@@ -15,12 +15,12 @@ import Paper from "@mui/material/Paper";
 const StyledDialog = styled(Dialog)(
   ({ theme, isApplyJob, isTalentMyJobsDialog, isProfile }) => ({
     "& .MuiDialog-container": {
-      height: (isApplyJob && "auto") || (isTalentMyJobsDialog && "100%"),
+      height: (isApplyJob) || (isTalentMyJobsDialog && "100%"),
     },
     "& .MuiPaper-root": {
       background: theme.palette.menuBackground,
       height:
-        (isApplyJob && "65%") ||
+        (isApplyJob) ||
         (isTalentMyJobsDialog && "100%") ||
         (isProfile && "92%"),
       padding: isTalentMyJobsDialog ? "16px" : "",
@@ -122,7 +122,7 @@ export default function CustomDialog(props) {
       sx={{
         //             width: "500px",
         //             marginLeft: "auto",
-        // marginRight: "auto",
+        margin: "auto",
         height:
           (title === "Login" && "420px") || (isTalentMyJobsDialog && "auto"),
       }}

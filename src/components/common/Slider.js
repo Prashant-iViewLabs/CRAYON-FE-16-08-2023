@@ -26,7 +26,7 @@ const Slider = ({ items, theme, color }) => {
                 color={color}
                 height={25}
                 value={item}
-                label={truncate(item, { length: 20 })}
+                label={truncate(item, { length: 9 })}
               />
             );
           }

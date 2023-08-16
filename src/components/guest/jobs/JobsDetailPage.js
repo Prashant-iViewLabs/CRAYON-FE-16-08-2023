@@ -753,52 +753,56 @@ export default function JobsDetailPage() {
                 isHovered={isHovered}
               />
             </Box>
-            <Box
-              sx={{
-                width: "16.6%",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            {job?.primary?.name &&
               <Box
-                component="img"
                 sx={{
-                  height: 70,
-                  width: 70,
+                  width: "16.6%",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
-                alt="job_exp"
-                src={
-                  (job?.primary?.name == "collaborator" &&
-                    profile_collaborator) ||
-                  (job?.primary?.name == "challenger" && profile_challenger) ||
-                  (job?.primary?.name == "character" && profile_character) ||
-                  (job?.primary?.name == "contemplator" && profile_contemplator)
-                }
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "16.6%",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+              >
+                <Box
+                  component="img"
+                  sx={{
+                    height: 70,
+                    width: 70,
+                  }}
+                  alt="job_exp"
+                  src={
+                    (job?.primary?.name == "collaborator" &&
+                      profile_collaborator) ||
+                    (job?.primary?.name == "challenger" && profile_challenger) ||
+                    (job?.primary?.name == "character" && profile_character) ||
+                    (job?.primary?.name == "contemplator" && profile_contemplator)
+                  }
+                />
+              </Box>
+            }
+            {job?.shadow?.name &&
               <Box
-                component="img"
                 sx={{
-                  height: 70,
-                  width: 70,
+                  width: "16.6%",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
-                alt="job_exp"
-                src={
-                  (job?.shadow?.name == "collaborator" &&
-                    profile_collaborator) ||
-                  (job?.shadow?.name == "challenger" && profile_challenger) ||
-                  (job?.shadow?.name == "character" && profile_character) ||
-                  (job?.shadow?.name == "contemplator" && profile_contemplator)
-                }
-              />
-            </Box>
+              >
+                <Box
+                  component="img"
+                  sx={{
+                    height: 70,
+                    width: 70,
+                  }}
+                  alt="job_exp"
+                  src={
+                    (job?.shadow?.name == "collaborator" &&
+                      profile_collaborator) ||
+                    (job?.shadow?.name == "challenger" && profile_challenger) ||
+                    (job?.shadow?.name == "character" && profile_character) ||
+                    (job?.shadow?.name == "contemplator" && profile_contemplator)
+                  }
+                />
+              </Box>
+            }
 
             {/* <Box
               sx={{
@@ -1363,7 +1367,7 @@ export default function JobsDetailPage() {
               sx={{
                 fontWeight: "Bold",
                 fontSize: 16,
-                letterSpacing: "0.75px",  
+                letterSpacing: "0.75px",
               }}
             >
               About

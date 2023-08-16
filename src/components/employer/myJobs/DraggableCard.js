@@ -1106,13 +1106,14 @@ export default function DraggableCard({
                         background: theme.palette.base.main,
                       }}
                     >
-                      <Link
+                      {item?.candidate_profile?.linkedin_profile_link ? <Link
                         to={item?.candidate_profile?.linkedin_profile_link}
-                        target="_blank"
+                        target={"_blank"}
                         style={{
                           textDecoration: "none",
                           color: theme.palette.black,
                         }}
+                        
                       >
                         <Box
                           component="img"
@@ -1125,7 +1126,27 @@ export default function DraggableCard({
                             cursor: "pointer",
                           }}
                         />
-                      </Link>
+                      </Link> : 
+                      <Box
+                          component="img"
+                          className="dragDots"
+                          alt="drag dots"
+                          src={linkedin}
+                          sx={{
+                            width: "20px",
+                            height: "20px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            dispatch(
+                              setAlert({
+                                show: true,
+                                type: ALERT_TYPE.ERROR,
+                                msg:"Profile Link is not attached",
+                              })
+                            );
+                          }}
+                        />}
                     </Box>
                   </Box>
                 </Popover>

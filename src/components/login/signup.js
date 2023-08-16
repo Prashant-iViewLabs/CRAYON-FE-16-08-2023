@@ -535,7 +535,6 @@ export default function Signup({
           alignItems: "center",
           height: "auto",
           width: "400px",
-          padding: "30px 0 0",
         }}
       >
         <Avatar
@@ -553,7 +552,7 @@ export default function Signup({
         <Typography
           sx={{
             fontSize: "16px",
-            marginTop: 3,
+            marginTop: 2,
             fontWeight: "bold",
           }}
         >
@@ -572,7 +571,7 @@ export default function Signup({
             width: "90%",
             display: "flex",
             flexDirection: "column",
-            mt: 2,
+            mt: 1,
             gap: 2,
           }}
         >
@@ -582,7 +581,7 @@ export default function Signup({
               onButtonToggle={onHandleButtonToggle}
             />
           </Box>
-          <Box sx={{ display: "flex", mt: 3 }}>
+          <Box sx={{ display: "flex", mt: 1 }}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <InputBox
                 id="firstName"
@@ -590,7 +589,7 @@ export default function Signup({
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder={i18n["login.firstName"]}
-                sx={{ mr: 1, width: "95%" }}
+                sx={{ mr: 1, width: "95%", height: "35px" }}
                 style={{ flex: "1" }}
               />
               {formik.errors.firstName && formik.touched.firstName && (
@@ -604,7 +603,7 @@ export default function Signup({
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder={i18n["login.lastName"]}
-                sx={{ ml: 1, width: "95%" }}
+                sx={{ ml: 1, width: "95%",height: "35px" }}
                 style={{ flex: "1" }}
               />
               {formik.errors.lastName && formik.touched.lastName && (
@@ -617,7 +616,7 @@ export default function Signup({
             <Paper
               sx={{
                 display: "flex",
-                height: "40px",
+                height: "35px",
                 borderRadius: "25px",
                 boxShadow: "none",
                 border: `1px solid ${theme.palette.grayBorder}`,
@@ -643,7 +642,7 @@ export default function Signup({
             <Paper
               sx={{
                 display: "flex",
-                height: "40px",
+                height: "35px",
                 borderRadius: "25px",
                 boxShadow: "none",
                 border: `1px solid ${theme.palette.grayBorder}`,
@@ -676,7 +675,7 @@ export default function Signup({
             <Paper
               sx={{
                 display: "flex",
-                height: "40px",
+                height: "35px",
                 borderRadius: "25px",
                 boxShadow: "none",
                 border: `1px solid ${theme.palette.grayBorder}`,

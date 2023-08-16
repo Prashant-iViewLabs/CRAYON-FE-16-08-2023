@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 import job_logo from "../../../../assets/job_logo.svg";
 import job_volume from "../../../../assets/job_volume.svg";
 import job_exp from "../../../../assets/job_exp.png";
@@ -14,6 +15,7 @@ import {
 } from "../../../../redux/guest/getQuestions";
 import { ALERT_TYPE } from "../../../../utils/Constants";
 import Tooltip from "@mui/material/Tooltip";
+import tooltipClasses from "@mui/material/Tooltip";
 import SingleRadialChart from "../../../common/SingleRadialChart";
 import SmallButton from "../../../common/SmallButton";
 import CustomCard from "../../../common/CustomCard";
@@ -38,6 +40,7 @@ import JobsDetailPage from "../JobsDetailPage";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Slider2 from "../../../common/Slider2";
+import DescTextwrapper from "../../../common/DescTextwrapper";
 
 const label1 = "applied";
 const label2 = "shortlisted";
@@ -135,7 +138,17 @@ const JobCardFront = ({
       __html: DOMPurify.sanitize(html),
     };
   }
-
+  const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} placement="top" />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }));
   // const handleJobTitle = () => {
   //   navigate(
 
@@ -218,8 +231,8 @@ const JobCardFront = ({
             >
               <Box
                 sx={{
-                  height: 43,
-                  width: 50,
+                  height: 39,
+                  width: 43,
                   maxHeight: { xs: 43 },
                   maxWidth: { xs: 50 },
                   borderRadius: "0 0 0 10px",
@@ -232,10 +245,10 @@ const JobCardFront = ({
                 <Box
                   component="img"
                   sx={{
-                    height: 25,
-                    width: 25,
-                    maxHeight: { xs: 25 },
-                    maxWidth: { xs: 25 },
+                    height: 20,
+                    width: 20,
+                    maxHeight: { xs: 20 },
+                    maxWidth: { xs: 20 },
                   }}
                   alt="job_volume"
                   src={job_volume}
@@ -301,7 +314,7 @@ const JobCardFront = ({
           <Typography
             sx={{
               fontWeight: 400,
-              fontSize: 12,
+              fontSize: 10,
               letterSpacing: "0.75px",
               opacity: 0.8,
               marginBottom: "8px",
@@ -334,9 +347,8 @@ const JobCardFront = ({
             placement="top"
           >
             <Link
-              to={`/jobs/job-detail/${`${
-                job?.town?.name + " " + job?.town?.region?.name
-              }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+                }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -354,7 +366,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-                // onClick={handleJobTitle}
+              // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -475,23 +487,36 @@ const JobCardFront = ({
             />
           </Box>
 
-          <TextWrapper
-            mt="12px"
-            mb={1}
+          {/* <DescTextwrapper
             color={theme.palette.black100}
             letterSpacing="0.25px"
-          >
-            <Box
+            children={job?.description}
+          /> */}
+          <TextWrapper>
+            <div dangerouslySetInnerHTML={{ __html: job?.description }} />
+          </TextWrapper>
+
+          {/* <Box
               // letterSpacing="0.25px"
-              sx={{
-                background: "transparent",
-              }}
               className="preview"
+              sx={{
+                fontWeight: 400,
+                fontSize: 14,
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 3,
+              }
+              }
               m={0}
               p={0}
               dangerouslySetInnerHTML={createMarkup(job?.description)}
-            ></Box>
-          </TextWrapper>
+            ></Box> */}
+          {/* </HtmlTooltip> */}
+
+
+          {/* </TextWrapper> */}
+
         </Grid>
         <Box
           sx={{
@@ -523,7 +548,7 @@ const JobCardFront = ({
             {/* &#62; */}
           </Button>
         </Box>
-      </Box>
+      </Box >
       {/* <Grid
                 container
                 spacing={2}
@@ -608,7 +633,7 @@ const JobCardFront = ({
                 ) : null}
             </Grid> */}
 
-      <Grid
+      <Grid Grid
         container
         spacing={2}
         padding="0 16px 8px 16px"
@@ -619,7 +644,7 @@ const JobCardFront = ({
             max={1000}
             labelsData={label1}
             series={[job?.TotalUserCount]}
-            width={140}
+            width={120}
             color={theme.palette.chart.red}
             index={index}
             isHovered={isHovered}
@@ -629,7 +654,7 @@ const JobCardFront = ({
           <SingleRadialChart
             labelsData={label2}
             series={[job?.TotalUserShorlisted]}
-            width={140}
+            width={120}
             color={theme.palette.chart.green}
             index={index}
             isHovered={isHovered}
@@ -639,13 +664,13 @@ const JobCardFront = ({
           <SingleRadialChart
             labelsData={label3}
             series={[job?.TotalUserInterviewed]}
-            width={140}
+            width={120}
             color={theme.palette.chart.yellow}
             index={index}
             isHovered={isHovered}
           />
         </Box>
-      </Grid>
+      </Grid >
       <Grid
         container
         // padding="0 8px 8px 8px"
@@ -687,7 +712,7 @@ const JobCardFront = ({
                     <Button
                         sx={{
                             boxShadow: 0,
-                            fontSize: "12px",
+                            fontSize: "10px",
                             width: "100%",
                             height: "43px",
                         }}
@@ -695,7 +720,7 @@ const JobCardFront = ({
                         color="redButton100"
                         onClick={handleClick}
                     >
-                        {i18n["jobCard.apply"]}
+                        {i18n["jobCard.apply"]}fontSize: "10px",
                     </Button>
                 </Grid> */}
         <Button
@@ -704,16 +729,15 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="blueButton200"
         >
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${
-            job?.town?.name + " " + job?.town?.region?.name
-          }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+            }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",
@@ -726,7 +750,7 @@ const JobCardFront = ({
             variant="contained"
             sx={{
               borderRadius: 0,
-              fontSize: "12px",
+              fontSize: "10px",
               height: "100%",
               width: "100%",
             }}
@@ -742,7 +766,7 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="redButton"
           onClick={handleClick}
@@ -750,7 +774,7 @@ const JobCardFront = ({
           apply
         </Button>
       </Grid>
-    </CustomCard>
+    </CustomCard >
   );
 };
 

@@ -5,7 +5,7 @@ import {
 } from "../../../redux/guest/getQuestions";
 import { useDispatch } from "react-redux";
 import { ALERT_TYPE } from "../../../utils/Constants";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import InputBox from "../../common/InputBox";
 import locale from "../../../i18n/locale";
 import { useNavigate } from "react-router-dom";
@@ -311,7 +311,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   // })
   console.log(answers);
   return (
-    <Box>
+    <>
       <Box
         sx={{
           textAlign: "center",
@@ -419,20 +419,23 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
                   Q.{index + 1} &nbsp;
                   {question.question}
                 </Typography>
-                <InputBox
+                <TextField
                   id="answer"
                   type="text"
+                  rows={4}
+                  multiline
                   onChange={(event) =>
                     handleChange(event, question.question_id)
                   }
                   // onBlur={formik.handleBlur}
                   // value={formik.values.answer}
                   // onChange={ }
-                  placeholder={"Answer"}
+                  placeholder={"Enter your Answer here..."}
                   sx={{
                     mb: 2,
-                    height: "30px !important",
+                    // height: "30px !important",
                     width: "90%",
+                    borderRadius: "15px",
                     margin: "auto",
                   }}
                 />
@@ -679,6 +682,6 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
         padding={0}
       >
       </CustomDialog> */}
-    </Box>
+    </>
   );
 }

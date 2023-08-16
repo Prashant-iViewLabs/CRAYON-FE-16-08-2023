@@ -28,7 +28,7 @@ const Slider2 = ({ items, color, hideTagsAfter }) => {
                 color={color}
                 height={25}
                 value={item}
-                label={truncate(item, { length: 15 })}
+                label={truncate(item, { length: 12 })}
                 mr="4px"
               />
             );

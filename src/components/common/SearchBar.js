@@ -121,11 +121,12 @@ export default function SearchBar({
           m: { xs: 2, md: 0 },
           borderRadius: "25px",
           border: "1px solid rgba(224, 224, 224, 0.5)",
-          position: "fixed",
-          width: {
-            xl: isOpen ? "82.4%" : "83.4%",
-            lg: isOpen ? "74.2%" : "75.1%",
-          },
+          position: "sticky",
+          top: "7rem",
+          // width: {
+          //   xl: isOpen ? "82.4%" : "83.4%",
+          //   lg: isOpen ? "74.2%" : "75.1%",
+          // },
           zIndex: "1111",
         }}
       >

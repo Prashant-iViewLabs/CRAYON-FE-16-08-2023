@@ -209,8 +209,8 @@ const JobCardFront = ({
             >
               <Box
                 sx={{
-                  height: 43,
-                  width: 50,
+                  height: 39,
+                  width: 43,
                   maxHeight: { xs: 43 },
                   maxWidth: { xs: 50 },
                   borderRadius: "0 0 0 10px",
@@ -223,10 +223,10 @@ const JobCardFront = ({
                 <Box
                   component="img"
                   sx={{
-                    height: 25,
-                    width: 25,
-                    maxHeight: { xs: 25 },
-                    maxWidth: { xs: 25 },
+                    height: 20,
+                    width: 20,
+                    maxHeight: { xs: 20 },
+                    maxWidth: { xs: 20 },
                   }}
                   alt="job_volume"
                   src={job_volume}
@@ -256,7 +256,7 @@ const JobCardFront = ({
           <Typography
             sx={{
               fontWeight: 400,
-              fontSize: 12,
+              fontSize: 10,
               letterSpacing: "0.75px",
               opacity: 0.8,
               marginBottom: "8px",
@@ -478,7 +478,7 @@ const JobCardFront = ({
             max={1000}
             labelsData={"grit score"}
             series={[job?.grit_score]}
-            width={140}
+            width={120}
             color={theme.palette.chart.red}
             index={index}
             isHovered={isHovered}
@@ -487,7 +487,7 @@ const JobCardFront = ({
         {job?.primary?.name && (
           <Box
             component="img"
-            height={90}
+            height={80}
             alt="job_exp"
             src={
               (job?.primary?.name === "collaborator" && profile_collaborator) ||
@@ -501,7 +501,7 @@ const JobCardFront = ({
         {job?.shadow?.name && (
           <Box
             component="img"
-            height={90}
+            height={80}
             alt="job_exp"
             src={
               (job?.shadow?.name === "collaborator" && profile_collaborator) ||
@@ -532,7 +532,7 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="blueButton200"
         >
@@ -554,7 +554,7 @@ const JobCardFront = ({
             variant="contained"
             sx={{
               borderRadius: 0,
-              fontSize: "12px",
+              fontSize: "10px",
               height: "100%",
               width: "100%",
             }}
@@ -569,7 +569,7 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="redButton"
           onClick={handleClick}
