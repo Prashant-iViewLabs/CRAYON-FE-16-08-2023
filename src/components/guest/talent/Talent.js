@@ -176,7 +176,7 @@ export default function Talent() {
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
     >
-      <Box>
+      <Grid item md={2} lg={1} xl={1}>
         <ButtonPanel
           topMargin={true}
           panelData={allIndustries}
@@ -188,8 +188,10 @@ export default function Talent() {
           side="left"
           onChangeFilter={onChangeFilterType}
         />
-      </Box>
-      <Grid xs={12} sm={6} md={8} lg={9} xl={10}>
+      </Grid>
+      <Grid item xs={12} sm={6} md={8} lg={9} xl={10} sx={{
+        px: 2,
+      }}>
         <SearchBar placeholder={i18n["jobs.searchPlaceholder"]} />
         <InfiniteScroll
           key={`${filters} + ${filtersType} + ${filtersJobType}`}
@@ -256,7 +258,12 @@ export default function Talent() {
           </SwipeableViews> */}
         </Grid>
       </Grid>
-      <Box>
+      <Grid item md={2} lg={1} xl={1}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "end"
+      }}>
         <ButtonPanel
           topMargin={true}
           panelData={allTalentTypes}
@@ -267,7 +274,7 @@ export default function Talent() {
           panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
           side="right"
         />
-      </Box>
+      </Grid>
     </Grid>
   );
 }

@@ -26,10 +26,21 @@ import Avatar from "@mui/material/Avatar";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import redTriangleSmile from '../../../assets/Characters/Red_Triangle_Smiling.svg'
+import blueElipseFace from '../../../assets/Characters/Blue_Ellipse_Head.svg'
+import yellowStar from '../../../assets/Characters/Yellow_Star.svg'
+import blueSmileFace from '../../../assets/Characters/Blue_Half_Circle_Smile.svg'
+import redSkateboarder from '../../../assets/Characters/Red_Skateboarder.svg'
+import yellowChilled from '../../../assets/Characters/Yellow_Chilled.svg'
+import redDiamondClose from '../../../assets/Characters/Red_Diamond_Close_Eyes.svg'
+import greenTriangleThinking from '../../../assets/Characters/Green_Triangle_Thinking.svg'
+
+
 const validationSchema = Yup.object().shape({
   answer: Yup.string().required("Answer is required"),
 });
 
+const questionImages = [blueSmileFace, redSkateboarder, yellowChilled, redDiamondClose, greenTriangleThinking]
 export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   const fileAccept = "application/pdf, application/doc, application/docx";
   const hiddenFileInput = useRef(null);
@@ -48,6 +59,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   const [userID, setuserID] = useState();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
+
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -75,9 +87,9 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
       const { payload } = await dispatch(
         decodedToken?.data?.role_id === undefined
           ? postAnswersWithoutLogin({
-              data: answers,
-              job_id: questions?.at(0).job_id,
-            })
+            data: answers,
+            job_id: questions?.at(0).job_id,
+          })
           : postAnswers({ data: answers, job_id: questions?.at(0).job_id })
       );
       if (payload?.status === "sccess") {
@@ -320,8 +332,9 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
           gap: 3,
         }}
       >
-        <Avatar
-          src="/static/images/avatar/1.jpg"
+        <Box
+          component={'img'}
+          src={redTriangleSmile}
           sx={{ width: 96, height: 96, margin: "auto" }}
         />
         <Typography
@@ -385,8 +398,9 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
                 gap: 3,
               }}
             >
-              <Avatar
-                src="/static/images/avatar/1.jpg"
+              <Box
+                component={'img'}
+                src={questionImages[index]}
                 sx={{ width: 96, height: 96, margin: "auto" }}
               />
               <Typography
@@ -485,8 +499,9 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
             gap: 3,
           }}
         >
-          <Avatar
-            src="/static/images/avatar/1.jpg"
+          <Box
+            component={'img'}
+            src={blueElipseFace}
             sx={{ width: 96, height: 96, margin: "auto" }}
           />
           <Typography
@@ -508,16 +523,6 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
             Your CV gives us a head start, but you'll still need to sign-up,
             complete your profile and Crayin Vitar post applying.
           </Typography>
-          <Typography
-            sx={{
-              fontSize: "12px",
-              fontWeight: 400,
-              ml: 1,
-              mt: "4px",
-            }}
-          >
-            {cvName}
-          </Typography>
           <Box>
             <Button
               variant="contained"
@@ -526,7 +531,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
                 borderRadius: 0,
                 width: "50%",
               }}
-              // onClick={handleUploadCVLater}
+              onClick={handleUploadCVLater}
             >
               I'll do it later
             </Button>
@@ -578,8 +583,9 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
             gap: 3,
           }}
         >
-          <Avatar
-            src="/static/images/avatar/1.jpg"
+          <Box
+            component={'img'}
+            src={yellowStar}
             sx={{ width: 96, height: 96, margin: "auto" }}
           />
           <Typography

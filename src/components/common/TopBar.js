@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled, useTheme } from "@mui/material/styles";
-import crayon from "../../assets/crayon_new_logo.png";
+import crayon from "../../assets/Crayon_Favicon.svg";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -40,8 +40,11 @@ import {
   removeLocalStorage,
 } from "../../utils/Common";
 import { login } from "../../redux/login/loginSlice";
-import { Popover } from "@mui/material";
+import { Popover, Typography } from "@mui/material";
 import jwt_decode from "jwt-decode";
+
+import userProfile from "../../assets/Padding Included/User_Profile.svg"
+import profileDetail from "../../assets/Padding Included/Profile_Details.svg"
 
 const StyledTab = styled(Tabs)(({ theme }) => ({
   "& .MuiTab-root": {
@@ -389,17 +392,39 @@ export default function TopBar() {
           }}
         >
           <div>
-            <Box
-              component="img"
-              sx={{
-                height: 30,
-                maxHeight: { xs: 45 },
-                cursor: "pointer",
-              }}
-              alt="crayon logo"
-              src={crayon}
-              onClick={handleHomeLogoClick}
-            />
+            <Box sx={{
+              display: "flex",
+              cursor: "pointer",
+            }} onClick={handleHomeLogoClick}>
+              <Box
+                component="img"
+                sx={{
+                  height: 45,
+                  marginTop: 1,
+                  cursor: "pointer",
+                }}
+                alt="crayon logo"
+                src={crayon}
+              />
+              <Box sx={{
+                marginLeft: 1
+              }}>
+                <Typography sx={{
+                  margin: 0,
+                  fontWeight: "bold",
+                  fontFamily: ""
+                }} variant="h4">Crayon</Typography>
+                <Typography sx={{
+                  fontSize: "11px",
+                  letterSpacing: 1,
+                  margin: 0,
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  textAlign: "center"
+                }} paragraph>we connect smiles</Typography>
+              </Box>
+
+            </Box>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ paddingRight: "25px" }}>
@@ -574,29 +599,55 @@ export default function TopBar() {
                   )}
                 </>
               ) : (
-                <>
+                <Box sx={{
+                  display: "flex",
+                  borderRadius: 4,
+                  overflow: "hidden"
+                }}>
                   <Button
                     variant="contained"
                     sx={{
-                      mr: 2,
-                      width: "96px",
-                      border: `solid ${theme.palette.redButton.main} 2px`,
-                      color: theme.palette.redButton.main,
+                      width: "50%",
+                      padding: 3,
+                      borderRadius: 0
                     }}
-                    color="base"
+                    color="redButton100"
                     onClick={() => setShowLogin(true)}
                   >
-                    {i18n["topBar.login"]}
+                    <Box
+                      component="img"
+                      sx={{
+                        height: 25,
+                        cursor: "pointer",
+                      }}
+                      alt="crayon logo"
+                      src={userProfile}
+                    /> {i18n["topBar.login"]}
                   </Button>
                   <Button
                     variant="contained"
-                    sx={{ width: "96px" }}
-                    color="redButton"
+                    sx={{
+                      width: "50%",
+                      padding: 3,
+                      borderRadius: 0
+                    }}
+                    color="blueButton300"
+                    // startIcon={}
                     onClick={() => setShowSignup(true)}
                   >
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 25,
+                          marginRight:1,
+                          cursor: "pointer",
+                        }}
+                        alt="crayon logo"
+                        src={profileDetail}
+                      />
                     {i18n["topBar.join"]}
                   </Button>
-                </>
+                </Box>
               )}
             </Box>
           </div>

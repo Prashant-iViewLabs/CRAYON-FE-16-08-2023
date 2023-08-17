@@ -529,7 +529,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           <SingleRadialChart
             labelsData={label1}
             series={[job?.TotalUserCount]}
-            width={140}
+            width={120}
             color={theme.palette.chart.red}
             index={index}
             isHovered={isHovered}
@@ -539,7 +539,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           <SingleRadialChart
             labelsData={label2}
             series={[job?.TotalUserShorlisted]}
-            width={140}
+            width={120}
             color={theme.palette.chart.green}
             index={index}
             isHovered={isHovered}
@@ -549,7 +549,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           <SingleRadialChart
             labelsData={label3}
             series={[job?.TotalUserInterviewed]}
-            width={140}
+            width={120}
             color={theme.palette.chart.yellow}
             index={index}
             isHovered={isHovered}
@@ -574,7 +574,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="blueButton200"
         >
@@ -586,7 +586,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="grayButton200"
         >
@@ -598,12 +598,12 @@ export default function TalentCard({ index, job, setisFlipped }) {
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="redButton"
           // onClick={handleClick}
         >
-          apply
+          shortlist
         </Button>
         {/* <Box
           sx={{

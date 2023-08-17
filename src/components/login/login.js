@@ -190,10 +190,12 @@ import Switch from "@mui/material/Switch";
 
 import { styled, alpha } from "@mui/material/styles";
 import CancelIcon from "@mui/icons-material/Cancel";
+import smileFace from '../../assets/Characters/Red_Circle_Bow_Tie-62.svg'
 const LOGINDATA = {
   username: "",
   password: "",
 };
+
 
 const BlueSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -309,7 +311,7 @@ export default function Login({
         }}
       >
         <Avatar
-          src="/static/images/avatar/1.jpg"
+          src={smileFace}
           sx={{ width: 96, height: 96 }}
         />
         <Typography

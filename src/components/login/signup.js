@@ -351,6 +351,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 
+import smileFace from '../../assets/Characters/Blue_Circle_Smile.svg'
+
 const FORMDATA = {
   firstName: "",
   lastName: "",
@@ -538,7 +540,7 @@ export default function Signup({
         }}
       >
         <Avatar
-          src="/static/images/avatar/1.jpg"
+          src={smileFace}
           sx={{ width: 96, height: 96 }}
         />
         <Typography

@@ -693,7 +693,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           <SingleRadialChart
             labelsData={"grit Score"}
             series={[job?.candidate_profile?.candidate_info?.grit_score]}
-            width={140}
+            width={120}
             color={theme.palette.chart.red}
             index={index}
             isHovered={isHovered}
@@ -703,7 +703,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           undefined && (
           <Box
             component="img"
-            height={90}
+            height={80}
             // sx={{ margin: "0 -22px 0 -22px" }}
             alt="Personality"
             src={
@@ -725,7 +725,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
         {job?.candidate_profile?.candidate_info?.shadow?.name !== undefined && (
           <Box
             component="img"
-            height={90}
+            height={80}
             // sx={{ margin: "0 -22px 0 -22px" }}
             // alt="job_exp"
             alt="Personality"
@@ -764,7 +764,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="blueButton200"
         >
@@ -776,7 +776,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="grayButton200"
         >
@@ -788,7 +788,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "10px",
           }}
           color="redButton"
           // onClick={handleClick}

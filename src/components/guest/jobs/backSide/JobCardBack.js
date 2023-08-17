@@ -488,7 +488,7 @@ const JobCardFront = ({
           <Box
             component="img"
             height={80}
-            alt="job_exp"
+            alt="personality"
             src={
               (job?.primary?.name === "collaborator" && profile_collaborator) ||
               (job?.primary?.name === "challenger" && profile_challenger) ||
@@ -502,7 +502,7 @@ const JobCardFront = ({
           <Box
             component="img"
             height={80}
-            alt="job_exp"
+            alt="Personality"
             src={
               (job?.shadow?.name === "collaborator" && profile_collaborator) ||
               (job?.shadow?.name === "challenger" && profile_challenger) ||
