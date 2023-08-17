@@ -19,13 +19,13 @@ export default function ButtonPanel({
 
   const removeBtnSelection = (selectedBtnList, id) => {
     selectedBtnList.splice(
-      selectedBtns.findIndex((selectedBtn) => selectedBtn == id),
+      selectedBtns.findIndex((selectedBtn) => selectedBtn === id),
       1
     );
   };
   const handleButtonClick = (event, { id, name, title }) => {
-    if (title == true) {
-      if (selectedBtns.find((selectedBtn) => selectedBtn == id)) {
+    if (title === true) {
+      if (selectedBtns.find((selectedBtn) => selectedBtn === id)) {
         const selectedBtnList = [...selectedBtns];
         removeBtnSelection(selectedBtnList, id);
         setSelectedBtn(selectedBtnList);
@@ -35,10 +35,10 @@ export default function ButtonPanel({
         onChangeFilter([panelData[0]?.id]);
       }
     } else {
-      if (selectedBtns.find((selectedBtn) => selectedBtn == id)) {
+      if (selectedBtns.find((selectedBtn) => selectedBtn === id)) {
         const selectedBtnList = [...selectedBtns];
         removeBtnSelection(selectedBtnList, id);
-        if (selectedBtnList.length == 0) {
+        if (selectedBtnList.length === 0) {
           setSelectedBtn([panelData[0]?.id]);
           onChangeFilter([panelData[0]?.id]);
         } else {
@@ -47,7 +47,7 @@ export default function ButtonPanel({
         }
       } else {
         if (
-          selectedBtns.find((selectedBtn) => selectedBtn == panelData[0]?.id)
+          selectedBtns.find((selectedBtn) => selectedBtn === panelData[0]?.id)
         ) {
           const selectedBtnList = [...selectedBtns];
           removeBtnSelection(selectedBtnList, id);
@@ -66,7 +66,7 @@ export default function ButtonPanel({
     <Box
       sx={{
         // mt: { sx: 0, sm: topMargin ? '68px' : '16px' },
-        textAlign: side == "right" && "end",
+        textAlign: side === "right" && "end",
         display: { xs: "none", sm: "flex" },
         flexDirection: "column",
         overflow: { xs: "auto", sm: "hidden" },
@@ -81,10 +81,10 @@ export default function ButtonPanel({
               width: 130,
               lineHeight: "inherit",
               borderRadius: "5px",
-              borderBottomLeftRadius: side == "left" ? { sm: 0 } : "5px",
-              borderTopLeftRadius: side == "left" ? { sm: 0 } : "5px",
-              borderTopRightRadius: side == "right" ? { sm: 0 } : "5px",
-              borderBottomRightRadius: side == "right" ? { sm: 0 } : "5px",
+              borderBottomLeftRadius: side === "left" ? { sm: 0 } : "5px",
+              borderTopLeftRadius: side === "left" ? { sm: 0 } : "5px",
+              borderTopRightRadius: side === "right" ? { sm: 0 } : "5px",
+              borderBottomRightRadius: side === "right" ? { sm: 0 } : "5px",
               mr: { xs: 1, sm: 0 },
               minWidth: { xs: "90px", sm: 0 },
               fontWeight:
@@ -96,6 +96,7 @@ export default function ButtonPanel({
                 color: theme.palette.white,
                 fontWeight: 900,
               },
+              fontSize: "13px"
               // opacity: selectedBtns.includes(btn.id) ? 1 : 0.5
             }}
             onClick={(e) => handleButtonClick(e, btn)}
