@@ -33,9 +33,9 @@ import currencySearch from "../assets/Padding Included/Currency_Search.svg"
 import talentSearch from "../assets/Padding Included/Search_Talent.svg"
 import { Link } from "react-router-dom";
 
-import './Home.css'
 import { BackHand } from "@mui/icons-material";
 import AdvanceSection from "./AdvanceSection";
+import theme from "../utils/Theme";
 const StyledGrid = styled(Grid)(({ theme }) => ({
   "& .MuiTypography-root": {
     ".talent": {
@@ -114,7 +114,7 @@ export default function Home() {
                 height: "30px",
                 width: "30px",
                 color: "white",
-                background: "#00b600"
+                background: theme.palette.greenButton.main
               }}
             >
               <SearchIcon fontSize="small" />
@@ -139,14 +139,14 @@ export default function Home() {
             </Paper>
             <IconButton
               color="redButton"
-              aria-label="search job"
+              aria-label="search Location"
               component="button"
               sx={{
                 mr: 1,
                 height: "30px",
                 width: "30px",
                 color: "white",
-                background: "#f05d61"
+                background: theme.palette.redButton.main
               }}
               onClick={showLocationInput}
             >

@@ -81,6 +81,58 @@ export const getAllTalentJobs = createAsyncThunk(
   }
 );
 
+export const getTalentPool = createAsyncThunk(
+  "getTalentPool",
+  async ({ lastKey }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi("/admin/getpools?lastKey=" + lastKey, true);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const addTalentPool = createAsyncThunk(
+  "addTalentPool",
+  async (payload, { dispatch }) => {
+    // dispatch(setLoading(true));
+    const { data } = await postApi("/admin/addusertopool", payload, true);
+    // dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const addTalentToJob = createAsyncThunk(
+  "addTalentToJob",
+  async (payload, { dispatch }) => {
+    // dispatch(setLoading(true));
+    const { data } = await postApi("/admin/addtojob", payload, true);
+    // dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const createTalentPool = createAsyncThunk(
+  "createTalentPool",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi("/admin/createpool", payload, true);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getPoolUsers = createAsyncThunk(
+  "getPoolUsers",
+  async ({ lastKey, pool_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/getpoolusers?lastKey=" + lastKey + "&pool_id=" + pool_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 export const jobsSlice = createSlice({
   name: "config",
   initialState,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import job_logo from "../../../../assets/job_logo.svg";
 import job_volume from "../../../../assets/job_volume.svg";
 import job_exp from "../../../../assets/job_exp.png";
@@ -40,7 +40,8 @@ import JobsDetailPage from "../JobsDetailPage";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Slider2 from "../../../common/Slider2";
-import DescTextwrapper from "../../../common/DescTextwrapper";
+import Fade from "@mui/material/Fade";
+import JobDescripiton from "../../../common/JobDescripiton";
 
 const label1 = "applied";
 const label2 = "shortlisted";
@@ -60,6 +61,7 @@ const JobCardFront = ({
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const [isStar, setIsStarSelected] = useState(job?.favourite);
+  const hasptag = job?.description?.trim()?.startsWith("<");
   const jobIndustries = job?.industry_jobs.map(
     (industry) => industry?.industry?.name
   );
@@ -142,13 +144,20 @@ const JobCardFront = ({
     <Tooltip {...props} classes={{ popper: className }} placement="top" />
   ))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: '#f5f5f9',
-      color: 'rgba(0, 0, 0, 0.87)',
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
       maxWidth: 220,
       fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
+      border: "1px solid #dadde9",
     },
   }));
+
+  const getDescriptionText = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText;
+  };
+
   // const handleJobTitle = () => {
   //   navigate(
 
@@ -347,8 +356,9 @@ const JobCardFront = ({
             placement="top"
           >
             <Link
-              to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${
+                job?.town?.name + " " + job?.town?.region?.name
+              }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -366,7 +376,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-              // onClick={handleJobTitle}
+                // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -486,37 +496,7 @@ const JobCardFront = ({
               hideTagsAfter={2}
             />
           </Box>
-
-          {/* <DescTextwrapper
-            color={theme.palette.black100}
-            letterSpacing="0.25px"
-            children={job?.description}
-          /> */}
-          <TextWrapper>
-            <div dangerouslySetInnerHTML={{ __html: job?.description }} />
-          </TextWrapper>
-
-          {/* <Box
-              // letterSpacing="0.25px"
-              className="preview"
-              sx={{
-                fontWeight: 400,
-                fontSize: 14,
-                overflow: "hidden",
-                display: "-webkit-box",
-                WebkitBoxOrient: "vertical",
-                WebkitLineClamp: 3,
-              }
-              }
-              m={0}
-              p={0}
-              dangerouslySetInnerHTML={createMarkup(job?.description)}
-            ></Box> */}
-          {/* </HtmlTooltip> */}
-
-
-          {/* </TextWrapper> */}
-
+          <JobDescripiton description={job?.description} />
         </Grid>
         <Box
           sx={{
@@ -548,7 +528,7 @@ const JobCardFront = ({
             {/* &#62; */}
           </Button>
         </Box>
-      </Box >
+      </Box>
       {/* <Grid
                 container
                 spacing={2}
@@ -633,7 +613,8 @@ const JobCardFront = ({
                 ) : null}
             </Grid> */}
 
-      <Grid Grid
+      <Grid
+        Grid
         container
         spacing={2}
         padding="0 16px 8px 16px"
@@ -670,7 +651,7 @@ const JobCardFront = ({
             isHovered={isHovered}
           />
         </Box>
-      </Grid >
+      </Grid>
       <Grid
         container
         // padding="0 8px 8px 8px"
@@ -736,8 +717,9 @@ const JobCardFront = ({
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-            }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${
+            job?.town?.name + " " + job?.town?.region?.name
+          }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",
@@ -774,7 +756,7 @@ const JobCardFront = ({
           apply
         </Button>
       </Grid>
-    </CustomCard >
+    </CustomCard>
   );
 };
 

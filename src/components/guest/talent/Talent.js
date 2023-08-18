@@ -189,9 +189,17 @@ export default function Talent() {
           onChangeFilter={onChangeFilterType}
         />
       </Grid>
-      <Grid item xs={12} sm={6} md={8} lg={9} xl={10} sx={{
-        px: 2,
-      }}>
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={8}
+        lg={9}
+        xl={10}
+        sx={{
+          px: 2,
+        }}
+      >
         <SearchBar placeholder={i18n["jobs.searchPlaceholder"]} />
         <InfiniteScroll
           key={`${filters} + ${filtersType} + ${filtersJobType}`}
@@ -258,12 +266,17 @@ export default function Talent() {
           </SwipeableViews> */}
         </Grid>
       </Grid>
-      <Grid item md={2} lg={1} xl={1}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "end"
-      }}>
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "end",
+        }}
+      >
         <ButtonPanel
           topMargin={true}
           panelData={allTalentTypes}

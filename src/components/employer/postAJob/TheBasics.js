@@ -718,8 +718,9 @@ export default function TheBasics({ changeStep }) {
               allowCustomInput={true}
               id="job_title_id"
               value={
-                titles?.find((title) => title.id == basicData.job_title_id) ||
-                basicData.job_title_id
+                titles?.find(
+                  (title) => title.job_title_id == basicData.job_title_id
+                ) || basicData.job_title_id
               }
               onChange={handleAutoComplete}
               sx={{ width: "95%" }}

@@ -24,6 +24,8 @@ import ManageButtonMenu from "./ManageButtonMenu";
 import { Link } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
+import JobDescripiton from "../../common/JobDescripiton";
+
 
 const label1 = "applicants";
 const label2 = "shortlisted";
@@ -305,24 +307,7 @@ export default function MyJobsCard({ index, job }) {
             })}
         </Box>
 
-        <TextWrapper
-          mt="12px"
-          mb={1}
-          color={theme.palette.black100}
-          letterSpacing="0.25px"
-          // height={"60px"}
-        >
-          <Box
-            mt="12px"
-            mb={1}
-            color={theme.palette.black100}
-            letterSpacing="0.25px"
-            className="preview"
-            m={0}
-            p={0}
-            dangerouslySetInnerHTML={createMarkup(job?.description)}
-          ></Box>
-        </TextWrapper>
+        <JobDescripiton description={job?.description} />
       </Grid>
 
       <Grid

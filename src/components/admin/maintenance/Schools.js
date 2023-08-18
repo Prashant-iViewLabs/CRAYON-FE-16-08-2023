@@ -20,17 +20,21 @@ import { useDispatch } from "react-redux";
 import {
   addSchool,
   approveSchool,
+  editSchool,
   getAllSchools,
   removeSchool,
 } from "../../../redux/admin/maintenance";
 import { dateConverterMonth } from "../../../utils/DateTime";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { setAlert } from "../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../utils/Constants";
+import EditIcon from "@mui/icons-material/Edit";
+import { setAlert, setLoading } from "../../../redux/configSlice";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
+import { getSchool } from "../../../redux/candidate/myCvSlice";
+import { useSelector } from "react-redux";
 
 export default function Schools() {
   const dispatch = useDispatch();
@@ -44,6 +48,28 @@ export default function Schools() {
   const [newSchoolTitle, setNewSchoolTitle] = useState("");
   const [schoolID, setschoolID] = useState();
   const [approveEvent, setApproveEvent] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableSchool, setEditableSchool] = useState();
+  const [schoolName, setschoolName] = useState("");
+  const [existingSchool, setExistingSchool] = useState();
+  const { school } = useSelector((state) => state.myCv);
+
+  const getAllData = async () => {
+    try {
+      dispatch(setLoading(true));
+      await dispatch(getSchool());
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
 
   const getSchools = async (lastkeyy) => {
     try {
@@ -122,6 +148,36 @@ export default function Schools() {
     } catch (error) {}
   };
 
+  const handleEditCompany = async () => {
+    try {
+      const data = {
+        new_school_id: existingSchool !== undefined ? existingSchool : null,
+        current_school_id: editableSchool,
+        title: schoolName !== "" ? schoolName : "",
+      };
+      const { payload } = await dispatch(editSchool(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "School edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getSchools(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteSchool(jobId);
@@ -136,8 +192,29 @@ export default function Schools() {
     setOpenAdd((prevState) => !prevState);
   };
 
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableSchool(currCompID);
+    setschoolName(compName);
+    setExistingSchool("");
+  };
+
   const handleCancel = () => {
     setOpenApprove(false);
+  };
+
+  const handleEdit = (event) => {
+    if (event.target.id === "edit_input") {
+      setExistingSchool(null);
+      setschoolName(event.target.value);
+    } else if (event.target.id.includes("existing_name")) {
+      let com = school?.find(
+        (title) => title.name === event.target.textContent
+      );
+      console.log(com);
+      setschoolName("");
+      setExistingSchool(com.school_id);
+    }
   };
 
   const getSchoolApproved = async (event, jobID) => {
@@ -184,6 +261,7 @@ export default function Schools() {
 
   useEffect(() => {
     getSchools(0);
+    getAllData();
   }, []);
 
   return (
@@ -293,6 +371,26 @@ export default function Schools() {
                               }
                             />
                           </Tooltip>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(row?.school_id, row?.name)
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="delete" placement="top-end">
                             <IconButton
                               aria-label="edit"
@@ -335,13 +433,16 @@ export default function Schools() {
         newTitle={newSchoolTitle}
         dialogText={"school"}
       />
-      {/*<Edit
-              show={openAdd}
-              handleOpen={handleOpenAdd}
-              handleEdit={handleAddNewSchool}
-              handleEditJob={handleNewJob}
-              editJobTitle={newSchoolTitle}
-            />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditCompany}
+        handleEditJob={handleEdit}
+        inputName={schoolName}
+        existingCompany={existingSchool}
+        data={school}
+        dialogText={"school"}
+      />
       <Approve
         dialogText={"school"}
         show={openApprove}

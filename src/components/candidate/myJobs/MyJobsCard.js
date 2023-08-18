@@ -25,6 +25,8 @@ import ManageJob from "../../employer/myJobs/ManageJob";
 import { convertDatetimeAgo } from "../../../utils/DateTime";
 import { Tooltip } from "@mui/material";
 import SelectMenu from "../../common/SelectMenu";
+import JobDescripiton from "../../common/JobDescripiton";
+
 import { useSelector } from "react-redux";
 import { getMyStatusFilter } from "../../../redux/candidate/myStatusFilter";
 import { useDispatch } from "react-redux";
@@ -398,22 +400,8 @@ export default function MyJobsCard({ index, job, getJobs }) {
             })}
         </Box>
 
-        <TextWrapper
-          children={job?.description}
-          mt="12px"
-          mb={1}
-          color={theme.palette.black100}
-          letterSpacing="0.25px"
-          sx={{ minHeight: "63px" }}
-        >
-          <Box
-            // letterSpacing="0.25px"
-            className="preview"
-            m={0}
-            p={0}
-            dangerouslySetInnerHTML={createMarkup(job?.description)}
-          ></Box>
-        </TextWrapper>
+        <JobDescripiton description={job?.description} />
+
       </Grid>
       <Grid
         container

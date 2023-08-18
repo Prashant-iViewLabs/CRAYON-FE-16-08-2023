@@ -18,6 +18,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 import {
   addCurrencies,
+  editCurrency,
   getAllCurrencies,
   removeCurrencies,
 } from "../../../redux/admin/maintenance";
@@ -27,7 +28,9 @@ import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import AddNewCurrency from "./Dialogbox/AddNewCurrency";
+import EditCurrency from "./Dialogbox/EditCurrency";
 
 export default function Currencies() {
   const dispatch = useDispatch();
@@ -43,6 +46,8 @@ export default function Currencies() {
   const [maxSalary, setMaxSalary] = useState();
   const [minRate, setMinRate] = useState();
   const [maxRate, setMaxRate] = useState();
+  const [currencyID, setCurrencyID] = useState();
+  const [openEdit, setOpenEdit] = useState(false);
 
   const getTitles = async (lastkeyy) => {
     try {
@@ -134,6 +139,51 @@ export default function Currencies() {
     } catch (error) {}
   };
 
+  const handleEditCurrency = async () => {
+    try {
+      if (currencyTitle !== "") {
+        const data = {
+          currency_id: currencyID,
+          title: currencyTitle,
+          min_salary: minSalary,
+          max_salary: maxSalary,
+          min_rate: minRate,
+          max_rate: maxRate,
+          currency: currencyName,
+          symbol: "$",
+        };
+        const { payload } = await dispatch(editCurrency(data));
+        if (payload.status === "success") {
+          dispatch(
+            setAlert({
+              show: true,
+              type: ALERT_TYPE.SUCCESS,
+              msg: "Currency added successfully",
+            })
+          );
+          setOpenEdit(false);
+          await getTitles(0);
+        } else {
+          dispatch(
+            setAlert({
+              show: true,
+              type: ALERT_TYPE.ERROR,
+              msg: payload?.message?.message,
+            })
+          );
+        }
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: "Field is blank",
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
@@ -141,6 +191,21 @@ export default function Currencies() {
 
   const handleOpenAdd = () => {
     setOpenAdd((prevState) => !prevState);
+    setcurrencyTitle("");
+    setCurrencyName("");
+    setMinSalary("");
+    setMaxSalary("");
+    setMinRate("");
+    setMaxRate("");
+  };
+
+  const handleOpenEdit = (currID, currency, title, minSalary, minRate) => {
+    setOpenEdit((prevState) => !prevState);
+    setCurrencyID(currID);
+    setcurrencyTitle(title);
+    setCurrencyName(currency);
+    setMinSalary(minSalary);
+    setMinRate(minRate);
   };
 
   const handleNewJob = (event) => {
@@ -232,6 +297,16 @@ export default function Currencies() {
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle1" fontWeight="bold">
+                        Min Salary
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Min Rate
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle1" fontWeight="bold">
                         Created At
                       </Typography>
                     </TableCell>
@@ -261,6 +336,8 @@ export default function Currencies() {
                       <TableCell>{row?.symbol}</TableCell>
                       <TableCell>{row?.currency}</TableCell>
                       <TableCell>{row?.title}</TableCell>
+                      <TableCell>{row?.min_salary}</TableCell>
+                      <TableCell>{row?.min_rate}</TableCell>
                       <TableCell>
                         {dateConverterMonth(row.created_at)}
                       </TableCell>
@@ -268,6 +345,32 @@ export default function Currencies() {
                         {dateConverterMonth(row.updated_at)}
                       </TableCell>
                       <TableCell>
+                        <Tooltip title="edit" placement="top-end">
+                          <IconButton
+                            aria-label="edit"
+                            color="blueButton400"
+                            sx={{
+                              padding: "0 !important",
+                              minWidth: "18px !important",
+                              "& .MuiSvgIcon-root": {
+                                width: "18px",
+                              },
+                            }}
+                          >
+                            <EditIcon
+                              onClick={() =>
+                                handleOpenEdit(
+                                  row?.currency_id,
+                                  row?.currency,
+                                  row?.title,
+                                  row?.min_salary,
+                                  row?.min_rate
+                                )
+                              }
+                              sx={{ cursor: "pointer" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="delete" placement="top-end">
                           <IconButton
                             aria-label="edit"
@@ -314,13 +417,20 @@ export default function Currencies() {
         maxRate={maxRate}
         dialogText={"currency"}
       />
-      {/*<Edit
-          show={openAdd}
-          handleOpen={handleOpenAdd}
-          handleEdit={handleAddNewJob}
-          handleEditJob={handleNewJob}
-          editJobTitle={currencyTitle}
-        />*/}
+
+      <EditCurrency
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleAdd={handleEditCurrency}
+        handleNewJob={handleNewJob}
+        newTitle={currencyTitle}
+        currencyName={currencyName}
+        minSalary={minSalary}
+        maxSalary={maxSalary}
+        minRate={minRate}
+        maxRate={maxRate}
+        dialogText={"currency"}
+      />
     </Box>
   );
 }

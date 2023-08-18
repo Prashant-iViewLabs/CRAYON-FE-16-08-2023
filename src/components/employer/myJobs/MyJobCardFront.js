@@ -36,7 +36,7 @@ import {
 import TrackButton from "./TrackButton";
 import GroupsIcon from "@mui/icons-material/Groups";
 import Slider2 from "../../common/Slider2";
-
+import JobDescripiton from "../../common/JobDescripiton";
 import PermContactCalendarOutlinedIcon from "@mui/icons-material/PermContactCalendarOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 const label1 = "applicants";
@@ -345,21 +345,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                   hideTagsAfter={2}
                 />
               </Box>
-              <TextWrapper
-                // mt="12px"
-                // mb={1}
-                color={theme.palette.black100}
-                letterSpacing="0.25px"
-              >
-                <Box
-                  color={theme.palette.black100}
-                  letterSpacing="0.25px"
-                  className="preview"
-                  m={0}
-                  p={0}
-                  dangerouslySetInnerHTML={createMarkup(job?.description)}
-                ></Box>
-              </TextWrapper>
+              <JobDescripiton description={job?.description} />
             </Grid>
             <Box sx={{ display: "flex", alignItems: "end" }}>
               <Button

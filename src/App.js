@@ -13,6 +13,7 @@ import JobTitles from './components/admin/maintenance/JobTitles';
 import ActiveJobs from './components/admin/adminJobs/activeJobs/ActiveJobs';
 import ActiveJobDetail from './components/admin/adminJobs/ActiveJobDetail';
 import AllTalent from './components/admin/adminTalent/AllTalent';
+import TalentPool from './components/admin/adminTalent/TalentPool';
 import Admin from './components/admin/index';
 import MyJobsCandidate from './components/candidate/myJobs/MyJobs';
 import MyCV from './components/candidate/myCV/MyCV';
@@ -52,6 +53,7 @@ import Languages from './components/admin/maintenance/Languages';
 import Industries from './components/admin/maintenance/Industries';
 import QualificationTypes from './components/admin/maintenance/QualificationTypes';
 import Currencies from './components/admin/maintenance/Currencies';
+import TalentPoolInfo from './components/admin/adminTalent/TalentPoolInfo';
 
 export default function App() {
   return (
@@ -83,6 +85,8 @@ export default function App() {
         <Route exact path='admin' element={<PrivateRoute><Admin /></PrivateRoute>} >
           <Route path='admin-talent' element={<PrivateRoute><AdminTalent /></PrivateRoute>} >
             <Route path='all-talent' element={<PrivateRoute><AllTalent /></PrivateRoute>} />
+            <Route path='talent-pool' element={<PrivateRoute><TalentPool /></PrivateRoute>} />
+            <Route path='talent-pool/:poolId?' element={<PrivateRoute><TalentPoolInfo /></PrivateRoute>} />
           </Route>
           <Route path='maintenance' element={<PrivateRoute><Maintenance /></PrivateRoute>} >
             <Route path='company' element={<PrivateRoute><Company /></PrivateRoute>} />

@@ -306,7 +306,13 @@ export default function TalentCard({ index, job, setisFlipped }) {
               {job?.first_name}
             </TextWrapper>
           </Link>
-          <TextWrapper line={1} weight={700} size={20}>
+          <TextWrapper
+            line={1}
+            weight={700}
+            size={20}
+            gutterBottom={true}
+            minHeight={"30px"}
+          >
             {job?.candidate_profile?.candidate_info?.job_title?.title}
           </TextWrapper>
           <Box

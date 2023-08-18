@@ -18,6 +18,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 import {
   addQualificationType,
+  editQualificationType,
   getAllQualificationType,
   removeQualificationType,
 } from "../../../redux/admin/maintenance";
@@ -27,7 +28,9 @@ import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import AddNewQualification from "./Dialogbox/AddNewQualification";
+import EditQualificationType from "./Dialogbox/EditQualificationType";
 
 export default function QualificationTypes() {
   const dispatch = useDispatch();
@@ -41,6 +44,8 @@ export default function QualificationTypes() {
   const [newJobTitle, setNewJobTitle] = useState("");
   const [reference, setReference] = useState("");
   const [level, setLevel] = useState();
+  const [openEdit, setOpenEdit] = useState(false);
+  const [qualifiationTypeId, setQualifiationTypeId] = useState();
 
   const getTitles = async (lastkeyy) => {
     try {
@@ -125,6 +130,37 @@ export default function QualificationTypes() {
     } catch (error) {}
   };
 
+  const handleEdit = async () => {
+    try {
+      const data = {
+        reference: reference,
+        title: newJobTitle,
+        level: level,
+        id: qualifiationTypeId,
+      };
+      const { payload } = await dispatch(editQualificationType(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Qualification type edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getTitles(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
@@ -132,6 +168,17 @@ export default function QualificationTypes() {
 
   const handleOpenAdd = () => {
     setOpenAdd((prevState) => !prevState);
+    setNewJobTitle("");
+    setReference("");
+    setLevel("");
+  };
+
+  const handleOpenEdit = (id, name, reference, level) => {
+    setOpenEdit((prevState) => !prevState);
+    setQualifiationTypeId(id);
+    setNewJobTitle(name);
+    setReference(reference);
+    setLevel(level);
   };
 
   const handleNewJob = (event) => {
@@ -248,24 +295,51 @@ export default function QualificationTypes() {
                         {dateConverterMonth(row.updated_at)}
                       </TableCell>
                       <TableCell>
-                        <Tooltip title="delete" placement="top-end">
-                          <IconButton
-                            aria-label="edit"
-                            color="blueButton400"
-                            sx={{
-                              padding: "0 !important",
-                              minWidth: "18px !important",
-                              "& .MuiSvgIcon-root": {
-                                width: "18px",
-                              },
-                            }}
-                          >
-                            <DeleteIcon
-                              onClick={() => handleOpenDelete(row?.id)}
-                              sx={{ cursor: "pointer" }}
-                            />
-                          </IconButton>
-                        </Tooltip>
+                        <Box sx={{ display: "flex", gap: "8px" }}>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(
+                                    row?.id,
+                                    row?.name,
+                                    row?.reference,
+                                    row?.level
+                                  )
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="delete" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <DeleteIcon
+                                onClick={() => handleOpenDelete(row?.id)}
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -291,13 +365,16 @@ export default function QualificationTypes() {
         level={level}
         dialogText={"qualification type"}
       />
-      {/*<Edit
-          show={openAdd}
-          handleOpen={handleOpenAdd}
-          handleEdit={handleAddNewJob}
-          handleEditJob={handleNewJob}
-          editJobTitle={newJobTitle}
-        />*/}
+      <EditQualificationType
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleAdd={handleEdit}
+        handleNewJob={handleNewJob}
+        newTitle={newJobTitle}
+        reference={reference}
+        level={level}
+        dialogText={"qualification type"}
+      />
     </Box>
   );
 }

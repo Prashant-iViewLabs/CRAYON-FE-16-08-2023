@@ -1,28 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomDialog from "../../../common/CustomDialog";
-import {
-  Box,
-  Button,
-  InputBase,
-  Paper,
-  Switch,
-  Typography,
-} from "@mui/material";
+import { Box, Button, InputBase, Paper } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import AutoComplete from "../../../common/AutoComplete";
+import SelectMenu from "../../../common/SelectMenu";
 import { useSelector } from "react-redux";
-export default function Edit({
+import AutoComplete from "../../../common/AutoComplete";
+
+export default function EditTown({
   show,
   handleOpen,
+  currQualification,
+  currQualificationType,
+  handleEditQual,
   handleEdit,
-  inputName,
-  handleEditJob,
-  existingCompany,
-  data,
-  dialogText,
-  singleInput,
 }) {
   const theme = useTheme();
+  const { country } = useSelector((state) => state.postJobs);
+
   return (
     <CustomDialog
       show={show}
@@ -32,7 +26,11 @@ export default function Edit({
       onDialogClose={handleOpen}
       padding={0}
     >
-      <Box sx={{ padding: 4 }}>
+      <Box
+        sx={{
+          padding: 4,
+        }}
+      >
         <Paper
           sx={{
             display: "flex",
@@ -44,33 +42,27 @@ export default function Edit({
         >
           <InputBase
             sx={{ ml: 2, mr: 2, width: "100%" }}
-            id="edit_input"
-            value={inputName}
-            onChange={handleEditJob}
-            placeholder={`Change current ${dialogText} name`}
+            id="current_town"
+            value={currQualification}
+            onChange={handleEditQual}
+            placeholder={"Edit current town title"}
           />
         </Paper>
+        <SelectMenu
+          name="required_region_id"
+          value={currQualificationType}
+          onHandleChange={handleEditQual}
+          options={country}
+          sx={{
+            width: "100%",
+            mt: 2,
+            border: `1px solid ${theme.palette.grayBorder}`,
+            boxShadow: "none !important",
+          }}
+          placeholder="Select the region"
+        />
       </Box>
-      {!singleInput && (
-        <>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <hr style={{ flexGrow: 1, marginRight: "10px" }} />
-            <span>Or</span>
-            <hr style={{ flexGrow: 1, marginLeft: "10px" }} />
-          </div>
-          <Box sx={{ padding: 4 }}>
-            <AutoComplete
-              // showAddOption={true}
-              // allowCustomInput={true}
-              id="existing_name"
-              value={existingCompany}
-              onChange={handleEditJob}
-              placeholder={`Select from existing ${dialogText}`}
-              data={data}
-            ></AutoComplete>
-          </Box>
-        </>
-      )}
+
       <Box>
         <Button
           sx={{

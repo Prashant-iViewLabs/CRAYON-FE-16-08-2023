@@ -20,17 +20,21 @@ import { useDispatch } from "react-redux";
 import {
   addAssociation,
   approveAssociation,
+  editAssociation,
   getAllAssociations,
   removeAssociation,
 } from "../../../redux/admin/maintenance";
 import { dateConverterMonth } from "../../../utils/DateTime";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { setAlert } from "../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../utils/Constants";
+import EditIcon from "@mui/icons-material/Edit";
+import { setAlert, setLoading } from "../../../redux/configSlice";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
+import { useSelector } from "react-redux";
+import { getAssociation } from "../../../redux/candidate/myCvSlice";
 
 export default function Associations() {
   const dispatch = useDispatch();
@@ -44,6 +48,29 @@ export default function Associations() {
   const [newAssociationTitle, setNewAssociationTitle] = useState("");
   const [associationID, setassociationID] = useState();
   const [approveEvent, setApproveEvent] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableAssociation, setEditableAssociation] = useState();
+  const [associationName, setassociationName] = useState("");
+  const [existingAssociation, setExistingAssociation] = useState();
+
+  const { association } = useSelector((state) => state.myCv);
+
+  const getAllData = async () => {
+    try {
+      dispatch(setLoading(true));
+      await dispatch(getAssociation());
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
 
   const getAssociations = async (lastkeyy) => {
     try {
@@ -124,6 +151,37 @@ export default function Associations() {
     } catch (error) {}
   };
 
+  const handleEditAssociation = async () => {
+    try {
+      const data = {
+        new_association_id:
+          existingAssociation !== undefined ? existingAssociation : null,
+        current_association_id: editableAssociation,
+        title: associationName !== "" ? associationName : "",
+      };
+      const { payload } = await dispatch(editAssociation(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Association edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getAssociations(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteAssociation(jobId);
@@ -134,12 +192,33 @@ export default function Associations() {
     setassociationID(jobId);
   };
 
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableAssociation(currCompID);
+    setassociationName(compName);
+    setExistingAssociation("");
+  };
+
   const handleOpenAdd = () => {
     setOpenAdd((prevState) => !prevState);
   };
 
   const handleCancel = () => {
     setOpenApprove(false);
+  };
+
+  const handleEdit = (event) => {
+    if (event.target.id === "edit_input") {
+      setExistingAssociation(null);
+      setassociationName(event.target.value);
+    } else if (event.target.id.includes("existing_name")) {
+      let com = association?.find(
+        (title) => title.name === event.target.textContent
+      );
+      console.log(com);
+      setassociationName("");
+      setExistingAssociation(com.association_id);
+    }
   };
 
   const getAssociationApproved = async (event, jobID) => {
@@ -186,6 +265,7 @@ export default function Associations() {
 
   useEffect(() => {
     getAssociations(0);
+    getAllData();
   }, []);
 
   return (
@@ -298,6 +378,26 @@ export default function Associations() {
                               }
                             />
                           </Tooltip>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(row?.association_id, row?.name)
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="delete" placement="top-end">
                             <IconButton
                               aria-label="edit"
@@ -332,7 +432,7 @@ export default function Associations() {
         show={openDelete}
         handleOpen={handleOpenDelete}
         handleDelete={removeAssociations}
-        dialogText={'association'}
+        dialogText={"association"}
       />
       <AddNew
         show={openAdd}
@@ -340,17 +440,20 @@ export default function Associations() {
         handleAdd={handleAddNewAssociation}
         handleNewJob={handleNewJob}
         newTitle={newAssociationTitle}
-        dialogText={'association'}
+        dialogText={"association"}
       />
-      {/*<Edit
-          show={openAdd}
-          handleOpen={handleOpenAdd}
-          handleEdit={handleAddNewAssociation}
-          handleEditJob={handleNewJob}
-          editJobTitle={newAssociationTitle}
-        />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditAssociation}
+        handleEditJob={handleEdit}
+        inputName={associationName}
+        existingCompany={existingAssociation}
+        data={association}
+        dialogText={"association"}
+      />
       <Approve
-      dialogText={"association"}
+        dialogText={"association"}
         show={openApprove}
         handleOpen={handleOpenApprove}
         handleCancel={handleCancel}

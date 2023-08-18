@@ -24,7 +24,17 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
-import { InputLabel, Paper, Popover, Tooltip } from "@mui/material";
+import {
+  Checkbox,
+  FormControl,
+  InputLabel,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
+  Popover,
+  Tooltip,
+} from "@mui/material";
 import RadialChart from "../../common/RadialChart";
 import {
   ALERT_TYPE,
@@ -55,9 +65,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import AutoComplete from "../../common/AutoComplete";
 import StyledButton from "../../common/StyledButton";
-import { talentPersonality } from "../../../redux/admin/jobsSlice";
+import {
+  addTalentPool,
+  addTalentToJob,
+  talentPersonality,
+} from "../../../redux/admin/jobsSlice";
 import { setAlert } from "../../../redux/configSlice";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const label = "grit score";
 const labelExp = "experience";
@@ -282,6 +297,9 @@ export default function AllTalentCard({
   setPersonalityAdded,
   traits,
   personalities,
+  tableData,
+  talentJobs,
+  getTalent,
 }) {
   const {
     chips,
@@ -305,14 +323,90 @@ export default function AllTalentCard({
   const [isHovered, setIsHovered] = useState(false);
   const [colorKey, setColorKey] = useState("color");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [jobClick, setJobClick] = useState(null);
   const [anchorElPersonality, setAnchorElPersonality] = useState(null);
   const [value, setValue] = useState([20, 37]);
   const [personalitiesData, setPersonalitiesData] = useState({
     ...PERSONALITY,
   });
 
+  const location = useLocation();
+  const hasTalentPool = location.pathname.includes("talent-pool");
+  // console.log(location);
+  console.log(hasTalentPool);
+
   const open = Boolean(anchorEl);
   const openPersonality = Boolean(anchorElPersonality);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleAddJobClick = (event) => {
+    setJobClick(event.currentTarget);
+  };
+  const addToPool = async (canID, poolID) => {
+    try {
+      const data = {
+        candidate_id: canID,
+        pool_id: poolID,
+      };
+      const { payload } = await dispatch(addTalentPool(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Talent added to pool successfully",
+          })
+        );
+        setAnchorEl(null);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message?.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+  const addToJob = async (event, canId) => {
+    try {
+      const job = talentJobs.find(
+        (item) => item.title === event.target.textContent
+      );
+      const data = {
+        candidate_id: canId,
+        job_id: job.job_id,
+      };
+      const { payload } = await dispatch(addTalentToJob(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Talent added to job successfully",
+          })
+        );
+        setJobClick(null);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message?.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setJobClick(null);
+  };
 
   const handlePopoverClose = () => {
     setAnchorElPersonality(null);
@@ -420,10 +514,6 @@ export default function AllTalentCard({
         })
       );
     }
-  };
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
   };
 
   return (
@@ -1734,51 +1824,197 @@ export default function AllTalentCard({
                   </Box>
                 </Box>
               </Box>
-              {/* <Box sx={{ mb: 1 }}>
-                                <Button variant='contained' color='redButton' sx={{ padding: '16px 32px !important', mr: 1 }} >{i18n['allTalent.history']}</Button>
-                                <Button variant='contained' color='redButton' sx={{ padding: '16px 32px !important', mr: 1 }} >{i18n['allTalent.chat']}</Button>
-                                <Button variant='contained' color='redButton' sx={{ padding: '16px 32px !important' }} >{i18n['allTalent.match']}</Button>
-                            </Box> */}
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
-                <Button
-                  id="broad"
-                  aria-controls={open ? "broad-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  variant="contained"
-                  disableElevation
-                  onClick={handleClick}
-                  endIcon={<KeyboardArrowDownIcon />}
-                  color="base"
+
+              {!hasTalentPool && (
+                <Box
                   sx={{
-                    mr: 1,
-                    padding: "16px 24px !important",
-                    color: theme.palette.redButton.main,
-                    border: `solid ${theme.palette.redButton.main} 2px`,
+                    mt: 2,
                   }}
                 >
-                  {i18n["allTalent.addToPool"]}
-                </Button>
-                <Button
-                  id="broad"
-                  aria-controls={open ? "broad-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  variant="contained"
-                  disableElevation
-                  onClick={handleClick}
-                  endIcon={<KeyboardArrowDownIcon />}
-                  color="redButton"
-                  sx={{ mr: 1, padding: "16px 24px !important" }}
-                >
-                  {i18n["allTalent.addToJob"]}
-                </Button>
-              </Box>
-              {/* </Box> */}
+                  <div
+                    style={{ display: "inline-block", position: "relative" }}
+                  >
+                    <Button
+                      id="broad"
+                      aria-controls={anchorEl ? "broad-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={anchorEl ? "true" : undefined}
+                      variant="contained"
+                      disableElevation
+                      onClick={handleClick}
+                      endIcon={<KeyboardArrowDownIcon />}
+                      color="base"
+                      sx={{
+                        mr: 1,
+                        padding: "16px 24px !important",
+                        color: theme.palette.redButton.main,
+                        border: `solid ${theme.palette.redButton.main} 2px`,
+                      }}
+                    >
+                      {i18n["allTalent.addToPool"]}
+                    </Button>
+                    <Menu
+                      id="broad-menu"
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                      PaperProps={{
+                        style: {
+                          width: "160px",
+                        },
+                      }}
+                    >
+                      <Box
+                        id="talentList"
+                        sx={{ overflow: "hidden", height: "100px" }}
+                      >
+                        <InfiniteScroll
+                          style={{
+                            height: "100%",
+                            overflowX: "hidden",
+                            scrollbarWidth: "thin",
+                          }}
+                          dataLength={tableData?.length}
+                          // next={() => getJobList(lastKey)}
+                          hasMore={true}
+                          scrollableTarget="talentList"
+                          endMessage={
+                            <p style={{ textAlign: "center" }}>
+                              <b>Yay! You have seen it all</b>
+                            </p>
+                          }
+                        >
+                          {tableData.map((option, index) => (
+                            <MenuItem
+                              key={index}
+                              onClick={() =>
+                                addToPool(
+                                  talentContent?.user_id,
+                                  option?.pool_id
+                                )
+                              }
+                            >
+                              <ListItemText primary={option.title} />
+                            </MenuItem>
+                          ))}
+                          <style>
+                            {`.infinite-scroll-component::-webkit-scrollbar {
+                          width: 7px !important;
+                          background-color: #F5F5F5; /* Set the background color of the scrollbar */
+                        }
+
+                        .infinite-scroll-component__outerdiv {
+                          height:100%
+                        }
+
+                        .infinite-scroll-component::-webkit-scrollbar-thumb {
+                          background-color: #888c; /* Set the color of the scrollbar thumb */
+                        }`}
+                          </style>
+                        </InfiniteScroll>
+                      </Box>
+                    </Menu>
+                  </div>
+                  <div
+                    style={{ display: "inline-block", position: "relative" }}
+                  >
+                    <Button
+                      id="broad"
+                      aria-controls={jobClick ? "broad-menu-job" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={jobClick ? "true" : undefined}
+                      variant="contained"
+                      disableElevation
+                      onClick={handleAddJobClick}
+                      endIcon={<KeyboardArrowDownIcon />}
+                      color="redButton"
+                      sx={{ mr: 1, padding: "16px 24px !important" }}
+                    >
+                      {i18n["allTalent.addToJob"]}
+                    </Button>
+                    <Menu
+                      id="broad-menu-job"
+                      anchorEl={jobClick}
+                      open={Boolean(jobClick)}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                      PaperProps={{
+                        style: {
+                          width: "150px",
+                        },
+                      }}
+                    >
+                      <Box
+                        id="talentList"
+                        sx={{ overflow: "hidden", height: "100px" }}
+                      >
+                        <InfiniteScroll
+                          style={{
+                            height: "100%",
+                            overflowX: "hidden",
+                            scrollbarWidth: "thin",
+                          }}
+                          dataLength={talentJobs?.length}
+                          // next={() => getJobList(lastKey)}
+                          hasMore={true}
+                          scrollableTarget="talentList"
+                          endMessage={
+                            <p style={{ textAlign: "center" }}>
+                              <b>Yay! You have seen it all</b>
+                            </p>
+                          }
+                        >
+                          {talentJobs.map((option, index) => (
+                            <MenuItem
+                              key={index}
+                              onClick={(event) =>
+                                addToJob(event, talentContent?.user_id)
+                              }
+                            >
+                              <Tooltip
+                                title={option?.title}
+                                placement="top-end"
+                              >
+                                <ListItemText
+                                  sx={{
+                                    width: "120px",
+                                    whiteSpace: "nowrap", // Prevents text from wrapping
+                                    overflow: "hidden", // Hides any overflowing content
+                                    textOverflow: "ellipsis",
+                                  }}
+                                  primary={option?.title}
+                                />
+                              </Tooltip>
+                            </MenuItem>
+                          ))}
+                          <style>
+                            {`.infinite-scroll-component::-webkit-scrollbar {
+                          width: 7px !important;
+                          background-color: #F5F5F5; /* Set the background color of the scrollbar */
+                        }
+
+                        .infinite-scroll-component__outerdiv {
+                          height:100%
+                        }
+
+                        .infinite-scroll-component::-webkit-scrollbar-thumb {
+                          background-color: #888c; /* Set the color of the scrollbar thumb */
+                        }`}
+                          </style>
+                        </InfiniteScroll>
+                      </Box>
+                    </Menu>
+                  </div>
+                </Box>
+              )}
+
               <Box
                 sx={{
                   display: "flex",

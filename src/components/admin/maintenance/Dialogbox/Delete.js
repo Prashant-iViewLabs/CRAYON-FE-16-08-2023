@@ -79,7 +79,7 @@ export default function Delete({ show, handleOpen, handleDelete, dialogText }) {
           textAlign={"center"}
           paragraph
         >
-          `Please confirm that you want to delete the selected ${dialogText}`
+          Please confirm that you want to delete the selected {dialogText}
         </Typography>
         <Box
           sx={{

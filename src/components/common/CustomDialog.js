@@ -15,14 +15,12 @@ import Paper from "@mui/material/Paper";
 const StyledDialog = styled(Dialog)(
   ({ theme, isApplyJob, isTalentMyJobsDialog, isProfile }) => ({
     "& .MuiDialog-container": {
-      height: (isApplyJob) || (isTalentMyJobsDialog && "100%"),
+      height: isApplyJob || (isTalentMyJobsDialog && "100%"),
     },
     "& .MuiPaper-root": {
       background: theme.palette.menuBackground,
       height:
-        (isApplyJob) ||
-        (isTalentMyJobsDialog && "100%") ||
-        (isProfile && "92%"),
+        isApplyJob || (isTalentMyJobsDialog && "100%") || (isProfile && "92%"),
       padding: isTalentMyJobsDialog ? "16px" : "",
     },
     "& .MuiDialogContent-root": {

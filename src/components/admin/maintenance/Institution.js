@@ -21,27 +21,26 @@ import Typography from "@mui/material/Typography";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 import {
-  addAssociation,
   addInstitute,
-  approveAssociation,
   approveInstitute,
-  getAllAssociations,
+  editInstitute,
   getAllInstitute,
-  removeAssociation,
   removeInstitute,
 } from "../../../redux/admin/maintenance";
 import { dateConverterMonth } from "../../../utils/DateTime";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { setAlert } from "../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../utils/Constants";
+import { setAlert, setLoading } from "../../../redux/configSlice";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import CustomDialog from "../../common/CustomDialog";
 import { useTheme } from "@emotion/react";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
+import { getInstitute } from "../../../redux/candidate/myCvSlice";
+import { useSelector } from "react-redux";
 export default function Institution() {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -55,6 +54,29 @@ export default function Institution() {
   const [newInstitutionTitle, setNewInstitutionTitle] = useState("");
   const [institutionID, setinstitutionID] = useState();
   const [approveEvent, setApproveEvent] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableInstitution, setEditableInstitution] = useState();
+  const [institutionName, setinstitutionName] = useState("");
+  const [existingInstitution, setExistingInstitution] = useState();
+
+  const { institution } = useSelector((state) => state.myCv);
+
+  const getAllData = async () => {
+    try {
+      dispatch(setLoading(true));
+      await dispatch(getInstitute());
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
 
   const getInstituion = async (lastkeyy) => {
     try {
@@ -135,6 +157,37 @@ export default function Institution() {
     } catch (error) {}
   };
 
+  const handleEditInstitution = async () => {
+    try {
+      const data = {
+        new_institution_id:
+          existingInstitution !== undefined ? existingInstitution : null,
+        current_institution_id: editableInstitution,
+        title: institutionName !== "" ? institutionName : "",
+      };
+      const { payload } = await dispatch(editInstitute(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Institution edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getInstituion(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteInstitution(jobId);
@@ -149,8 +202,29 @@ export default function Institution() {
     setOpenAdd((prevState) => !prevState);
   };
 
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableInstitution(currCompID);
+    setinstitutionName(compName);
+    setExistingInstitution("");
+  };
+
   const handleCancel = () => {
     setOpenApprove(false);
+  };
+
+  const handleEdit = (event) => {
+    if (event.target.id === "edit_input") {
+      setExistingInstitution(null);
+      setinstitutionName(event.target.value);
+    } else if (event.target.id.includes("existing_name")) {
+      let com = institution?.find(
+        (title) => title.name === event.target.textContent
+      );
+      console.log(com);
+      setinstitutionName("");
+      setExistingInstitution(com.job_title_id);
+    }
   };
 
   const getInstitutionApproved = async (event, jobID) => {
@@ -197,6 +271,7 @@ export default function Institution() {
 
   useEffect(() => {
     getInstituion(0);
+    getAllData();
   }, []);
 
   return (
@@ -306,6 +381,26 @@ export default function Institution() {
                               }
                             />
                           </Tooltip>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(row?.institution_id, row?.name)
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="delete" placement="top-end">
                             <IconButton
                               aria-label="edit"
@@ -350,13 +445,16 @@ export default function Institution() {
         newTitle={newInstitutionTitle}
         dialogText={"instituiton"}
       />
-      {/*<Edit
-            show={openAdd}
-            handleOpen={handleOpenAdd}
-            handleEdit={handleAddNewInstitution}
-            handleEditJob={handleNewJob}
-            editJobTitle={newInstitutionTitle}
-          />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditInstitution}
+        handleEditJob={handleEdit}
+        inputName={institutionName}
+        existingCompany={existingInstitution}
+        data={institution}
+        dialogText={"institution"}
+      />
       <Approve
         dialogText={"institution"}
         show={openApprove}

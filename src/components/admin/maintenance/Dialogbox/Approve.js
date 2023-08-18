@@ -9,6 +9,7 @@ export default function Approve({
   handleApprove,
   jobID,
   approveEvent,
+  dialogText,
 }) {
   return (
     <CustomDialog
@@ -30,7 +31,7 @@ export default function Approve({
           textAlign={"center"}
           paragraph
         >
-          Please confirm that you want to approve the selected job
+          Please confirm that you want to approve the selected {dialogText}
         </Typography>
       </Box>
       <Box>

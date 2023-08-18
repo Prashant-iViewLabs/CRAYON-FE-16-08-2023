@@ -445,9 +445,10 @@ export default function JobTitles() {
         handleOpen={handleOpenEdit}
         handleEdit={handleEditCompany}
         handleEditJob={handleEdit}
-        companyName={companyName}
+        inputName={companyName}
         existingCompany={existingCompany}
         data={titles}
+        dialogText={"job title"}
       />
       <Approve
         dialogText={"job title"}

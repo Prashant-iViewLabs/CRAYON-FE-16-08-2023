@@ -21,6 +21,7 @@ import {
   addAssociation,
   addTown,
   approveAssociation,
+  editTown,
   getAllAssociations,
   getAllTowns,
   removeAssociation,
@@ -28,6 +29,7 @@ import {
 } from "../../../redux/admin/maintenance";
 import { dateConverterMonth } from "../../../utils/DateTime";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { setAlert, setLoading } from "../../../redux/configSlice";
 import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
@@ -35,6 +37,7 @@ import Delete from "./Dialogbox/Delete";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
 import { getCountry } from "../../../redux/employer/postJobSlice";
+import EditTown from "./Dialogbox/EditTown";
 export default function Towns() {
   const dispatch = useDispatch();
   const [lastKey, setLastKey] = useState(0);
@@ -45,6 +48,10 @@ export default function Towns() {
   const [deleteTowns, setDeleteTowns] = useState();
   const [newTownTitle, setNewTownTitle] = useState("");
   const [countryValue, setCountryValue] = useState(0);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [currQualification, setCurrQualification] = useState("");
+  const [currQualificationType, setCurrQualificationType] = useState(0);
+  const [currQualificationID, setCurrQualificationID] = useState(0);
 
   const getTowns = async (lastkeyy) => {
     try {
@@ -123,6 +130,49 @@ export default function Towns() {
       }
     } catch (error) {}
   };
+  const handleEdit = async () => {
+    try {
+      console.log(
+        currQualification,
+        currQualificationID,
+        currQualificationType
+      );
+      const data = {
+        town_id: currQualificationID,
+        title: currQualification !== "" ? currQualification : "",
+        region_id: currQualificationType,
+      };
+      const { payload } = await dispatch(editTown(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Town edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getTowns(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
+  const handleEditQual = (event) => {
+    console.log(event);
+    if (event.target.id === "current_town") {
+      setCurrQualification(event.target.value);
+    } else if (event.target.name === "required_region_id") {
+      setCurrQualificationType(event.target.value);
+    }
+  };
 
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
@@ -136,6 +186,13 @@ export default function Towns() {
 
   const handleNewJob = (event) => {
     setNewTownTitle(event.target.value);
+  };
+
+  const handleOpenEdit = (qualID, qualName, qualType) => {
+    setOpenEdit((prevState) => !prevState);
+    setCurrQualificationID(qualID);
+    setCurrQualification(qualName);
+    setCurrQualificationType(qualType);
   };
 
   const getAllData = async () => {
@@ -259,24 +316,50 @@ export default function Towns() {
                         {dateConverterMonth(row.updated_at)}
                       </TableCell>
                       <TableCell>
-                        <Tooltip title="delete" placement="top-end">
-                          <IconButton
-                            aria-label="edit"
-                            color="blueButton400"
-                            sx={{
-                              padding: "0 !important",
-                              minWidth: "18px !important",
-                              "& .MuiSvgIcon-root": {
-                                width: "18px",
-                              },
-                            }}
-                          >
-                            <DeleteIcon
-                              onClick={() => handleOpenDelete(row?.town_id)}
-                              sx={{ cursor: "pointer" }}
-                            />
-                          </IconButton>
-                        </Tooltip>
+                        <Box sx={{ display: "flex", gap: "8px" }}>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(
+                                    row?.town_id,
+                                    row?.name,
+                                    row?.region_id
+                                  )
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="delete" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <DeleteIcon
+                                onClick={() => handleOpenDelete(row?.town_id)}
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -291,7 +374,6 @@ export default function Towns() {
         handleOpen={handleOpenDelete}
         handleDelete={removeTowns}
         dialogText={"town"}
-
       />
       <AddNew
         show={openAdd}
@@ -304,13 +386,14 @@ export default function Towns() {
         value={countryValue}
         dialogText={"town"}
       />
-      {/*<Edit
-            show={openAdd}
-            handleOpen={handleOpenAdd}
-            handleEdit={handleAddNewTowns}
-            handleEditJob={handleNewJob}
-            editJobTitle={newTownTitle}
-          />*/}
+      <EditTown
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        currQualification={currQualification}
+        currQualificationType={currQualificationType}
+        handleEditQual={handleEditQual}
+        handleEdit={handleEdit}
+      />
     </Box>
   );
 }

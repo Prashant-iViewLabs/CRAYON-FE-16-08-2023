@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import {
   addNationality,
   approveNationality,
+  editNationality,
   getAllNationality,
   removeNationalities,
 } from "../../../redux/admin/maintenance";
@@ -29,6 +30,7 @@ import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
 
@@ -41,6 +43,9 @@ export default function Nationalities() {
   const [openAdd, setOpenAdd] = useState(false);
   const [deleteNationality, setDeleteNationality] = useState();
   const [newNationalityTitle, setNewNationalityTitle] = useState("");
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableNationality, setEditableNationality] = useState();
+  const [nationalityName, setnationalityName] = useState("");
 
   const getNationalities = async (lastkeyy) => {
     try {
@@ -121,6 +126,35 @@ export default function Nationalities() {
     } catch (error) {}
   };
 
+  const handleEditCompany = async () => {
+    try {
+      const data = {
+        nationality_id: editableNationality,
+        title: nationalityName,
+      };
+      const { payload } = await dispatch(editNationality(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Nationality edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getNationalities(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteNationality(jobId);
@@ -132,6 +166,16 @@ export default function Nationalities() {
 
   const handleNewJob = (event) => {
     setNewNationalityTitle(event.target.value);
+  };
+
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableNationality(currCompID);
+    setnationalityName(compName);
+  };
+
+  const handleEdit = (event) => {
+    setnationalityName(event.target.value);
   };
 
   useEffect(() => {
@@ -236,6 +280,29 @@ export default function Nationalities() {
                         {dateConverterMonth(row.updated_at)}
                       </TableCell>
                       <TableCell>
+                        <Tooltip title="edit" placement="top-end">
+                          <IconButton
+                            aria-label="edit"
+                            color="blueButton400"
+                            sx={{
+                              padding: "0 !important",
+                              minWidth: "18px !important",
+                              "& .MuiSvgIcon-root": {
+                                width: "18px",
+                              },
+                            }}
+                          >
+                            <EditIcon
+                              onClick={() =>
+                                handleOpenEdit(
+                                  row?.nationality_id,
+                                  row?.nationality
+                                )
+                              }
+                              sx={{ cursor: "pointer" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="delete" placement="top-end">
                           <IconButton
                             aria-label="edit"
@@ -279,13 +346,15 @@ export default function Nationalities() {
         newTitle={newNationalityTitle}
         dialogText={"nationality"}
       />
-      {/*<Edit
-            show={openAdd}
-            handleOpen={handleOpenAdd}
-            handleEdit={handleAddNewNationality}
-            handleEditJob={handleNewJob}
-            editJobTitle={newNationalityTitle}
-          />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditCompany}
+        handleEditJob={handleEdit}
+        inputName={nationalityName}
+        dialogText={"nationality"}
+        singleInput={true}
+      />
     </Box>
   );
 }

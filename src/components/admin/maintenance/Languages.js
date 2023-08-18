@@ -22,6 +22,7 @@ import {
   addNationality,
   approveLanguages,
   approveNationality,
+  editLanguage,
   getAllLanguages,
   getAllNationality,
   removeLanguages,
@@ -33,6 +34,7 @@ import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import AddNew from "./Dialogbox/AddNew";
 import Delete from "./Dialogbox/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
 
@@ -45,6 +47,9 @@ export default function Languages() {
   const [openAdd, setOpenAdd] = useState(false);
   const [deleteLanguage, setDeleteLanguage] = useState();
   const [newLanguageTitle, setNewLanguageTitle] = useState("");
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableNationality, setEditableNationality] = useState();
+  const [nationalityName, setnationalityName] = useState("");
 
   const getLanguages = async (lastkeyy) => {
     try {
@@ -125,6 +130,35 @@ export default function Languages() {
     } catch (error) {}
   };
 
+  const handleEditCompany = async () => {
+    try {
+      const data = {
+        language_id: editableNationality,
+        title: nationalityName,
+      };
+      const { payload } = await dispatch(editLanguage(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Language edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getLanguages(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteLanguage(jobId);
@@ -137,6 +171,16 @@ export default function Languages() {
 
   const handleNewJob = (event) => {
     setNewLanguageTitle(event.target.value);
+  };
+
+  const handleEdit = (event) => {
+    setnationalityName(event.target.value);
+  };
+
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableNationality(currCompID);
+    setnationalityName(compName);
   };
 
   useEffect(() => {
@@ -241,6 +285,26 @@ export default function Languages() {
                         {dateConverterMonth(row.updated_at)}
                       </TableCell>
                       <TableCell>
+                        <Tooltip title="edit" placement="top-end">
+                          <IconButton
+                            aria-label="edit"
+                            color="blueButton400"
+                            sx={{
+                              padding: "0 !important",
+                              minWidth: "18px !important",
+                              "& .MuiSvgIcon-root": {
+                                width: "18px",
+                              },
+                            }}
+                          >
+                            <EditIcon
+                              onClick={() =>
+                                handleOpenEdit(row?.language_id, row?.language)
+                              }
+                              sx={{ cursor: "pointer" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="delete" placement="top-end">
                           <IconButton
                             aria-label="edit"
@@ -282,13 +346,15 @@ export default function Languages() {
         newTitle={newLanguageTitle}
         dialogText={"language"}
       />
-      {/*<Edit
-              show={openAdd}
-              handleOpen={handleOpenAdd}
-              handleEdit={handleAddNewLanguage}
-              handleEditJob={handleNewJob}
-              editJobTitle={newLanguageTitle}
-            />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditCompany}
+        handleEditJob={handleEdit}
+        inputName={nationalityName}
+        dialogText={"language"}
+        singleInput={true}
+      />
     </Box>
   );
 }

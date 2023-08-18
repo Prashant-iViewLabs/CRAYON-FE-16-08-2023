@@ -173,6 +173,20 @@ export const addNewSkill = createAsyncThunk(
   }
 );
 
+export const editSkill = createAsyncThunk(
+  "editSkill",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editskill",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getAllTools = createAsyncThunk(
   "getAllTools",
   async ({ lastKey }, { dispatch }) => {
@@ -206,6 +220,20 @@ export const addNewTool = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await postApi(
       "/admin/maintenance/addnewtool",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const editTool = createAsyncThunk(
+  "editTool",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/edittool",
       payload,
       true
     );
@@ -352,6 +380,20 @@ export const approveAssociation = createAsyncThunk(
   }
 );
 
+export const editAssociation = createAsyncThunk(
+  "editAssociation",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editassociation",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getAllInstitute = createAsyncThunk(
   "getAllInstitute",
   async ({ lastKey }, { dispatch }) => {
@@ -385,6 +427,20 @@ export const addInstitute = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await postApi(
       "/admin/maintenance/addnewinstitution",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const editInstitute = createAsyncThunk(
+  "editInstitute",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editinstitution",
       payload,
       true
     );
@@ -448,6 +504,20 @@ export const addTown = createAsyncThunk(
   }
 );
 
+export const editTown = createAsyncThunk(
+  "editTown",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/edittown",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const approveTown = createAsyncThunk(
   "approveTown",
   async (payload, { dispatch }) => {
@@ -503,6 +573,20 @@ export const addSchool = createAsyncThunk(
   }
 );
 
+export const editSchool = createAsyncThunk(
+  "editSchool",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editschool",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const approveSchool = createAsyncThunk(
   "approveSchool",
   async (payload, { dispatch }) => {
@@ -536,6 +620,20 @@ export const removeNationalities = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await postApi(
       "/admin/maintenance/deletenationality",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const editNationality = createAsyncThunk(
+  "editNationality",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editnationality",
       payload,
       true
     );
@@ -599,6 +697,20 @@ export const addLanguages = createAsyncThunk(
   }
 );
 
+export const editLanguage = createAsyncThunk(
+  "editLanguage",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editlanguage",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getAllIndustry = createAsyncThunk(
   "getAllIndustry",
   async ({ lastKey }, { dispatch }) => {
@@ -618,6 +730,20 @@ export const removeIndustry = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await postApi(
       "/admin/maintenance/deleteindustry",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const editIndustry = createAsyncThunk(
+  "editIndustry",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editindustry",
       payload,
       true
     );
@@ -667,6 +793,20 @@ export const addQualificationType = createAsyncThunk(
   }
 );
 
+export const editQualificationType = createAsyncThunk(
+  "editQualificationType",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editqualificationtype",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getAllCurrencies = createAsyncThunk(
   "getAllCurrencies",
   async ({ lastKey }, { dispatch }) => {
@@ -700,6 +840,20 @@ export const addCurrencies = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await postApi(
       "/admin/maintenance/addnewcurrency",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const editCurrency = createAsyncThunk(
+  "editCurrency",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/maintenance/editcurrency",
       payload,
       true
     );

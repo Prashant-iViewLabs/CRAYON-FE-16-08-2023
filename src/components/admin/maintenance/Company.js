@@ -182,11 +182,11 @@ export default function Company() {
       >
         Company ({companyCount})
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+      {/*<Box sx={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
         <Button variant="contained" color="redButton" onClick={handleOpenAdd}>
           Add
         </Button>
-      </Box>
+      </Box>*/}
       <Grid
         container
         spacing={2}
@@ -337,13 +337,14 @@ export default function Company() {
         handleOpen={handleOpenEdit}
         handleEdit={handleEditCompany}
         handleEditJob={handleEdit}
-        companyName={companyName}
+        inputName={companyName}
         existingCompany={existingCompany}
         data={companies}
+        dialogText={"company"}
+
       />
       <Approve
-      dialogText={"company"}
-        
+        dialogText={"company"}
         show={openApprove}
         handleOpen={handleOpenApprove}
         handleCancel={handleCancel}

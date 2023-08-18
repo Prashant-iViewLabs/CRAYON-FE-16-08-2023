@@ -249,6 +249,29 @@ export default function DraggableCard({
     setExpand((prev) => !prev);
   };
 
+  const handleDownloadClick = (cvLink) => {
+    const pdfData = cvLink;
+
+    // Create a Blob object from the PDF data
+    const blob = new Blob([pdfData], { type: "application/pdf" });
+
+    // Create a URL for the Blob
+    const blobUrl = URL.createObjectURL(blob);
+
+    const filename = pdfData.split("/").pop();
+    // Create a link element
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = filename;
+
+    // Append the link to the document and trigger a click event
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up by revoking the Blob URL after the download
+    URL.revokeObjectURL(blobUrl);
+  };
+
   return (
     <Draggable
       key={item?.user_id}
@@ -465,6 +488,11 @@ export default function DraggableCard({
                       label={i18n["draggableCard.cv"]}
                       mr="4px"
                       borderRadius="25px"
+                      onClick={() =>
+                        handleDownloadClick(
+                          item?.candidate_profile?.candidate_info?.cv_link
+                        )
+                      }
                     ></SmallButton>
                     <SmallButton
                       color="redButton"
@@ -620,6 +648,11 @@ export default function DraggableCard({
                   label={i18n["draggableCard.cv"]}
                   mr="4px"
                   borderRadius="25px"
+                  onClick={() =>
+                    handleDownloadClick(
+                      item?.candidate_profile?.candidate_info?.cv_link
+                    )
+                  }
                 ></SmallButton>
 
                 <SmallButton
@@ -1106,28 +1139,29 @@ export default function DraggableCard({
                         background: theme.palette.base.main,
                       }}
                     >
-                      {item?.candidate_profile?.linkedin_profile_link ? <Link
-                        to={item?.candidate_profile?.linkedin_profile_link}
-                        target={"_blank"}
-                        style={{
-                          textDecoration: "none",
-                          color: theme.palette.black,
-                        }}
-                        
-                      >
-                        <Box
-                          component="img"
-                          className="dragDots"
-                          alt="drag dots"
-                          src={linkedin}
-                          sx={{
-                            width: "20px",
-                            height: "20px",
-                            cursor: "pointer",
+                      {item?.candidate_profile?.linkedin_profile_link ? (
+                        <Link
+                          to={item?.candidate_profile?.linkedin_profile_link}
+                          target={"_blank"}
+                          style={{
+                            textDecoration: "none",
+                            color: theme.palette.black,
                           }}
-                        />
-                      </Link> : 
-                      <Box
+                        >
+                          <Box
+                            component="img"
+                            className="dragDots"
+                            alt="drag dots"
+                            src={linkedin}
+                            sx={{
+                              width: "20px",
+                              height: "20px",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Link>
+                      ) : (
+                        <Box
                           component="img"
                           className="dragDots"
                           alt="drag dots"
@@ -1142,11 +1176,12 @@ export default function DraggableCard({
                               setAlert({
                                 show: true,
                                 type: ALERT_TYPE.ERROR,
-                                msg:"Profile Link is not attached",
+                                msg: "Profile Link is not attached",
                               })
                             );
                           }}
-                        />}
+                        />
+                      )}
                     </Box>
                   </Box>
                 </Popover>

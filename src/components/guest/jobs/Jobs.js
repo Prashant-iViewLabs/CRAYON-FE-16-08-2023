@@ -822,18 +822,45 @@ export default function Jobs() {
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
     >
-      <Grid item md={2} lg={1} xl={1}>
-          <ButtonPanel
-            topMargin={true}
-            panelData={allIndustries}
-            side="left"
-            onChangeFilter={onChangeFilter}
-          />
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        className="filterSec"
+        sx={{
+          height: "90vh",
+          overflow: "scroll",
+        }}
+      >
+        <ButtonPanel
+          topMargin={true}
+          panelData={allIndustries}
+          side="left"
+          onChangeFilter={onChangeFilter}
+        />
+        <style>
+          {`.filterSec::-webkit-scrollbar {
+                      width: 7px !important;
+                      background-color: #F5F5F5; /* Set the background color of the scrollbar */
+                    }
+                    .filterSec::-webkit-scrollbar-thumb {
+                      background-color: #888c; /* Set the color of the scrollbar thumb */
+                    }`}
+        </style>
       </Grid>
       {/*      <Outlet />*/}
-      <Grid item xs={12} sm={6} md={8} lg={9} xl={10} sx={{
-        px: 2,
-      }}>
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={8}
+        lg={9}
+        xl={10}
+        sx={{
+          px: 2,
+        }}
+      >
         <SearchBar
           placeholder={i18n["jobs.searchPlaceholder"]}
           setAllJobs={setAllJobs}
@@ -874,43 +901,43 @@ export default function Jobs() {
           >
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                <Grid
-                  xl={expandedItemId === job.job_id ? 12 : 3}
-                  lg={expandedItemId === job.job_id ? 12 : 4}
-                  md={expandedItemId === job.job_id ? 12 : 6}
-                  xs={12}
-                  key={job.job_id}
-                  ref={(ref) => {
-                    if (expandedItemId === job.job_id && ref) {
-                      ref.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                >
-                  <JobCard
-                    index={job.job_id}
-                    job={job}
-                    setQuestions={setQuestions}
-                    onHandleClose={onHandleClose}
-                    setopenApplyJobDialog={setopenApplyJobDialog}
-                    setIsExpanded={handleExpand}
-                  />
-                </Grid>
-              ))
+                  <Grid
+                    xl={expandedItemId === job.job_id ? 12 : 3}
+                    lg={expandedItemId === job.job_id ? 12 : 4}
+                    md={expandedItemId === job.job_id ? 12 : 6}
+                    xs={12}
+                    key={job.job_id}
+                    ref={(ref) => {
+                      if (expandedItemId === job.job_id && ref) {
+                        ref.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }
+                    }}
+                  >
+                    <JobCard
+                      index={job.job_id}
+                      job={job}
+                      setQuestions={setQuestions}
+                      onHandleClose={onHandleClose}
+                      setopenApplyJobDialog={setopenApplyJobDialog}
+                      setIsExpanded={handleExpand}
+                    />
+                  </Grid>
+                ))
               : (allJobs.length = 0 ? (
-                <Box
-                  sx={{
-                    width: "100%",
-                    textAlign: "center",
-                    mt: 4,
-                    color: theme.palette.placeholder,
-                  }}
-                >
-                  {i18n["jobs.noData"]}
-                </Box>
-              ) : null)}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      textAlign: "center",
+                      mt: 4,
+                      color: theme.palette.placeholder,
+                    }}
+                  >
+                    {i18n["jobs.noData"]}
+                  </Box>
+                ) : null)}
           </Grid>
         </InfiniteScroll>
         {/*<Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
@@ -936,33 +963,38 @@ export default function Jobs() {
           </SwipeableViews>
         </Grid>*/}
       </Grid>
-      <Grid item md={2} lg={1} xl={1}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "end"
-      }}>
-          <ButtonPanel
-            topMargin={true}
-            panelData={allJobTypes}
-            side="right"
-            onChangeFilter={onChangeFilterJobType}
-          />
-          <ButtonPanel
-            panelData={allStages}
-            side="right"
-            onChangeFilter={onChangeFilterJobStage}
-          />
-          <ButtonPanel
-            panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
-            onChangeFilter={onChangefavourite}
-            side="right"
-          />
-          <ButtonPanel
-            panelData={allTypes}
-            side="left"
-            onChangeFilter={onChangeFilterType}
-          />
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "end",
+        }}
+      >
+        <ButtonPanel
+          topMargin={true}
+          panelData={allJobTypes}
+          side="right"
+          onChangeFilter={onChangeFilterJobType}
+        />
+        <ButtonPanel
+          panelData={allStages}
+          side="right"
+          onChangeFilter={onChangeFilterJobStage}
+        />
+        <ButtonPanel
+          panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
+          onChangeFilter={onChangefavourite}
+          side="right"
+        />
+        <ButtonPanel
+          panelData={allTypes}
+          side="left"
+          onChangeFilter={onChangeFilterType}
+        />
       </Grid>
 
       <CustomDialog

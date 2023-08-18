@@ -12,12 +12,12 @@ const theme = createTheme({
       light: "#f1e5ff",
     },
     redButton: {
-      main: "#F05D61",
+      main: "#E41E26",
       contrastText: "#FFFFFF",
-      light: "#f44336",
+      light: "#F44336",
     },
     redButton100: {
-      main: "#FF6464",
+      main: "#E41E26",
       contrastText: "#FFFFFF",
     },
     pinkButton: {

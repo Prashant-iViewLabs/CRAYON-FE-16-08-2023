@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 import {
+  editIndustry,
   getAllIndustry,
   removeIndustry,
 } from "../../../redux/admin/maintenance";
@@ -25,6 +26,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import Delete from "./Dialogbox/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import Edit from "./Dialogbox/Edit";
 
 export default function Industries() {
   const dispatch = useDispatch();
@@ -33,6 +36,9 @@ export default function Industries() {
   const [industryCount, setindustryCount] = useState(0);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteJob, setDeleteJob] = useState();
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableIndustry, setEditableIndustry] = useState();
+  const [industryName, setindustryName] = useState("");
 
   const getindustry = async (lastkeyy) => {
     try {
@@ -71,9 +77,48 @@ export default function Industries() {
     } catch (error) {}
   };
 
+  const handleEditIndustry = async () => {
+    try {
+      const data = {
+        industry_id: editableIndustry,
+        title: industryName,
+      };
+      const { payload } = await dispatch(editIndustry(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Nationality edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getindustry(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
+  const handleEdit = (event) => {
+    setindustryName(event.target.value);
+  };
+
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
+  };
+
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableIndustry(currCompID);
+    setindustryName(compName);
   };
 
   useEffect(() => {
@@ -181,6 +226,26 @@ export default function Industries() {
                         {dateConverterMonth(row.updated_at)}
                       </TableCell>
                       <TableCell>
+                        <Tooltip title="edit" placement="top-end">
+                          <IconButton
+                            aria-label="edit"
+                            color="blueButton400"
+                            sx={{
+                              padding: "0 !important",
+                              minWidth: "18px !important",
+                              "& .MuiSvgIcon-root": {
+                                width: "18px",
+                              },
+                            }}
+                          >
+                            <EditIcon
+                              onClick={() =>
+                                handleOpenEdit(row?.industry_id, row?.name)
+                              }
+                              sx={{ cursor: "pointer" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="delete" placement="top-end">
                           <IconButton
                             aria-label="edit"
@@ -215,6 +280,16 @@ export default function Industries() {
         handleOpen={handleOpenDelete}
         handleDelete={removeindustry}
         dialogText={"industry"}
+      />
+
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditIndustry}
+        handleEditJob={handleEdit}
+        inputName={industryName}
+        dialogText={"industry"}
+        singleInput={true}
       />
     </Box>
   );

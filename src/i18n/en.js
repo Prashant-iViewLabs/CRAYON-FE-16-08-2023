@@ -211,6 +211,7 @@ const en = {
     salary: "Salary",
     experience: "Experience",
     comments: "Comments",
+    noData: "No Comments",
     personality: "Personality",
     challenger: "Challenger",
     collaborator: "Collaborator",

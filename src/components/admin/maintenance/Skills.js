@@ -25,6 +25,7 @@ import {
   addNewSkill,
   approveJobTitle,
   approveSkill,
+  editSkill,
   getAllJobTitles,
   getAllSkills,
   removeJobTitle,
@@ -34,14 +35,16 @@ import { dateConverterMonth } from "../../../utils/DateTime";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { setAlert } from "../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../utils/Constants";
+import { setAlert, setLoading } from "../../../redux/configSlice";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import CustomDialog from "../../common/CustomDialog";
 import { useTheme } from "@emotion/react";
 import Delete from "./Dialogbox/Delete";
 import AddNew from "./Dialogbox/AddNew";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
+import { getSkills } from "../../../redux/employer/postJobSlice";
+import { useSelector } from "react-redux";
 
 export default function Skills() {
   const dispatch = useDispatch();
@@ -57,6 +60,30 @@ export default function Skills() {
   const [openAdd, setOpenAdd] = useState(false);
   const [jobID, setJobID] = useState();
   const [approveEvent, setApproveEvent] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableSkill, setEditableSkill] = useState();
+  const [skillName, setskillName] = useState("");
+  const [existingSkill, setExistingSkill] = useState();
+
+  const { skills } = useSelector((state) => state.postJobs);
+
+  const getAllData = async () => {
+    try {
+      dispatch(setLoading(true));
+      await dispatch(getSkills());
+      dispatch(setLoading(false));
+    } catch (error) {
+      console.log(error);
+      dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
 
   const getSkiils = async (lastkeyy) => {
     try {
@@ -135,6 +162,50 @@ export default function Skills() {
     } catch (error) {}
   };
 
+  const handleEdit = (event) => {
+    if (event.target.id === "edit_input") {
+      setExistingSkill(null);
+      setskillName(event.target.value);
+    } else if (event.target.id.includes("existing_name")) {
+      let com = skills?.find(
+        (title) => title.name === event.target.textContent
+      );
+      console.log(com);
+      setskillName("");
+      setExistingSkill(com.tag_id);
+    }
+  };
+
+  const handleEditTool = async () => {
+    try {
+      const data = {
+        new_skill_id: existingSkill !== undefined ? existingSkill : null,
+        current_skill_id: editableSkill,
+        title: skillName !== "" ? skillName : "",
+      };
+      const { payload } = await dispatch(editSkill(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Job title edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getSkiils(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
   const getJobApproved = async (event, jobID) => {
     let approvedJobTitle = {
       tag_id: jobID,
@@ -187,6 +258,13 @@ export default function Skills() {
     setJobID(jobId);
   };
 
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableSkill(currCompID);
+    setskillName(compName);
+    setExistingSkill("");
+  };
+
   const handleOpenAdd = () => {
     setOpenAdd((prevState) => !prevState);
   };
@@ -197,6 +275,7 @@ export default function Skills() {
 
   useEffect(() => {
     getSkiils(0);
+    getAllData();
   }, []);
   return (
     <Box sx={{ ml: 6 }}>
@@ -304,6 +383,26 @@ export default function Skills() {
                               }
                             />
                           </Tooltip>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(row?.tag_id, row?.tag)
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="delete" placement="top-end">
                             <IconButton
                               aria-label="edit"
@@ -345,13 +444,16 @@ export default function Skills() {
         newTitle={newTagTitle}
         dialogText={"skill"}
       />
-      {/*<Edit
-        show={openAdd}
-        handleOpen={handleOpenAdd}
-        handleEdit={handleAddNewJob}
-        handleEditJob={handleNewJob}
-        editJobTitle={newJobTitle}
-      />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditTool}
+        handleEditJob={handleEdit}
+        inputName={skillName}
+        existingCompany={existingSkill}
+        data={skills}
+        dialogText={"skill"}
+      />
       <Approve
         show={openApprove}
         dialogText={"skill"}

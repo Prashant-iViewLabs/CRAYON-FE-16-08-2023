@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import {
   addNewTool,
   approveTool,
+  editTool,
   getAllTools,
   removeTools,
 } from "../../../redux/admin/maintenance";
@@ -30,14 +31,16 @@ import { dateConverterMonth } from "../../../utils/DateTime";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { setAlert } from "../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../utils/Constants";
+import { setAlert, setLoading } from "../../../redux/configSlice";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import CustomDialog from "../../common/CustomDialog";
 import { useTheme } from "@emotion/react";
 import Delete from "./Dialogbox/Delete";
 import AddNew from "./Dialogbox/AddNew";
 import Edit from "./Dialogbox/Edit";
 import Approve from "./Dialogbox/Approve";
+import { getTools } from "../../../redux/employer/postJobSlice";
+import { useSelector } from "react-redux";
 export default function Tools() {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -51,8 +54,32 @@ export default function Tools() {
   const [jobID, setJobID] = useState();
   const [approveEvent, setApproveEvent] = useState(false);
   const [openApprove, setOpenApprove] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editableTool, setEditableTool] = useState();
+  const [toolName, settoolName] = useState("");
+  const [existingTool, setExistingTool] = useState();
 
-  const getTools = async (lastkeyy) => {
+  const { tools } = useSelector((state) => state.postJobs);
+
+  const getAllData = async () => {
+    try {
+      dispatch(setLoading(true));
+      await dispatch(getTools());
+      dispatch(setLoading(false));
+    } catch (error) {
+      console.log(error);
+      dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
+
+  const getTool = async (lastkeyy) => {
     try {
       const { payload } = await dispatch(getAllTools({ lastKey: lastkeyy }));
       if (payload.status === "success") {
@@ -85,7 +112,7 @@ export default function Tools() {
           })
         );
         setOpenDelete(false);
-        await getTools(0);
+        await getTool(0);
       }
     } catch (error) {}
   };
@@ -108,7 +135,7 @@ export default function Tools() {
             })
           );
           setOpenAdd(false);
-          await getTools(0);
+          await getTool(0);
         } else {
           console.log(payload);
           dispatch(
@@ -125,6 +152,36 @@ export default function Tools() {
             show: true,
             type: ALERT_TYPE.ERROR,
             msg: "Field is blank",
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
+  const handleEditTool = async () => {
+    try {
+      const data = {
+        new_tool_id: existingTool !== undefined ? existingTool : null,
+        current_tool_id: editableTool,
+        title: toolName !== "" ? toolName : "",
+      };
+      const { payload } = await dispatch(editTool(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Job title edited successfully",
+          })
+        );
+        setOpenEdit(false);
+        await getTool(0);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload.message.message,
           })
         );
       }
@@ -190,8 +247,28 @@ export default function Tools() {
     setApproveEvent(event);
     setJobID(jobId);
   };
+
+  const handleEdit = (event) => {
+    if (event.target.id === "edit_input") {
+      setExistingTool(null);
+      settoolName(event.target.value);
+    } else if (event.target.id.includes("existing_name")) {
+      let com = tools?.find((title) => title.name === event.target.textContent);
+      console.log(com);
+      settoolName("");
+      setExistingTool(com.tool_id);
+    }
+  };
+
+  const handleOpenEdit = (currCompID, compName) => {
+    setOpenEdit((prevState) => !prevState);
+    setEditableTool(currCompID);
+    settoolName(compName);
+    setExistingTool("");
+  };
   useEffect(() => {
-    getTools(0);
+    getTool(0);
+    getAllData();
   }, []);
   return (
     <Box sx={{ ml: 6 }}>
@@ -222,7 +299,7 @@ export default function Tools() {
         <InfiniteScroll
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
-          next={() => getTools(lastKey)}
+          next={() => getTool(lastKey)}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>
@@ -299,6 +376,26 @@ export default function Tools() {
                               }
                             />
                           </Tooltip>
+                          <Tooltip title="edit" placement="top-end">
+                            <IconButton
+                              aria-label="edit"
+                              color="blueButton400"
+                              sx={{
+                                padding: "0 !important",
+                                minWidth: "18px !important",
+                                "& .MuiSvgIcon-root": {
+                                  width: "18px",
+                                },
+                              }}
+                            >
+                              <EditIcon
+                                onClick={() =>
+                                  handleOpenEdit(row?.tool_id, row?.name)
+                                }
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="delete" placement="top-end">
                             <IconButton
                               aria-label="edit"
@@ -341,13 +438,16 @@ export default function Tools() {
         newTitle={newTool}
         dialogText={"tool"}
       />
-      {/*<Edit
-        show={openAdd}
-        handleOpen={handleOpenAdd}
-        handleEdit={handleAddNewJob}
-        handleEditJob={handleNewJob}
-        editJobTitle={newJobTitle}
-      />*/}
+      <Edit
+        show={openEdit}
+        handleOpen={handleOpenEdit}
+        handleEdit={handleEditTool}
+        handleEditJob={handleEdit}
+        inputName={toolName}
+        existingCompany={existingTool}
+        data={tools}
+        dialogText={"tool"}
+      />
       <Approve
         show={openApprove}
         dialogText={"tool"}

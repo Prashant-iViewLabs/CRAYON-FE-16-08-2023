@@ -6,12 +6,10 @@ import {
 import { useDispatch } from "react-redux";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import InputBox from "../../common/InputBox";
 import locale from "../../../i18n/locale";
 import { useNavigate } from "react-router-dom";
 import { setAlert } from "../../../redux/configSlice";
 import CustomDialog from "../../common/CustomDialog";
-import StyledButton from "../../common/StyledButton";
 import {
   uploadCv,
   uploadCvWithoutLogin,
@@ -22,25 +20,22 @@ import Signup from "../../login/signup";
 import { useTheme } from "@emotion/react";
 import Login from "../../login/login";
 import { login } from "../../../redux/login/loginSlice";
-import Avatar from "@mui/material/Avatar";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import redTriangleSmile from "../../../assets/Characters/Red_Triangle_Smiling.svg";
+import blueElipseFace from "../../../assets/Characters/Blue_Ellipse_Head.svg";
+import yellowStar from "../../../assets/Characters/Yellow_Star.svg";
+import blueSmileFace from "../../../assets/Characters/Blue_Half_Circle_Smile.svg";
+import redSkateboarder from "../../../assets/Characters/Red_Skateboarder.svg";
+import yellowChilled from "../../../assets/Characters/Yellow_Chilled.svg";
+import redDiamondClose from "../../../assets/Characters/Red_Diamond_Close_Eyes.svg";
+import greenTriangleThinking from "../../../assets/Characters/Green_Triangle_Thinking.svg";
 
-import redTriangleSmile from '../../../assets/Characters/Red_Triangle_Smiling.svg'
-import blueElipseFace from '../../../assets/Characters/Blue_Ellipse_Head.svg'
-import yellowStar from '../../../assets/Characters/Yellow_Star.svg'
-import blueSmileFace from '../../../assets/Characters/Blue_Half_Circle_Smile.svg'
-import redSkateboarder from '../../../assets/Characters/Red_Skateboarder.svg'
-import yellowChilled from '../../../assets/Characters/Yellow_Chilled.svg'
-import redDiamondClose from '../../../assets/Characters/Red_Diamond_Close_Eyes.svg'
-import greenTriangleThinking from '../../../assets/Characters/Green_Triangle_Thinking.svg'
-
-
-const validationSchema = Yup.object().shape({
-  answer: Yup.string().required("Answer is required"),
-});
-
-const questionImages = [blueSmileFace, redSkateboarder, yellowChilled, redDiamondClose, greenTriangleThinking]
+const questionImages = [
+  blueSmileFace,
+  redSkateboarder,
+  yellowChilled,
+  redDiamondClose,
+  greenTriangleThinking,
+];
 export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   const fileAccept = "application/pdf, application/doc, application/docx";
   const hiddenFileInput = useRef(null);
@@ -51,6 +46,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   const history = useNavigate();
   const [answers, setAnswers] = useState([]);
   const [cvName, setCvName] = useState("No file chosen");
+  const [nextButton, setNextButton] = useState(false);
   const [openQandADialog, setopenQandADialog] = useState(false);
   const [openCVDialog, setopenCVDialog] = useState(false);
   const [openSignUpLogin, setOpenSignUpLogin] = useState(false);
@@ -58,8 +54,6 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
   const [userID, setuserID] = useState();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState({});
-
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -68,6 +62,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   }
 
   const nextQuestion = () => {
+    setNextButton(false);
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -87,9 +82,9 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
       const { payload } = await dispatch(
         decodedToken?.data?.role_id === undefined
           ? postAnswersWithoutLogin({
-            data: answers,
-            job_id: questions?.at(0).job_id,
-          })
+              data: answers,
+              job_id: questions?.at(0).job_id,
+            })
           : postAnswers({ data: answers, job_id: questions?.at(0).job_id })
       );
       if (payload?.status === "sccess") {
@@ -131,6 +126,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
     }
   };
   const handleChange = (event, id) => {
+    setNextButton(event.target.value.trim() !== "");
     if (answers.find((item) => item.question_id === id)) {
       setAnswers(
         answers.map((item) =>
@@ -286,6 +282,8 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
   };
 
   const handleQuestions = () => {
+    setAnswers([]);
+    setNextButton(false);
     setopenQandADialog(false);
     setCurrentQuestionIndex(0);
   };
@@ -299,29 +297,6 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
     setOpenSignUpDialog((prevState) => !prevState);
   };
 
-  // const formik = useFormik({
-  //   initialValues: {
-  //     answer: ''
-  //   },
-  //   validationSchema: validationSchema,
-  //   onSubmit: (values) => {
-
-  //     if (answers.find((item) => item.question_id === questions[currentQuestionIndex].question_id)) {
-  //       setAnswers(
-  //         answers.map((item) =>
-  //           item.question_id === questions[currentQuestionIndex].question_id
-  //             ? { ...item, answer: values.answer }
-  //             : item
-  //         )
-  //       );
-  //     } else {
-  //       setAnswers([...answers, { question_id: questions[currentQuestionIndex].question_id, answer: values.answer }]);
-  //     }
-  //     nextQuestion()
-  //     formik.resetForm()
-  //   }
-  // })
-  console.log(answers);
   return (
     <>
       <Box
@@ -333,7 +308,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
         }}
       >
         <Box
-          component={'img'}
+          component={"img"}
           src={redTriangleSmile}
           sx={{ width: 96, height: 96, margin: "auto" }}
         />
@@ -381,6 +356,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
         const isCurrentQuestion = index === currentQuestionIndex;
         return (
           <CustomDialog
+            key={question.question_id}
             show={openQandADialog && isCurrentQuestion}
             hideButton={false}
             onDialogClose={handleQuestions}
@@ -399,7 +375,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
               }}
             >
               <Box
-                component={'img'}
+                component={"img"}
                 src={questionImages[index]}
                 sx={{ width: 96, height: 96, margin: "auto" }}
               />
@@ -434,6 +410,11 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
                   {question.question}
                 </Typography>
                 <TextField
+                  value={
+                    answers.find(
+                      (item) => item.question_id === question.question_id
+                    )?.answer || ""
+                  }
                   id="answer"
                   type="text"
                   rows={4}
@@ -441,9 +422,6 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
                   onChange={(event) =>
                     handleChange(event, question.question_id)
                   }
-                  // onBlur={formik.handleBlur}
-                  // value={formik.values.answer}
-                  // onChange={ }
                   placeholder={"Enter your Answer here..."}
                   sx={{
                     mb: 2,
@@ -453,13 +431,10 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
                     margin: "auto",
                   }}
                 />
-                {/* {formik.errors && (<Typography sx={{
-                  color: "red",
-                  fontSize: "0.8rem",
-                }}>{formik.errors.answer}</Typography>)} */}
               </Box>
               <Box sx={{ display: "flex", justifyContent: "center", mt: 0 }}>
                 <Button
+                  disabled={!nextButton}
                   sx={{
                     boxShadow: 0,
                     fontSize: "12px",
@@ -500,7 +475,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
           }}
         >
           <Box
-            component={'img'}
+            component={"img"}
             src={blueElipseFace}
             sx={{ width: 96, height: 96, margin: "auto" }}
           />
@@ -584,7 +559,7 @@ export default function ApplyJobs({ questions, setopenApplyJobDialog }) {
           }}
         >
           <Box
-            component={'img'}
+            component={"img"}
             src={yellowStar}
             sx={{ width: 96, height: 96, margin: "auto" }}
           />

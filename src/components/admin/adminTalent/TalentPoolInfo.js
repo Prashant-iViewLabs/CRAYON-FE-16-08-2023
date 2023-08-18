@@ -17,13 +17,13 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import search from "../../../assets/search.svg";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
-  getAllJobs,
   getAllPendingJobs,
   getAllTalentJobs,
   getJobCount,
+  getPoolUsers,
   getTalentPool,
 } from "../../../redux/admin/jobsSlice";
 import { setAlert, setLoading } from "../../../redux/configSlice";
@@ -132,18 +132,15 @@ const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
   },
 }));
 
-export default function AllTalent() {
-  const i18n = locale.en;
-  const theme = useTheme();
+export default function TalentPoolInfo() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [allJobs, setAllJobs] = useState([]);
-  const [talentJobs, setTalentJobs] = useState([]);
   const dispatch = useDispatch();
-  const [lastKey, setLastKey] = useState("");
-  const [totalJob, setTotalJob] = useState(0);
+  const [lastKey, setLastKey] = useState(0);
   const [personalityAdded, setPersonalityAdded] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const { poolId } = useParams();
 
   const { personalities, traits } = useSelector((state) => state.postJobs);
 
@@ -152,8 +149,12 @@ export default function AllTalent() {
   };
 
   const getJobList = async (lastkeyy) => {
-    const { payload } = await dispatch(getAllTalentJobs(lastkeyy));
-    if (payload?.status == "success") {
+    const data = {
+      lastKey: lastkeyy,
+      pool_id: poolId,
+    };
+    const { payload } = await dispatch(getPoolUsers(data));
+    if (payload?.status === "success") {
       setLastKey(payload.data[payload.data.length - 1]?.user_id);
       setAllJobs((prevState) => [...prevState, ...payload.data]);
     } else {
@@ -167,74 +168,9 @@ export default function AllTalent() {
     }
   };
 
-  const getTalent = async (lastkeyy) => {
-    try {
-      const { payload } = await dispatch(getTalentPool({ lastKey: lastkeyy }));
-      if (payload.status === "success") {
-        if (lastkeyy === 0) {
-          setTableData(payload.data);
-          setLastKey(payload.pageNumber + 1);
-        } else {
-          setLastKey(payload.pageNumber + 1);
-          setTableData((prevState) => [...prevState, ...payload.data]);
-        }
-      }
-    } catch (error) {}
-  };
-
-  const getTalentJobList = async (lastkeyy) => {
-    console.log("LAST KEY", lastkeyy);
-    const { payload } = await dispatch(getAllJobs(lastkeyy + "&status_id=2"));
-    if (payload?.status == "success") {
-      if (lastkeyy === "") {
-        setTalentJobs(payload.data);
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
-      } else {
-        setTalentJobs((prevState) => [...prevState, ...payload.data]);
-      }
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
-  };
-
-  const getAllData = async () => {
-    try {
-      dispatch(setLoading(true));
-      await Promise.all([dispatch(getPersonalities()), dispatch(getTraits())]);
-      dispatch(setLoading(false));
-    } catch (error) {
-      dispatch(setLoading(false));
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: ERROR_MSG,
-        })
-      );
-    }
-  };
-
-  const pendingJobCount = async () => {
-    const response = await dispatch(getJobCount(1));
-    setTotalJob(response.payload.count);
-  };
-
-  useEffect(() => {
-    getAllData();
-    getTalent();
-    getTalentJobList("");
-  }, []);
-
   useEffect(() => {
     getJobList(lastKey);
-    pendingJobCount();
-  }, [personalityAdded]);
+  }, []);
 
   return (
     <Box sx={{ ml: 6 }}>
@@ -245,28 +181,9 @@ export default function AllTalent() {
           // ml: 6
         }}
       >
-        {i18n["allTalent.title"]}({})
+        Talent Pool
       </Typography>
-      {/* <StyledTextField placeholder='quick search' id="search" size="small" /> */}
-      <StyledTextField
-        id="outlined-adornment-search"
-        type="text"
-        size="small"
-        placeholder="quick search"
-        endAdornment={
-          <InputAdornment position="end">
-            <Box
-              component="img"
-              className="profileAvatar"
-              alt="crayon logo"
-              src={search}
-              sx={{
-                width: "30px",
-              }}
-            />
-          </InputAdornment>
-        }
-      />
+
       <InfiniteScroll
         style={{ overflow: "hidden" }}
         dataLength={allJobs.length}
@@ -283,7 +200,6 @@ export default function AllTalent() {
             mt: 2,
           }}
         >
-          {console.log("ALL JOBS", allJobs)}
           {allJobs?.map((job, index) => (
             <AllTalentCard
               key={index}
@@ -294,8 +210,6 @@ export default function AllTalent() {
               traits={traits}
               personalities={personalities}
               tableData={tableData}
-              talentJobs={talentJobs}
-              getTalent={getTalent}
             />
           ))}
         </Box>

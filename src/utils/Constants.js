@@ -973,7 +973,7 @@ export const ADMIN_LFET_PANEL = [
     color: "blueButton400",
     menuItems: [
       { label: "All talent", path: "all-talent" },
-      { label: "Talent pools" },
+      { label: "Talent pools", path: "talent-pool" },
     ],
   },
   {

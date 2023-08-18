@@ -26,6 +26,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import CallIcon from "@mui/icons-material/Call";
 import SingleRadialChart from "../../common/SingleRadialChart";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import JobDescripiton from "../../common/JobDescripiton";
 import InputAdornment from "@mui/material/InputAdornment";
 import DOMPurify from "dompurify";
 import {
@@ -792,25 +793,8 @@ export default function JobCard({
 
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box className="contentBoxLeft">
-            <Tooltip title={jobContent?.description} placement="top-end">
-              <Typography
-                sx={{
-                  fontSize: "12px",
-                  fontWeight: 400,
-                  mr: 1,
-                }}
-              >
-                <Box
-                  // letterSpacing="0.25px"
-                  className="preview"
-                  m={0}
-                  p={0}
-                  dangerouslySetInnerHTML={createMarkup(
-                    jobContent?.description?.slice(0, 500)
-                  )}
-                ></Box>
-              </Typography>
-            </Tooltip>
+            <JobDescripiton description={jobContent?.description} />
+
             <Box sx={{ mt: 1, mb: 2 }}>
               {jobContent?.job_tags?.map((val) => {
                 return (
@@ -1213,54 +1197,67 @@ export default function JobCard({
                     </p>
                   }
                 >
-                  {comments?.map((comment) => {
-                    return (
-                      <Box sx={{ display: "flex", mt: 2 }}>
-                        <Box
-                          component="img"
-                          className="profileAvatar"
-                          alt="crayon logo"
-                          src={profile}
-                          sx={{
-                            mr: 1,
-                            width: 20,
-                            height: 20,
-                          }}
-                        />
-                        <Box>
-                          <Typography
+                  {comments.length > 0 ? (
+                    comments?.map((comment) => {
+                      return (
+                        <Box sx={{ display: "flex", mt: 2 }}>
+                          <Box
+                            component="img"
+                            className="profileAvatar"
+                            alt="crayon logo"
+                            src={profile}
                             sx={{
-                              fontSize: "14px",
-                              fontWeight: 600,
                               mr: 1,
+                              width: 20,
+                              height: 20,
                             }}
-                          >
-                            {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontSize: "14px",
-                              fontWeight: 400,
-                              mr: 1,
-                            }}
-                          >
-                            {comment.comment}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontSize: "12px",
-                              fontWeight: 400,
-                              mr: 1,
-                              color: theme.palette.grayButton.main,
-                              textAlign: "end",
-                            }}
-                          >
-                            {dateConverterMonth(comment.created_at)}
-                          </Typography>
+                          />
+                          <Box>
+                            <Typography
+                              sx={{
+                                fontSize: "14px",
+                                fontWeight: 600,
+                                mr: 1,
+                              }}
+                            >
+                              {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                fontSize: "14px",
+                                fontWeight: 400,
+                                mr: 1,
+                              }}
+                            >
+                              {comment.comment}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                fontSize: "12px",
+                                fontWeight: 400,
+                                mr: 1,
+                                color: theme.palette.grayButton.main,
+                                textAlign: "end",
+                              }}
+                            >
+                              {dateConverterMonth(comment.created_at)}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    );
-                  })}
+                      );
+                    })
+                  ) : (
+                    <Box
+                      sx={{
+                        width: "100%",
+                        textAlign: "center",
+                        mt: 4,
+                        color: theme.palette.placeholder,
+                      }}
+                    >
+                      {i18n["pendingJobs.noData"]}
+                    </Box>
+                  )}
                   <style>
                     {`.infinite-scroll-component::-webkit-scrollbar {
                       width: 7px !important;

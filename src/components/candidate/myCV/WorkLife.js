@@ -475,7 +475,6 @@ export default function WorkLife({ changeStep }) {
                     onChange={(newValue) =>
                       handleChange(newValue, index, "start_date")
                     }
-                    inputFormat="DD/MM/YYYY"
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -526,7 +525,6 @@ export default function WorkLife({ changeStep }) {
                     onChange={(newValue) =>
                       handleChange(newValue, index, "end_date")
                     }
-                    inputFormat="DD/MM/YYYY"
                     renderInput={(params) => (
                       <TextField
                         {...params}

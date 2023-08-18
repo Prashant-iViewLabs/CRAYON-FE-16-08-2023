@@ -27,13 +27,14 @@ import TrackButton from "./TrackButton";
 import DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import JobDescripiton from "../../common/JobDescripiton";
 
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import {
   AccountBalanceWallet,
   CalendarMonth,
   NavigateNext,
-  Circle
+  Circle,
 } from "@mui/icons-material";
 import Slider2 from "../../common/Slider2";
 
@@ -56,10 +57,12 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
   );
   const [openManageJobDialog, setOpenManageJobDialog] = useState(false);
   const myStatus = useSelector((state) => state.configMyStatus.mystatusfilter);
-  const [trackButton, setTrackButton] = useState(false)
+  const [trackButton, setTrackButton] = useState(false);
 
-  const industries = job?.industry_jobs.map(industry => industry?.industry.name)
-  console.log(industries)
+  const industries = job?.industry_jobs.map(
+    (industry) => industry?.industry.name
+  );
+  console.log(industries);
   const [arrSlider2, setArrSlider2] = useState([
     job?.primary?.name,
     job?.shadow?.name,
@@ -108,7 +111,6 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
     }
   };
 
-
   const showManageJob = () => {
     setOpenManageJobDialog(true);
   };
@@ -147,9 +149,10 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
           idth: "100%",
         }}
       >
-        {!trackButton ?
+        {!trackButton ? (
           <>
-            <Box component="img"
+            <Box
+              component="img"
               sx={{
                 height: 40,
                 width: "20%",
@@ -168,7 +171,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-evenly",
-                width: "45%"
+                width: "45%",
               }}
             >
               <Box sx={{ display: "flex", gap: 1 }}>
@@ -203,7 +206,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               </Typography>
             </Box>
           </>
-          : <Box />}
+        ) : (
+          <Box />
+        )}
         <Box
           sx={{
             alignItems: "center",
@@ -225,24 +230,32 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               width: "100%",
             }}
             onClick={() => {
-              setTrackButton(prevState => !prevState)
+              setTrackButton((prevState) => !prevState);
             }}
             endIcon={<KeyboardArrowDownIcon />}
             color="grayButton100"
           >
             Track
           </Button>
-          <Typography sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontWeight: "Bold",
-            fontSize: "0.9rem"
-          }}>{job?.job_status?.name || "Status"} <Circle fontSize="string" color={job?.job_status?.name === "active" ? "success" : "error"} /></Typography>
+          <Typography
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              fontWeight: "Bold",
+              fontSize: "0.9rem",
+            }}
+          >
+            {job?.job_status?.name || "Status"}{" "}
+            <Circle
+              fontSize="string"
+              color={job?.job_status?.name === "active" ? "success" : "error"}
+            />
+          </Typography>
         </Box>
       </Grid>
-      {trackButton && <TrackButton job={job} closeFunc={setTrackButton}/>}
-      {!trackButton &&
+      {trackButton && <TrackButton job={job} closeFunc={setTrackButton} />}
+      {!trackButton && (
         <>
           <Box
             sx={{
@@ -266,8 +279,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                    }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${
+                    job?.town?.name + " " + job?.town?.region?.name
+                  }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -299,7 +313,11 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <AccountBalanceWallet fontSize="string" color="primary" sx={{}} />
+                  <AccountBalanceWallet
+                    fontSize="string"
+                    color="primary"
+                    sx={{}}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 700,
@@ -359,36 +377,29 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                   </Typography>
                 </Box>
               </Box>
-              <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 1
-              }}>
-                <Slider2 items={[job?.type,
-                job?.work_setup]} color={"blueButton700"} hideTagsAfter={2} />
-                <Slider2 items={industries} color={"blueButton600"} hideTagsAfter={2} />
-              </Box>
-              <TextWrapper
-                children={job?.description}
-                mt="12px"
-                mb={1}
-                color={theme.palette.black100}
-                letterSpacing="0.25px"
-                sx={{ minHeight: "63px" }}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                }}
               >
-                <Box
-                  // sx={{
-                  //     background: "transparent"
-                  // }}
-                  // letterSpacing="0.25px"
-                  className="preview"
-                  m={0}
-                  p={0}
-                  dangerouslySetInnerHTML={createMarkup(job?.description)}
-                ></Box>
-              </TextWrapper>
+                <Slider2
+                  items={[job?.type, job?.work_setup]}
+                  color={"blueButton700"}
+                  hideTagsAfter={2}
+                />
+                <Slider2
+                  items={industries}
+                  color={"blueButton600"}
+                  hideTagsAfter={2}
+                />
+              </Box>
+              <JobDescripiton description={job?.description} />
             </Grid>
-            <Box sx={{ display: "flex", alignItems: "end", marginBottom: "12px" }}>
+            <Box
+              sx={{ display: "flex", alignItems: "end", marginBottom: "12px" }}
+            >
               <Button
                 variant="contained"
                 color="redButton"
@@ -601,9 +612,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                   (job?.candidate_status === "not for me" &&
                     theme.status.notforme.main),
                 "& .css-1g66942-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-                {
-                  color: theme.palette.base.main,
-                },
+                  {
+                    color: theme.palette.base.main,
+                  },
               }}
             />
             {/* </Grid> */}
@@ -636,8 +647,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                     </Button>
                 </Box> */}
         </>
-
-      }
-    </CustomCard >
+      )}
+    </CustomCard>
   );
 }
