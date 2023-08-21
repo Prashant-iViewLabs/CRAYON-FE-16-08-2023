@@ -89,6 +89,10 @@ const theme = createTheme({
       main: "#D4DADD",
       contrastText: "#FFFFFF",
     },
+    grayButton400: {
+      main: "#BFBEBE",
+      contrastText: "#FFFFFF",
+    },
     greenButton: {
       main: "#2FA84F",
       contrastText: "#FFFFFF",

@@ -20,17 +20,17 @@ import Signup from "../components/login/signup";
 import { getAllIndustries } from "../redux/configSlice";
 import { handleSignState } from "../redux/signUp/action";
 
-import greenTriangle from "../assets/Characters/Green_Triangle_Happy.svg"
-import redSkateboard from "../assets/Characters/Red_Skateboarder.svg"
-import yellowStar from "../assets/Characters/Yellow_Star.svg"
-import greenChilled from "../assets/Characters/Green_Chilled.svg"
-import blueHalf from "../assets/Characters/Blue_Half_Circle_Smile.svg"
-import redTriangle from "../assets/Characters/Red_Triangle_Shocked.svg"
-import redDiamond from "../assets/Characters/Red_Diamond.svg"
-import blueEllipse from "../assets/Characters/Blue_Ellipse_Head.svg"
+import greenTriangle from "../assets/Characters/Green_Triangle_Happy.svg";
+import redSkateboard from "../assets/Characters/Red_Skateboarder.svg";
+import yellowStar from "../assets/Characters/Yellow_Star.svg";
+import greenChilled from "../assets/Characters/Green_Chilled.svg";
+import blueHalf from "../assets/Characters/Blue_Half_Circle_Smile.svg";
+import redTriangle from "../assets/Characters/Red_Triangle_Shocked.svg";
+import redDiamond from "../assets/Characters/Red_Diamond.svg";
+import blueEllipse from "../assets/Characters/Blue_Ellipse_Head.svg";
 
-import currencySearch from "../assets/Padding Included/Currency_Search.svg"
-import talentSearch from "../assets/Padding Included/Search_Talent.svg"
+import currencySearch from "../assets/Padding Included/Currency_Search.svg";
+import talentSearch from "../assets/Padding Included/Search_Talent.svg";
 import { Link } from "react-router-dom";
 
 import { BackHand } from "@mui/icons-material";
@@ -56,11 +56,11 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const StyledBox = styled("img")(() => ({
-  cursor: 'pointer',
+  cursor: "pointer",
   height: 170,
   width: 170,
-  position: "absolute"
-}))
+  position: "absolute",
+}));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
@@ -69,7 +69,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 export default function Home() {
   const i18n = locale.en;
   const dispatch = useDispatch();
-  const [locationInput, setLocationInput] = useState(false)
+  const [locationInput, setLocationInput] = useState(false);
   // const signUpHandle =(role_id)=>{
   //   console.log("home..............................................")
   //   //const role_id = localStorage.getItem("rolID")
@@ -86,14 +86,20 @@ export default function Home() {
   //   setcurrentTabs(tabs);
   //  }
   const showLocationInput = () => {
-
-    setLocationInput(prevState => !prevState)
-  }
+    setLocationInput((prevState) => !prevState);
+  };
 
   return (
     <Grid container spacing={0} flexDirection={{ xs: "column", sm: "row" }}>
       <Grid item xs={12} sx={{ mt: 2 }}>
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
           <Paper
             elevation={3}
             sx={{
@@ -114,7 +120,7 @@ export default function Home() {
                 height: "30px",
                 width: "30px",
                 color: "white",
-                background: theme.palette.greenButton.main
+                background: theme.palette.greenButton.main,
               }}
             >
               <SearchIcon fontSize="small" />
@@ -146,7 +152,7 @@ export default function Home() {
                 height: "30px",
                 width: "30px",
                 color: "white",
-                background: theme.palette.redButton.main
+                background: theme.palette.redButton.main,
               }}
               onClick={showLocationInput}
             >
@@ -170,15 +176,20 @@ export default function Home() {
                 placeholder="Add location"
               />
             </Paper>
-            <Box sx={{
-              display: "flex",
-              borderRadius: "15px",
-              overflow: "hidden",
-              minWidth: 235.5
-            }}>
-              <Link to={'jobs'} sx={{
-                width: "50%",
-              }}>
+            <Box
+              sx={{
+                display: "flex",
+                borderRadius: "15px",
+                overflow: "hidden",
+                minWidth: 235.5,
+              }}
+            >
+              <Link
+                to={"jobs"}
+                sx={{
+                  width: "50%",
+                }}
+              >
                 <Button
                   sx={{
                     borderRadius: 0,
@@ -199,13 +210,16 @@ export default function Home() {
                     }}
                     alt="crayon logo"
                     src={currencySearch}
-                  />{i18n["login.findWork"]}
+                  />
+                  {i18n["login.findWork"]}
                 </Button>
               </Link>
-              <Link to={'talent'} sx={{
-                width: "50%",
-              }}>
-
+              <Link
+                to={"talent"}
+                sx={{
+                  width: "50%",
+                }}
+              >
                 <Button
                   sx={{
                     borderRadius: 0,
@@ -226,26 +240,25 @@ export default function Home() {
                     }}
                     alt="crayon logo"
                     src={talentSearch}
-                  />{i18n["login.findTalent"]}
+                  />
+                  {i18n["login.findTalent"]}
                 </Button>
               </Link>
-
             </Box>
-
           </Paper>
-          <Box sx={{
-            position: "absolute",
-            // left: 0,
-            // right: 0,
-            top: 54,
-            width: "70%",
-            margin: "0 auto",
-            zIndex:10
-
-          }}>
-            <AdvanceSection/>
+          <Box
+            sx={{
+              position: "absolute",
+              // left: 0,
+              // right: 0,
+              top: 54,
+              width: "70%",
+              margin: "0 auto",
+              zIndex: 10,
+            }}
+          >
+            <AdvanceSection />
           </Box>
-
         </Box>
         <StyledGrid
           container
@@ -255,11 +268,13 @@ export default function Home() {
           alignItems={"center"}
           paddingBottom={1}
         >
-          <Box sx={{
-            pt: 2,
-            width: "70%",
-            marginBottom: 5
-          }}>
+          <Box
+            sx={{
+              pt: 2,
+              width: "70%",
+              marginBottom: 5,
+            }}
+          >
             <Typography
               sx={{
                 //   fontSize: { xs: "32px", sm: "35px", lg:"50px"},
@@ -293,18 +308,20 @@ export default function Home() {
               learn more
             </Button>
           </Box>
-          <Box sx={{
-            margin: 'auto',
-            position: "relative",
-            display: "flex",
-            flexWrap: "nowrap",
-            marginTop: 6
-          }}>
+          <Box
+            sx={{
+              margin: "auto",
+              position: "relative",
+              display: "flex",
+              flexWrap: "nowrap",
+              marginTop: 6,
+            }}
+          >
             <StyledBox
               className="homeImages"
               alt="Home Image"
               sx={{
-                left: "-35rem"
+                left: "-35rem",
               }}
               src={greenTriangle}
             />
@@ -319,7 +336,8 @@ export default function Home() {
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={redSkateboard} />
+              src={redSkateboard}
+            />
             <StyledBox
               className="homeImages"
               component="img"
@@ -329,7 +347,8 @@ export default function Home() {
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={yellowStar} />
+              src={yellowStar}
+            />
             <StyledBox
               className="homeImages"
               component="img"
@@ -342,7 +361,8 @@ export default function Home() {
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={greenChilled} />
+              src={greenChilled}
+            />
             <StyledBox
               className="homeImages"
               component="img"
@@ -350,10 +370,11 @@ export default function Home() {
                 top: "3rem",
                 left: "-4rem",
                 cursor: "pointer",
-                zIndex: 1
+                zIndex: 1,
               }}
               alt="Home Image"
-              src={blueHalf} />
+              src={blueHalf}
+            />
             <StyledBox
               className="homeImages"
               component="img"
@@ -363,7 +384,8 @@ export default function Home() {
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={redTriangle} />
+              src={redTriangle}
+            />
             <StyledBox
               className="homeImages"
               component="img"
@@ -372,17 +394,19 @@ export default function Home() {
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={yellowStar} />
+              src={yellowStar}
+            />
             <StyledBox
               className="homeImages"
               component="img"
               sx={{
-                zIndex: 0 ,
+                zIndex: 0,
                 left: "22rem",
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={redDiamond} />
+              src={redDiamond}
+            />
             <StyledBox
               className="homeImages"
               component="img"
@@ -391,11 +415,11 @@ export default function Home() {
                 cursor: "pointer",
               }}
               alt="Home Image"
-              src={blueEllipse} />
+              src={blueEllipse}
+            />
           </Box>
         </StyledGrid>
-
       </Grid>
-    </Grid >
+    </Grid>
   );
 }

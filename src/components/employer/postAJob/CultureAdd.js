@@ -161,35 +161,45 @@ export default function CultureAdd({ changeStep }) {
 
   const saveCulture = async () => {
     try {
-      const culturePayload = {
-        job_id: cultureData.jobDetails.job_id,
-        primary_personality: cultureData.jobDetails.primary_personality,
-        shadow_personality: cultureData.jobDetails.shadow_personality,
-        grit_score: cultureData.jobDetails.grit_score,
-        screen_questions: [...cultureData.screen_questions],
-        traits: [...cultureData.traits],
-      };
-      const { payload } = await dispatch(addCultureData(culturePayload));
-      if (payload?.status == "success") {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.SUCCESS,
-            msg: "Culture Data added successfully!",
-          })
-        );
-        setErrors([]);
-        setTimeout(() => {
-          navigate("/employer/my-jobs");
-        }, [500]);
-      } else if (payload?.status == "error") {
-        setErrors(payload?.errors);
+      if (jobId !== undefined) {
+        const culturePayload = {
+          job_id: cultureData.jobDetails.job_id,
+          primary_personality: cultureData.jobDetails.primary_personality,
+          shadow_personality: cultureData.jobDetails.shadow_personality,
+          grit_score: cultureData.jobDetails.grit_score,
+          screen_questions: [...cultureData.screen_questions],
+          traits: [...cultureData.traits],
+        };
+        const { payload } = await dispatch(addCultureData(culturePayload));
+        if (payload?.status == "success") {
+          dispatch(
+            setAlert({
+              show: true,
+              type: ALERT_TYPE.SUCCESS,
+              msg: "Culture Data added successfully!",
+            })
+          );
+          setErrors([]);
+          setTimeout(() => {
+            navigate("/employer/my-jobs");
+          }, [500]);
+        } else if (payload?.status == "error") {
+          setErrors(payload?.errors);
+        } else {
+          dispatch(
+            setAlert({
+              show: true,
+              type: ALERT_TYPE.ERROR,
+              msg: payload?.message,
+            })
+          );
+        }
       } else {
         dispatch(
           setAlert({
             show: true,
             type: ALERT_TYPE.ERROR,
-            msg: payload?.message,
+            msg: "Fill the previous steps first",
           })
         );
       }

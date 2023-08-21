@@ -117,6 +117,7 @@ export default function TheBasics({
   };
 
   const handleInputChange = (event) => {
+    console.log(event.target.value);
     if (event.target.id == "contact_no") {
       const newProfileData = {
         ...profileData,
@@ -324,7 +325,7 @@ export default function TheBasics({
             id="name"
             onChange={handleInputChange}
           />
-          {profileData.name == "" &&
+          {profileData.name === "" &&
             errors?.find((error) => error.key == "name") && (
               <Typography color={"red !important"}>
                 {`*${errors?.find((error) => error.key == "name").message}`}
@@ -351,7 +352,7 @@ export default function TheBasics({
             id="surname"
             onChange={handleInputChange}
           />
-          {profileData.surname == "" &&
+          {profileData.surname === "" &&
             errors?.find((error) => error.key == "surname") && (
               <Typography color={"red !important"}>
                 {`*${errors?.find((error) => error.key == "surname").message}`}
@@ -387,7 +388,7 @@ export default function TheBasics({
             id="email"
             onChange={handleInputChange}
           />
-          {profileData.email == "" &&
+          {profileData.email === "" &&
             errors?.find((error) => error.key == "email") && (
               <Typography color={"red !important"}>
                 {`*${errors?.find((error) => error.key == "email").message}`}
@@ -511,7 +512,7 @@ export default function TheBasics({
             id="contact_no"
             onChange={handleInputChange}
           />
-          {profileData.contact_no == "" &&
+          {profileData.contact_no === "" &&
             errors?.find((error) => error.key == "contact_no") && (
               <Typography color={"red !important"}>
                 {`*${
@@ -766,13 +767,12 @@ export default function TheBasics({
             id="my_bio"
             onChange={handleInputChange}
           />
-          {profileData.my_bio == null ||
-            (profileData.my_bio == "" &&
-              errors?.find((error) => error.key == "my_bio") && (
-                <Typography color={"red !important"}>
-                  {`*${errors?.find((error) => error.key == "my_bio").message}`}
-                </Typography>
-              ))}
+          {(profileData.my_bio === null || profileData.my_bio === "") &&
+            errors?.find((error) => error.key === "my_bio") && (
+              <Typography color="red !important">
+                {`*${errors?.find((error) => error.key === "my_bio").message}`}
+              </Typography>
+            )}
         </Box>
         <Box sx={{ width: "50%" }}>
           {/* <InputLabel
@@ -860,11 +860,15 @@ export default function TheBasics({
             id="linkedin_profile_link"
             onChange={handleInputChange}
           />
-          {profileData.linkedin_profile_link == "" &&
-            errors?.find((error) => error.key == "linkedin_profile_link") && (
-              <Typography color={"red !important"}>
+
+          {(profileData.linkedin_profile_link === null ||
+            profileData.linkedin_profile_link === "" ||
+            (profileData.linkedin_profile_link &&
+              !profileData.linkedin_profile_link.startsWith("http"))) &&
+            errors?.find((error) => error.key === "linkedin_profile_link") && (
+              <Typography color="red !important">
                 {`*${
-                  errors?.find((error) => error.key == "linkedin_profile_link")
+                  errors?.find((error) => error.key === "linkedin_profile_link")
                     .message
                 }`}
               </Typography>

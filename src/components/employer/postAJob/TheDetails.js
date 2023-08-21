@@ -214,7 +214,7 @@ export default function TheDetails({ changeStep }) {
             type="role_summary"
             onInputCHange={handleInputChange}
           />
-          {detailData?.role_summary == "" &&
+          {detailData?.role_summary == null &&
             errors.find((error) => error.key == "role_summary") && (
               <Typography color={"red"}>
                 {`*${
@@ -230,7 +230,7 @@ export default function TheDetails({ changeStep }) {
             type="role_responsibilty"
             onInputCHange={handleInputChange}
           />
-          {detailData?.role_responsibilty == "" &&
+          {detailData?.role_responsibilty == null &&
             errors.find((error) => error.key == "role_responsibilty") && (
               <Typography color={"red"}>
                 {`*${
@@ -247,7 +247,7 @@ export default function TheDetails({ changeStep }) {
             type="role_requirements"
             onInputCHange={handleInputChange}
           />
-          {detailData.role_requirements == "" &&
+          {detailData.role_requirements == null &&
             errors.find((error) => error.key == "role_requirements") && (
               <Typography color={"red"}>
                 {`*${

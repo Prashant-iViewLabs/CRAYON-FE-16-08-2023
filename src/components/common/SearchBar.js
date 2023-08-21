@@ -119,7 +119,7 @@ export default function SearchBar({
         sx={{
           display: { xs: "none", md: "flex" },
           m: { xs: 2, md: 0 },
-          paddingLeft:1,
+          paddingLeft: 1,
           alignItems: "center",
           borderRadius: "25px",
           border: "1px solid rgba(224, 224, 224, 0.5)",
@@ -131,7 +131,6 @@ export default function SearchBar({
           zIndex: "1111",
         }}
       >
-        
         {/* <Button
           sx={{
             width: 140,

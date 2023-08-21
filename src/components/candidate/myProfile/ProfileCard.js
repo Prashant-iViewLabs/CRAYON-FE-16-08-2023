@@ -33,6 +33,7 @@ import {
   getProfile,
 } from "../../../redux/candidate/myProfileSlice";
 import { useNavigate } from "react-router-dom";
+import FollowCompany from "./FollowCompany";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
@@ -654,6 +655,10 @@ export default function ProfileCard() {
           p: 4,
         }}
       >
+        <Box sx={{ mt: 3 }}>
+          <FollowCompany />
+        </Box>
+
         <Box sx={{ mt: 3 }}>
           {/* <SomeComponent handleInfoData={getInfoData} handleCompanyInfoData={getCompanyInfoData} /> */}
           <TheBasics

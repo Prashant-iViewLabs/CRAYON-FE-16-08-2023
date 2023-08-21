@@ -129,8 +129,12 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                     sx={{
                       fontWeight: 400,
                       fontSize: 12,
+                      width: "150px",
                       letterSpacing: "0.75px",
                       opacity: 0.8,
+                      whiteSpace: "nowrap", // Prevents text from wrapping
+                      overflow: "hidden", // Hides any overflowing content
+                      textOverflow: "ellipsis",
                     }}
                   >
                     posted {convertDatetimeAgo(job?.updated_at)}
@@ -210,7 +214,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             sx={{
               display: "flex",
               width: "100%",
-              height: "270px",
+              height: "290px",
             }}
           >
             <Grid

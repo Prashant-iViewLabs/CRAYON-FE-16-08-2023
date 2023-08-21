@@ -50,7 +50,7 @@ export default function Main() {
         <Backdrop />
         <TopBar />
         <Box component="main" sx={{ pt: 2, width: 1 }}>
-          <Toolbar  />
+          <Toolbar />
           <Box
             sx={{
               paddingTop: "13px",

@@ -55,7 +55,6 @@ import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JobDescripiton from "../../common/JobDescripiton";
-;
 
 const label1 = "applied";
 const label2 = "shortlisted";

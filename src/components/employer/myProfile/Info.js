@@ -198,6 +198,8 @@ export default function Info({ handleInfoData, profile, errors, setErrors }) {
       ...profileData,
       gender: genders,
     };
+    const filteredErrors = errors?.filter((item) => item.key != "gender");
+    setErrors(filteredErrors);
     setProfileData(newProfileData);
     handleInfoData(newProfileData);
   };
@@ -425,12 +427,11 @@ export default function Info({ handleInfoData, profile, errors, setErrors }) {
                 {i18n["empMyProfile.female"]}
               </Button>
             </Box>
-            {profileData.gender == "" &&
-              errors?.find((error) => error.key == "gender") && (
-                <Typography color={"red !important"}>
-                  {`*${errors?.find((error) => error.key == "gender").message}`}
-                </Typography>
-              )}
+            {errors?.find((error) => error.key == "gender") && (
+              <Typography color={"red !important"}>
+                {`*${errors?.find((error) => error.key == "gender").message}`}
+              </Typography>
+            )}
           </Paper>
         </Box>
       </Box>

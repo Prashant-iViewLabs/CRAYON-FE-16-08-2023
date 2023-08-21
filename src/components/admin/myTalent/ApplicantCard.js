@@ -41,6 +41,10 @@ import {
   CARD_RIGHT_BUTTON_GROUP,
   ERROR_MSG,
 } from "../../../utils/Constants";
+import {
+  getPersonalities,
+  getTraits,
+} from "../../../redux/employer/postJobSlice";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import ManIcon from "@mui/icons-material/Man";
 import Switch from "@mui/material/Switch";
@@ -68,18 +72,11 @@ import StyledButton from "../../common/StyledButton";
 import {
   addTalentPool,
   addTalentToJob,
-  getAdminTalentJobList,
-  getAllJobs,
-  getTalentPool,
   talentPersonality,
 } from "../../../redux/admin/jobsSlice";
-import { setAlert, setLoading } from "../../../redux/configSlice";
+import { setAlert } from "../../../redux/configSlice";
 import { Link, useLocation } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  getPersonalities,
-  getTraits,
-} from "../../../redux/employer/postJobSlice";
 
 const label = "grit score";
 const labelExp = "experience";
@@ -297,135 +294,26 @@ const textValue = (value) => {
   return value;
 };
 
-export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
+export default function ApplicantCard({
+  talentContent,
+  setPersonalityAdded,
+  // traits,
+  // personalities,
+}) {
   const i18n = locale.en;
   const theme = useTheme();
   const dispatch = useDispatch();
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [jobClick, setJobClick] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [anchorElPersonality, setAnchorElPersonality] = useState(null);
   const [value, setValue] = useState([20, 37]);
-  const [tableData, setTableData] = useState([]);
-  const [talentJobs, setTalentJobs] = useState([]);
-  const [lastKey, setLastKey] = useState(0);
   const [personalitiesData, setPersonalitiesData] = useState({
     ...PERSONALITY,
   });
+  const openPersonality = Boolean(anchorElPersonality);
   const { personalities, traits } = useSelector((state) => state.postJobs);
 
-  const location = useLocation();
-  const hasTalentPool = location.pathname.includes("talent-pool");
-  // console.log(location);
-  console.log(hasTalentPool);
-
-  const open = Boolean(anchorEl);
-  const openPersonality = Boolean(anchorElPersonality);
-
-  const handleClick = async (event) => {
-    setAnchorEl(event.currentTarget);
-    await getTalent();
-  };
-
-  const handleAddJobClick = async (event) => {
-    setJobClick(event.currentTarget);
-    await getTalentJobList("");
-  };
-
-  const getTalent = async (lastkeyy) => {
-    try {
-      const { payload } = await dispatch(getTalentPool({ lastKey: lastkeyy }));
-      if (payload.status === "success") {
-        if (lastkeyy === 0) {
-          setTableData(payload.data);
-          setLastKey(payload.pageNumber + 1);
-        } else {
-          setLastKey(payload.pageNumber + 1);
-          setTableData((prevState) => [...prevState, ...payload.data]);
-        }
-      }
-    } catch (error) {}
-  };
-
-  const getTalentJobList = async (lastkeyy) => {
-    console.log("LAST KEY", lastkeyy);
-    const { payload } = await dispatch(
-      getAdminTalentJobList(lastkeyy + "&status_id=2")
-    );
-    if (payload?.status == "success") {
-      if (lastkeyy === "") {
-        setTalentJobs(payload.data);
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
-      } else {
-        setTalentJobs((prevState) => [...prevState, ...payload.data]);
-      }
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
-  };
-
-  const addToPool = async (canID, poolID) => {
-    try {
-      const data = {
-        candidate_id: canID,
-        pool_id: poolID,
-      };
-      const { payload } = await dispatch(addTalentPool(data));
-      if (payload.status === "success") {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.SUCCESS,
-            msg: "Talent added to pool successfully",
-          })
-        );
-        setAnchorEl(null);
-      } else {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.ERROR,
-            msg: payload?.message?.message,
-          })
-        );
-      }
-    } catch (error) {}
-  };
-  const addToJob = async (event, canId) => {
-    try {
-      const job = talentJobs.find(
-        (item) => item.title === event.target.textContent
-      );
-      const data = {
-        candidate_id: canId,
-        job_id: job.job_id,
-      };
-      const { payload } = await dispatch(addTalentToJob(data));
-      if (payload.status === "success") {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.SUCCESS,
-            msg: "Talent added to job successfully",
-          })
-        );
-        setJobClick(null);
-      } else {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.ERROR,
-            msg: payload?.message?.message,
-          })
-        );
-      }
-    } catch (error) {}
+  const handlePopoverClose = () => {
+    setAnchorElPersonality(null);
   };
 
   const getAllData = async () => {
@@ -443,15 +331,6 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
         })
       );
     }
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setJobClick(null);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorElPersonality(null);
   };
 
   const handlePersonality = async (event, newTab) => {
@@ -661,15 +540,15 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
               opacity="0.5"
             ></SmallButton>
             {/*
-              {chips?.map((chip, index) => (
-              <SmallButton
-                color={chip.color}
-                key={index}
-                label={chip.label}
-                mr="8px"
-              ></SmallButton>
-            ))}
-            */}
+                  {chips?.map((chip, index) => (
+                  <SmallButton
+                    color={chip.color}
+                    key={index}
+                    label={chip.label}
+                    mr="8px"
+                  ></SmallButton>
+                ))}
+                */}
             <IconButton
               aria-label="edit"
               color="blueButton400"
@@ -964,40 +843,40 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
             </Typography>
             <Box sx={{ mt: 1, mb: 2 }}>
               {/*<SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="graphic design"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="Adobe Illustrator"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="animation"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="motion graphics"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="sketching"
-                mr="8px"
-              ></SmallButton>*/}
+                    color="orangeButton"
+                    letterSpacing="-0.02em"
+                    borderRadius="5px"
+                    label="graphic design"
+                    mr="8px"
+                  ></SmallButton>
+                  <SmallButton
+                    color="orangeButton"
+                    letterSpacing="-0.02em"
+                    borderRadius="5px"
+                    label="Adobe Illustrator"
+                    mr="8px"
+                  ></SmallButton>
+                  <SmallButton
+                    color="orangeButton"
+                    letterSpacing="-0.02em"
+                    borderRadius="5px"
+                    label="animation"
+                    mr="8px"
+                  ></SmallButton>
+                  <SmallButton
+                    color="orangeButton"
+                    letterSpacing="-0.02em"
+                    borderRadius="5px"
+                    label="motion graphics"
+                    mr="8px"
+                  ></SmallButton>
+                  <SmallButton
+                    color="orangeButton"
+                    letterSpacing="-0.02em"
+                    borderRadius="5px"
+                    label="sketching"
+                    mr="8px"
+                  ></SmallButton>*/}
               {talentContent?.candidate_profile?.tag_users.map((item) => {
                 return (
                   <SmallButton
@@ -1451,7 +1330,7 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                     valueOffsetY="-17"
                     color={theme.palette.lightGreenButton300.main}
                     index={1}
-                    // isHovered={isHovered}
+                    isHovered={isHovered}
                   />
                 </Box>
                 <Box>
@@ -1588,7 +1467,7 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
               )}
             </Box>
             <Box sx={{ mt: 1, width: "60%" }}>
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography
                   sx={{
                     fontSize: "14px",
@@ -1717,17 +1596,17 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                   mr="8px"
                 ></SmallButton>
                 {/* <Slider
-                                    getAriaLabel={() => 'Temperature range'}
-                                    value={value}
-                                    onChange={handleChange}
-                                    valueLabelDisplay="auto"
-                                    getAriaValueText={valuetext}
-                                    color="blueButton500"
-                                    sx={{
-                                        width: '60%',
-                                        p: 0
-                                    }}
-                                /> */}
+                                        getAriaLabel={() => 'Temperature range'}
+                                        value={value}
+                                        onChange={handleChange}
+                                        valueLabelDisplay="auto"
+                                        getAriaValueText={valuetext}
+                                        color="blueButton500"
+                                        sx={{
+                                            width: '60%',
+                                            p: 0
+                                        }}
+                                    /> */}
               </Box>
               <Box
                 sx={{ display: "flex", alignItems: "center", marginTop: "6px" }}
@@ -1754,17 +1633,17 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                 ></SmallButton>
 
                 {/* <Slider
-                                    getAriaLabel={() => 'Temperature range'}
-                                    value={value}
-                                    onChange={handleChange}
-                                    valueLabelDisplay="auto"
-                                    getAriaValueText={valuetext}
-                                    color="blueButton500"
-                                    sx={{
-                                        width: '60%',
-                                        p: 0
-                                    }}
-                                /> */}
+                                        getAriaLabel={() => 'Temperature range'}
+                                        value={value}
+                                        onChange={handleChange}
+                                        valueLabelDisplay="auto"
+                                        getAriaValueText={valuetext}
+                                        color="blueButton500"
+                                        sx={{
+                                            width: '60%',
+                                            p: 0
+                                        }}
+                                    /> */}
               </Box>
             </Box>
           </Box>
@@ -1796,7 +1675,7 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                       valueOffsetY="-20"
                       color={theme.palette.redButton.main}
                       index={1}
-                      // isHovered={isHovered}
+                      isHovered={isHovered}
                     />
                   </Box>
                   <Box sx={{}}>
@@ -1814,7 +1693,7 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                       valueOffsetY="-20"
                       color={theme.palette.redButton.main}
                       index={1}
-                      // isHovered={isHovered}
+                      isHovered={isHovered}
                     />
                   </Box>
                 </Box>
@@ -1838,7 +1717,7 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                       valueOffsetY="-20"
                       color={theme.palette.redButton.main}
                       index={1}
-                      // isHovered={isHovered}
+                      isHovered={isHovered}
                     />
                   </Box>
 
@@ -1862,202 +1741,11 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                       valueOffsetY="-20"
                       color={theme.palette.redButton.main}
                       index={1}
-                      // isHovered={isHovered}
+                      isHovered={isHovered}
                     />
                   </Box>
                 </Box>
               </Box>
-
-              {!hasTalentPool && (
-                <Box
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  <div
-                    style={{ display: "inline-block", position: "relative" }}
-                  >
-                    <Button
-                      id="broad"
-                      aria-controls={anchorEl ? "broad-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={anchorEl ? "true" : undefined}
-                      variant="contained"
-                      disableElevation
-                      onClick={handleClick}
-                      endIcon={<KeyboardArrowDownIcon />}
-                      color="base"
-                      sx={{
-                        mr: 1,
-                        padding: "16px 24px !important",
-                        color: theme.palette.redButton.main,
-                        border: `solid ${theme.palette.redButton.main} 2px`,
-                      }}
-                    >
-                      {i18n["allTalent.addToPool"]}
-                    </Button>
-                    <Menu
-                      id="broad-menu"
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                      }}
-                      PaperProps={{
-                        style: {
-                          width: "160px",
-                        },
-                      }}
-                    >
-                      <Box
-                        id="talentList"
-                        sx={{ overflow: "hidden", height: "100px" }}
-                      >
-                        <InfiniteScroll
-                          style={{
-                            height: "100%",
-                            overflowX: "hidden",
-                            scrollbarWidth: "thin",
-                          }}
-                          dataLength={tableData?.length}
-                          // next={() => getJobList(lastKey)}
-                          hasMore={true}
-                          scrollableTarget="talentList"
-                          endMessage={
-                            <p style={{ textAlign: "center" }}>
-                              <b>Yay! You have seen it all</b>
-                            </p>
-                          }
-                        >
-                          {tableData.map((option, index) => (
-                            <MenuItem
-                              key={index}
-                              onClick={() =>
-                                addToPool(
-                                  talentContent?.user_id,
-                                  option?.pool_id
-                                )
-                              }
-                            >
-                              <ListItemText primary={option.title} />
-                            </MenuItem>
-                          ))}
-                          <style>
-                            {`.infinite-scroll-component::-webkit-scrollbar {
-                          width: 7px !important;
-                          background-color: #F5F5F5; /* Set the background color of the scrollbar */
-                        }
-
-                        .infinite-scroll-component__outerdiv {
-                          height:100%
-                        }
-
-                        .infinite-scroll-component::-webkit-scrollbar-thumb {
-                          background-color: #888c; /* Set the color of the scrollbar thumb */
-                        }`}
-                          </style>
-                        </InfiniteScroll>
-                      </Box>
-                    </Menu>
-                  </div>
-                  <div
-                    style={{ display: "inline-block", position: "relative" }}
-                  >
-                    <Button
-                      id="broad"
-                      aria-controls={jobClick ? "broad-menu-job" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={jobClick ? "true" : undefined}
-                      variant="contained"
-                      disableElevation
-                      onClick={handleAddJobClick}
-                      endIcon={<KeyboardArrowDownIcon />}
-                      color="redButton"
-                      sx={{ mr: 1, padding: "16px 24px !important" }}
-                    >
-                      {i18n["allTalent.addToJob"]}
-                    </Button>
-                    <Menu
-                      id="broad-menu-job"
-                      anchorEl={jobClick}
-                      open={Boolean(jobClick)}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                      }}
-                      PaperProps={{
-                        style: {
-                          width: "150px",
-                        },
-                      }}
-                    >
-                      <Box
-                        id="talentList"
-                        sx={{ overflow: "hidden", height: "100px" }}
-                      >
-                        <InfiniteScroll
-                          style={{
-                            height: "100%",
-                            overflowX: "hidden",
-                            scrollbarWidth: "thin",
-                          }}
-                          dataLength={talentJobs?.length}
-                          // next={() => getJobList(lastKey)}
-                          hasMore={true}
-                          scrollableTarget="talentList"
-                          endMessage={
-                            <p style={{ textAlign: "center" }}>
-                              <b>Yay! You have seen it all</b>
-                            </p>
-                          }
-                        >
-                          {talentJobs.map((option, index) => (
-                            <MenuItem
-                              key={index}
-                              onClick={(event) =>
-                                addToJob(event, talentContent?.user_id)
-                              }
-                            >
-                              <Tooltip
-                                title={option?.title}
-                                placement="top-end"
-                              >
-                                <ListItemText
-                                  sx={{
-                                    width: "120px",
-                                    whiteSpace: "nowrap", // Prevents text from wrapping
-                                    overflow: "hidden", // Hides any overflowing content
-                                    textOverflow: "ellipsis",
-                                  }}
-                                  primary={option?.title}
-                                />
-                              </Tooltip>
-                            </MenuItem>
-                          ))}
-                          <style>
-                            {`.infinite-scroll-component::-webkit-scrollbar {
-                          width: 7px !important;
-                          background-color: #F5F5F5; /* Set the background color of the scrollbar */
-                        }
-
-                        .infinite-scroll-component__outerdiv {
-                          height:100%
-                        }
-
-                        .infinite-scroll-component::-webkit-scrollbar-thumb {
-                          background-color: #888c; /* Set the color of the scrollbar thumb */
-                        }`}
-                          </style>
-                        </InfiniteScroll>
-                      </Box>
-                    </Menu>
-                  </div>
-                </Box>
-              )}
-
               <Box
                 sx={{
                   display: "flex",
@@ -2202,7 +1890,6 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                 </Box>
               </Box>
               <Box sx={{ mt: 4 }}>
-                {/* <StyledTextField placeholder="type your comment here..." id="comment" size="small" /> */}
                 <StyledTextField
                   id="outlined-adornment-password"
                   type="text"
@@ -2220,13 +1907,6 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
                           // mr: 1
                         }}
                       />
-                      {/* <IconButton
-                                                aria-label="toggle password visibility"
-                                                edge="end"
-                                                color='redButton'
-                                            >
-                                                <PlaceIcon />
-                                            </IconButton> */}
                     </InputAdornment>
                   }
                 />

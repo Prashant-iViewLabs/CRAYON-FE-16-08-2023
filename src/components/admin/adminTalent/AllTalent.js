@@ -34,86 +34,6 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 
-const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  marginTop: "4px",
-  borderRadius: "5px",
-  position: "unset",
-  "& .MuiAccordionSummary-root": {
-    // alignItems: 'start'
-  },
-  "& .MuiAccordionSummary-content": {
-    flexDirection: "column",
-    // margin: 0,
-    ".summaryBox": {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      // marginRight: '8px',
-      "& .MuiButtonBase-root": {
-        fontSize: 10,
-        fontWeight: 700,
-        minWidth: 29,
-        padding: "2px 8px",
-        // borderRadius: 3,
-        height: "20px",
-        boxShadow: "none",
-      },
-    },
-    ".summaryBoxContent": {
-      display: "flex",
-      alignItems: "center",
-    },
-    ".profileAvatar": {
-      height: 20,
-      width: 20,
-      borderRadius: 6,
-    },
-
-    "& .MuiTypography-root": {
-      // fontWeight: 700,
-      // fontSize: '20px',
-    },
-    "& .MuiButtonBase-root": {
-      // padding: '2px 8px',
-      // fontSize: 10,
-      // fontWeight: 700,
-      // minWidth: 30,
-      // boxShadow: 'none',
-      // borderRadius: 2
-    },
-  },
-  "& .MuiAccordionSummary-expandIconWrapper": {
-    color: theme.palette.black,
-    // marginRight: '32px',
-    // position: 'absolute',
-    // right: '40px',
-    // top: '12px',
-    "& .MuiSvgIcon-root": {
-      fontSize: "1.8rem",
-    },
-  },
-  "& .MuiCollapse-root": {
-    "& .MuiAccordionDetails-root": {
-      // padding: 0,
-      "& .MuiButtonBase-root": {
-        // fontSize: 10,
-        // fontWeight: 700,
-        // minWidth: 30,
-        // padding: '1px 4px',
-        // borderRadius: 3
-      },
-      ".contentBox": {
-        // display: 'flex',
-        // justifyContent: 'space-between',
-      },
-    },
-  },
-  "& .MuiButtonBase-root": {
-    // boxShadow: 'none',
-    padding: "0 16px",
-  },
-}));
-
 const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
   width: "100%",
   margin: "8px 0",
@@ -153,44 +73,13 @@ export default function AllTalent() {
 
   const getJobList = async (lastkeyy) => {
     const { payload } = await dispatch(getAllTalentJobs(lastkeyy));
-    if (payload?.status == "success") {
-      setLastKey(payload.data[payload.data.length - 1]?.user_id);
-      setAllJobs((prevState) => [...prevState, ...payload.data]);
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
-  };
-
-  const getTalent = async (lastkeyy) => {
-    try {
-      const { payload } = await dispatch(getTalentPool({ lastKey: lastkeyy }));
-      if (payload.status === "success") {
-        if (lastkeyy === 0) {
-          setTableData(payload.data);
-          setLastKey(payload.pageNumber + 1);
-        } else {
-          setLastKey(payload.pageNumber + 1);
-          setTableData((prevState) => [...prevState, ...payload.data]);
-        }
-      }
-    } catch (error) {}
-  };
-
-  const getTalentJobList = async (lastkeyy) => {
-    console.log("LAST KEY", lastkeyy);
-    const { payload } = await dispatch(getAllJobs(lastkeyy + "&status_id=2"));
-    if (payload?.status == "success") {
-      if (lastkeyy === "") {
-        setTalentJobs(payload.data);
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
+    if (payload.status === "success") {
+      if (lastkeyy === 0) {
+        setAllJobs(payload.data);
+        setLastKey(payload.offset + 1);
       } else {
-        setTalentJobs((prevState) => [...prevState, ...payload.data]);
+        setLastKey(payload.offset + 1);
+        setAllJobs((prevState) => [...prevState, ...payload.data]);
       }
     } else {
       dispatch(
@@ -198,23 +87,6 @@ export default function AllTalent() {
           show: true,
           type: ALERT_TYPE.ERROR,
           msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
-  };
-
-  const getAllData = async () => {
-    try {
-      dispatch(setLoading(true));
-      await Promise.all([dispatch(getPersonalities()), dispatch(getTraits())]);
-      dispatch(setLoading(false));
-    } catch (error) {
-      dispatch(setLoading(false));
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: ERROR_MSG,
         })
       );
     }
@@ -226,13 +98,13 @@ export default function AllTalent() {
   };
 
   useEffect(() => {
-    getAllData();
-    getTalent();
-    getTalentJobList("");
+    // getAllData();
+    // getTalent();
+    // getTalentJobList("");
   }, []);
 
   useEffect(() => {
-    getJobList(lastKey);
+    getJobList(0);
     pendingJobCount();
   }, [personalityAdded]);
 
@@ -287,15 +159,8 @@ export default function AllTalent() {
           {allJobs?.map((job, index) => (
             <AllTalentCard
               key={index}
-              index={job.user_id}
               talentContent={job}
-              onManageTalent={onHandleManageTalent}
               setPersonalityAdded={setPersonalityAdded}
-              traits={traits}
-              personalities={personalities}
-              tableData={tableData}
-              talentJobs={talentJobs}
-              getTalent={getTalent}
             />
           ))}
         </Box>

@@ -81,6 +81,30 @@ export const uploadProfilePic = createAsyncThunk(
     return data;
   }
 );
+export const followCompany = createAsyncThunk(
+  "followCompany",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const data = await postApi("/admin/followcompany", payload, true);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getFollowCompany = createAsyncThunk(
+  "getFollowCompany",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/getfollowedcompany?lastKey=",
+      payload,
+      true
+    );
+    console.log(data);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 
 export const myProfileSlice = createSlice({
   name: "myProfile",

@@ -392,7 +392,14 @@ export default function TheBasics({ changeStep }) {
     let slider = false,
       sliderValue = "";
 
-    console.log(value);
+    const currencySalary = currency.find((item) => item.currency_id === value);
+    console.log(currencySalary.min_salary, currencySalary.max_salary);
+    setRangeValue([
+      currencySalary.min_salary / 1000,
+      currencySalary.max_salary / 1000,
+    ]);
+
+    console.log(event);
 
     if (name == "salary_id") {
       slider = true;
@@ -406,6 +413,7 @@ export default function TheBasics({ changeStep }) {
     }
     let newBasicData = {};
     if (basicData.salary.length === 0) {
+      console.log(currency);
       newBasicData = {
         ...basicData,
         [name || id]: slider ? sliderValue : value,
@@ -417,6 +425,7 @@ export default function TheBasics({ changeStep }) {
         [name || id]: slider ? sliderValue : value,
       };
     }
+    console.log(newBasicData);
     setBasicData(newBasicData);
   };
 
@@ -830,6 +839,7 @@ export default function TheBasics({ changeStep }) {
                 ? i18n["postAJob.salaryRangeLable2"]
                 : i18n["postAJob.salaryRangeLable"]}
             </InputLabel>
+            {console.log(rangeValue)}
             <Slider
               disableSwap
               sx={{ width: "92%", ml: 1 }}

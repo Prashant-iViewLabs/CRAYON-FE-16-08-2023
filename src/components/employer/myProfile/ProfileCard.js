@@ -398,7 +398,10 @@ export default function ProfileCard() {
       console.log(compInfo);
       console.log(companyName);
       let data = compInfo;
-      if (compInfo.company_name === companyName) {
+      if (
+        compInfo.company_name !== null &&
+        compInfo.company_name === companyName
+      ) {
         data = {
           ...compInfo,
           company_name: companies.find((item) => item.name === companyName)
@@ -430,7 +433,14 @@ export default function ProfileCard() {
         );
       }
     } catch (error) {
-      dispatch(setAlert({ show: true }));
+      console.log(error);
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: "Error",
+        })
+      );
     }
   };
   const handlePrev = () => {

@@ -74,7 +74,7 @@ export default function Login({
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [inputType, setInputType] = useState("password");
-  const [openForgotPassword, setOpenForgotPassword] = useState(false)
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
 
   const handleShowPassword = () => {
     if (showPassword) setInputType("password");
@@ -113,12 +113,12 @@ export default function Login({
     },
   });
   const handleForgotPassword = () => {
-    closeFunc()
-    setOpenForgotPassword(true)
-  }
+    closeFunc();
+    setOpenForgotPassword(true);
+  };
   const handleCloseForgotPassword = () => {
-    setOpenForgotPassword(false)
-  }
+    setOpenForgotPassword(false);
+  };
   return (
     <>
       <Dialog
@@ -252,9 +252,9 @@ export default function Login({
             </Typography>
             <BlueSwitch
               defaultChecked={false}
-            // onChange={(event) =>
-            //   handleJobAccess(event, row.job_id)
-            // }
+              // onChange={(event) =>
+              //   handleJobAccess(event, row.job_id)
+              // }
             />
           </Box>
           <Box
@@ -325,7 +325,10 @@ export default function Login({
           </Box>
         </Box>
       </Dialog>
-      <ForgotPassword openFunc={openForgotPassword} closeFunc={handleCloseForgotPassword} />
+      <ForgotPassword
+        openFunc={openForgotPassword}
+        closeFunc={handleCloseForgotPassword}
+      />
     </>
   );
 }

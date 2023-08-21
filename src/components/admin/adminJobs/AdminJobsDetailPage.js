@@ -16,7 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LanguageIcon from "@mui/icons-material/Language";
-import { InputBase, Paper } from "@mui/material";
+import { Grid, InputBase, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import eye from "../../../assets/eye.svg";
 import send from "../../../assets/send.svg";
@@ -36,18 +36,19 @@ import {
 } from "../../../redux/admin/jobsSlice";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../utils/Constants";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import {
   convertDatetimeAgo,
   dateConverter,
   dateConverterMonth,
 } from "../../../utils/DateTime";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import ChangeStatusButton from "./ChangeStatusButton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { uploadSpecData } from "../../../redux/employer/postJobSlice";
+import { getJobDetail } from "../../../redux/guest/jobsSlice";
 
 const label = "grit score";
 const label1 = "applied";
@@ -209,26 +210,20 @@ const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
   },
 }));
 
-export default function JobCard({
-  index,
-  jobContent,
-  getJobList,
-  getComments,
-  comments,
-}) {
+export default function AdminJobsDetailPage() {
   const i18n = locale.en;
+  const { id } = useParams();
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [jobContent, setJobContent] = useState([]);
+  const [specName, setspecName] = useState("No file chosen");
+  const [expand, setExpand] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [inputValue, setInputValue] = useState("");
   const fileAccept = "application/pdf, application/doc, application/docx";
   const hiddenFileInput = useRef(null);
 
-  const [specName, setspecName] = useState("No file chosen");
-  const [isHovered, setIsHovered] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [expand, setExpand] = useState(false);
-
   const location = useLocation();
-  const prevLocation = location.pathname;
   const include = location.pathname.includes("pending-jobs");
 
   const token = localStorage?.getItem("token");
@@ -237,15 +232,50 @@ export default function JobCard({
     decodedToken = jwt_decode(token);
   }
 
-  function createMarkup(html) {
-    return {
-      __html: DOMPurify.sanitize(html),
-    };
-  }
-
   const toggleAcordion = () => {
     setExpand((prev) => !prev);
-    !expand && getComments(jobContent?.job_id);
+  };
+
+  const handleCardClick = async () => {
+    try {
+      const { payload } = await dispatch(getJobDetail({ job_id: id }));
+      if (payload?.status == "success") {
+        setJobContent(payload?.data);
+      }
+    } catch (error) {
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
+
+  const getComments = async (jobid) => {
+    try {
+      const { payload } = await dispatch(getAllComments(jobid));
+      if (payload?.status == "success") {
+        setComments(payload?.data);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message,
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: error,
+        })
+      );
+    }
   };
 
   const sendComment = async () => {
@@ -336,8 +366,13 @@ export default function JobCard({
     }
   };
 
+  useEffect(() => {
+    handleCardClick();
+    getComments(id);
+  }, []);
+
   return (
-    <StyledAccordion expanded={expand}>
+    <StyledAccordion expanded={expand} sx={{ margin: "2rem !important" }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon onClick={toggleAcordion} />}
         aria-controls="panel1a-content"
@@ -369,7 +404,7 @@ export default function JobCard({
             />
             <Tooltip title={jobContent?.title} placement="top-end">
               <Link
-                to={`${prevLocation}/job-detail/${`${
+                to={`/job-detail/${`${
                   jobContent?.town?.name + " " + jobContent?.town?.region?.name
                 }`}/${jobContent?.job_id}`}
                 target={"_blank"}
@@ -475,15 +510,15 @@ export default function JobCard({
               mr="8px"
             ></SmallButton>
             {/*
-              {chips.map((chip, index) => (
-              <SmallButton
-                color={chip.color}
-                key={index}
-                label={chip.label}
-                mr="8px"
-              ></SmallButton>
-            ))}  
-            */}
+          {chips.map((chip, index) => (
+          <SmallButton
+            color={chip.color}
+            key={index}
+            label={chip.label}
+            mr="8px"
+          ></SmallButton>
+        ))}  
+        */}
             <Link
               to={`/employer/post-a-job/${jobContent?.job_id}`}
               style={{
@@ -585,30 +620,30 @@ export default function JobCard({
               }
             })}
             {/* <SmallButton color="blueButton400" label={address} mr="8px"></SmallButton>
-                        <SmallButton color="blueButton400" label={salary} mr="8px"></SmallButton>
-                        <SmallButton color="blueButton400" label={experience} mr="8px"></SmallButton>
-                        <SmallButton color="redButton" label={workType} mr="8px"></SmallButton>
-                        <SmallButton color="redButton" label={jobType} mr="8px"></SmallButton> */}
+                    <SmallButton color="blueButton400" label={salary} mr="8px"></SmallButton>
+                    <SmallButton color="blueButton400" label={experience} mr="8px"></SmallButton>
+                    <SmallButton color="redButton" label={workType} mr="8px"></SmallButton>
+                    <SmallButton color="redButton" label={jobType} mr="8px"></SmallButton> */}
           </Box>
           <Box className="summaryBoxContent">
             {/*{jobContent?.job_status?.name === "pending" &&
-            decodedToken?.data?.role_id === 1 && (
-              <SmallButton
-                color="redButton"
-                startIconMargin="4px"
-                height={24}
-                fontWeight={700}
-                label={i18n["pendingJobs.approveJob"]}
-                mr="8px"
-                borderRadius="25px"
-                onClick={() =>
-                  handleApprove(
-                    jobContent?.job_id,
-                    jobContent?.employer_industries
-                  )
-                }
-              ></SmallButton>
-            )}*/}
+        decodedToken?.data?.role_id === 1 && (
+          <SmallButton
+            color="redButton"
+            startIconMargin="4px"
+            height={24}
+            fontWeight={700}
+            label={i18n["pendingJobs.approveJob"]}
+            mr="8px"
+            borderRadius="25px"
+            onClick={() =>
+              handleApprove(
+                jobContent?.job_id,
+                jobContent?.employer_industries
+              )
+            }
+          ></SmallButton>
+        )}*/}
             <SmallButton
               color="redButton"
               startIcon={
@@ -636,13 +671,13 @@ export default function JobCard({
             <IconButton>
               <PlayCircleFilledIcon color="grayButton300" />
             </IconButton>
-            <ChangeStatusButton
-              loggedInUser={decodedToken?.data?.role_id}
-              jobId={index}
-              jobStatus={jobContent?.job_status?.name}
-              employerIndustry={jobContent?.employer_industries}
-              getJobList={getJobList}
-            />
+            {/*<ChangeStatusButton
+            loggedInUser={decodedToken?.data?.role_id}
+            jobId={id}
+            jobStatus={jobContent?.job_status?.name}
+            employerIndustry={jobContent?.employer_industries}
+            //   getJobList={getJobList}
+            />*/}
 
             <IconButton
               aria-label="edit"
@@ -660,7 +695,6 @@ export default function JobCard({
           </Box>
         </Box>
       </AccordionSummary>
-
       <AccordionDetails
         sx={{
           display: "flex",
@@ -820,6 +854,7 @@ export default function JobCard({
                 );
               })}
             </Box>
+
             <Box sx={{ mt: 1 }}>
               <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                 <Typography
@@ -935,42 +970,8 @@ export default function JobCard({
                   mr="4px"
                 ></SmallButton>
               </Box>
-              {/*<Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                  }}
-                >
-                  {i18n["pendingJobs.languages"]}:
-                </Typography>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton"
-                  borderRadius="5px"
-                  label="English"
-                  mr="4px"
-                ></SmallButton>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton"
-                  borderRadius="5px"
-                  label="Afrikaans"
-                  mr="4px"
-                ></SmallButton>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton"
-                  borderRadius="5px"
-                  label="Spanish"
-                  mr="4px"
-                ></SmallButton>
-              </Box>*/}
             </Box>
+
             <Box sx={{ mt: 1 }}>
               <Typography
                 sx={{
@@ -1003,7 +1004,7 @@ export default function JobCard({
                     valueOffsetY="-17"
                     color={theme.palette.lightGreenButton300.main}
                     index={1}
-                    isHovered={isHovered}
+                    // isHovered={isHovered}
                   />
                 </Box>
                 <Box>
@@ -1067,7 +1068,7 @@ export default function JobCard({
               </Typography>
               <Box sx={{ display: "flex" }}>
                 <Box sx={{ width: "90%" }}>
-                  {jobContent?.job_questions.map((questions, index) => {
+                  {jobContent?.job_questions?.map((question, index) => {
                     return (
                       <>
                         <Typography
@@ -1078,7 +1079,7 @@ export default function JobCard({
                             mt: 1,
                           }}
                         >
-                          Question #{index + 1}: {questions?.question}
+                          Question #{index + 1}: {question?.question}
                         </Typography>
                         <Paper
                           sx={{
@@ -1092,7 +1093,7 @@ export default function JobCard({
                           <InputBase
                             sx={{ ml: 2, mr: 2 }}
                             id="password"
-                            value={questions?.answer}
+                            value={question?.answer}
                             type="text"
                             placeholder={i18n["pendingJobs.answer"]}
                           />
@@ -1104,6 +1105,7 @@ export default function JobCard({
               </Box>
             </Box>
           </Box>
+
           <Box className="contentBoxRight">
             <Box
               sx={{
@@ -1123,8 +1125,8 @@ export default function JobCard({
                       series={[jobContent?.TotalUserCount]}
                       width={140}
                       color={theme.palette.chart.red}
-                      index={index}
-                      isHovered={isHovered}
+                      index={0}
+                      // isHovered={isHovered}
                     />
                   </Box>
                   <Box sx={{ margin: "0" }}>
@@ -1133,8 +1135,8 @@ export default function JobCard({
                       series={[jobContent?.TotalUserShorlisted]}
                       width={140}
                       color={theme.palette.chart.green}
-                      index={index}
-                      isHovered={isHovered}
+                      index={1}
+                      // isHovered={isHovered}
                     />
                   </Box>
                   <Box sx={{ margin: "0" }}>
@@ -1143,8 +1145,8 @@ export default function JobCard({
                       series={[jobContent?.TotalUserInterviewed]}
                       width={140}
                       color={theme.palette.chart.yellow}
-                      index={index}
-                      isHovered={isHovered}
+                      index={2}
+                      // isHovered={isHovered}
                     />
                   </Box>
                 </Box>

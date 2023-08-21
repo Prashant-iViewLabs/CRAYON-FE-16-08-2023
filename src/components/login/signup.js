@@ -6,8 +6,8 @@ import Paper from "@mui/material/Paper";
 import locale from "../../i18n/locale";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import InputBox from "../../components/common/InputBox";
-import SwipeableButton from "../../components/common/SwipeableButton";
+import InputBox from "../common/InputBox";
+import SwipeableButton from "../common/SwipeableButton";
 import {
   ALERT_TYPE,
   USER_TYPES,
@@ -71,7 +71,7 @@ export default function Signup({
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentTabs, setcurrentTabs] = useState(PUBLIC_TAB_ITEMS);
   const [showPassword, setShowPassword] = useState(false);
-  const [openForgotPassword, setOpenForgotPassword] = useState(false)
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -192,12 +192,12 @@ export default function Signup({
   };
 
   const handleForgotPassword = () => {
-    closeFunc()
-    setOpenForgotPassword(true)
-  }
+    closeFunc();
+    setOpenForgotPassword(true);
+  };
   const handleCloseForgotPassword = () => {
-    setOpenForgotPassword(false)
-  }
+    setOpenForgotPassword(false);
+  };
   return (
     <>
       <Dialog
@@ -489,8 +489,10 @@ export default function Signup({
           </Box>
         </Box>
       </Dialog>
-      <ForgotPassword openFunc={openForgotPassword} closeFunc={handleCloseForgotPassword}/>
+      <ForgotPassword
+        openFunc={openForgotPassword}
+        closeFunc={handleCloseForgotPassword}
+      />
     </>
-
   );
 }

@@ -239,7 +239,7 @@ export default function TopBar() {
           })
         );
       } else {
-        console.log(payload)
+        console.log(payload);
         dispatch(
           setAlert({
             show: true,
@@ -387,8 +387,9 @@ export default function TopBar() {
         elevation={0}
         color="base"
         sx={{
-          borderRadius: 0, height: "80px",
-          justifyContent: "center"
+          borderRadius: 0,
+          height: "80px",
+          justifyContent: "center",
         }}
       >
         <Toolbar

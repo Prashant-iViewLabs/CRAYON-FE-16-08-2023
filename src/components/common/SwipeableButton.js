@@ -12,20 +12,20 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
   const container = useRef();
   const theme = useTheme();
   const selectedColor = (selectedUser) => {
-    console.log(selectedUser)
+    console.log(selectedUser);
     switch (selectedUser) {
       case "Candidate":
-        return "blueButton600"
+        return "blueButton600";
       case "Employer":
-        return "redButton"
+        return "redButton";
       case "Recruiter":
-        return "yellowButton100"
+        return "yellowButton100";
       case "Promoter":
-        return "lightGreenButton300"
+        return "lightGreenButton300";
       default:
         break;
     }
-  }
+  };
   const ButtonComponent = ({ selectedUser, nextUser }) => {
     return (
       <Button
@@ -99,9 +99,10 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
       {selectedUser === USER_TYPES[2] ? (
         <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[3]} />
       ) : (
-        <TypographyComponent user={USER_TYPES[2]}
-        // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
-        // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
+        <TypographyComponent
+          user={USER_TYPES[2]}
+          // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
+          // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
         >
           {USER_TYPES[2]}
         </TypographyComponent>

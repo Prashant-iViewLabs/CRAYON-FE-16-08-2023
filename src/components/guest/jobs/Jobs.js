@@ -834,10 +834,12 @@ export default function Jobs() {
           overflowY: "scroll",
         }}
       >
-        <Paper sx={{
-          background: "transparent",
-          marginRight: "1px"
-        }}>
+        <Paper
+          sx={{
+            background: "transparent",
+            marginRight: "1px",
+          }}
+        >
           <ButtonPanel
             panelData={allIndustries}
             side="left"
@@ -869,7 +871,7 @@ export default function Jobs() {
         sx={{
           px: 2,
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
         }}
         gap={1}
       >
@@ -907,52 +909,51 @@ export default function Jobs() {
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
               display: { xs: "none", md: "flex" },
-              
             }}
             width={"99.5%"}
           >
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                <Grid
-                  xl={expandedItemId === job.job_id ? 12 : 3}
-                  lg={expandedItemId === job.job_id ? 12 : 4}
-                  md={expandedItemId === job.job_id ? 12 : 6}
-                  xs={12}
-                  key={job.job_id}
-                  ref={(ref) => {
-                    if (expandedItemId === job.job_id && ref) {
-                      ref.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                >
-                  <JobCard
-                    index={job.job_id}
-                    job={job}
-                    setQuestions={setQuestions}
-                    onHandleClose={onHandleClose}
-                    setopenApplyJobDialog={setopenApplyJobDialog}
-                    setIsExpanded={handleExpand}
-                  />
-                </Grid>
-              ))
+                  <Grid
+                    xl={expandedItemId === job.job_id ? 12 : 3}
+                    lg={expandedItemId === job.job_id ? 12 : 4}
+                    md={expandedItemId === job.job_id ? 12 : 6}
+                    xs={12}
+                    key={job.job_id}
+                    ref={(ref) => {
+                      if (expandedItemId === job.job_id && ref) {
+                        ref.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }
+                    }}
+                  >
+                    <JobCard
+                      index={job.job_id}
+                      job={job}
+                      setQuestions={setQuestions}
+                      onHandleClose={onHandleClose}
+                      setopenApplyJobDialog={setopenApplyJobDialog}
+                      setIsExpanded={handleExpand}
+                    />
+                  </Grid>
+                ))
               : (allJobs.length = 0 ? (
-                <Box
-                  sx={{
-                    width: "100%",
-                    textAlign: "center",
-                    mt: 4,
-                    color: theme.palette.placeholder,
-                  }}
-                >
-                  {i18n["jobs.noData"]}
-                </Box>
-              ) : null)}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      textAlign: "center",
+                      mt: 4,
+                      color: theme.palette.placeholder,
+                    }}
+                  >
+                    {i18n["jobs.noData"]}
+                  </Box>
+                ) : null)}
           </Grid>
           <style>
-                    {`.infinite-scroll-component::-webkit-scrollbar {
+            {`.infinite-scroll-component::-webkit-scrollbar {
                       width: 5px !important;
                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
                     }
@@ -965,7 +966,7 @@ export default function Jobs() {
                       box-shadow: 0px 3px 3px #00000029;
                       border-radius: 3px;/* Set the color of the scrollbar thumb */
                     }`}
-                  </style>
+          </style>
         </InfiniteScroll>
         {/*<Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
           <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
@@ -989,7 +990,6 @@ export default function Jobs() {
             </Grid>
           </SwipeableViews>
         </Grid>*/}
-
       </Grid>
       <Grid
         item
@@ -1002,7 +1002,7 @@ export default function Jobs() {
           flexDirection: "column",
           height: "80vh",
           overflowY: "scroll",
-          direction: "rtl"
+          direction: "rtl",
         }}
       >
         <style>
@@ -1017,34 +1017,34 @@ export default function Jobs() {
                       border-radius: 3px;
                     }`}
         </style>
-        <Paper sx={{
-          background: "transparent",
-          marginLeft: "1px"
-        }}>
-
-        <ButtonPanel
-          topMargin={true}
-          panelData={allJobTypes}
-          side="right"
-          onChangeFilter={onChangeFilterJobType}
-        />
-        <ButtonPanel
-          panelData={allStages}
-          side="right"
-          onChangeFilter={onChangeFilterJobStage}
-        />
-        <ButtonPanel
-          panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
-          onChangeFilter={onChangefavourite}
-          side="right"
-        />
-        <ButtonPanel
-          panelData={allTypes}
-          side="left"
-          onChangeFilter={onChangeFilterType}
-        />
+        <Paper
+          sx={{
+            background: "transparent",
+            marginLeft: "1px",
+          }}
+        >
+          <ButtonPanel
+            topMargin={true}
+            panelData={allJobTypes}
+            side="right"
+            onChangeFilter={onChangeFilterJobType}
+          />
+          <ButtonPanel
+            panelData={allStages}
+            side="right"
+            onChangeFilter={onChangeFilterJobStage}
+          />
+          <ButtonPanel
+            panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
+            onChangeFilter={onChangefavourite}
+            side="right"
+          />
+          <ButtonPanel
+            panelData={allTypes}
+            side="left"
+            onChangeFilter={onChangeFilterType}
+          />
         </Paper>
-
       </Grid>
 
       <CustomDialog

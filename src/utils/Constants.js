@@ -47,7 +47,7 @@ export const USER_ROLES = [
 
 export const ERROR_MSG = "Something went wrong! Please try again later!";
 
-export const USER_TYPES = ["Candidate", "Employer", "Recruiter", "Promoter"];
+export const USER_TYPES = ["Candidate", "Employer", "Promoter", "Recruiter"];
 
 export const LOGIN_TYPE = ["login", "signup"];
 
@@ -973,6 +973,9 @@ export const ADMIN_LFET_PANEL = [
     color: "blueButton400",
     menuItems: [
       { label: "All talent", path: "all-talent" },
+      { label: "My Talent" },
+      { label: "Applicants", path: "applicants" },
+      { label: "Followers", path: "followers" },
       { label: "Talent pools", path: "talent-pool" },
     ],
   },

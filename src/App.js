@@ -20,6 +20,10 @@ import MyCV from './components/candidate/myCV/MyCV';
 import JobListing from './components/guest/jobs/JobListing';
 import ComingSoon from './components/common/ComingSoon';
 
+import MyTalents from './components/admin/myTalent/MyTalents';
+import Applicants from './components/admin/myTalent/Applicants';
+import Followers from './components/admin/myTalent/Followers';
+
 import Candidate from './components/candidate';
 import Employer from './components/employer';
 
@@ -54,6 +58,9 @@ import Industries from './components/admin/maintenance/Industries';
 import QualificationTypes from './components/admin/maintenance/QualificationTypes';
 import Currencies from './components/admin/maintenance/Currencies';
 import TalentPoolInfo from './components/admin/adminTalent/TalentPoolInfo';
+import AdminJobsDetailPage from './components/admin/adminJobs/AdminJobsDetailPage';
+
+
 
 export default function App() {
   return (
@@ -87,6 +94,8 @@ export default function App() {
             <Route path='all-talent' element={<PrivateRoute><AllTalent /></PrivateRoute>} />
             <Route path='talent-pool' element={<PrivateRoute><TalentPool /></PrivateRoute>} />
             <Route path='talent-pool/:poolId?' element={<PrivateRoute><TalentPoolInfo /></PrivateRoute>} />
+            <Route path='applicants' element={<PrivateRoute><Applicants /></PrivateRoute>} />
+            <Route path='followers' element={<PrivateRoute><Followers /></PrivateRoute>} />
           </Route>
           <Route path='maintenance' element={<PrivateRoute><Maintenance /></PrivateRoute>} >
             <Route path='company' element={<PrivateRoute><Company /></PrivateRoute>} />
@@ -113,7 +122,6 @@ export default function App() {
           </Route>
           <Route path='Search' element={<PrivateRoute><Search /></PrivateRoute>} >
             <Route path='build-search' element={<PrivateRoute><BuildSearch /></PrivateRoute>} />
-            <Route path='job-titles' element={<PrivateRoute><JobTitles /></PrivateRoute>} />
           </Route>
           <Route path='*' element={<PrivateRoute><ComingSoon /></PrivateRoute>} />
         </Route>
@@ -121,6 +129,7 @@ export default function App() {
         <Route path='*' element={<ComingSoon />} />
         <Route path='candidate-cv/:id' element={<CandidateCVPage />} />
         <Route path='/:prev/job-detail/:location/:id' element={<JobsDetailPage />} />
+        <Route path='/:prev1/:prev2/:prev3/job-detail/:location/:id' element={<AdminJobsDetailPage />} />
       </Route>
       <Route path='*' element={<PrivateRoute><ComingSoon /></PrivateRoute>} />
     </Routes>

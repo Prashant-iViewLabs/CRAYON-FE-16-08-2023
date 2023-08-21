@@ -103,7 +103,7 @@ export default function ButtonPanel({
             color={selectedBtns.includes(btn.id) ? btn.color : "base"}
             key={btn.id}
           >
-            {truncate(btn?.name, {length: 14} )}
+            {truncate(btn?.name, { length: 14 })}
           </Button>
         </Tooltip>
       ))}

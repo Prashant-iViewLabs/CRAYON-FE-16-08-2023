@@ -18,6 +18,14 @@ export const getAllJobs = createAsyncThunk(
   }
 );
 
+export const getAdminTalentJobList = createAsyncThunk(
+  "getAdminTalentJobList",
+  async (payload, { dispatch }) => {
+    const { data } = await getApi("/admin/job?lastKey=" + payload, true);
+    return data;
+  }
+);
+
 export const getJobCount = createAsyncThunk(
   "getJobCount",
   async (payload, { dispatch }) => {
@@ -84,9 +92,9 @@ export const getAllTalentJobs = createAsyncThunk(
 export const getTalentPool = createAsyncThunk(
   "getTalentPool",
   async ({ lastKey }, { dispatch }) => {
-    dispatch(setLoading(true));
+    // dispatch(setLoading(true));
     const { data } = await getApi("/admin/getpools?lastKey=" + lastKey, true);
-    dispatch(setLoading(false));
+    // dispatch(setLoading(false));
     return data;
   }
 );
@@ -133,6 +141,33 @@ export const getPoolUsers = createAsyncThunk(
     return data;
   }
 );
+
+export const getApplicants = createAsyncThunk(
+  "getApplicants",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/getapplicantpool?lastKey=" + payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getFollowers = createAsyncThunk(
+  "getFollowers",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/getfollowerpool?lastKey=" + payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const jobsSlice = createSlice({
   name: "config",
   initialState,

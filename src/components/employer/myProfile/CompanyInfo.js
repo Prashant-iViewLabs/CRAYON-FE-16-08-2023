@@ -134,7 +134,10 @@ export default function Info({
             id="hyperlink"
             onChange={handleInputChange}
           />
-          {profileData.hyperlink == "" &&
+          {(profileData.hyperlink === null ||
+            profileData.hyperlink === "" ||
+            (profileData.hyperlink &&
+              !profileData.hyperlink.startsWith("http"))) &&
             errors?.find((error) => error.key == "hyperlink") && (
               <Typography color={"red !important"}>
                 {`*${
@@ -182,7 +185,7 @@ export default function Info({
             id="notes"
             onChange={handleInputChange}
           />
-          {profileData.notes == "" &&
+          {(profileData.notes === "" || profileData.notes === null) &&
             errors?.find((error) => error.key == "notes") && (
               <Typography color={"red !important"}>
                 {`*${errors?.find((error) => error.key == "notes").message}`}
