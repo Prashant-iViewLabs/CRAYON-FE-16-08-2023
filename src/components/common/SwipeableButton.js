@@ -11,7 +11,21 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
   const slider = useRef();
   const container = useRef();
   const theme = useTheme();
-
+  const selectedColor = (selectedUser) => {
+    console.log(selectedUser)
+    switch (selectedUser) {
+      case "Candidate":
+        return "blueButton600"
+      case "Employer":
+        return "redButton"
+      case "Recruiter":
+        return "yellowButton100"
+      case "Promoter":
+        return "lightGreenButton300"
+      default:
+        break;
+    }
+  }
   const ButtonComponent = ({ selectedUser, nextUser }) => {
     return (
       <Button
@@ -20,7 +34,7 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
           boxShadow: 0,
         }}
         variant="contained"
-        color="blueButton400"
+        color={selectedColor(selectedUser)}
         onClick={(e) => onButtonToggle(e, nextUser)}
       >
         {selectedUser}
@@ -34,8 +48,11 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
         onClick={(e) => onButtonToggle(e, user)}
         sx={{
           fontWeight: 300,
+          fontSize: 14,
           color: theme.palette.lightGray,
           cursor: "pointer",
+          width: 100,
+          textAlign: "center",
           ...otherStyles,
         }}
         variant="subtitle1"
@@ -46,46 +63,56 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
   };
   return (
     <Paper
-  elevation={3}
-  sx={{
-    display: "flex",
-    borderRadius: "25px",
-    height: "40px",
-    alignItems: "center",
-    justifyContent: "space-between",
-    overflowX: "auto",
-    whiteSpace: "nowrap",
-    padding: "0 1px",
-  }}
-  style={{
-    maxWidth: "100%",
-  }}
->
-  {selectedUser === USER_TYPES[0] ? (
-    <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[1]} />
-  ) : (
-    <TypographyComponent user={USER_TYPES[0]} ml={3}>
-      {USER_TYPES[0]}
-    </TypographyComponent>
-  )}
-  {selectedUser === USER_TYPES[1] ? (
-    <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[2]} />
-  ) : (
-    <TypographyComponent
-      user={USER_TYPES[1]}
-      mr={selectedUser === USER_TYPES[0] ? 3 : 0}
-      ml={selectedUser === USER_TYPES[2] ? 3 : 0}
+      elevation={3}
+      sx={{
+        display: "flex",
+        borderRadius: "25px",
+        height: "40px",
+        alignItems: "center",
+        justifyContent: "space-between",
+        overflowX: "auto",
+        whiteSpace: "nowrap",
+        padding: "0 1px",
+      }}
+      style={{
+        maxWidth: "100%",
+      }}
     >
-      {USER_TYPES[1]}
-    </TypographyComponent>
-  )}
-  {selectedUser === USER_TYPES[2] ? (
-    <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[0]} />
-  ) : (
-    <TypographyComponent user={USER_TYPES[2]} mr={3}>
-      {USER_TYPES[2]}
-    </TypographyComponent>
-  )}
-</Paper>
+      {selectedUser === USER_TYPES[0] ? (
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[1]} />
+      ) : (
+        <TypographyComponent user={USER_TYPES[0]}>
+          {USER_TYPES[0]}
+        </TypographyComponent>
+      )}
+      {selectedUser === USER_TYPES[1] ? (
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[2]} />
+      ) : (
+        <TypographyComponent
+          user={USER_TYPES[1]}
+          // mr={selectedUser === USER_TYPES[0] ? 3 : 0}
+          // ml={selectedUser === USER_TYPES[2] ? 3 : 0}
+        >
+          {USER_TYPES[1]}
+        </TypographyComponent>
+      )}
+      {selectedUser === USER_TYPES[2] ? (
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[3]} />
+      ) : (
+        <TypographyComponent user={USER_TYPES[2]}
+        // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
+        // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
+        >
+          {USER_TYPES[2]}
+        </TypographyComponent>
+      )}
+      {selectedUser === USER_TYPES[3] ? (
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[0]} />
+      ) : (
+        <TypographyComponent user={USER_TYPES[3]}>
+          {USER_TYPES[3]}
+        </TypographyComponent>
+      )}
+    </Paper>
   );
 }

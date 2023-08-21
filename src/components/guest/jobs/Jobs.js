@@ -500,6 +500,7 @@ import jwt_decode from "jwt-decode";
 import CustomDialog from "../../common/CustomDialog";
 import ApplyJobs from "./ApplyJobs";
 import { Outlet, useNavigate } from "react-router-dom";
+import { Paper } from "@mui/material";
 
 export default function Jobs() {
   const i18n = locale.en;
@@ -829,23 +830,31 @@ export default function Jobs() {
         xl={1}
         className="filterSec"
         sx={{
-          height: "90vh",
-          overflow: "scroll",
+          height: "80vh",
+          overflowY: "scroll",
         }}
       >
-        <ButtonPanel
-          topMargin={true}
-          panelData={allIndustries}
-          side="left"
-          onChangeFilter={onChangeFilter}
-        />
+        <Paper sx={{
+          background: "transparent",
+          marginRight: "1px"
+        }}>
+          <ButtonPanel
+            panelData={allIndustries}
+            side="left"
+            onChangeFilter={onChangeFilter}
+          />
+        </Paper>
+
         <style>
           {`.filterSec::-webkit-scrollbar {
-                      width: 7px !important;
-                      background-color: #F5F5F5; /* Set the background color of the scrollbar */
+                      width: 5px !important;
+                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
                     }
                     .filterSec::-webkit-scrollbar-thumb {
-                      background-color: #888c; /* Set the color of the scrollbar thumb */
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
                     }`}
         </style>
       </Grid>
@@ -859,7 +868,10 @@ export default function Jobs() {
         xl={10}
         sx={{
           px: 2,
+          display: "flex",
+          flexDirection: "column"
         }}
+        gap={1}
       >
         <SearchBar
           placeholder={i18n["jobs.searchPlaceholder"]}
@@ -868,7 +880,7 @@ export default function Jobs() {
         />
         <InfiniteScroll
           key={`${filters} + ${filtersJobType} + ${filtersJobStage} + ${filtersType}+${searchedJobs} +${favourite}`}
-          style={{ overflow: "hidden" }}
+          height="75vh"
           dataLength={allJobs.length} //This is important field to render the next data
           next={() =>
             getJobList(
@@ -894,51 +906,66 @@ export default function Jobs() {
             spacing={2}
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
-              my: 2,
               display: { xs: "none", md: "flex" },
-              marginTop: "60px",
+              
             }}
+            width={"99.5%"}
           >
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                  <Grid
-                    xl={expandedItemId === job.job_id ? 12 : 3}
-                    lg={expandedItemId === job.job_id ? 12 : 4}
-                    md={expandedItemId === job.job_id ? 12 : 6}
-                    xs={12}
-                    key={job.job_id}
-                    ref={(ref) => {
-                      if (expandedItemId === job.job_id && ref) {
-                        ref.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }
-                    }}
-                  >
-                    <JobCard
-                      index={job.job_id}
-                      job={job}
-                      setQuestions={setQuestions}
-                      onHandleClose={onHandleClose}
-                      setopenApplyJobDialog={setopenApplyJobDialog}
-                      setIsExpanded={handleExpand}
-                    />
-                  </Grid>
-                ))
+                <Grid
+                  xl={expandedItemId === job.job_id ? 12 : 3}
+                  lg={expandedItemId === job.job_id ? 12 : 4}
+                  md={expandedItemId === job.job_id ? 12 : 6}
+                  xs={12}
+                  key={job.job_id}
+                  ref={(ref) => {
+                    if (expandedItemId === job.job_id && ref) {
+                      ref.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }}
+                >
+                  <JobCard
+                    index={job.job_id}
+                    job={job}
+                    setQuestions={setQuestions}
+                    onHandleClose={onHandleClose}
+                    setopenApplyJobDialog={setopenApplyJobDialog}
+                    setIsExpanded={handleExpand}
+                  />
+                </Grid>
+              ))
               : (allJobs.length = 0 ? (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      textAlign: "center",
-                      mt: 4,
-                      color: theme.palette.placeholder,
-                    }}
-                  >
-                    {i18n["jobs.noData"]}
-                  </Box>
-                ) : null)}
+                <Box
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                    mt: 4,
+                    color: theme.palette.placeholder,
+                  }}
+                >
+                  {i18n["jobs.noData"]}
+                </Box>
+              ) : null)}
           </Grid>
+          <style>
+                    {`.infinite-scroll-component::-webkit-scrollbar {
+                      width: 5px !important;
+                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .infinite-scroll-component__outerdiv {
+                      height:100%
+                    }
+                    .infinite-scroll-component::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;/* Set the color of the scrollbar thumb */
+                    }`}
+                  </style>
         </InfiniteScroll>
         {/*<Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
           <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
@@ -962,18 +989,39 @@ export default function Jobs() {
             </Grid>
           </SwipeableViews>
         </Grid>*/}
+
       </Grid>
       <Grid
         item
         md={2}
         lg={1}
         xl={1}
+        className="rightfilterSec"
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "end",
+          height: "80vh",
+          overflowY: "scroll",
+          direction: "rtl"
         }}
       >
+        <style>
+          {`.rightfilterSec::-webkit-scrollbar {
+                       width: 5px !important;
+                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .rightfilterSec::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+        </style>
+        <Paper sx={{
+          background: "transparent",
+          marginLeft: "1px"
+        }}>
+
         <ButtonPanel
           topMargin={true}
           panelData={allJobTypes}
@@ -995,6 +1043,8 @@ export default function Jobs() {
           side="left"
           onChangeFilter={onChangeFilterType}
         />
+        </Paper>
+
       </Grid>
 
       <CustomDialog

@@ -155,7 +155,7 @@ const JobCardFront = ({
             width: 40,
             maxHeight: { xs: 40 },
             maxWidth: { xs: 40 },
-            ml: 2,
+            ml: 1,
             mt: 1,
             p: 1,
             borderRadius: 4,
@@ -165,93 +165,35 @@ const JobCardFront = ({
         />
         <Box
           sx={{
-            flexGrow: 0.5,
+            padding: "10px 0",
+            flexGrow: 1
           }}
         >
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-              }}
-            >
-              {job?.job_type === "crayon recruit" ? (
-                <SmallButton
-                  color="yellowButton100"
-                  label={job?.job_type?.slice(6)}
-                  mr={1}
-                />
-              ) : job?.job_type === "crayon lite" ? (
-                <SmallButton
-                  color="orangeButton"
-                  label={job?.job_type?.slice(6)}
-                  mr={1}
-                />
-              ) : null}
-              {job?.stage?.name && (
-                <SmallButton
-                  color="lightGreenButton300"
-                  mr={1}
-                  label={job?.stage?.name}
-                />
-              )}
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-              }}
-            >
-              <Box
-                sx={{
-                  height: 39,
-                  width: 43,
-                  maxHeight: { xs: 43 },
-                  maxWidth: { xs: 50 },
-                  borderRadius: "0 0 0 10px",
-                  background: theme.palette.purpleButton300.main,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  component="img"
-                  sx={{
-                    height: 20,
-                    width: 20,
-                    maxHeight: { xs: 20 },
-                    maxWidth: { xs: 20 },
-                  }}
-                  alt="job_volume"
-                  src={job_volume}
-                  onClick={handleClick}
-                />
-              </Box>
-
-              <Button
-                color="grayButton200"
-                onClick={() =>
-                  decodedToken?.data?.role_id === "undefined"
-                    ? handleClick
-                    : handleStar(job?.job_id)
-                }
-                sx={{
-                  height: "auto",
-                  minWidth: 50,
-                  background: theme.palette.grayBackground,
-                  borderRadius: 0,
-                  padding: 0,
-                }}
-              >
-                <StarRoundedIcon color={isStar ? "error" : "disabled"} />
-              </Button>
-            </Box>
+            {job?.job_type === "crayon recruit" ? (
+              <SmallButton
+                color="yellowButton100"
+                label={job?.job_type?.slice(6)}
+                mr={1}
+              />
+            ) : job?.job_type === "crayon lite" ? (
+              <SmallButton
+                color="orangeButton"
+                label={job?.job_type?.slice(6)}
+                mr={1}
+              />
+            ) : null}
+            {job?.stage?.name && (
+              <SmallButton
+                color="lightGreenButton300"
+                mr={1}
+                label={job?.stage?.name}
+              />
+            )}
           </Box>
           <Typography
             sx={{
@@ -259,16 +201,66 @@ const JobCardFront = ({
               fontSize: 10,
               letterSpacing: "0.75px",
               opacity: 0.8,
-              marginBottom: "8px",
+              marginTop: "8px",
             }}
           >
             posted {convertDatetimeAgo(job?.updated_at)}
           </Typography>
         </Box>
-      </Grid>
+        <Box
+          sx={{
+            display: "flex",
+          }}
+        >
+          <Box
+            sx={{
+              height: 39,
+              width: 43,
+              maxHeight: { xs: 43 },
+              maxWidth: { xs: 50 },
+              borderRadius: "0 0 0 10px",
+              background: theme.palette.purpleButton300.main,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              component="img"
+              sx={{
+                height: 20,
+                width: 20,
+                maxHeight: { xs: 20 },
+                maxWidth: { xs: 20 },
+              }}
+              alt="job_volume"
+              src={job_volume}
+              onClick={handleClick}
+            />
+          </Box>
+
+          <Button
+            color="grayButton200"
+            onClick={() =>
+              decodedToken?.data?.role_id === "undefined"
+                ? handleClick
+                : handleStar(job?.job_id)
+            }
+            sx={{
+              height: "auto",
+              minWidth: 50,
+              background: theme.palette.grayBackground,
+              borderRadius: 0,
+              padding: 0,
+            }}
+          >
+            <StarRoundedIcon color={isStar ? "error" : "disabled"} />
+          </Button>
+        </Box>
+      </Grid >
       {/* Header Section */}
 
-      <Box
+      < Box
         sx={{
           display: "flex",
           width: "100%",
@@ -276,7 +268,7 @@ const JobCardFront = ({
         }}
       >
         {/* Name and Info Section */}
-        <Grid
+        <Grid Grid
           paddingTop={0}
           marginLeft={1}
           marginRight={1}
@@ -286,9 +278,8 @@ const JobCardFront = ({
         >
           <Tooltip arrow title={job?.title} placement="top">
             <Link
-              to={`/jobs/job-detail/${`${
-                job?.town?.name + " " + job?.town?.region?.name
-              }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+                }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -305,7 +296,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-                // onClick={handleJobTitle}
+              // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -464,7 +455,7 @@ const JobCardFront = ({
           </Button>
         </Box>
         {/* flip Button */}
-      </Box>
+      </Box >
       {/* Radial Chart Section */}
       <Grid
         container
@@ -484,34 +475,38 @@ const JobCardFront = ({
             isHovered={isHovered}
           />
         </Box>
-        {job?.primary?.name && (
-          <Box
-            component="img"
-            height={80}
-            alt="Primary personality"
-            src={
-              (job?.primary?.name === "collaborator" && profile_collaborator) ||
-              (job?.primary?.name === "challenger" && profile_challenger) ||
-              (job?.primary?.name === "character" && profile_character) ||
-              (job?.primary?.name === "contemplator" && profile_contemplator)
-            }
-          />
-        )}
+        {
+          job?.primary?.name && (
+            <Box
+              component="img"
+              height={80}
+              alt="Primary personality"
+              src={
+                (job?.primary?.name === "collaborator" && profile_collaborator) ||
+                (job?.primary?.name === "challenger" && profile_challenger) ||
+                (job?.primary?.name === "character" && profile_character) ||
+                (job?.primary?.name === "contemplator" && profile_contemplator)
+              }
+            />
+          )
+        }
         {/* </Box> */}
-        {job?.shadow?.name && (
-          <Box
-            component="img"
-            height={80}
-            alt="Shadow personality"
-            src={
-              (job?.shadow?.name === "collaborator" && profile_collaborator) ||
-              (job?.shadow?.name === "challenger" && profile_challenger) ||
-              (job?.shadow?.name === "character" && profile_character) ||
-              (job?.shadow?.name === "contemplator" && profile_contemplator)
-            }
-          />
-        )}
-      </Grid>
+        {
+          job?.shadow?.name && (
+            <Box
+              component="img"
+              height={80}
+              alt="Shadow personality"
+              src={
+                (job?.shadow?.name === "collaborator" && profile_collaborator) ||
+                (job?.shadow?.name === "challenger" && profile_challenger) ||
+                (job?.shadow?.name === "character" && profile_character) ||
+                (job?.shadow?.name === "contemplator" && profile_contemplator)
+              }
+            />
+          )
+        }
+      </Grid >
       {/* Radial Chart Section */}
       {/* Footer Section */}
       <Grid
@@ -539,9 +534,8 @@ const JobCardFront = ({
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${
-            job?.town?.name + " " + job?.town?.region?.name
-          }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+            }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",
@@ -578,7 +572,7 @@ const JobCardFront = ({
         </Button>
       </Grid>
       {/* Footer Section */}
-    </CustomCard>
+    </CustomCard >
   );
 };
 

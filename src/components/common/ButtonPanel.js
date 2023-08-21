@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import { useTheme } from "@mui/material/styles";
+import { truncate } from "lodash";
 
 export default function ButtonPanel({
   panelData,
   side,
-  topMargin = false,
   onChangeFilter = () => {},
 }) {
   const theme = useTheme();
@@ -66,10 +66,10 @@ export default function ButtonPanel({
     <Box
       sx={{
         // mt: { sx: 0, sm: topMargin ? '68px' : '16px' },
-        textAlign: side == "right" && "end",
+        textAlign: side === "right" && "end",
         display: { xs: "none", sm: "flex" },
         flexDirection: "column",
-        overflow: { xs: "auto", sm: "hidden" },
+        // overflow: { xs: "auto", sm: "hidden" },
       }}
     >
       {panelData?.map((btn) => (
@@ -78,7 +78,6 @@ export default function ButtonPanel({
             sx={{
               mb: 1,
               padding: "6px 7px",
-              width: 130,
               lineHeight: "inherit",
               borderRadius: "5px",
               borderBottomLeftRadius: side == "left" ? { sm: 0 } : "5px",
@@ -104,7 +103,7 @@ export default function ButtonPanel({
             color={selectedBtns.includes(btn.id) ? btn.color : "base"}
             key={btn.id}
           >
-            {btn?.name.length <= 14 ? btn.name : btn?.name?.slice(0, 15)}
+            {truncate(btn?.name, {length: 14} )}
           </Button>
         </Tooltip>
       ))}

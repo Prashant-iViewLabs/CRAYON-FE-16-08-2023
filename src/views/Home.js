@@ -240,6 +240,7 @@ export default function Home() {
             top: 54,
             width: "70%",
             margin: "0 auto",
+            zIndex:10
 
           }}>
             <AdvanceSection/>
@@ -297,6 +298,7 @@ export default function Home() {
             position: "relative",
             display: "flex",
             flexWrap: "nowrap",
+            marginTop: 6
           }}>
             <StyledBox
               className="homeImages"
@@ -348,6 +350,7 @@ export default function Home() {
                 top: "3rem",
                 left: "-4rem",
                 cursor: "pointer",
+                zIndex: 1
               }}
               alt="Home Image"
               src={blueHalf} />
@@ -355,7 +358,7 @@ export default function Home() {
               className="homeImages"
               component="img"
               sx={{
-                zIndex: -1,
+                zIndex: 0,
                 left: "5rem",
                 cursor: "pointer",
               }}
@@ -374,7 +377,7 @@ export default function Home() {
               className="homeImages"
               component="img"
               sx={{
-                zIndex: -1,
+                zIndex: 0 ,
                 left: "22rem",
                 cursor: "pointer",
               }}

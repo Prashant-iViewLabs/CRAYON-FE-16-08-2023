@@ -119,7 +119,8 @@ export default function SearchBar({
         sx={{
           display: { xs: "none", md: "flex" },
           m: { xs: 2, md: 0 },
-          top: "110px",
+          paddingLeft:1,
+          alignItems: "center",
           borderRadius: "25px",
           border: "1px solid rgba(224, 224, 224, 0.5)",
           position: "sticky",
@@ -130,7 +131,8 @@ export default function SearchBar({
           zIndex: "1111",
         }}
       >
-        <Button
+        
+        {/* <Button
           sx={{
             width: 140,
             height: "auto",
@@ -150,7 +152,7 @@ export default function SearchBar({
           color="black100"
         >
           {i18n["searchBar.filters"]}
-        </Button>
+        </Button> */}
         {searchFilter ? (
           <Paper
             elevation={0}
@@ -193,13 +195,13 @@ export default function SearchBar({
               <Grid xs={5}>
                 <StyledBox>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton
+                    {/* <IconButton
                       color="redButton"
                       aria-label="search job"
                       component="button"
                     >
                       <PlaceIcon />
-                    </IconButton>
+                    </IconButton> */}
                   </Box>
                   <Paper
                     elevation={0}

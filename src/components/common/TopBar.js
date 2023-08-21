@@ -182,11 +182,12 @@ export default function TopBar() {
   }, [sign]);
 
   const onHandleLogin = async (loginData) => {
-    setShowLogin(false);
     try {
       const { payload } = await dispatch(login(loginData));
 
       if (payload?.status == "success" && payload?.token) {
+        setShowLogin(false);
+
         const user = payload.data.role_id;
         setLocalStorage("token", payload?.token);
         onHandleClose();
@@ -238,11 +239,12 @@ export default function TopBar() {
           })
         );
       } else {
+        console.log(payload)
         dispatch(
           setAlert({
             show: true,
             type: ALERT_TYPE.ERROR,
-            msg: payload?.message,
+            msg: payload?.message?.message,
           })
         );
       }
@@ -384,7 +386,10 @@ export default function TopBar() {
         component="nav"
         elevation={0}
         color="base"
-        sx={{ borderRadius: 0 }}
+        sx={{
+          borderRadius: 0, height: "80px",
+          justifyContent: "center"
+        }}
       >
         <Toolbar
           sx={{

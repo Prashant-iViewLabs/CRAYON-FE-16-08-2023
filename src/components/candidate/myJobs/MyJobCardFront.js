@@ -16,7 +16,7 @@ import {
   convertDatetimeAgo,
   dateConverterMonth,
 } from "../../../utils/DateTime";
-import { Tooltip } from "@mui/material";
+import { Paper, Tooltip } from "@mui/material";
 import SelectMenu from "../../common/SelectMenu";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -35,8 +35,10 @@ import {
   CalendarMonth,
   NavigateNext,
   Circle,
+  ExpandLess,
 } from "@mui/icons-material";
 import Slider2 from "../../common/Slider2";
+import TrackButtonLayout from "../../common/TrackButtonLayout";
 
 const label1 = "applicants";
 const label2 = "shortlisted";
@@ -228,14 +230,18 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               // marginLeft: 1,
               borderRadius: 0,
               width: "100%",
+              display: "flex",
+              flexDirection: "column"
             }}
             onClick={() => {
               setTrackButton((prevState) => !prevState);
             }}
-            endIcon={<KeyboardArrowDownIcon />}
+            // endIcon={}
             color="grayButton100"
           >
-            Track
+            <TrackButtonLayout colorPattern={["lightGreenButton300","lightGreenButton300","lightGreenButton300","lightGreenButton300"]}/>
+            {trackButton ? <ExpandLess /> : <KeyboardArrowDownIcon />}
+            
           </Button>
           <Typography
             sx={{
@@ -279,9 +285,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${
-                    job?.town?.name + " " + job?.town?.region?.name
-                  }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+                    }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -612,9 +617,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                   (job?.candidate_status === "not for me" &&
                     theme.status.notforme.main),
                 "& .css-1g66942-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-                  {
-                    color: theme.palette.base.main,
-                  },
+                {
+                  color: theme.palette.base.main,
+                },
               }}
             />
             {/* </Grid> */}
