@@ -33,19 +33,37 @@ import {
   getProfile,
 } from "../../../redux/candidate/myProfileSlice";
 import { useNavigate } from "react-router-dom";
-import FollowCompany from "./FollowCompany";
+// import FollowCompany from "./FollowCompany";
+import { Grid } from "@mui/material";
+import SingleRadialChart from "../../common/SingleRadialChart";
+
+
+import profile_challenger from "../../../assets/Profile Icons_Challenger.svg";
+import profile_character from "../../../assets/Profile Icons_Charater.svg";
+import profile_collaborator from "../../../assets/Profile Icons_Collaborator.svg";
+import profile_contemplator from "../../../assets/Profile Icons_Contemplator.svg";
+import { AddCircleOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
+import AddNewCompany from "./dialog/AddNewCompany";
+import DisplayFollowedCompanies from "./dialog/DisplayFollowedCompanies";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
-  borderRadius: "10px",
+  borderRadius: "17px",
   position: "unset",
   boxShadow: "none",
+  height: "75vh",
+  width: "100%",
+  overflow: "scroll",
+  overflowX: "hidden",
+  backgroundColor: "transparent",
   "& .MuiAccordionSummary-root": {
     padding: "16px 32px",
     cursor: "auto !important",
     boxShadow: "-1px 3px 8px rgba(0, 0, 0, 0.1)",
-    borderRadius: "10px",
+    borderRadius: "17px",
     marginBottom: "16px",
+    position: "relative",
+    background: "#ffff",
   },
   "& .MuiAccordionSummary-content.Mui-expanded": {
     margin: "0 0 8px 0",
@@ -80,7 +98,8 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
       display: "flex",
       paddingTop: 0,
       boxShadow: "-1px 3px 8px rgba(0, 0, 0, 0.1)",
-      borderRadius: "10px",
+      borderRadius: "17px",
+      background: "#ffff",
       "& .MuiTypography-root": {
         fontSize: "14px",
         fontWeight: 500,
@@ -97,15 +116,15 @@ const StyledButton = styled(Button)(({ theme }) => ({
   height: "32px",
 }));
 
-const StyledButtonSave = styled(Button)(({ theme }) => ({
-  marginRight: "24px",
-  fontSize: "14px",
-  width: "150px",
-  border: `2px solid ${theme.palette.redButton100.main}`,
-  "& .MuiSvgIcon-root": {
-    fontSize: "16px",
-  },
-}));
+// const StyledButtonSave = styled(Button)(({ theme }) => ({
+//   marginRight: "24px",
+//   fontSize: "14px",
+//   width: "150px",
+//   border: `2px solid ${theme.palette.redButton100.main}`,
+//   "& .MuiSvgIcon-root": {
+//     fontSize: "16px",
+//   },
+// }));
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
   height: "5px",
@@ -183,6 +202,7 @@ export default function ProfileCard() {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [openAddCompanyDialog, setOpenCompanyDialog] = useState(false);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -217,7 +237,7 @@ export default function ProfileCard() {
 
       try {
         const { payload } = await dispatch(uploadProfilePic(formData));
-        if (payload?.status == "success") {
+        if (payload?.status === "success") {
           setImage(URL.createObjectURL(croppedImage));
           setOpenEditImage(false);
 
@@ -390,14 +410,19 @@ export default function ProfileCard() {
       navigate("candidate/my-cam");
     }
   };
+
+  const handleOpenCompanyDialog = () => {
+    setOpenCompanyDialog((prevState) => !prevState);
+  };
   return (
-    <StyledAccordion expanded={expanded}>
-      <AccordionSummary
-        // expandIcon={<ExpandMoreIcon onClick={handleProfilePop} />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Box
+    <Box>
+      <StyledAccordion expanded={expanded} className="accordianSection">
+        <AccordionSummary
+          // expandIcon={<ExpandMoreIcon onClick={handleProfilePop} />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          {/* <Box
           sx={{
             position: "absolute",
             right: "30px",
@@ -409,7 +434,7 @@ export default function ProfileCard() {
             paddingRight: 0.4,
           }}
         >
-          {displayD == "none" ? (
+          {displayD === "none" ? (
             <ArrowDownwardIcon
               onClick={handleProfilePop}
               sx={{ "&:hover": { cursor: "pointer" } }}
@@ -514,7 +539,7 @@ export default function ProfileCard() {
                 )}
               </Button>
             </Box>
-          </Box>
+          </Box>*}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box sx={{ mb: 3 }}>
               <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -576,7 +601,7 @@ export default function ProfileCard() {
                   <StyledButton variant="contained" disabled>
                     {i18n["myProfile.take"]}
                   </StyledButton>
-                </Box> */}
+                </Box> 
                   </Box>
                 </Box>
                 <Box>
@@ -604,7 +629,7 @@ export default function ProfileCard() {
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ width: "39%", mt: 2 }}>
+            < sx={{ width: "39%", mt: 2 }}>
               <Typography
                 sx={{
                   fontSize: "16px",
@@ -623,7 +648,7 @@ export default function ProfileCard() {
               sx={{padding:"17px"}}
             >
               {i18n["empMyProfile.updateProfile"]}
-            </StyledButton> */}
+            </StyledButton> 
               {!expanded ? (
                 <StyledButton
                   // disabled={expanded}
@@ -645,144 +670,403 @@ export default function ProfileCard() {
               )}
             </Box>
           </Box>
-        </Box>
-      </AccordionSummary>
+        </Box> */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  component="img"
+                  alt="upload profile"
+                  src={
+                    image?.length > 0
+                      ? image || profile?.profile_url
+                      : companyLogo
+                  }
+                  // src={
+                  //   profile?.profile_url !== "No URL"
+                  //     ? profile?.profile_url
+                  //     : companyLogo
+                  // }
+                  sx={{
+                    height: "96px",
+                    width: "96px",
+                    borderRadius: "49px",
+                  }}
+                />
+                <Box sx={{ ml: 2 }}>
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {profile.name} {profile.surname}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      color: theme.palette.lightText,
+                    }}
+                  >
+                    Date Joined: {profile.created_at?.substring(0, 10)}
+                  </Typography>
+                </Box>
+              </Box>
+              <input
+                ref={hiddenFileInput}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  marginTop: "10px",
+                }}
+              >
+                <StyledButton
+                  color="blueButton700"
+                  variant="contained"
+                  onClick={handleImageClick}
+                  sx={{ mr: 1 }}
+                >
+                  {i18n["myProfile.uploadPhoto"]}
+                </StyledButton>
+                <StyledButton variant="outlined" color="blueButton700">
+                  {i18n["myProfile.take"]}
+                </StyledButton>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexGrow: 0.9,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                {/* { */}
+                {/*  job?.primary?.name && ( */}
+                <Box
+                  component="img"
+                  height={80}
+                  alt="Primary personality"
+                  src={
+                    profile_challenger
+                    // (job?.primary?.name === "collaborator" && profile_collaborator)
+                    //   (job?.primary?.name === "challenger" && profile_challenger) ||
+                    //   (job?.primary?.name === "character" && profile_character) ||
+                    //   (job?.primary?.name === "contemplator" && profile_contemplator)
+                  }
+                />
+                {/*  ) */}
+                {/* } */}
+                {/* </Box> */}
+                {/* { */}
+                {/* job?.shadow?.name && ( */}
+                <Box
+                  component="img"
+                  height={80}
+                  alt="Shadow personality"
+                  src={
+                    profile_collaborator
+                    // (job?.shadow?.name === "collaborator" && profile_collaborator) ||
+                    // (job?.shadow?.name === "challenger" && profile_challenger) ||
+                    // (job?.shadow?.name === "character" && profile_character) ||
+                    // (job?.shadow?.name === "contemplator" && profile_contemplator)
+                  }
+                />
+                {/* ) */}
+                {/* } */}
+                <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                  <SingleRadialChart
+                    max={1000}
+                    labelsData={"grit score"}
+                    series={[80]}
+                    width={120}
+                    color={theme.palette.chart.red}
+                    isHovered={true}
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                  <SingleRadialChart
+                    max={1000}
+                    labelsData={"grit score"}
+                    series={[80]}
+                    width={120}
+                    color={theme.palette.chart.red}
+                    isHovered={true}
+                  />
+                </Box>
+                <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                  <SingleRadialChart
+                    max={1000}
+                    labelsData={"grit score"}
+                    series={[80]}
+                    width={120}
+                    color={theme.palette.chart.red}
+                    isHovered={true}
+                  />
+                </Box>
+                <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                  <SingleRadialChart
+                    max={1000}
+                    labelsData={"grit score"}
+                    series={[80]}
+                    width={120}
+                    color={theme.palette.chart.red}
+                    isHovered={true}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    zIndex:10
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="grayButton100"
+                    sx={{
+                      borderRadius: "20px 0 0 0",
+                    }}
+                    onClick={handleOpenCompanyDialog}
+                  >
+                    <AddCircleOutline />
+                  </Button>
+                  <DisplayFollowedCompanies />
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              left: 0,
+              // right: 0,
+              bottom: expanded ? 0 : -20,
+              width: "100%",
+              margin: "0 auto",
+              zIndex: 5,
+              display: "flex",
+              justifyContent: "center",
 
-      <AccordionDetails
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          p: 4,
-        }}
-      >
-        <Box sx={{ mt: 3 }}>
-          <FollowCompany />
-        </Box>
+            }}
+          >
+            <Button
+              sx={{
+                padding: "4px 20px",
+                height: 20,
+                borderRadius: expanded ? "15px 15px 0 0" : "0 0 15px 15px",
+                boxShadow: 3,
+              }}
+              size="small"
+              variant="contained"
+              color="redButton"
+              endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
+              onClick={() => {
+                setExpanded((prevState) => !prevState);
+              }}
+            >
+              {expanded ? "looks good" : "my info"}
+            </Button>
+          </Box>
+        </AccordionSummary>
 
-        <Box sx={{ mt: 3 }}>
-          {/* <SomeComponent handleInfoData={getInfoData} handleCompanyInfoData={getCompanyInfoData} /> */}
-          <TheBasics
-            profile={profile}
-            handleProfileData={getProfileData}
-            errors={errors}
-            setErrors={setErrors}
-          />
+        <AccordionDetails
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            p: 4,
+            pb:0,
+            mb: 6
+          }}
+        >
+          {/* <Box sx={{ mt: 3 }}>
+            <FollowCompany />
+          </Box> */}
+
+          <Box sx={{ mt: 3 }}>
+            {/* <SomeComponent handleInfoData={getInfoData} handleCompanyInfoData={getCompanyInfoData} /> */}
+            <TheBasics
+              profile={profile}
+              handleProfileData={getProfileData}
+              errors={errors}
+              setErrors={setErrors}
+            />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                onClick={onSaveProfile}
+                variant="contained"
+                color="grayButton200"
+                sx={{
+                  width: "225px",
+                  height: "57px",
+                  borderRadius: "26px 0 0 0"
+                }}
+              >
+                {/* {i18n["myProfile.save"]} */}
+                save & exit
+              </Button>
+              <Button
+                onClick={onSaveProfile}
+                variant="contained"
+                color="redButton100"
+                sx={{
+                  width: "225px",
+                  height: "57px",
+                  borderRadius: "0 26px 0 0 "
+                }}
+              >
+                {/* {i18n["myProfile.save"]} */}
+                go to CV
+              </Button>
+            </Box>
+          </Box>
+        </AccordionDetails>
+        <CustomDialog
+          dialogWidth="md"
+          show={openEditImage}
+          onDialogClose={() => {
+            setImageName("My pic");
+            setOpenEditImage(false);
+          }}
+          title={i18n["myProfile.moveAndScale"]}
+          footer={renderFooter}
+          isProfile
+        >
+          <Box
+            sx={{
+              position: "relative",
+              height: "80%",
+            }}
+          >
+            <Cropper
+              image={imagePreview}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              cropShape="round"
+              showGrid={true}
+              onCropChange={setCrop}
+              // onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+            />
+          </Box>
+          <Box
+            sx={{
+              position: "relative",
+              // height: "20%",
+              display: "flex",
+              paddingTop: 2,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button variant="text" onClick={() => handleZoom("-")}>
+              <ZoomOutIcon />
+            </Button>
+            <Box
+              className="controls"
+              sx={{
+                width: 200,
+                mx: 3,
+              }}
+            >
+              <Slider
+                defaultValue={0}
+                size="small"
+                value={zoom}
+                min={1}
+                max={3}
+                step={0.5}
+                aria-labelledby="Zoom"
+                onChange={(e) => {
+                  setZoom(e.target.value);
+                }}
+                className="zoom-range"
+              />
+            </Box>
+            <Button variant="text" onClick={() => handleZoom("+")}>
+              <ZoomInIcon />
+            </Button>
+            <Button variant="text" onClick={() => setZoom(1)}>
+              Reset
+            </Button>
+          </Box>
           <Box
             sx={{
               display: "flex",
               justifyContent: "center",
+              paddingTop: 2,
             }}
           >
-            <StyledButtonSave
-              onClick={onSaveProfile}
-              variant="contained"
-              color="redButton100"
-            >
-              {i18n["myProfile.save"]}
-            </StyledButtonSave>
-          </Box>
-        </Box>
-      </AccordionDetails>
-      <CustomDialog
-        dialogWidth="md"
-        show={openEditImage}
-        onDialogClose={() => {
-          setImageName("My pic");
-          setOpenEditImage(false);
-        }}
-        title={i18n["myProfile.moveAndScale"]}
-        footer={renderFooter}
-        isProfile
-      >
-        <Box
-          sx={{
-            position: "relative",
-            height: "80%",
-          }}
-        >
-          <Cropper
-            image={imagePreview}
-            crop={crop}
-            zoom={zoom}
-            aspect={1}
-            cropShape="round"
-            showGrid={true}
-            onCropChange={setCrop}
-            // onZoomChange={setZoom}
-            onCropComplete={onCropComplete}
-          />
-        </Box>
-        <Box
-          sx={{
-            position: "relative",
-            // height: "20%",
-            display: "flex",
-            paddingTop: 2,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button variant="text" onClick={() => handleZoom("-")}>
-            <ZoomOutIcon />
-          </Button>
-          <Box
-            className="controls"
-            sx={{
-              width: 200,
-              mx: 3,
-            }}
-          >
-            <Slider
-              defaultValue={0}
-              size="small"
-              value={zoom}
-              min={1}
-              max={3}
-              step={0.5}
-              aria-labelledby="Zoom"
-              onChange={(e) => {
-                setZoom(e.target.value);
+            <Button
+              onClick={() => {
+                setImageName("My pic");
+                setOpenEditImage(false);
               }}
-              className="zoom-range"
-            />
+              disableElevation
+              variant="outlined"
+              color="redButton"
+              sx={{ width: "130px", mr: 2 }}
+            >
+              {i18n["myProfile.cancel"]}
+            </Button>
+            <Button
+              onClick={handleImageEdit}
+              disableElevation
+              variant="contained"
+              color="redButton"
+              sx={{ width: "130px" }}
+            >
+              {i18n["myProfile.upload"]}
+            </Button>
           </Box>
-          <Button variant="text" onClick={() => handleZoom("+")}>
-            <ZoomInIcon />
-          </Button>
-          <Button variant="text" onClick={() => setZoom(1)}>
-            Reset
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: 2,
-          }}
-        >
-          <Button
-            onClick={() => {
-              setImageName("My pic");
-              setOpenEditImage(false);
-            }}
-            disableElevation
-            variant="outlined"
-            color="redButton"
-            sx={{ width: "130px", mr: 2 }}
-          >
-            {i18n["myProfile.cancel"]}
-          </Button>
-          <Button
-            onClick={handleImageEdit}
-            disableElevation
-            variant="contained"
-            color="redButton"
-            sx={{ width: "130px" }}
-          >
-            {i18n["myProfile.upload"]}
-          </Button>
-        </Box>
-      </CustomDialog>
-    </StyledAccordion>
+        </CustomDialog>
+        <style>
+          {`.accordianSection::-webkit-scrollbar {
+                      margin-left: 2px;
+                      width: 5px !important;
+                      background-color: transparent; /* Set the background color of the scrollbar */
+                    }
+                    .accordianSection::-webkit-scrollbar-thumb {
+                      background-color: #EEEEEE;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+        </style>
+      </StyledAccordion>
+      <AddNewCompany show={openAddCompanyDialog} handleOpen={handleOpenCompanyDialog}/>
+    </Box>
   );
 }
