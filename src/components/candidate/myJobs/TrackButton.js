@@ -10,29 +10,26 @@ import SmallButton from "../../common/SmallButton";
 import { Link } from "react-router-dom";
 import { Avatar, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
+import redTriangleSmile from "../../../assets/Characters/Red_Triangle_Smiling.svg";
+import editIcon from "../../../assets/Padding Included/Black_Edit.svg";
+import { CheckCircle, HourglassEmpty } from "@mui/icons-material";
+
 
 const TrackButton = ({ job, closeFunc }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const theme = useTheme();
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   console.log(job);
   return (
     <Box>
       <Box
         sx={{
-          padding: 2,
+          padding: "10px 16px",
+          height: "388px"
         }}
       >
         <Box mb={2}>
           <strong>Application Stage:</strong>
           <SmallButton
-            color="lightGreenButton300"
+            color= {job?.job_users[0]?.job_user_status?.name === "incomplete" ? "grayButton200" : "lightGreenButton300"} 
             ml={1}
             label={job?.job_users[0]?.job_user_status?.name}
           />
@@ -56,7 +53,11 @@ const TrackButton = ({ job, closeFunc }) => {
             'the basics' section of your Crayon Vitae be completed.
           </Typography>
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Avatar></Avatar>
+            <Box
+              component={"img"}
+              src={redTriangleSmile}
+              sx={{ width: 36, height: 36, margin: "auto" }}
+            />
             <Typography
               sx={{
                 fontSize: "0.8rem",
@@ -77,38 +78,66 @@ const TrackButton = ({ job, closeFunc }) => {
               paddingBottom: 2,
             }}
           >
-            {job?.profileCompleted ? (
+            {/* {job?.profileCompleted ? (
               <Button
                 variant={job?.profileCompleted ? "contained" : "outlined"}
                 sx={{
                   borderRadius: "10px",
                 }}
-                color={job?.profileCompleted ? "lightGreenButton300" : ""}
+                color={job?. ? "lightGreenButton300" : ""}
                 endIcon={job?.profileCompleted ? <CheckIcon /> : ""}
               >
                 {" "}
                 My Profile
               </Button>
-            ) : (
-              <Link
-                to={"/candidate/my-profile"}
-                style={{
-                  textDecoration: "none",
-                  color: theme.palette.black,
+            ) : ( */}
+            <Link
+              to={"/candidate/my-profile"}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.black,
+              }}
+            >
+              <Button
+                variant="contained"
+                color="grayButton200"
+                sx={{
+                  borderRadius: "10px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                  padding: 1
                 }}
               >
-                <Button
-                  variant="outlined"
-                  sx={{
-                    borderRadius: "10px",
-                  }}
-                >
-                  {" "}
-                  My Profile
-                </Button>
-              </Link>
-            )}
-            {job?.cvCompleted ? (
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1
+                }}>{job?.profileCompleted ? <CheckCircle sx={{
+                  fontSize: 35
+                }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
+                  background: "#D9D9D9",
+                  color: "#707070",
+                  padding: 1,
+                  fontSize: 18,
+                  borderRadius: "50%",
+                }} />} <span> My Profile</span></Box>
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center"
+                }}>
+                  Edit
+                  <Box
+                    component={"img"}
+                    src={editIcon}
+                    sx={{ width: 20, height: 20 }}
+                  />
+                </Box>
+              </Button>
+            </Link>
+            {/* )} */}
+            {/* {job?.cvCompleted ? (
               <Button
                 variant={job?.cvCompleted ? "contained" : "outlined"}
                 sx={{
@@ -120,15 +149,15 @@ const TrackButton = ({ job, closeFunc }) => {
                 {" "}
                 Crayon vitae
               </Button>
-            ) : (
-              <Link
-                to={"/candidate/my-cv"}
-                style={{
-                  textDecoration: "none",
-                  color: theme.palette.black,
-                }}
-              >
-                <Button
+            ) : ( */}
+            <Link
+              to={"/candidate/my-cv"}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.black,
+              }}
+            >
+              {/* <Button
                   variant="outlined"
                   sx={{
                     borderRadius: "10px",
@@ -136,10 +165,47 @@ const TrackButton = ({ job, closeFunc }) => {
                 >
                   {" "}
                   Crayon vitae
-                </Button>
-              </Link>
-            )}
-            <Button
+                </Button> */}
+              <Button
+                variant="contained"
+                color="grayButton200"
+                sx={{
+                  borderRadius: "10px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                  padding: 1
+                }}
+              >
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1
+                }}>{job?.cvCompleted ? <CheckCircle sx={{
+                  fontSize: 35
+                }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
+                  background: "#D9D9D9",
+                  color: "#707070",
+                  padding: 1,
+                  fontSize: 18,
+                  borderRadius: "50%",
+                }} />} <span>Crayon vitae</span></Box>
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center"
+                }}>
+                  Edit
+                  <Box
+                    component={"img"}
+                    src={editIcon}
+                    sx={{ width: 20, height: 20 }}
+                  />
+                </Box>
+              </Button>
+            </Link>
+            {/* )} */}
+            {/* <Button
               variant="contained"
               sx={{
                 borderRadius: "10px",
@@ -149,9 +215,46 @@ const TrackButton = ({ job, closeFunc }) => {
             >
               {" "}
               Q&A
+            </Button> */}
+            <Button
+              variant="contained"
+              color="grayButton200"
+              sx={{
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: 1
+              }}
+            >
+              <Box sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1
+              }}>{true ? <CheckCircle sx={{
+                fontSize: 35
+              }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
+                background: "#D9D9D9",
+                color: "#707070",
+                padding: 1,
+                fontSize: 18,
+                borderRadius: "50%",
+              }} />} <span>Q&A</span></Box>
+              <Box sx={{
+                display: "flex",
+                alignItems: "center"
+              }}>
+                Edit
+                <Box
+                  component={"img"}
+                  src={editIcon}
+                  sx={{ width: 20, height: 20 }}
+                />
+              </Box>
             </Button>
 
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{
                 borderRadius: "10px",
@@ -159,7 +262,44 @@ const TrackButton = ({ job, closeFunc }) => {
             >
               {" "}
               Application video
-            </Button>
+            </Button> */}
+            <Button
+                variant="contained"
+                color="grayButton200"
+                sx={{
+                  borderRadius: "10px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                  padding: 1
+                }}
+              >
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1
+                }}>{false ? <CheckCircle sx={{
+                  fontSize: 35
+                }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
+                  background: "#D9D9D9",
+                  color: "#707070",
+                  padding: 1,
+                  fontSize: 18,
+                  borderRadius: "50%",
+                }} />} <span>Video application </span></Box>
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center"
+                }}>
+                  Edit
+                  <Box
+                    component={"img"}
+                    src={editIcon}
+                    sx={{ width: 20, height: 20 }}
+                  />
+                </Box>
+              </Button>
           </Box>
         </Box>
       </Box>
@@ -173,7 +313,7 @@ const TrackButton = ({ job, closeFunc }) => {
         }}
         onClick={() => closeFunc(false)}
       >
-        back
+        close
       </Button>
     </Box>
   );

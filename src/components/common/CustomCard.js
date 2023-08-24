@@ -14,6 +14,8 @@ const sxPaper = {
     boxShadow: 15, //'rgb(0 0 0 / 24%) 0px 12px 24px',
     transition: "1s ease",
   },
+  height: "500px",
+  overflow: "hidden",
   width: "100%",
 };
 export default function CustomCard({

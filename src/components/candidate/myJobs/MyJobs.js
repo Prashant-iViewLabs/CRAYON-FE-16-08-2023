@@ -28,6 +28,7 @@ import {
 import { getJobStatus } from "../../../redux/status";
 import { useSelector } from "react-redux";
 import { getMyStatusFilter } from "../../../redux/candidate/myStatusFilter";
+import { Paper } from "@mui/material";
 export default function Talent() {
   const i18n = locale.en;
   const theme = useTheme();
@@ -116,16 +117,56 @@ export default function Talent() {
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
     >
-      <ButtonPanel
-        panelData={myStatus}
-        side="left"
-        onChangeFilter={leftStatusFilter}
-      />
-      <Grid xs={12} sm={6} md={8} lg={9} xl={10}>
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        className="filterSec"
+        sx={{
+          height: "88vh",
+          overflowY: "scroll",
+        }}
+      >
+        <Paper
+          sx={{
+            background: "transparent",
+            marginRight: "1px",
+          }}
+        >
+          <ButtonPanel
+            panelData={myStatus}
+            side="left"
+            onChangeFilter={leftStatusFilter}
+          />
+        </Paper>
+        <style>
+          {`.filterSec::-webkit-scrollbar {
+                      width: 5px !important;
+                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .filterSec::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+        </style>
+      </Grid>
+      <Grid xs={12} sm={6} md={8} lg={9} xl={10}
+        sx={{
+          px: 2,
+          display: "flex",
+          flexDirection: "column",
+        }}
+        gap={1}
+        flexGrow="1 !important"
+      >
         <SearchBar placeholder={i18n["jobs.searchPlaceholder"]} />
         <InfiniteScroll
           key={`${jobStatusFilter}, ${myStatusFilter}`}
-          style={{ overflow: "hidden" }}
+          // style={{ overflow: "hidden" }}
+          height="80vh"
           dataLength={candidateJobs.length}
           //   next={getJobs}
           hasMore={true}
@@ -140,10 +181,9 @@ export default function Talent() {
             spacing={2}
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
-              my: 2,
               display: { xs: "none", md: "flex" },
-              marginTop: "60px",
             }}
+            width={"99.5%"}
           >
             {candidateJobs.length > 0 ? (
               candidateJobs?.map((talent) => (
@@ -164,6 +204,21 @@ export default function Talent() {
               </Box>
             )}
           </Grid>
+          <style>
+            {`.infinite-scroll-component::-webkit-scrollbar {
+                      width: 5px !important;
+                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .infinite-scroll-component__outerdiv {
+                      height:100%
+                    }
+                    .infinite-scroll-component::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;/* Set the color of the scrollbar thumb */
+                    }`}
+          </style>
         </InfiniteScroll>
         {/*
       <Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
@@ -190,11 +245,46 @@ export default function Talent() {
         </Grid>
       */}
       </Grid>
-      <ButtonPanel
-        panelData={jobStatus}
-        side="right"
-        onChangeFilter={rightStatusFilter}
-      />
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        className="rightfilterSec"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "88vh",
+          overflowY: "scroll",
+          direction: "rtl",
+        }}
+      >
+        <style>
+          {`.rightfilterSec::-webkit-scrollbar {
+                       width: 5px !important;
+                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .rightfilterSec::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+        </style>
+        <Paper
+          sx={{
+            background: "transparent",
+            marginLeft: "1px",
+          }}
+        >
+
+          <ButtonPanel
+            panelData={jobStatus}
+            side="right"
+            onChangeFilter={rightStatusFilter}
+          />
+        </Paper>
+      </Grid>
     </Grid>
   );
 }

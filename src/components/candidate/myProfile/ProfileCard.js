@@ -755,6 +755,7 @@ export default function ProfileCard() {
                 flexGrow: 0.9,
               }}
             >
+
               <Box
                 sx={{
                   display: "flex",
@@ -762,49 +763,53 @@ export default function ProfileCard() {
                   gap: 2,
                 }}
               >
-                {/* { */}
-                {/*  job?.primary?.name && ( */}
-                <Box
-                  component="img"
-                  height={80}
-                  alt="Primary personality"
-                  src={
-                    profile_challenger
-                    // (job?.primary?.name === "collaborator" && profile_collaborator)
-                    //   (job?.primary?.name === "challenger" && profile_challenger) ||
-                    //   (job?.primary?.name === "character" && profile_character) ||
-                    //   (job?.primary?.name === "contemplator" && profile_contemplator)
-                  }
-                />
-                {/*  ) */}
-                {/* } */}
-                {/* </Box> */}
-                {/* { */}
-                {/* job?.shadow?.name && ( */}
-                <Box
-                  component="img"
-                  height={80}
-                  alt="Shadow personality"
-                  src={
-                    profile_collaborator
-                    // (job?.shadow?.name === "collaborator" && profile_collaborator) ||
-                    // (job?.shadow?.name === "challenger" && profile_challenger) ||
-                    // (job?.shadow?.name === "character" && profile_character) ||
-                    // (job?.shadow?.name === "contemplator" && profile_contemplator)
-                  }
-                />
-                {/* ) */}
-                {/* } */}
-                <Box sx={{ margin: "0 -22px 0 -22px" }}>
-                  <SingleRadialChart
-                    max={1000}
-                    labelsData={"grit score"}
-                    series={[80]}
-                    width={120}
-                    color={theme.palette.chart.red}
-                    isHovered={true}
-                  />
-                </Box>
+                {!expanded &&
+                  <>
+                    {/* { */}
+                    {/*  job?.primary?.name && ( */}
+                    <Box
+                      component="img"
+                      height={80}
+                      alt="Primary personality"
+                      src={
+                        profile_challenger
+                        // (job?.primary?.name === "collaborator" && profile_collaborator)
+                        //   (job?.primary?.name === "challenger" && profile_challenger) ||
+                        //   (job?.primary?.name === "character" && profile_character) ||
+                        //   (job?.primary?.name === "contemplator" && profile_contemplator)
+                      }
+                    />
+                    {/*  ) */}
+                    {/* } */}
+                    {/* </Box> */}
+                    {/* { */}
+                    {/* job?.shadow?.name && ( */}
+                    <Box
+                      component="img"
+                      height={80}
+                      alt="Shadow personality"
+                      src={
+                        profile_collaborator
+                        // (job?.shadow?.name === "collaborator" && profile_collaborator) ||
+                        // (job?.shadow?.name === "challenger" && profile_challenger) ||
+                        // (job?.shadow?.name === "character" && profile_character) ||
+                        // (job?.shadow?.name === "contemplator" && profile_contemplator)
+                      }
+                    />
+                    {/* ) */}
+                    {/* } */}
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={1000}
+                        labelsData={"grit score"}
+                        series={[80]}
+                        width={120}
+                        color={theme.palette.chart.red}
+                        isHovered={true}
+                      />
+                    </Box>
+                  </>
+                }
               </Box>
               <Box
                 sx={{
@@ -813,36 +818,41 @@ export default function ProfileCard() {
                   gap: 2,
                 }}
               >
-                <Box sx={{ margin: "0 -22px 0 -22px" }}>
-                  <SingleRadialChart
-                    max={1000}
-                    labelsData={"grit score"}
-                    series={[80]}
-                    width={120}
-                    color={theme.palette.chart.red}
-                    isHovered={true}
-                  />
-                </Box>
-                <Box sx={{ margin: "0 -22px 0 -22px" }}>
-                  <SingleRadialChart
-                    max={1000}
-                    labelsData={"grit score"}
-                    series={[80]}
-                    width={120}
-                    color={theme.palette.chart.red}
-                    isHovered={true}
-                  />
-                </Box>
-                <Box sx={{ margin: "0 -22px 0 -22px" }}>
-                  <SingleRadialChart
-                    max={1000}
-                    labelsData={"grit score"}
-                    series={[80]}
-                    width={120}
-                    color={theme.palette.chart.red}
-                    isHovered={true}
-                  />
-                </Box>
+                {!expanded &&
+                  <>
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={10000}
+                        labelsData={"applications"}
+                        series={[4000]}
+                        width={120}
+                        color={theme.palette.chart.green200}
+                        isHovered={true}
+                      />
+                    </Box>
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={1000}
+                        labelsData={"shortlistings"}
+                        series={[123]}
+                        width={120}
+                        color={theme.palette.chart.green200}
+                        isHovered={true}
+                      />
+                    </Box>
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={1000}
+                        labelsData={"interviews"}
+                        series={[3]}
+                        width={120}
+                        color={theme.palette.chart.green200}
+                        isHovered={true}
+                      />
+                    </Box>
+                  </>
+
+                }
                 <Box
                   sx={{
                     position: "absolute",
@@ -881,7 +891,7 @@ export default function ProfileCard() {
                       src={CompanyListLogo}
                     />
                   </Button>
-                  <DisplayFollowedCompanies openDialog={openFollowedDialog}/>
+                  <DisplayFollowedCompanies openDialog={openFollowedDialog} />
                 </Box>
               </Box>
             </Box>

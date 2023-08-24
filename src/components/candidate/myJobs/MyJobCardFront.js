@@ -39,6 +39,8 @@ import {
 } from "@mui/icons-material";
 import Slider2 from "../../common/Slider2";
 import TrackButtonLayout from "../../common/TrackButtonLayout";
+import MatchMeButton from "./MatchMeButton";
+import StatusButton from "./StatusButton";
 
 const label1 = "applicants";
 const label2 = "shortlisted";
@@ -60,6 +62,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
   const [openManageJobDialog, setOpenManageJobDialog] = useState(false);
   const myStatus = useSelector((state) => state.configMyStatus.mystatusfilter);
   const [trackButton, setTrackButton] = useState(false);
+  const [matchMeButton, setMatchButton] = useState(false);
 
   const industries = job?.industry_jobs.map(
     (industry) => industry?.industry.name
@@ -80,20 +83,19 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
     setAnchorEl(null);
   };
 
-  const handleCandidateStatus = async (event) => {
-    const {
-      target: { value },
-      target: { name },
-      target: { id },
-    } = event;
-
+  const handleCandidateStatus = async (value) => {
+    // const {
+    //   target: { value },
+    //   target: { name },
+    //   target: { id },
+    // } = event;
     const data = {
       job_id: job?.job_id,
       status_id: value,
     };
 
     const { payload } = await dispatch(changeStatus(data));
-    if (payload?.status == "success") {
+    if (payload?.status === "success") {
       dispatch(
         setAlert({
           show: true,
@@ -113,28 +115,13 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
     }
   };
 
-  const showManageJob = () => {
-    setOpenManageJobDialog(true);
-  };
-  const onHandleClose = () => {
-    setOpenManageJobDialog(false);
-  };
-  const handleHoverEnter = () => {
-    setColorKey("hover");
-  };
-  const handleHoverLeave = () => {
-    setColorKey("color");
-  };
   const handleStar = () => {
     setIsStarSelected(!isStar);
   };
 
-  function createMarkup(html) {
-    return {
-      __html: DOMPurify.sanitize(html),
-    };
+  const handleMatchMeButton = () => {
+    setMatchButton(prevState => !prevState)
   }
-
   return (
     <CustomCard
       handleMouseEnter={() => setIsHovered(true)}
@@ -148,10 +135,10 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
         overflow={"hidden"}
         sx={{
           borderRadius: "25px 25px 0 0",
-          idth: "100%",
         }}
+        visibility={!matchMeButton ? "visible" : "hidden"}
       >
-        {!trackButton ? (
+        {(!trackButton && !matchMeButton)  ? (
           <>
             <Box
               component="img"
@@ -199,7 +186,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               <Typography
                 sx={{
                   fontWeight: 400,
-                  fontSize: 12,
+                  fontSize: 10,
                   letterSpacing: "0.75px",
                   opacity: 0.8,
                 }}
@@ -218,7 +205,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
 
             width: "30%",
             flexDirection: "column",
-            border: "1px solid lightGray",
+            border: !trackButton ? "1px solid lightGray" : "none",
             borderTop: 0,
             borderRight: 0,
             borderRadius: "0 0px 0px 10px",
@@ -250,31 +237,35 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
             />
             {trackButton ? <ExpandLess /> : <KeyboardArrowDownIcon />}
           </Button>
-          <Typography
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              fontWeight: "Bold",
-              fontSize: "0.9rem",
-            }}
-          >
-            {job?.job_status?.name || "Status"}{" "}
-            <Circle
-              fontSize="string"
-              color={job?.job_status?.name === "active" ? "success" : "error"}
-            />
-          </Typography>
+          {(!trackButton && !matchMeButton) &&
+            <Typography
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontWeight: "Bold",
+                fontSize: "0.9rem",
+                // visibility:  ? "visible" : "hidden"
+              }}
+            >
+              {job?.job_status?.name || "Status"}{" "}
+              <Circle
+                fontSize="string"
+                color={job?.job_status?.name === "active" ? "success" : "error"}
+              />
+            </Typography>
+            }
         </Box>
       </Grid>
       {trackButton && <TrackButton job={job} closeFunc={setTrackButton} />}
-      {!trackButton && (
+      {matchMeButton && <MatchMeButton closeFunc={handleMatchMeButton} />}
+      {!trackButton && !matchMeButton && (
         <>
           <Box
             sx={{
               display: "flex",
               width: "100%",
-              height: "290px",
+              height: "292px",
             }}
           >
             <Grid
@@ -292,9 +283,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${
-                    job?.town?.name + " " + job?.town?.region?.name
-                  }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+                    }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -439,90 +429,6 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
             </Box>
           </Box>
 
-          {/* Back Part */}
-          {/* <Grid
-                container
-                spacing={2}
-                padding="0 8px 8px 0px"
-                sx={
-                    arrSlider2.length >= 4
-                        ? { justifyContent: "space-evenly", alignItems: "center" }
-                        : { ml: 2 }
-                }
-            >
-                {arrSlider2.length >= 4 ? (
-                    <IconButton
-                        sx={{
-                            border: `1px solid ${theme.palette.grayBorder}`,
-                            borderRadius: "8px",
-                            width: "37px",
-                            height: "37px",
-                            ml: 1,
-                        }}
-                        color="redButton100"
-                        aria-label="search job"
-                        component="button"
-                        onClick={handleLeftClick}
-                    >
-                        <KeyboardArrowLeftIcon />
-                    </IconButton>
-                ) : null}
-
-                <Box
-                    sx={
-                        job?.job_traits.length <= 1 &&
-                            job?.primary?.name !== "" &&
-                            job?.shadow?.name !== ""
-                            ? {
-                                width: "65%",
-                                display: "flex",
-                            }
-                            : {
-                                width: "65%",
-                                display: "flex",
-                                overflow: "hidden",
-                            }
-                    }
-                >
-                    {arrSlider2
-                        .filter((item) => item !== null)
-                        .map((item, index) => {
-                            if (item !== undefined) {
-                                return (
-                                    <SmallButton
-                                        color={
-                                            item?.trait?.name
-                                                ? "grayButton200"
-                                                : index == 1
-                                                    ? "brownButton"
-                                                    : "purpleButton"
-                                        }
-                                        height={25}
-                                        label={item?.trait ? item?.trait?.name : item}
-                                        mr="4px"
-                                    />
-                                );
-                            }
-                        })}
-                </Box>
-                {arrSlider2.length >= 4 ? (
-                    <IconButton
-                        sx={{
-                            border: `1px solid ${theme.palette.grayBorder}`,
-                            borderRadius: "8px",
-                            width: "37px",
-                            height: "37px",
-                            mr: 1,
-                        }}
-                        color="redButton100"
-                        aria-label="search job"
-                        component="button"
-                        onClick={handleRightClick}
-                    >
-                        <KeyboardArrowRightIcon />
-                    </IconButton>
-                ) : null}
-            </Grid> */}
           <Grid
             container
             spacing={2}
@@ -533,7 +439,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               <SingleRadialChart
                 labelsData={label1}
                 series={[job?.TotalUserCount]}
-                width={140}
+                width={120}
                 color={theme.palette.chart.red}
                 index={index}
                 isHovered={isHovered}
@@ -543,8 +449,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               <SingleRadialChart
                 labelsData={label2}
                 series={[job?.TotalUserShorlisted]}
-                width={140}
-                color={theme.palette.chart.green}
+                width={120}
+                color={theme.palette.chart.green200}
                 index={index}
                 isHovered={isHovered}
               />
@@ -553,7 +459,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
               <SingleRadialChart
                 labelsData={label3}
                 series={[job?.TotalUserInterviewed]}
-                width={140}
+                width={120}
                 color={theme.palette.chart.yellow}
                 index={index}
                 isHovered={isHovered}
@@ -578,9 +484,10 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 borderRadius: 0,
                 width: "33.33%",
                 height: "100%",
-                fontSize: "12px",
+                fontSize: "10px",
               }}
               color="blueButton200"
+              onClick={handleMatchMeButton}
             >
               Match me
             </Button>
@@ -590,7 +497,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 borderRadius: 0,
                 width: "33.33%",
                 height: "100%",
-                fontSize: "12px",
+                fontSize: "10px",
               }}
               color="grayButton200"
             >
@@ -603,7 +510,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                         height: "100%",
                         fontSize: "12px",
                     }}> */}
-            <SelectMenu
+            {/* <SelectMenu
               name="candidate_status"
               // defaultValue={`my status: ${job?.candidate_status}`}
               value={`${job?.candidate_status}`}
@@ -629,7 +536,14 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                     color: theme.palette.base.main,
                   },
               }}
-            />
+            /> */}
+            <Box sx={{
+              width: "33.33%",
+              height: "100%",
+              postion: "relative"
+            }}>
+              <StatusButton selectedStatus={job?.candidate_status} options={myStatus.filter((status) => (status.id !== 1111 && status.id !== job?.candidate_status_id))} handleStatusChange={handleCandidateStatus} />
+            </Box>
             {/* </Grid> */}
           </Grid>
 

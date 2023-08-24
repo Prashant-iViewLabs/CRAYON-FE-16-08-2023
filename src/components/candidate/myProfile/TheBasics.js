@@ -515,9 +515,8 @@ export default function TheBasics({
           {profileData.contact_no === "" &&
             errors?.find((error) => error.key == "contact_no") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "contact_no").message
-                }`}
+                {`*${errors?.find((error) => error.key == "contact_no").message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -534,7 +533,7 @@ export default function TheBasics({
           >
             {i18n["myProfile.birthLabel"]}
           </InputLabel>
-          <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb">
+          <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb" >
             <DatePicker
               name="dob"
               value={profileData.dob}
@@ -547,6 +546,7 @@ export default function TheBasics({
                   //   placeholder: "dd/mm/yyyy",
                   // }}
                   sx={{
+                    width: "95%",
                     "& .MuiInputBase-root": {
                       height: "40px",
                       width: "100%",
@@ -557,6 +557,7 @@ export default function TheBasics({
               )}
             />
           </LocalizationProvider>
+
           {errors?.find((error) => error.key == "dob") && (
             <Typography color={"red !important"}>
               {`*${errors?.find((error) => error.key == "dob").message}`}
@@ -596,9 +597,8 @@ export default function TheBasics({
           {!profileData.country_id &&
             errors?.find((error) => error.key == "country_id") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "country_id").message
-                }`}
+                {`*${errors?.find((error) => error.key == "country_id").message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -638,9 +638,8 @@ export default function TheBasics({
             {!towns.find((val) => val.town_id == profileData.town_id)?.name &&
               errors?.find((error) => error.key == "town_id") && (
                 <Typography color={"red !important"}>
-                  {`*${
-                    errors?.find((error) => error.key == "town_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "town_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -699,10 +698,9 @@ export default function TheBasics({
           {getNatiValue() == "" &&
             errors?.find((error) => error.key == "nationality_ids") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "nationality_ids")
-                    .message
-                }`}
+                {`*${errors?.find((error) => error.key == "nationality_ids")
+                  .message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -732,9 +730,8 @@ export default function TheBasics({
           {getLangValue() == "" &&
             errors?.find((error) => error.key == "language_ids") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "language_ids").message
-                }`}
+                {`*${errors?.find((error) => error.key == "language_ids").message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -867,10 +864,9 @@ export default function TheBasics({
               !profileData.linkedin_profile_link.startsWith("http"))) &&
             errors?.find((error) => error.key === "linkedin_profile_link") && (
               <Typography color="red !important">
-                {`*${
-                  errors?.find((error) => error.key === "linkedin_profile_link")
-                    .message
-                }`}
+                {`*${errors?.find((error) => error.key === "linkedin_profile_link")
+                  .message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -1113,6 +1109,6 @@ export default function TheBasics({
           />
         </Box>
       </Box>
-    </Box>
+    </Box >
   );
 }

@@ -53,7 +53,6 @@ export default function Main() {
           <Toolbar />
           <Box
             sx={{
-              paddingTop: "13px",
               background: theme.palette.mainBackground,
             }}
           >

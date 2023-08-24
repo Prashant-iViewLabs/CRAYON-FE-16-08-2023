@@ -55,9 +55,16 @@ const StyledTab = styled(Tabs)(({ theme }) => ({
     opacity: 1,
   },
   "& .MuiTabs-indicator": {
-    backgroundColor: theme.palette.redButton.main,
-    height: "4px",
-    borderRadius: "5px",
+      display: 'flex',
+      justifyContent: 'center',
+      backgroundColor: 'transparent',
+      height: "60px",
+      width: "60px !important",
+      margin: "auto",
+      borderRadius: "50%",
+      borderRight: "5px solid transparent",
+      borderLeft: "5px solid transparent",
+      borderBottom: "5px solid orange"
   },
 }));
 
@@ -388,7 +395,6 @@ export default function TopBar() {
         color="base"
         sx={{
           borderRadius: 0,
-          height: "80px",
           justifyContent: "center",
         }}
       >

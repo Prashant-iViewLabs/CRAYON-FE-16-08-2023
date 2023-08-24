@@ -332,7 +332,7 @@ const JobCardFront = ({
         sx={{
           display: "flex",
           width: "100%",
-          height: "280px",
+          height: "292px",
         }}
       >
         <Grid

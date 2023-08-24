@@ -24,6 +24,10 @@ const theme = createTheme({
       main: "#F5576C",
       contrastText: "#FFFFFF",
     },
+    pinkButton100: {
+      main: "#F05DD8",
+      contrastText: "#FFFFFF",
+    },
     orangeButton: {
       main: "#FF934A",
       contrastText: "#FFFFFF",

@@ -830,7 +830,7 @@ export default function Jobs() {
         xl={1}
         className="filterSec"
         sx={{
-          height: "80vh",
+          height: "88vh",
           overflowY: "scroll",
         }}
       >
@@ -874,16 +874,18 @@ export default function Jobs() {
           flexDirection: "column",
         }}
         gap={1}
+        flexGrow="1 !important"
       >
         <SearchBar
           placeholder={i18n["jobs.searchPlaceholder"]}
           setAllJobs={setAllJobs}
           setSearchedJobs={setSearchedJobs}
         />
+
         <InfiniteScroll
           key={`${filters} + ${filtersJobType} + ${filtersJobStage} + ${filtersType}+${searchedJobs} +${favourite}`}
-          height="75vh"
-          dataLength={allJobs.length} //This is important field to render the next data
+          height="80vh"
+          dataLength={allJobs.length * 4} //This is important field to render the next data
           next={() =>
             getJobList(
               filters,
@@ -896,13 +898,13 @@ export default function Jobs() {
             )
           }
           hasMore={true} //{allJobs.length <= allJobs[0]?.TotalJobs}
-          // loader={<h4>Loading...</h4>}
           endMessage={
             <p style={{ textAlign: "center" }}>
               <b>Yay! You have seen it all</b>
             </p>
           }
         >
+
           <Grid
             container
             spacing={2}
@@ -914,43 +916,43 @@ export default function Jobs() {
           >
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                  <Grid
-                    xl={expandedItemId === job.job_id ? 12 : 3}
-                    lg={expandedItemId === job.job_id ? 12 : 4}
-                    md={expandedItemId === job.job_id ? 12 : 6}
-                    xs={12}
-                    key={job.job_id}
-                    ref={(ref) => {
-                      if (expandedItemId === job.job_id && ref) {
-                        ref.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }
-                    }}
-                  >
-                    <JobCard
-                      index={job.job_id}
-                      job={job}
-                      setQuestions={setQuestions}
-                      onHandleClose={onHandleClose}
-                      setopenApplyJobDialog={setopenApplyJobDialog}
-                      setIsExpanded={handleExpand}
-                    />
-                  </Grid>
-                ))
+                <Grid
+                  xl={expandedItemId === job.job_id ? 12 : 3}
+                  lg={expandedItemId === job.job_id ? 12 : 4}
+                  md={expandedItemId === job.job_id ? 12 : 6}
+                  xs={12}
+                  key={job.job_id}
+                  ref={(ref) => {
+                    if (expandedItemId === job.job_id && ref) {
+                      ref.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }}
+                >
+                  <JobCard
+                    index={job.job_id}
+                    job={job}
+                    setQuestions={setQuestions}
+                    onHandleClose={onHandleClose}
+                    setopenApplyJobDialog={setopenApplyJobDialog}
+                    setIsExpanded={handleExpand}
+                  />
+                </Grid>
+              ))
               : (allJobs.length = 0 ? (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      textAlign: "center",
-                      mt: 4,
-                      color: theme.palette.placeholder,
-                    }}
-                  >
-                    {i18n["jobs.noData"]}
-                  </Box>
-                ) : null)}
+                <Box
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                    mt: 4,
+                    color: theme.palette.placeholder,
+                  }}
+                >
+                  {i18n["jobs.noData"]}
+                </Box>
+              ) : null)}
           </Grid>
           <style>
             {`.infinite-scroll-component::-webkit-scrollbar {
@@ -968,6 +970,7 @@ export default function Jobs() {
                     }`}
           </style>
         </InfiniteScroll>
+
         {/*<Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
           <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
             <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
@@ -1000,7 +1003,7 @@ export default function Jobs() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "80vh",
+          height: "88vh",
           overflowY: "scroll",
           direction: "rtl",
         }}
@@ -1062,6 +1065,6 @@ export default function Jobs() {
           setopenApplyJobDialog={setopenApplyJobDialog}
         />
       </CustomDialog>
-    </Grid>
+    </Grid >
   );
 }
