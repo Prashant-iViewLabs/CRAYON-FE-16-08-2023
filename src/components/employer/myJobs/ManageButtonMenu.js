@@ -319,7 +319,7 @@ const ManageButtonMenu = ({ job }) => {
         onClick={handleClick}
         startIcon={<KeyboardArrowUpIcon />}
         color="grayButton100"
-        sx={{ boxShadow: 0, width: "100%", height: "50px", borderRadius: 0 }}
+        sx={{ boxShadow: 0, width: "100%", height: "50px", borderRadius: 0, fontSize: "12px" }}
       >
         {i18n["manageJob.manage"]}
       </Button>

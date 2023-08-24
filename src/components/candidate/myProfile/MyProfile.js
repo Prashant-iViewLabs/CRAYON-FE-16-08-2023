@@ -12,11 +12,12 @@ import { styled } from "@mui/material/styles";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
-import { Button } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import zIndex from "@mui/material/styles/zIndex";
 import { useState } from "react";
 import ProfileProgressButtonLayout from "../../common/ProfileProgressButtonLayout";
-import { GpsFixedSharp } from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
   height: "5px",
@@ -50,12 +51,13 @@ function LinearProgressWithLabel(props) {
 export default function MyCV() {
   const i18n = locale.en;
   const [progressButton, setProgressButton] = useState(false)
+  const theme = useTheme()
   return (
     <>
       <Grid
         container
         spacing={0}
-        sx={{ pb: 3 }}
+        sx={{ my: 3 }}
         flexDirection={{ xs: "column", sm: "row" }}
         justifyContent="center"
         gap={2}
@@ -111,16 +113,19 @@ export default function MyCV() {
               <Button
                 sx={{
                   // position: "",
+                  flexDirection: "column",
                   right: 0,
                   top: 0,
-                  border: 1 ,
+                  border: 1,
+                  borderColor: theme.palette.grayBorder,
                   borderRadius: 0,
                   borderTopRightRadius: "17px"
                 }} onClick={() => setProgressButton(prevState => !prevState)}
                 variant="outlined"
-                color="grayButton100"
+                color="grayButton"
               >
                 <ProfileProgressButtonLayout />
+                {!progressButton ? <ExpandMore /> : <ExpandLess />}
               </Button>
 
 
@@ -128,7 +133,7 @@ export default function MyCV() {
             <Box sx={{
               paddingRight: "32px"
             }}>
-            <LinearProgressWithLabel value={50} />
+              <LinearProgressWithLabel value={50} />
             </Box>
 
             {/* <StyledButton
@@ -191,21 +196,13 @@ export default function MyCV() {
                     can compete!
                   </Typography>
                   <Button
-                    variant="outlined"
+                    variant="contained"
+                    color="redButton100"
                     sx={{ mt: 2, borderRadius: 2 }}
                   // onClick={() => handlePageChange("a")}
                   >
-                    Profile{" "}
-                    {/* {profileCompletion >= 25 && ( */}
-                    <CheckSharpIcon
-                      sx={{
-                        position: "absolute",
-                        right: 2,
-                        color: "green",
-                        fontSize: "25px",
-                      }}
-                    />
-                    {/* )} */}
+                    Profile
+
                   </Button>
                   <Button
                     variant="outlined"

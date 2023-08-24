@@ -16,7 +16,7 @@ const TrackButton = ({ theme, closeFunc }) => {
           display: "flex",
           flexDirection: "column",
           gap: 1.5,
-          height: "385px",
+          height: "372px",
         }}
       >
         <Typography
@@ -68,7 +68,7 @@ const TrackButton = ({ theme, closeFunc }) => {
               labelsData={"credits left"}
               series={[35]}
               width={140}
-              color={theme.palette.chart.green}
+              color={theme.palette.chart.green200}
               isHovered={true}
             />
           </Box>
@@ -83,6 +83,7 @@ const TrackButton = ({ theme, closeFunc }) => {
             borderRadius: "0 0 0 20px",
             width: "33.33%",
             paddingY: "25px",
+            fontSize: "10px"
           }}
           onClick={() => closeFunc(false)}
         >
@@ -95,6 +96,7 @@ const TrackButton = ({ theme, closeFunc }) => {
             borderRadius: 0,
             width: "33.33%",
             paddingY: "25px",
+            fontSize: "10px"
           }}
           onClick={() => closeFunc(false)}
         >
@@ -107,6 +109,7 @@ const TrackButton = ({ theme, closeFunc }) => {
             borderRadius: "0 0 20px 0",
             width: "33.33%",
             paddingY: "25px",
+            fontSize: "10px",
             overflow: "hidden",
           }}
           onClick={() => closeFunc(false)}

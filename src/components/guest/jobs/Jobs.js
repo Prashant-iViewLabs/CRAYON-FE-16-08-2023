@@ -21,7 +21,7 @@ import { getAllTypes } from "../../../redux/allTypes";
 import jwt_decode from "jwt-decode";
 import CustomDialog from "../../common/CustomDialog";
 import ApplyJobs from "./ApplyJobs";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
 
 export default function Jobs() {
@@ -419,6 +419,8 @@ export default function Jobs() {
               favourite
             )
           }
+          loader={<h4>Loading more... </h4>}
+          scrollThreshold={"100px"}
           hasMore={true} //{allJobs.length <= allJobs[0]?.TotalJobs}
           endMessage={
             <p style={{ textAlign: "center" }}>

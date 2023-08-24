@@ -259,7 +259,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
         sx={{
           display: "flex",
           width: "100%",
-          height: "320px",
+          height: "287px",
         }}
       >
         <Grid
@@ -295,7 +295,6 @@ export default function TalentCard({ index, job, setisFlipped }) {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 0.5,
               marginBottom: "12px",
             }}
           >

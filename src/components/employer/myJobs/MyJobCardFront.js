@@ -52,11 +52,6 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
   const [trackButton, setTrackButton] = useState(false);
 
   const industries = job?.industry.map((industry) => industry.industry_name);
-  function createMarkup(html) {
-    return {
-      __html: DOMPurify.sanitize(html),
-    };
-  }
 
   const handleStar = () => {
     setIsStarSelected(!isStar);
@@ -128,7 +123,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                   <Typography
                     sx={{
                       fontWeight: 400,
-                      fontSize: 12,
+                      fontSize: 10,
                       width: "150px",
                       letterSpacing: "0.75px",
                       opacity: 0.8,
@@ -214,7 +209,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             sx={{
               display: "flex",
               width: "100%",
-              height: "290px",
+              height: "294px",
             }}
           >
             <Grid
@@ -262,7 +257,6 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 0.5,
                   marginBottom: "12px",
                 }}
               >
@@ -387,7 +381,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
               <SingleRadialChart
                 labelsData={label1}
                 series={[job?.TotalUserCount]}
-                width={140}
+                width={120}
                 color={theme.palette.chart.red}
                 index={index}
                 isHovered={isHovered}
@@ -397,7 +391,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
               <SingleRadialChart
                 labelsData={label2}
                 series={[job?.totalusershorlisted]}
-                width={140}
+                width={120}
                 color={theme.palette.chart.green}
                 index={index}
                 isHovered={isHovered}
@@ -407,7 +401,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
               <SingleRadialChart
                 labelsData={label3}
                 series={[job?.totaluserinterviewed]}
-                width={140}
+                width={120}
                 color={theme.palette.chart.yellow}
                 index={index}
                 isHovered={isHovered}
@@ -443,7 +437,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 <Button
                   sx={{
                     boxShadow: 0,
-                    fontSize: "12px",
+                    fontSize: "10px",
                     width: "100%",
                     height: "50px",
                     borderRadius: 0,

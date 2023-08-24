@@ -217,7 +217,7 @@ export default function ButtomMenu({ jobId, closeFunc }) {
         id="talentList"
         sx={{
           padding: "16px",
-          height: "250px",
+          height: "262px",
           overflowY: "auto",
         }}
       >
@@ -295,14 +295,15 @@ export default function ButtomMenu({ jobId, closeFunc }) {
           </style>
         </InfiniteScroll>
       </Box>
-      <Box sx={{ display: "flex", width: "100%" }}>
+      <Box sx={{ display: "flex" , width: "100%" }}>
         <Button
           variant="contained"
           color="grayButton200"
           sx={{
             borderRadius: "0 0 0 25px",
-            width: "300px",
+            width: "30%",
             padding: "25px 40px",
+            fontSize: "10px"
           }}
           onClick={() => closeFunc(false)}
         >
@@ -313,6 +314,7 @@ export default function ButtomMenu({ jobId, closeFunc }) {
           style={{
             textDecoration: "none",
             color: theme.palette.black,
+            flexGrow: 1
           }}
         >
           <Button
@@ -320,8 +322,9 @@ export default function ButtomMenu({ jobId, closeFunc }) {
             backgroundColor={"redButton"}
             sx={{
               borderRadius: "0 0 25px 0",
-              width: "252px",
+              width: "100%",
               padding: "25px 20px",
+              fontSize: "10px"
             }}
             color="redButton100"
           >

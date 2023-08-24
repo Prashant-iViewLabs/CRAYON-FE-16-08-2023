@@ -42,20 +42,30 @@ import {
 } from "../../../redux/employer/empProfileSlice";
 import CustomDialog from "../../common/CustomDialog";
 import Cropper from "react-easy-crop";
+import { Grid } from "@mui/material";
+import ProfileProgressButtonLayout from "../../common/ProfileProgressButtonLayout";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import SingleRadialChart from "../../common/SingleRadialChart";
 
 // 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
-  width: "100%",
-  borderRadius: "10px",
+  borderRadius: "17px",
   position: "unset",
   boxShadow: "none",
+  height: "69vh",
+  width: "100%",
+  overflow: "scroll",
+  overflowX: "hidden",
+  backgroundColor: "transparent",
   "& .MuiAccordionSummary-root": {
     padding: "16px 32px",
     cursor: "auto !important",
     boxShadow: "-1px 3px 8px rgba(0, 0, 0, 0.1)",
-    borderRadius: "10px",
-    // marginBottom: "16px",
+    borderRadius: "17px",
+    marginBottom: "16px",
+    position: "relative",
+    background: "#ffff",
   },
   "& .MuiAccordionSummary-content.Mui-expanded": {
     margin: "0 0 8px 0",
@@ -90,7 +100,8 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
       display: "flex",
       paddingTop: 0,
       boxShadow: "-1px 3px 8px rgba(0, 0, 0, 0.1)",
-      borderRadius: "10px",
+      borderRadius: "17px",
+      background: "#ffff",
       "& .MuiTypography-root": {
         fontSize: "14px",
         fontWeight: 500,
@@ -116,7 +127,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
     backgroundColor:
-      value == 100
+      value === 100
         ? theme.palette.lightGreenButton300.main
         : theme.palette.redButton100.main,
   },
@@ -195,6 +206,8 @@ export default function ProfileCard() {
   const [errors, setErrors] = useState([]);
   const [industries, setIndustries] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [progressButton, setProgressButton] = useState(false)
+
 
   const handleZoom = (direction) => {
     const step = 0.5;
@@ -283,7 +296,7 @@ export default function ProfileCard() {
 
       try {
         const { payload } = await dispatch(uploadProfilePic(formData));
-        if (payload?.status == "success") {
+        if (payload?.status === "success") {
           setImage(URL.createObjectURL(croppedImage));
           setOpenEditImage(false);
           dispatch(
@@ -321,8 +334,8 @@ export default function ProfileCard() {
   const getAllEmpData = async () => {
     try {
       const { payload } = await dispatch(getEmpProfile());
-      if (payload?.status == "success") {
-        if (typeof payload.data == "string") {
+      if (payload?.status === "success") {
+        if (typeof payload.data === "string") {
           setCompInfo({});
           setInfo({});
         } else {
@@ -354,7 +367,7 @@ export default function ProfileCard() {
     // calProfileCompletion()
     try {
       const { payload } = await dispatch(createInfo(info));
-      if (payload?.status == "success") {
+      if (payload?.status === "success") {
         dispatch(
           setAlert({
             show: true,
@@ -367,7 +380,7 @@ export default function ProfileCard() {
         setCurrentComp("companyInfo");
         setColor("2");
         setCurrentCompIndex(currentCompIndex + 1);
-      } else if (payload?.status == "error") {
+      } else if (payload?.status === "error") {
         // console.log("PAYLOAD", payload);
         // payload?.message.map((message, index) => {
         //   dispatch(
@@ -409,7 +422,7 @@ export default function ProfileCard() {
         };
       }
       const { payload } = await dispatch(createCompInfo(data));
-      if (payload?.status == "success") {
+      if (payload?.status === "success") {
         const company = payload.data[0].company_name;
         setCompanyName(company);
         dispatch(
@@ -421,7 +434,7 @@ export default function ProfileCard() {
         );
         await getAllEmpData();
         setErrors([]);
-      } else if (payload?.status == "error") {
+      } else if (payload?.status === "error") {
         setErrors(payload?.message);
       } else {
         dispatch(
@@ -444,7 +457,7 @@ export default function ProfileCard() {
     }
   };
   const handlePrev = () => {
-    if (currentCompIndex == 1) {
+    if (currentCompIndex === 1) {
       setCurrentComp("info");
       setColor("1");
     } else {
@@ -454,7 +467,7 @@ export default function ProfileCard() {
     setCurrentCompIndex(currentCompIndex - 1);
   };
   const handleNext = () => {
-    if (currentCompIndex == 0) {
+    if (currentCompIndex === 0) {
       setCurrentComp("companyInfo");
       setColor("2");
     } else {
@@ -490,32 +503,41 @@ export default function ProfileCard() {
     </Box>
   );
 
-  // const handleAccordion = () => {
-  //   setExpanded(!expanded);
-  // };
+  const handleAccordion = () => {
+    setExpanded(prevState => !prevState);
+  };
 
   const handleUpdateProfile = () => {
-    if (currentCompIndex == 0) {
+    if (currentCompIndex === 0) {
       setColor("1");
-    } else if (currentCompIndex == 1) {
+    } else if (currentCompIndex === 1) {
       setColor("2");
+    } else {
     }
-    setExpanded(true);
+    setExpanded(true)
+
   };
 
   const handleCancelProfile = () => {
     setExpanded(false);
-    // setCurrentCompIndex(null)
-    // setCurrentComp("info")
+    setCurrentCompIndex(null)
+    setCurrentComp("info")
     setColor("");
   };
+  const handleOpenClose = () => {
+    if (expanded) {
+      handleCancelProfile()
+    } else {
+      handleUpdateProfile()
+    }
+  }
 
   // useEffect(() => {
   //     calProfileCompletion()
   // }, [info,compInfo])
 
   const handleProfilePop = () => {
-    if (displayD == "none") {
+    if (displayD === "none") {
       // setExpanded(true)
       setDisplayD("block");
     } else {
@@ -524,31 +546,31 @@ export default function ProfileCard() {
     }
   };
   const handlePageChange = (test) => {
-    if (test == "a") {
+    if (test === "a") {
       setCurrentComp("info");
       setExpanded(true);
       setColor("1");
       setDisplayD("none");
       setCurrentCompIndex(0);
-    } else if (test == "b") {
+    } else if (test === "b") {
       setCurrentComp("companyInfo");
       setColor("2");
       setDisplayD("none");
       setCurrentCompIndex(1);
       setExpanded(true);
-    } else if (test == "c") {
-    } else if (test == "d") {
+    } else if (test === "c") {
+    } else if (test === "d") {
     }
     // setCurrentCompIndex(currentCompIndex + 1);
   };
   const func = (prop) => {
-    if (prop == 1) {
+    if (prop === 1) {
       setCurrentComp("info");
       setExpanded(true);
       setColor("1");
       setDisplayD("none");
       setCurrentCompIndex(currentCompIndex - 1);
-    } else if (prop == 2) {
+    } else if (prop === 2) {
       setCurrentComp("companyInfo");
       setColor("2");
       setDisplayD("none");
@@ -584,19 +606,19 @@ export default function ProfileCard() {
     };
   }, []);
   return (
-    <Box sx={{ display: "flex", width: "100%" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", width: "15%" }}>
+    <Box sx={{ display: "flex", width: "100%", my: 3 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", minWidth: "12%" }}>
         <StyledButtonLeft
-          onClick={() => func("1")}
-          variant={color == "1" ? "contained" : "outlined"}
+          onClick={() => func(1)}
+          variant={color === "1" ? "contained" : "text"}
           color="redButton100"
           sx={{ mb: 2 }}
         >
           {i18n["myProfile.myInfo"]}
         </StyledButtonLeft>
         <StyledButtonLeft
-          onClick={() => func("2")}
-          variant={color == "2" ? "contained" : "outlined"}
+          onClick={() => func(2)}
+          variant={color === "2" ? "contained" : "text"}
           color="redButton100"
           sx={{ mb: 2 }}
         >
@@ -604,7 +626,7 @@ export default function ProfileCard() {
         </StyledButtonLeft>
         <StyledButtonLeft
           //  onClick={()=>func("3")}
-          variant={color == "3" ? "contained" : "outlined"}
+          variant={color === "3" ? "contained" : "outlined"}
           color="redButton100"
           disabled
         >
@@ -612,7 +634,7 @@ export default function ProfileCard() {
         </StyledButtonLeft>
         <StyledButtonLeft
           //  onClick={()=>func("3")}
-          variant={color == "4" ? "contained" : "outlined"}
+          variant={color === "4" ? "contained" : "outlined"}
           color="redButton100"
           sx={{ mt: 2 }}
           disabled
@@ -620,25 +642,231 @@ export default function ProfileCard() {
           {i18n["myProfile.billing"]}
         </StyledButtonLeft>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", width: "75%" }}>
-        <Typography
-          sx={{
-            fontSize: "36px",
-            fontWeight: 700,
-            marginBottom: 2,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          {i18n["myProfile.title"]}
-        </Typography>
-        <StyledAccordion expanded={expanded}>
+      {/* <Box sx={{ display: "flex", flexDirection: "column", width: "75%" }}> */}
+      <Grid
+        container
+        spacing={0}
+        sx={{ pb: 3 }}
+        flexDirection={{ xs: "column", sm: "row" }}
+        width="75%"
+        justifyContent="center"
+        gap={2}
+      >
+        <Box sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "relative"
+        }}>
+          <Typography
+            sx={{
+              width: "60%",
+              fontSize: "36px",
+              fontWeight: 700,
+              display: "flex",
+              justifyContent: "end",
+            }}
+          >
+            {i18n["myProfile.title"]}
+          </Typography>
+          <Box sx={{
+            width: "30%", background: "#ffff",
+            borderRadius: "17px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+            // zIndex: 100,
+            position: "relative",
+            padding: "0 0 16px 32px"
+          }}>
+            <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "space-between", alignItems: "center" }}>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    mr: 1,
+                  }}
+                >
+                  {i18n["empMyProfile.profileCompletion"]}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    mr: 1,
+                  }}
+                >
+                  Progress
+                </Typography>
+              </Box>
+
+              <Button
+                sx={{
+                  // position: "",
+                  flexDirection: "column",
+                  right: 0,
+                  top: 0,
+                  border: 1,
+                  borderColor: theme.palette.grayBorder,
+                  borderRadius: 0,
+                  borderTopRightRadius: "17px"
+                }} onClick={() => setProgressButton(prevState => !prevState)}
+                variant="outlined"
+                color="grayButton"
+              >
+                <ProfileProgressButtonLayout />
+                {!progressButton ? <ExpandMore /> : <ExpandLess />}
+              </Button>
+
+
+            </Box>
+            <Box sx={{
+              paddingRight: "32px"
+            }}>
+              <LinearProgressWithLabel value={profileCompletion} />
+            </Box>
+
+            {/* <StyledButton
+              disabled={expanded}
+              variant="contained"
+              color="redButton100"
+              onClick={handleUpdateProfile}
+              sx={{padding:"17px"}}
+            >
+              {i18n["empMyProfile.updateProfile"]}
+            </StyledButton> */}
+            {/* {!expanded ? (
+            <StyledButton
+              // disabled={expanded}
+              variant="contained"
+              color="redButton100"
+              onClick={handleUpdateProfile}
+            >
+              {i18n["empMyProfile.updateProfile"]}
+            </StyledButton>
+          ) : (
+            <StyledButton
+              // disabled={expanded}
+              variant="outlined"
+              color="redButton100"
+              onClick={handleCancelProfile}
+            >
+              {i18n["empMyProfile.cancelProfile"]}
+            </StyledButton>
+          )} */}
+            {progressButton &&
+              <Box
+                sx={{
+                  backgroundColor: "white",
+                  position: "absolute",
+                  // display: displayD,
+                  right: 0,
+                  // bottom: 0,
+                  width: "100%",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  zIndex: 999,
+                  borderRadius: "17px",
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0
+                }}
+              >
+                <Box
+                  sx={{ display: "flex", flexDirection: "column", p: 2 }}
+                  className="candidate-profile-viewer-dropdown"
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "0.8rem",
+                      textAlign: "left",
+                      color: "gray",
+                      fontWeight: 700,
+                    }}
+                  >
+                    <strong>Remember,</strong> the more you complete, the stronger you
+                    can compete!
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    sx={{ mt: 2, borderRadius: 2 }}
+                  // onClick={() => handlePageChange("a")}
+                  >
+                    Profile{" "}
+                    {/* {profileCompletion >= 25 && ( */}
+                    <CheckSharpIcon
+                      sx={{
+                        position: "absolute",
+                        right: 2,
+                        color: "green",
+                        fontSize: "25px",
+                      }}
+                    />
+                    {/* )} */}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{ mt: 2, borderRadius: 2 }}
+                  // onClick={() => handlePageChange("b")}
+                  >
+                    Crayon vitae{" "}
+                    {/* {profileCompletion >= 50 && ( */}
+                    <CheckSharpIcon
+                      sx={{
+                        position: "absolute",
+                        right: 2,
+                        color: "green",
+                        fontSize: "25px",
+                      }}
+                    />
+                    {/* )} */}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{ mt: 2, borderRadius: 2 }}
+                    // onClick={() => handlePageChange("c")}
+                    disabled
+                  >
+                    Personality Assessment{" "}
+                    {/* {profileCompletion >= 75 && ( */}
+                    <CheckSharpIcon
+                      sx={{
+                        position: "absolute",
+                        right: 2,
+                        color: "green",
+                        fontSize: "25px",
+                      }}
+                    />
+                    {/* )} */}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{ mt: 2, borderRadius: 2 }}
+                    // onClick={() => handlePageChange("d")}
+                    disabled
+                  >
+                    Crayon cam{" "}
+                    {/* {profileCompletion >= 100 && ( */}
+                    <CheckSharpIcon
+                      sx={{
+                        position: "absolute",
+                        right: 2,
+                        color: "green",
+                        fontSize: "25px",
+                      }}
+                    />
+                    {/* )} */}
+                  </Button>
+                </Box>
+              </Box>}
+          </Box>
+        </Box>
+
+        <StyledAccordion expanded={expanded} className="accordianSection">
           <AccordionSummary
             // expandIcon={<ExpandMoreIcon onClick={handleProfilePop} />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Box
+            {/* <Box
               sx={{
                 position: "absolute",
                 right: "30px",
@@ -651,7 +879,7 @@ export default function ProfileCard() {
               }}
               id="profile-viewer-btn"
             >
-              {displayD == "none" ? (
+              {displayD === "none" ? (
                 <ArrowDownwardIcon
                   onClick={handleProfilePop}
                   sx={{ "&:hover": { cursor: "pointer" } }}
@@ -744,7 +972,7 @@ export default function ProfileCard() {
                   disabled
                 >
                   Billing{" "}
-                  {profileCompletion == 100 && (
+                  {profileCompletion === 100 && (
                     <CheckSharpIcon
                       sx={{
                         position: "absolute",
@@ -756,7 +984,7 @@ export default function ProfileCard() {
                   )}
                 </Button>
               </Box>
-            </Box>
+            </Box> */}
             {/* <AccordionSummary
                 expandIcon={<ExpandMoreIcon onClick={handleAccordion} />}
                 aria-controls="panel1a-content"
@@ -826,12 +1054,54 @@ export default function ProfileCard() {
                     variant="contained"
                     color="blueButton400"
                     onClick={handleImageClick}
+                    sx={{ mr: 1 }}
                   >
                     {i18n["empMyProfile.uploadAlogo"]}
                   </StyledButton>
+                  <StyledButton variant="outlined" color="blueButton700">
+                    {i18n["myProfile.take"]}
+                  </StyledButton>
                 </Box>
               </Box>
-              <Box sx={{ width: "39%", mt: 2 }}>
+              <Box sx={{ display: "flex", gap: 3}}>
+
+                {!expanded && (
+                  <>
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={10000}
+                        labelsData={"applications"}
+                        series={[4000]}
+                        width={120}
+                        color={theme.palette.chart.green200}
+                        isHovered={true}
+                      />
+                    </Box>
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={1000}
+                        labelsData={"shortlistings"}
+                        series={[123]}
+                        width={120}
+                        color={theme.palette.chart.green200}
+                        isHovered={true}
+                      />
+                    </Box>
+                    <Box sx={{ margin: "0 -22px 0 -22px" }}>
+                      <SingleRadialChart
+                        max={1000}
+                        labelsData={"interviews"}
+                        series={[3]}
+                        width={120}
+                        color={theme.palette.chart.green200}
+                        isHovered={true}
+                      />
+                    </Box>
+                  </>
+                )}
+              </Box>
+
+              {/* <Box sx={{ width: "39%", mt: 2 }}>
                 <Typography
                   sx={{
                     fontSize: "16px",
@@ -861,7 +1131,36 @@ export default function ProfileCard() {
                     {i18n["empMyProfile.cancelProfile"]}
                   </StyledButton>
                 )}
-              </Box>
+              </Box> */}
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                left: 0,
+                // right: 0,
+                bottom: expanded ? 0 : -20,
+                width: "100%",
+                margin: "0 auto",
+                zIndex: 5,
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                sx={{
+                  padding: "4px 20px",
+                  height: 20,
+                  borderRadius: expanded ? "15px 15px 0 0" : "0 0 15px 15px",
+                  boxShadow: 3,
+                }}
+                size="small"
+                variant="contained"
+                color="redButton"
+                endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
+                onClick={handleOpenClose}
+              >
+                {expanded ? "looks good" : "my info"}
+              </Button>
             </Box>
           </AccordionSummary>
 
@@ -870,7 +1169,8 @@ export default function ProfileCard() {
               display: "flex",
               flexDirection: "column",
               p: 4,
-              mt: 1,
+              pb: 0,
+              mb: 6,
             }}
           >
             <Box sx={{ mt: 3 }}>
@@ -892,20 +1192,29 @@ export default function ProfileCard() {
                   mt: 8,
                 }}
               >
-                {currentCompIndex == 0 ? (
+                {currentCompIndex === 0 ? (
                   <Box>
                     <StyledButton
                       onClick={saveInfo}
                       variant="contained"
-                      color="redButton100"
-                      sx={{ mr: 5, width: "145px", height: "40px" }}
+                      color="grayButton200"
+                      sx={{
+                        width: "200px",
+                        height: "50px",
+                        borderRadius: "26px 0 0 0",
+                      }}
                     >
                       {i18n["empMyProfile.save"]}
                     </StyledButton>
                     <StyledButton
                       endIcon={<ArrowForwardIosIcon />}
-                      sx={{ boxShadow: "none" }}
+                      variant="contained"
                       color="redButton100"
+                      sx={{
+                        width: "200px",
+                        height: "50px",
+                        borderRadius: "0 26px 0 0 ",
+                      }}
                       onClick={handleNext}
                     >
                       {EMP_PROFILE_STEPS[currentCompIndex + 1]}
@@ -914,17 +1223,26 @@ export default function ProfileCard() {
                 ) : (
                   <Box>
                     <StyledButton
-                      sx={{ mr: 5, boxShadow: "none" }}
                       startIcon={<ArrowBackIosIcon />}
-                      color="redButton100"
+                      variant="contained"
+                      color="grayButton200"
+                      sx={{
+                        width: "200px",
+                        height: "50px",
+                        borderRadius: "26px 0 0 0",
+                      }}
                       onClick={handlePrev}
                     >
                       {EMP_PROFILE_STEPS[currentCompIndex - 1]}
                     </StyledButton>
                     <StyledButton
-                      sx={{ width: "145px", height: "40px" }}
                       variant="contained"
                       color="redButton100"
+                      sx={{
+                        width: "200px",
+                        height: "50px",
+                        borderRadius: "0 26px 0 0 ",
+                      }}
                       onClick={saveCompInfo}
                     >
                       {i18n["empMyProfile.save"]}
@@ -1003,8 +1321,21 @@ export default function ProfileCard() {
               </Button>
             </Box>
           </CustomDialog>
+          <style>
+            {`.accordianSection::-webkit-scrollbar {
+                      margin-left: 2px;
+                      width: 5px !important;
+                      background-color: transparent; /* Set the background color of the scrollbar */
+                    }
+                    .accordianSection::-webkit-scrollbar-thumb {
+                      background-color: #EEEEEE;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+          </style>
         </StyledAccordion>
-      </Box>
+      </Grid>
     </Box>
   );
 }

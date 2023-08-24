@@ -312,7 +312,6 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 0.5,
                   marginBottom: "12px",
                 }}
               >

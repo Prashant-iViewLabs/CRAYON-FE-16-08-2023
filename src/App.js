@@ -17,7 +17,6 @@ import TalentPool from './components/admin/adminTalent/TalentPool';
 import Admin from './components/admin/index';
 import MyJobsCandidate from './components/candidate/myJobs/MyJobs';
 import MyCV from './components/candidate/myCV/MyCV';
-import JobListing from './components/guest/jobs/JobListing';
 import ComingSoon from './components/common/ComingSoon';
 
 import MyTalents from './components/admin/myTalent/MyTalents';

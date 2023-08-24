@@ -126,7 +126,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                   <Typography
                     sx={{
                       fontWeight: 400,
-                      fontSize: 12,
+                      fontSize: 10,
                       letterSpacing: "0.75px",
                       opacity: 0.8,
                     }}
@@ -207,7 +207,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             sx={{
               display: "flex",
               width: "100%",
-              height: "290px",
+              height: "294px",
             }}
           >
             <Grid
@@ -255,7 +255,6 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 0.5,
                   marginBottom: "12px",
                 }}
               >
@@ -476,7 +475,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
               <SingleRadialChart
                 labelsData={"Grit Score"}
                 series={[job?.TotalUserCount]}
-                width={140}
+                width={120}
                 color={theme.palette.chart.red}
                 index={index}
                 isHovered={isHovered}
@@ -485,7 +484,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             {job?.primaryName && (
               <Box
                 component="img"
-                height={90}
+                height={80}
                 // sx={{ margin: "0 -22px 0 -22px" }}
                 alt="job_exp"
                 src={
@@ -500,7 +499,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             {job?.shadowName && (
               <Box
                 component="img"
-                height={90}
+                height={80}
                 // sx={{ margin: "0 -22px 0 -22px" }}
                 alt="job_exp"
                 src={
@@ -557,7 +556,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 variant="contained"
                 sx={{
                   borderRadius: 0,
-                  fontSize: "12px",
+                  fontSize: "10px",
                   height: "100%",
                   width: "100%",
                 }}
@@ -577,7 +576,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 <Button
                   sx={{
                     boxShadow: 0,
-                    fontSize: "12px",
+                    fontSize: "10px",
                     width: "100%",
                     height: "50px",
                     borderRadius: 0,

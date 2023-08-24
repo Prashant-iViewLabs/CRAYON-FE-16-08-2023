@@ -172,8 +172,9 @@ export default function Talent() {
           key={`${jobStatusFilter}, ${myStatusFilter}`}
           // style={{ overflow: "hidden" }}
           height="80vh"
+          scrollThreshold={"100px"}
           dataLength={candidateJobs.length}
-          //   next={getJobs}
+            // next={getJobs}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

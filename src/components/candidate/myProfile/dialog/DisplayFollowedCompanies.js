@@ -33,7 +33,6 @@ const DisplayFollowedCompanies = ({ openDialog}) => {
             {openDialog ?
                 <Box sx={{
                     position: "absolute",
-                    top: "63px",
                     right: 0,
                     background: "#ffff",
                     padding: "10px",
