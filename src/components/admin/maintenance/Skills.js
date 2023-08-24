@@ -64,6 +64,7 @@ export default function Skills() {
   const [editableSkill, setEditableSkill] = useState();
   const [skillName, setskillName] = useState("");
   const [existingSkill, setExistingSkill] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const { skills } = useSelector((state) => state.postJobs);
 
@@ -209,7 +210,7 @@ export default function Skills() {
   const getJobApproved = async (event, jobID) => {
     let approvedJobTitle = {
       tag_id: jobID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(approveSkill(approvedJobTitle));
@@ -223,6 +224,7 @@ export default function Skills() {
             })
           );
         setOpenApprove(false);
+        await getSkiils(0);
       } else {
         dispatch(
           setAlert({
@@ -250,6 +252,11 @@ export default function Skills() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenApprove = (event, jobId) => {
@@ -377,7 +384,7 @@ export default function Skills() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.tag_id)
                               }
@@ -435,6 +442,9 @@ export default function Skills() {
         show={openDelete}
         handleOpen={handleOpenDelete}
         handleDelete={removeTitle}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

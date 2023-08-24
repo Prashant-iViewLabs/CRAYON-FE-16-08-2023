@@ -50,6 +50,8 @@ export default function Company() {
   const [approveEvent, setApproveEvent] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editableCompany, setEditableCompany] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const { companies } = useSelector((state) => state.myProfile);
 
   const getAllData = async () => {
@@ -91,7 +93,7 @@ export default function Company() {
     try {
       const data = {
         company_id: companyId,
-        flag: event.target.checked ? 1 : 0,
+        flag: event.target.checked ? 0 : 1,
       };
       const { payload } = await dispatch(approveCompany(data));
       if (payload.status === "success") {
@@ -103,6 +105,7 @@ export default function Company() {
           })
         );
         setOpenApprove(false);
+        await getCompany(0);
       }
     } catch (error) {}
   };
@@ -137,6 +140,11 @@ export default function Company() {
     setOpenApprove((prevState) => !prevState);
     setApproveEvent(event);
     setassociationID(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenAdd = () => {
@@ -266,7 +274,7 @@ export default function Company() {
                       <TableCell>
                         <Tooltip title="approve" placement="top-end">
                           <Checkbox
-                            defaultChecked={row.enabled}
+                            checked={row.enabled}
                             onClick={(event) =>
                               handleOpenApprove(event, row?.company_id)
                             }
@@ -323,6 +331,9 @@ export default function Company() {
         show={openDelete}
         handleOpen={handleOpenDelete}
         dialogText={"company"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
         // handleDelete={removeAssociations}
       />
       {/*<AddNew
@@ -341,7 +352,6 @@ export default function Company() {
         existingCompany={existingCompany}
         data={companies}
         dialogText={"company"}
-
       />
       <Approve
         dialogText={"company"}

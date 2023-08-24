@@ -941,7 +941,6 @@ export default function ProfileCard() {
               setImageName("My pic");
               setOpenEditImage(false);
             }}
-            // title={i18n["myProfile.moveAndScale"]}
             footer={renderFooter}
             isProfile
           >

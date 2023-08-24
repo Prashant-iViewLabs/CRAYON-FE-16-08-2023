@@ -37,7 +37,6 @@ import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import SingleRadialChart from "../../common/SingleRadialChart";
 
-
 import profile_challenger from "../../../assets/Profile Icons_Challenger.svg";
 import profile_character from "../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../assets/Profile Icons_Collaborator.svg";
@@ -46,7 +45,6 @@ import { AddCircleOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
 import AddNewCompany from "./dialog/AddNewCompany";
 import DisplayFollowedCompanies from "./dialog/DisplayFollowedCompanies";
 import CompanyListLogo from "../../../assets/Padding Included/Black_Company_Details.svg";
-
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
@@ -416,7 +414,7 @@ export default function ProfileCard() {
 
   const handleOpenCompanyDialog = () => {
     setOpenCompanyDialog((prevState) => !prevState);
-    setOpenFollowedListDialog(false)
+    setOpenFollowedListDialog(false);
   };
   return (
     <Box>
@@ -755,7 +753,6 @@ export default function ProfileCard() {
                 flexGrow: 0.9,
               }}
             >
-
               <Box
                 sx={{
                   display: "flex",
@@ -763,7 +760,7 @@ export default function ProfileCard() {
                   gap: 2,
                 }}
               >
-                {!expanded &&
+                {!expanded && (
                   <>
                     {/* { */}
                     {/*  job?.primary?.name && ( */}
@@ -809,7 +806,7 @@ export default function ProfileCard() {
                       />
                     </Box>
                   </>
-                }
+                )}
               </Box>
               <Box
                 sx={{
@@ -818,7 +815,7 @@ export default function ProfileCard() {
                   gap: 2,
                 }}
               >
-                {!expanded &&
+                {!expanded && (
                   <>
                     <Box sx={{ margin: "0 -22px 0 -22px" }}>
                       <SingleRadialChart
@@ -851,14 +848,13 @@ export default function ProfileCard() {
                       />
                     </Box>
                   </>
-
-                }
+                )}
                 <Box
                   sx={{
                     position: "absolute",
                     bottom: 0,
                     right: 0,
-                    zIndex: 10
+                    zIndex: 10,
                   }}
                 >
                   <Button
@@ -877,7 +873,9 @@ export default function ProfileCard() {
                     sx={{
                       borderRadius: "0 0 17px 0",
                     }}
-                    onClick={() => setOpenFollowedListDialog(prevState => !prevState)}
+                    onClick={() =>
+                      setOpenFollowedListDialog((prevState) => !prevState)
+                    }
                   >
                     <Box
                       component="img"
@@ -907,7 +905,6 @@ export default function ProfileCard() {
               zIndex: 5,
               display: "flex",
               justifyContent: "center",
-
             }}
           >
             <Button
@@ -936,7 +933,7 @@ export default function ProfileCard() {
             flexDirection: "column",
             p: 4,
             pb: 0,
-            mb: 6
+            mb: 6,
           }}
         >
           {/* <Box sx={{ mt: 3 }}>
@@ -964,7 +961,7 @@ export default function ProfileCard() {
                 sx={{
                   width: "225px",
                   height: "57px",
-                  borderRadius: "26px 0 0 0"
+                  borderRadius: "26px 0 0 0",
                 }}
               >
                 {/* {i18n["myProfile.save"]} */}
@@ -977,7 +974,7 @@ export default function ProfileCard() {
                 sx={{
                   width: "225px",
                   height: "57px",
-                  borderRadius: "0 26px 0 0 "
+                  borderRadius: "0 26px 0 0 ",
                 }}
               >
                 {/* {i18n["myProfile.save"]} */}
@@ -1100,7 +1097,11 @@ export default function ProfileCard() {
                     }`}
         </style>
       </StyledAccordion>
-      <AddNewCompany newTitle={"Follow Company"} show={openAddCompanyDialog} handleOpen={handleOpenCompanyDialog} />
+      <AddNewCompany
+        newTitle={"Follow Company"}
+        show={openAddCompanyDialog}
+        handleOpen={handleOpenCompanyDialog}
+      />
     </Box>
   );
 }

@@ -52,6 +52,7 @@ export default function Associations() {
   const [editableAssociation, setEditableAssociation] = useState();
   const [associationName, setassociationName] = useState("");
   const [existingAssociation, setExistingAssociation] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const { association } = useSelector((state) => state.myCv);
 
@@ -185,6 +186,12 @@ export default function Associations() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteAssociation(jobId);
+    // setConfirmDelete(false);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
   const handleOpenApprove = (event, jobId) => {
     setOpenApprove((prevState) => !prevState);
@@ -224,7 +231,7 @@ export default function Associations() {
   const getAssociationApproved = async (event, jobID) => {
     let approvedJobTitle = {
       association_id: jobID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(approveAssociation(approvedJobTitle));
@@ -372,7 +379,7 @@ export default function Associations() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.association_id)
                               }
@@ -431,8 +438,11 @@ export default function Associations() {
       <Delete
         show={openDelete}
         handleOpen={handleOpenDelete}
+        handleCancel={handleCancelDelete}
         handleDelete={removeAssociations}
         dialogText={"association"}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

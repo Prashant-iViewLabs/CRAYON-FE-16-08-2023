@@ -59,6 +59,7 @@ import QualificationTypes from './components/admin/maintenance/QualificationType
 import Currencies from './components/admin/maintenance/Currencies';
 import TalentPoolInfo from './components/admin/adminTalent/TalentPoolInfo';
 import AdminJobsDetailPage from './components/admin/adminJobs/AdminJobsDetailPage';
+import TalentDetailPage from './components/admin/adminTalent/TalentDetailPage';
 
 
 
@@ -128,6 +129,7 @@ export default function App() {
 
         <Route path='*' element={<ComingSoon />} />
         <Route path='candidate-cv/:id' element={<CandidateCVPage />} />
+        <Route path='/:prev1/:prev2/:prev3/candidate-cv/:id' element={<TalentDetailPage />} />
         <Route path='/:prev/job-detail/:location/:id' element={<JobsDetailPage />} />
         <Route path='/:prev1/:prev2/:prev3/job-detail/:location/:id' element={<AdminJobsDetailPage />} />
       </Route>

@@ -2,7 +2,7 @@ import { useTheme } from "@emotion/react";
 import { Box, Button } from "@mui/material";
 import React from "react";
 
-const ProfileProgressButtonLayout = ({ colorPattern, }) => {
+const ProfileProgressButtonLayout = ({ colorPattern }) => {
   const theme = useTheme();
   return (
     <Box

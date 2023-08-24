@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import DraggableCard from "./DraggableCard";
+import DraggableCard from "./DraggableCardNew";
 import {
   changeJobApplicationStatus,
   getTalentJobStatusApplications,
@@ -417,7 +417,7 @@ export default function ManageJob() {
                       sx={{
                         flex: "1 1 0px",
                         margin: "8px",
-                        minWidth: "300px",
+                        minWidth: "325px",
                       }}
                     >
                       <StyledBox

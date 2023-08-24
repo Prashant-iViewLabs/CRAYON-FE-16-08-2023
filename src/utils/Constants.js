@@ -1028,8 +1028,6 @@ export const ADMIN_LFET_PANEL = [
       { label: "Languages", path: "languages" },
       { label: "Industries", path: "industries" },
       { label: "Qualification types", path: "qualification-types" },
-      { label: "Salaries", path: "salaries" },
-      { label: "Rates", path: "rates" },
       { label: "Currencies", path: "currencies" },
       { label: "Vouchers", path: "vouchers" },
     ],

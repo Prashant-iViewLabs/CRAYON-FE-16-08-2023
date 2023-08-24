@@ -50,6 +50,7 @@ export default function Languages() {
   const [openEdit, setOpenEdit] = useState(false);
   const [editableNationality, setEditableNationality] = useState();
   const [nationalityName, setnationalityName] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const getLanguages = async (lastkeyy) => {
     try {
@@ -162,6 +163,11 @@ export default function Languages() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteLanguage(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenAdd = () => {
@@ -337,6 +343,9 @@ export default function Languages() {
         handleOpen={handleOpenDelete}
         handleDelete={removeLanguage}
         dialogText={"language"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

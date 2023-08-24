@@ -42,11 +42,13 @@ export default function Currencies() {
   const [deleteJob, setDeleteJob] = useState();
   const [currencyTitle, setcurrencyTitle] = useState("");
   const [currencyName, setCurrencyName] = useState("");
+  const [currencySymbol, setCurrencySymbol] = useState("");
   const [minSalary, setMinSalary] = useState();
   const [maxSalary, setMaxSalary] = useState();
   const [minRate, setMinRate] = useState();
   const [maxRate, setMaxRate] = useState();
   const [currencyID, setCurrencyID] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
 
   const getTitles = async (lastkeyy) => {
@@ -98,12 +100,13 @@ export default function Currencies() {
           min_rate: minRate,
           max_rate: maxRate,
           currency: currencyName,
-          symbol: "$",
+          symbol: currencySymbol,
         };
         const { payload } = await dispatch(addCurrencies(data));
         if (payload.status === "success") {
           setTableData([]);
           setcurrencyTitle("");
+          setCurrencySymbol("");
           setCurrencyName("");
           setMinSalary();
           setMaxSalary();
@@ -150,7 +153,7 @@ export default function Currencies() {
           min_rate: minRate,
           max_rate: maxRate,
           currency: currencyName,
-          symbol: "$",
+          symbol: currencySymbol,
         };
         const { payload } = await dispatch(editCurrency(data));
         if (payload.status === "success") {
@@ -187,6 +190,12 @@ export default function Currencies() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
+    // setConfirmDelete(false);
+  };
+
+  const handleCancel = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenAdd = () => {
@@ -197,20 +206,35 @@ export default function Currencies() {
     setMaxSalary("");
     setMinRate("");
     setMaxRate("");
+    setCurrencySymbol("");
   };
 
-  const handleOpenEdit = (currID, currency, title, minSalary, minRate) => {
+  const handleOpenEdit = (
+    currID,
+    currency,
+    title,
+    minSalary,
+    maxSalary,
+    minRate,
+    maxRate,
+    symbol
+  ) => {
     setOpenEdit((prevState) => !prevState);
     setCurrencyID(currID);
     setcurrencyTitle(title);
     setCurrencyName(currency);
+    setMaxSalary(maxSalary);
     setMinSalary(minSalary);
+    setMaxRate(maxRate);
     setMinRate(minRate);
+    setCurrencySymbol(symbol);
   };
 
   const handleNewJob = (event) => {
     if (event.target.id === "currencyTitle") {
       setcurrencyTitle(event.target.value);
+    } else if (event.target.id === "currencySymbol") {
+      setCurrencySymbol(event.target.value);
     } else if (event.target.id === "currencyName") {
       setCurrencyName(event.target.value);
     } else if (event.target.id === "minSalary") {
@@ -302,7 +326,17 @@ export default function Currencies() {
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle1" fontWeight="bold">
+                        Max Salary
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle1" fontWeight="bold">
                         Min Rate
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Max Rate
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -337,7 +371,9 @@ export default function Currencies() {
                       <TableCell>{row?.currency}</TableCell>
                       <TableCell>{row?.title}</TableCell>
                       <TableCell>{row?.min_salary}</TableCell>
+                      <TableCell>{row?.max_salary}</TableCell>
                       <TableCell>{row?.min_rate}</TableCell>
+                      <TableCell>{row?.max_rate}</TableCell>
                       <TableCell>
                         {dateConverterMonth(row.created_at)}
                       </TableCell>
@@ -364,7 +400,10 @@ export default function Currencies() {
                                   row?.currency,
                                   row?.title,
                                   row?.min_salary,
-                                  row?.min_rate
+                                  row?.max_salary,
+                                  row?.min_rate,
+                                  row?.max_rate,
+                                  row?.symbol
                                 )
                               }
                               sx={{ cursor: "pointer" }}
@@ -401,8 +440,11 @@ export default function Currencies() {
       <Delete
         show={openDelete}
         handleOpen={handleOpenDelete}
+        handleCancel={handleCancel}
         handleDelete={removeTitle}
         dialogText={"currency"}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNewCurrency
         show={openAdd}
@@ -410,6 +452,7 @@ export default function Currencies() {
         handleAdd={handleAddNewJob}
         handleNewJob={handleNewJob}
         newTitle={currencyTitle}
+        currencySymbol={currencySymbol}
         currencyName={currencyName}
         minSalary={minSalary}
         maxSalary={maxSalary}
@@ -425,6 +468,7 @@ export default function Currencies() {
         handleNewJob={handleNewJob}
         newTitle={currencyTitle}
         currencyName={currencyName}
+        currencySymbol={currencySymbol}
         minSalary={minSalary}
         maxSalary={maxSalary}
         minRate={minRate}

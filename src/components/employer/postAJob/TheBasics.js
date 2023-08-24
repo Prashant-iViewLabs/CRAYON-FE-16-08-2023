@@ -392,15 +392,25 @@ export default function TheBasics({ changeStep }) {
     let slider = false,
       sliderValue = "";
 
-    const currencySalary = currency.find((item) => item.currency_id === value);
-    console.log(currencySalary.min_salary, currencySalary.max_salary);
-    setRangeValue([
-      currencySalary.min_salary / 1000,
-      currencySalary.max_salary / 1000,
-    ]);
+    console.log(basicData.job_role_type === "freelance");
 
-    console.log(event);
-
+    if (name === "currency_id") {
+      const currencySalary = currency.find(
+        (item) => item.currency_id === value
+      );
+      console.log(currencySalary.min_salary, currencySalary.max_salary);
+      if (basicData.job_role_type === "freelance") {
+        setRangeValue([
+          currencySalary.min_rate / 5,
+          currencySalary.max_rate / 5,
+        ]);
+      } else {
+        setRangeValue([
+          currencySalary.min_salary / 1000,
+          currencySalary.max_salary / 1000,
+        ]);
+      }
+    }
     if (name == "salary_id") {
       slider = true;
       sliderValue = salary.find((sal) => sal.max == value).salary_id;

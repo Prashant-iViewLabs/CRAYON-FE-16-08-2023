@@ -196,7 +196,7 @@ export default function Tools() {
   const getToolApproved = async (event, toolID) => {
     let approvedJobTitle = {
       tool_id: toolID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(approveTool(approvedJobTitle));
@@ -210,6 +210,7 @@ export default function Tools() {
             })
           );
         setOpenApprove(false);
+        await getTool(0);
       } else {
         dispatch(
           setAlert({
@@ -370,7 +371,7 @@ export default function Tools() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.tool_id)
                               }

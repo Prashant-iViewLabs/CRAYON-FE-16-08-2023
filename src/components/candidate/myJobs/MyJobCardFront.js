@@ -120,8 +120,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
   };
 
   const handleMatchMeButton = () => {
-    setMatchButton(prevState => !prevState)
-  }
+    setMatchButton((prevState) => !prevState);
+  };
   return (
     <CustomCard
       handleMouseEnter={() => setIsHovered(true)}
@@ -138,7 +138,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
         }}
         visibility={!matchMeButton ? "visible" : "hidden"}
       >
-        {(!trackButton && !matchMeButton)  ? (
+        {!trackButton && !matchMeButton ? (
           <>
             <Box
               component="img"
@@ -237,7 +237,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
             />
             {trackButton ? <ExpandLess /> : <KeyboardArrowDownIcon />}
           </Button>
-          {(!trackButton && !matchMeButton) &&
+          {!trackButton && !matchMeButton && (
             <Typography
               sx={{
                 display: "flex",
@@ -254,7 +254,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 color={job?.job_status?.name === "active" ? "success" : "error"}
               />
             </Typography>
-            }
+          )}
         </Box>
       </Grid>
       {trackButton && <TrackButton job={job} closeFunc={setTrackButton} />}
@@ -283,8 +283,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                    }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${
+                    job?.town?.name + " " + job?.town?.region?.name
+                  }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -537,12 +538,21 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                   },
               }}
             /> */}
-            <Box sx={{
-              width: "33.33%",
-              height: "100%",
-              postion: "relative"
-            }}>
-              <StatusButton selectedStatus={job?.candidate_status} options={myStatus.filter((status) => (status.id !== 1111 && status.id !== job?.candidate_status_id))} handleStatusChange={handleCandidateStatus} />
+            <Box
+              sx={{
+                width: "33.33%",
+                height: "100%",
+                postion: "relative",
+              }}
+            >
+              <StatusButton
+                selectedStatus={job?.candidate_status}
+                options={myStatus.filter(
+                  (status) =>
+                    status.id !== 1111 && status.id !== job?.candidate_status_id
+                )}
+                handleStatusChange={handleCandidateStatus}
+              />
             </Box>
             {/* </Grid> */}
           </Grid>

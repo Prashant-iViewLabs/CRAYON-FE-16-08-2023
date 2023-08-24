@@ -39,6 +39,7 @@ export default function Industries() {
   const [openEdit, setOpenEdit] = useState(false);
   const [editableIndustry, setEditableIndustry] = useState();
   const [industryName, setindustryName] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const getindustry = async (lastkeyy) => {
     try {
@@ -113,6 +114,11 @@ export default function Industries() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenEdit = (currCompID, compName) => {
@@ -280,6 +286,9 @@ export default function Industries() {
         handleOpen={handleOpenDelete}
         handleDelete={removeindustry}
         dialogText={"industry"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
 
       <Edit

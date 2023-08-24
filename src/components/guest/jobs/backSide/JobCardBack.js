@@ -166,7 +166,7 @@ const JobCardFront = ({
         <Box
           sx={{
             padding: "10px 0",
-            flexGrow: 1
+            flexGrow: 1,
           }}
         >
           <Box
@@ -257,10 +257,10 @@ const JobCardFront = ({
             <StarRoundedIcon color={isStar ? "error" : "disabled"} />
           </Button>
         </Box>
-      </Grid >
+      </Grid>
       {/* Header Section */}
 
-      < Box
+      <Box
         sx={{
           display: "flex",
           width: "100%",
@@ -268,7 +268,8 @@ const JobCardFront = ({
         }}
       >
         {/* Name and Info Section */}
-        <Grid Grid
+        <Grid
+          Grid
           paddingTop={0}
           marginLeft={1}
           marginRight={1}
@@ -278,8 +279,9 @@ const JobCardFront = ({
         >
           <Tooltip arrow title={job?.title} placement="top">
             <Link
-              to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${
+                job?.town?.name + " " + job?.town?.region?.name
+              }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -296,7 +298,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-              // onClick={handleJobTitle}
+                // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -455,7 +457,7 @@ const JobCardFront = ({
           </Button>
         </Box>
         {/* flip Button */}
-      </Box >
+      </Box>
       {/* Radial Chart Section */}
       <Grid
         container
@@ -475,38 +477,34 @@ const JobCardFront = ({
             isHovered={isHovered}
           />
         </Box>
-        {
-          job?.primary?.name && (
-            <Box
-              component="img"
-              height={80}
-              alt="Primary personality"
-              src={
-                (job?.primary?.name === "collaborator" && profile_collaborator) ||
-                (job?.primary?.name === "challenger" && profile_challenger) ||
-                (job?.primary?.name === "character" && profile_character) ||
-                (job?.primary?.name === "contemplator" && profile_contemplator)
-              }
-            />
-          )
-        }
+        {job?.primary?.name && (
+          <Box
+            component="img"
+            height={80}
+            alt="Primary personality"
+            src={
+              (job?.primary?.name === "collaborator" && profile_collaborator) ||
+              (job?.primary?.name === "challenger" && profile_challenger) ||
+              (job?.primary?.name === "character" && profile_character) ||
+              (job?.primary?.name === "contemplator" && profile_contemplator)
+            }
+          />
+        )}
         {/* </Box> */}
-        {
-          job?.shadow?.name && (
-            <Box
-              component="img"
-              height={80}
-              alt="Shadow personality"
-              src={
-                (job?.shadow?.name === "collaborator" && profile_collaborator) ||
-                (job?.shadow?.name === "challenger" && profile_challenger) ||
-                (job?.shadow?.name === "character" && profile_character) ||
-                (job?.shadow?.name === "contemplator" && profile_contemplator)
-              }
-            />
-          )
-        }
-      </Grid >
+        {job?.shadow?.name && (
+          <Box
+            component="img"
+            height={80}
+            alt="Shadow personality"
+            src={
+              (job?.shadow?.name === "collaborator" && profile_collaborator) ||
+              (job?.shadow?.name === "challenger" && profile_challenger) ||
+              (job?.shadow?.name === "character" && profile_character) ||
+              (job?.shadow?.name === "contemplator" && profile_contemplator)
+            }
+          />
+        )}
+      </Grid>
       {/* Radial Chart Section */}
       {/* Footer Section */}
       <Grid
@@ -534,8 +532,9 @@ const JobCardFront = ({
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-            }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${
+            job?.town?.name + " " + job?.town?.region?.name
+          }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",
@@ -572,7 +571,7 @@ const JobCardFront = ({
         </Button>
       </Grid>
       {/* Footer Section */}
-    </CustomCard >
+    </CustomCard>
   );
 };
 

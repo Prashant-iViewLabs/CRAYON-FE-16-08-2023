@@ -24,10 +24,6 @@ const theme = createTheme({
       main: "#F5576C",
       contrastText: "#FFFFFF",
     },
-    pinkButton100: {
-      main: "#F05DD8",
-      contrastText: "#FFFFFF",
-    },
     orangeButton: {
       main: "#FF934A",
       contrastText: "#FFFFFF",
@@ -133,6 +129,10 @@ const theme = createTheme({
       main: "#F05DD8",
       contrastText: "#FFFFFF",
     },
+    pinkButton100: {
+      main: "#F05DD8",
+      contrastText: "#FFFFFF",
+    },
     brownButton: {
       main: "#C19C47",
       contrastText: "#FFFFFF",
@@ -145,6 +145,22 @@ const theme = createTheme({
       main: "#C19C47",
       contrastText: "#FFFFFF",
     },
+    eyeview: {
+      main: "#1DB954",
+      contrastText: "#FFFFFF",
+    },
+    eyeview100: {
+      main: "#EBECF3",
+      contrastText: "#FFFFFF",
+    },
+    QandA: {
+      main: "#F09248",
+      contrastText: "#FFFFFF",
+    },
+    quicklinks: {
+      main: "#228CCE",
+      contrastText: "#FFFFFF",
+    },
     white: "#FFFFFF",
     black: "#000000",
     mainBackground: "#FAFAFA",
@@ -152,6 +168,7 @@ const theme = createTheme({
     hoverBlue: "#E6EFFF",
     lightText: "#5E6366",
     lightGray: "#D3D3D3",
+    grayRejct: "#efeeee",
     grayBackground: "#F0F0F0",
     grayBorder: "#E0E0E0",
     placeholder: "#C6CACC",
@@ -188,6 +205,12 @@ const theme = createTheme({
     },
     rejected: {
       main: "#F05D61",
+    },
+  },
+  manageTalent: {
+    lovethis: {
+      main: "#F05DD8",
+      contrastText: "#FFFFFF",
     },
   },
   components: {

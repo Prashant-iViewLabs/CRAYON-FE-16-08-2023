@@ -52,6 +52,8 @@ export default function Schools() {
   const [editableSchool, setEditableSchool] = useState();
   const [schoolName, setschoolName] = useState("");
   const [existingSchool, setExistingSchool] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const { school } = useSelector((state) => state.myCv);
 
   const getAllData = async () => {
@@ -182,6 +184,12 @@ export default function Schools() {
     setOpenDelete((prevState) => !prevState);
     setDeleteSchool(jobId);
   };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
+  };
+
   const handleOpenApprove = (event, jobId) => {
     setOpenApprove((prevState) => !prevState);
     setApproveEvent(event);
@@ -220,7 +228,7 @@ export default function Schools() {
   const getSchoolApproved = async (event, jobID) => {
     let approvedInstitute = {
       school_id: jobID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(approveSchool(approvedInstitute));
@@ -365,7 +373,7 @@ export default function Schools() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.school_id)
                               }
@@ -424,6 +432,9 @@ export default function Schools() {
         handleOpen={handleOpenDelete}
         handleDelete={removeSchools}
         dialogText={"school"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

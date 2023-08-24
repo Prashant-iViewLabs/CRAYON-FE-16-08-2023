@@ -1,48 +1,60 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { PayloadAction } from '@reduxjs/toolkit'
-import { ALERT_TYPE, ERROR_MSG } from '../../utils/Constants'
-import { postApi } from "../../utils/Apis"
-import { setLoading } from '../configSlice'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { ALERT_TYPE, ERROR_MSG } from "../../utils/Constants";
+import { getApi, postApi } from "../../utils/Apis";
+import { setLoading } from "../configSlice";
 
+const initialState = {};
 
-const initialState = {
+export const signup = createAsyncThunk(
+  "signup",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi("/signup", payload);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 
-}
+export const login = createAsyncThunk(
+  "login",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi("/login", payload);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 
-export const signup = createAsyncThunk('signup', async (payload, { dispatch }) => {
-    dispatch(setLoading(true))
-    const { data } = await postApi('/signup', payload)
-    dispatch(setLoading(false))
-    return data
-})
-
-export const login = createAsyncThunk('signup', async (payload, { dispatch }) => {
-    dispatch(setLoading(true))
-    const { data } = await postApi('/login', payload)
-    dispatch(setLoading(false))
-    return data
-})
+export const logout = createAsyncThunk(
+  "logout",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi("/admin/logout", true);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 
 export const loginSlice = createSlice({
-    name: 'config',
-    initialState,
-    reducers: {
-    },
-    // extraReducers(builder) {
-    //     builder
-    //         .addCase(signup.pending, (state, action) => {
-    //             // state.status = 'loading'
-    //         })
-    //         .addCase(signup.fulfilled, (state, action) => {
-    //             // state.status = 'succeeded'
-    //         })
-    //         .addCase(signup.rejected, (state, action) => {
-    //             // state.status = 'failed'
-    //         })
-    // }
-})
+  name: "config",
+  initialState,
+  reducers: {},
+  // extraReducers(builder) {
+  //     builder
+  //         .addCase(signup.pending, (state, action) => {
+  //             // state.status = 'loading'
+  //         })
+  //         .addCase(signup.fulfilled, (state, action) => {
+  //             // state.status = 'succeeded'
+  //         })
+  //         .addCase(signup.rejected, (state, action) => {
+  //             // state.status = 'failed'
+  //         })
+  // }
+});
 
 // Action creators are generated for each case reducer function
-export const { } = loginSlice.actions
+export const {} = loginSlice.actions;
 
-export default loginSlice.reducer
+export default loginSlice.reducer;

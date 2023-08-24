@@ -32,7 +32,15 @@ const BlueSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function Delete({ show, handleOpen, handleDelete, dialogText }) {
+export default function Delete({
+  show,
+  handleOpen,
+  handleDelete,
+  dialogText,
+  confirmDelete,
+  handleCancel,
+  setConfirmDelete,
+}) {
   // const [isSwitchSelected, setIsSwitchSelected] = useState(false);
   // const [showError, setShowError] = useState(false);
 
@@ -48,6 +56,10 @@ export default function Delete({ show, handleOpen, handleDelete, dialogText }) {
   //     handleDelete(); // Call the handleDelete function if the switch is selected
   //   }
   // };
+
+  const handleDeleteConfirm = (event) => {
+    setConfirmDelete(event.target.checked);
+  };
 
   return (
     <CustomDialog
@@ -108,7 +120,11 @@ export default function Delete({ show, handleOpen, handleDelete, dialogText }) {
               </Typography>
             )}
           </Box>*/}
-          <BlueSwitch />
+          {console.log(confirmDelete)}
+          <BlueSwitch
+            checked={confirmDelete}
+            onChange={(event) => handleDeleteConfirm(event)}
+          />
         </Box>
       </Box>
       <Box>
@@ -124,7 +140,7 @@ export default function Delete({ show, handleOpen, handleDelete, dialogText }) {
             padding: 3,
           }}
           variant="contained"
-          onClick={handleOpen}
+          onClick={handleCancel}
         >
           cancel
         </Button>
@@ -140,6 +156,7 @@ export default function Delete({ show, handleOpen, handleDelete, dialogText }) {
           variant="contained"
           color="redButton100"
           onClick={handleDelete}
+          disabled={!confirmDelete}
         >
           continue
         </Button>

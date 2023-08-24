@@ -158,8 +158,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
     setIsStarSelected(!isStar);
   };
   const handleMatchMeButton = () => {
-    setMatchButton(prevState => !prevState)
-  }
+    setMatchButton((prevState) => !prevState);
+  };
 
   return (
     <CustomCard
@@ -178,7 +178,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
         }}
         visibility={!matchMeButton ? "visible" : "hidden"}
       >
-        {(!trackButton && !matchMeButton) ? (
+        {!trackButton && !matchMeButton ? (
           <>
             <Box
               component="img"
@@ -277,8 +277,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
             />
             {trackButton ? <ExpandLess /> : <KeyboardArrowDownIcon />}
           </Button>
-          {(!trackButton && !matchMeButton) &&
-
+          {!trackButton && !matchMeButton && (
             <Typography
               sx={{
                 display: "flex",
@@ -295,14 +294,13 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 color={job?.job_status?.name === "active" ? "success" : "error"}
               />
             </Typography>
-          }
+          )}
         </Box>
       </Grid>
       {trackButton && <TrackButton job={job} closeFunc={setTrackButton} />}
       {matchMeButton && <MatchMeButton closeFunc={handleMatchMeButton} />}
       {!trackButton && !matchMeButton && (
         <>
-
           <Box
             sx={{
               display: "flex",
@@ -325,8 +323,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                    }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${
+                    job?.town?.name + " " + job?.town?.region?.name
+                  }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -358,7 +357,11 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <AccountBalanceWallet fontSize="string" color="primary" sx={{}} />
+                  <AccountBalanceWallet
+                    fontSize="string"
+                    color="primary"
+                    sx={{}}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 700,
@@ -425,7 +428,11 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                   gap: 1,
                 }}
               >
-                <Slider2 items={Tags} color={"yellowButton200"} hideTagsAfter={2} />
+                <Slider2
+                  items={Tags}
+                  color={"yellowButton200"}
+                  hideTagsAfter={2}
+                />
                 <Slider2
                   items={Tools}
                   color={"yellowButton100"}
@@ -434,7 +441,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 <Slider items={Traits} theme={theme} color={"grayButton200"} />
               </Box>
             </Grid>
-            <Box sx={{ display: "flex", alignItems: "end", marginBottom: "12px" }}>
+            <Box
+              sx={{ display: "flex", alignItems: "end", marginBottom: "12px" }}
+            >
               <Button
                 variant="contained"
                 color="redButton"
@@ -485,10 +494,12 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 // sx={{ margin: "0 -22px 0 -22px" }}
                 alt="job_exp"
                 src={
-                  (job?.primary?.name === "collaborator" && profile_collaborator) ||
+                  (job?.primary?.name === "collaborator" &&
+                    profile_collaborator) ||
                   (job?.primary?.name === "challenger" && profile_challenger) ||
                   (job?.primary?.name === "character" && profile_character) ||
-                  (job?.primary?.name === "contemplator" && profile_contemplator)
+                  (job?.primary?.name === "contemplator" &&
+                    profile_contemplator)
                 }
               />
             )}
@@ -500,7 +511,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 // sx={{ margin: "0 -22px 0 -22px" }}
                 alt="job_exp"
                 src={
-                  (job?.shadow?.name === "collaborator" && profile_collaborator) ||
+                  (job?.shadow?.name === "collaborator" &&
+                    profile_collaborator) ||
                   (job?.shadow?.name === "challenger" && profile_challenger) ||
                   (job?.shadow?.name === "character" && profile_character) ||
                   (job?.shadow?.name === "contemplator" && profile_contemplator)
@@ -579,12 +591,21 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 },
               }}
             /> */}
-            <Box sx={{
-              width: "33.33%",
-              height: "100%",
-              postion: "relative"
-            }}>
-              <StatusButton selectedStatus={job?.candidate_status} options={myStatus.filter((status) => (status.id !== 1111 && status.id !== job?.candidate_status_id))} handleStatusChange={handleCandidateStatus} />
+            <Box
+              sx={{
+                width: "33.33%",
+                height: "100%",
+                postion: "relative",
+              }}
+            >
+              <StatusButton
+                selectedStatus={job?.candidate_status}
+                options={myStatus.filter(
+                  (status) =>
+                    status.id !== 1111 && status.id !== job?.candidate_status_id
+                )}
+                handleStatusChange={handleCandidateStatus}
+              />
             </Box>
             {/* </Grid> */}
           </Grid>

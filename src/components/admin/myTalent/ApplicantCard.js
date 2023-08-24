@@ -306,6 +306,7 @@ export default function ApplicantCard({
   const [isHovered, setIsHovered] = useState(false);
   const [anchorElPersonality, setAnchorElPersonality] = useState(null);
   const [value, setValue] = useState([20, 37]);
+  const [expand, setExpand] = useState(false);
   const [personalitiesData, setPersonalitiesData] = useState({
     ...PERSONALITY,
   });
@@ -438,10 +439,14 @@ export default function ApplicantCard({
     }
   };
 
+  const toggleAcordion = () => {
+    setExpand((prev) => !prev);
+  };
+
   return (
-    <StyledAccordion>
+    <StyledAccordion expanded={expand}>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={<ExpandMoreIcon onClick={toggleAcordion} />}
         aria-controls="panel1a-content"
         id="panel1a-header"
       >

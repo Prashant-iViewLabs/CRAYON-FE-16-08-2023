@@ -58,6 +58,7 @@ export default function Institution() {
   const [editableInstitution, setEditableInstitution] = useState();
   const [institutionName, setinstitutionName] = useState("");
   const [existingInstitution, setExistingInstitution] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const { institution } = useSelector((state) => state.myCv);
 
@@ -192,6 +193,12 @@ export default function Institution() {
     setOpenDelete((prevState) => !prevState);
     setDeleteInstitution(jobId);
   };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
+  };
+
   const handleOpenApprove = (event, jobId) => {
     setOpenApprove((prevState) => !prevState);
     setApproveEvent(event);
@@ -230,7 +237,7 @@ export default function Institution() {
   const getInstitutionApproved = async (event, jobID) => {
     let approvedInstitute = {
       institution_id: jobID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(approveInstitute(approvedInstitute));
@@ -375,7 +382,7 @@ export default function Institution() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.institution_id)
                               }
@@ -436,6 +443,9 @@ export default function Institution() {
         handleOpen={handleOpenDelete}
         handleDelete={removeInstitution}
         dialogText={"instituiton"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

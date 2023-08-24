@@ -11,9 +11,8 @@ import { Link } from "react-router-dom";
 import { Avatar, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import redTriangleSmile from "../../../assets/Characters/Red_Triangle_Smiling.svg";
-import editIcon from "../../../assets/Padding Included/Black_Edit.svg";
+import editIcon from "../../../assets/Black_Edit.svg";
 import { CheckCircle, HourglassEmpty } from "@mui/icons-material";
-
 
 const TrackButton = ({ job, closeFunc }) => {
   const theme = useTheme();
@@ -23,13 +22,17 @@ const TrackButton = ({ job, closeFunc }) => {
       <Box
         sx={{
           padding: "10px 16px",
-          height: "388px"
+          height: "388px",
         }}
       >
         <Box mb={2}>
           <strong>Application Stage:</strong>
           <SmallButton
-            color= {job?.job_users[0]?.job_user_status?.name === "incomplete" ? "grayButton200" : "lightGreenButton300"} 
+            color={
+              job?.job_users[0]?.job_user_status?.name === "incomplete"
+                ? "grayButton200"
+                : "lightGreenButton300"
+            }
             ml={1}
             label={job?.job_users[0]?.job_user_status?.name}
           />
@@ -107,26 +110,42 @@ const TrackButton = ({ job, closeFunc }) => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   width: "100%",
-                  padding: 1
+                  padding: 1,
                 }}
               >
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1
-                }}>{job?.profileCompleted ? <CheckCircle sx={{
-                  fontSize: 35
-                }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
-                  background: "#D9D9D9",
-                  color: "#707070",
-                  padding: 1,
-                  fontSize: 18,
-                  borderRadius: "50%",
-                }} />} <span> My Profile</span></Box>
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center"
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  {job?.profileCompleted ? (
+                    <CheckCircle
+                      sx={{
+                        fontSize: 35,
+                      }}
+                      color="lightGreenButton300"
+                    />
+                  ) : (
+                    <HourglassEmpty
+                      sx={{
+                        background: "#D9D9D9",
+                        color: "#707070",
+                        padding: 1,
+                        fontSize: 18,
+                        borderRadius: "50%",
+                      }}
+                    />
+                  )}{" "}
+                  <span> My Profile</span>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   Edit
                   <Box
                     component={"img"}
@@ -175,26 +194,42 @@ const TrackButton = ({ job, closeFunc }) => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   width: "100%",
-                  padding: 1
+                  padding: 1,
                 }}
               >
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1
-                }}>{job?.cvCompleted ? <CheckCircle sx={{
-                  fontSize: 35
-                }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
-                  background: "#D9D9D9",
-                  color: "#707070",
-                  padding: 1,
-                  fontSize: 18,
-                  borderRadius: "50%",
-                }} />} <span>Crayon vitae</span></Box>
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center"
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  {job?.cvCompleted ? (
+                    <CheckCircle
+                      sx={{
+                        fontSize: 35,
+                      }}
+                      color="lightGreenButton300"
+                    />
+                  ) : (
+                    <HourglassEmpty
+                      sx={{
+                        background: "#D9D9D9",
+                        color: "#707070",
+                        padding: 1,
+                        fontSize: 18,
+                        borderRadius: "50%",
+                      }}
+                    />
+                  )}{" "}
+                  <span>Crayon vitae</span>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   Edit
                   <Box
                     component={"img"}
@@ -225,26 +260,42 @@ const TrackButton = ({ job, closeFunc }) => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 width: "100%",
-                padding: 1
+                padding: 1,
               }}
             >
-              <Box sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1
-              }}>{true ? <CheckCircle sx={{
-                fontSize: 35
-              }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
-                background: "#D9D9D9",
-                color: "#707070",
-                padding: 1,
-                fontSize: 18,
-                borderRadius: "50%",
-              }} />} <span>Q&A</span></Box>
-              <Box sx={{
-                display: "flex",
-                alignItems: "center"
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                {true ? (
+                  <CheckCircle
+                    sx={{
+                      fontSize: 35,
+                    }}
+                    color="lightGreenButton300"
+                  />
+                ) : (
+                  <HourglassEmpty
+                    sx={{
+                      background: "#D9D9D9",
+                      color: "#707070",
+                      padding: 1,
+                      fontSize: 18,
+                      borderRadius: "50%",
+                    }}
+                  />
+                )}{" "}
+                <span>Q&A</span>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 Edit
                 <Box
                   component={"img"}
@@ -264,42 +315,58 @@ const TrackButton = ({ job, closeFunc }) => {
               Application video
             </Button> */}
             <Button
-                variant="contained"
-                color="grayButton200"
+              variant="contained"
+              color="grayButton200"
+              sx={{
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: 1,
+              }}
+            >
+              <Box
                 sx={{
-                  borderRadius: "10px",
                   display: "flex",
-                  justifyContent: "space-between",
                   alignItems: "center",
-                  width: "100%",
-                  padding: 1
+                  gap: 1,
                 }}
               >
-                <Box sx={{
+                {false ? (
+                  <CheckCircle
+                    sx={{
+                      fontSize: 35,
+                    }}
+                    color="lightGreenButton300"
+                  />
+                ) : (
+                  <HourglassEmpty
+                    sx={{
+                      background: "#D9D9D9",
+                      color: "#707070",
+                      padding: 1,
+                      fontSize: 18,
+                      borderRadius: "50%",
+                    }}
+                  />
+                )}{" "}
+                <span>Video application </span>
+              </Box>
+              <Box
+                sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 1
-                }}>{false ? <CheckCircle sx={{
-                  fontSize: 35
-                }} color="lightGreenButton300" /> : <HourglassEmpty sx={{
-                  background: "#D9D9D9",
-                  color: "#707070",
-                  padding: 1,
-                  fontSize: 18,
-                  borderRadius: "50%",
-                }} />} <span>Video application </span></Box>
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center"
-                }}>
-                  Edit
-                  <Box
-                    component={"img"}
-                    src={editIcon}
-                    sx={{ width: 20, height: 20 }}
-                  />
-                </Box>
-              </Button>
+                }}
+              >
+                Edit
+                <Box
+                  component={"img"}
+                  src={editIcon}
+                  sx={{ width: 20, height: 20 }}
+                />
+              </Box>
+            </Button>
           </Box>
         </Box>
       </Box>

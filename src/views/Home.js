@@ -121,6 +121,9 @@ export default function Home() {
                 width: "30px",
                 color: "white",
                 background: theme.palette.greenButton.main,
+                "&:hover": {
+                  background: theme.palette.greenButton.main, // Set the same background color for hover
+                },
               }}
             >
               <SearchIcon fontSize="small" />
@@ -153,6 +156,9 @@ export default function Home() {
                 width: "30px",
                 color: "white",
                 background: theme.palette.redButton.main,
+                "&:hover": {
+                  background: theme.palette.redButton.main, // Set the same background color for hover
+                },
               }}
               onClick={showLocationInput}
             >

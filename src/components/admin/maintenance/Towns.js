@@ -52,6 +52,7 @@ export default function Towns() {
   const [currQualification, setCurrQualification] = useState("");
   const [currQualificationType, setCurrQualificationType] = useState(0);
   const [currQualificationID, setCurrQualificationID] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const getTowns = async (lastkeyy) => {
     try {
@@ -177,6 +178,11 @@ export default function Towns() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteTowns(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenAdd = () => {
@@ -374,6 +380,9 @@ export default function Towns() {
         handleOpen={handleOpenDelete}
         handleDelete={removeTowns}
         dialogText={"town"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

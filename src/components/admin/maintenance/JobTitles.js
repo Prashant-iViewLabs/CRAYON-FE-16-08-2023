@@ -54,6 +54,8 @@ export default function JobTitles() {
   const [editableCompany, setEditableCompany] = useState();
   const [companyName, setcompanyName] = useState("");
   const [existingCompany, setExistingCompany] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const { titles } = useSelector((state) => state.myCv);
 
   const getAllData = async () => {
@@ -187,6 +189,12 @@ export default function JobTitles() {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
   };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
+  };
+
   const handleOpenApprove = (event, jobId) => {
     setOpenApprove((prevState) => !prevState);
     setApproveEvent(event);
@@ -225,7 +233,7 @@ export default function JobTitles() {
   const getJobApproved = async (event, jobID) => {
     let approvedJobTitle = {
       job_title_id: jobID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(approveJobTitle(approvedJobTitle));
@@ -370,7 +378,7 @@ export default function JobTitles() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.job_title_id)
                               }
@@ -431,6 +439,9 @@ export default function JobTitles() {
         handleOpen={handleOpenDelete}
         handleDelete={removeTitle}
         dialogText={"job title"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

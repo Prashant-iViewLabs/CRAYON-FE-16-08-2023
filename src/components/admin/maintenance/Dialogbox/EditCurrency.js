@@ -19,6 +19,7 @@ export default function EditCurrency({
   handleAdd,
   handleNewJob,
   newTitle,
+  currencySymbol,
   currencyName,
   minSalary,
   maxSalary,
@@ -87,8 +88,27 @@ export default function EditCurrency({
               borderRadius: "25px",
               boxShadow: "none",
               border: `1px solid ${theme.palette.grayBorder}`,
+              width: "40%",
             }}
           >
+            <InputBase
+              id="currencySymbol"
+              label="Symbol"
+              onChange={handleNewJob}
+              value={currencySymbol}
+              margin="normal"
+              sx={{ ml: 2, mr: 2, width: "10%" }}
+              placeholder="$"
+              inputProps={{
+                maxLength: 1, // Change the maximum limit as needed
+              }}
+            />
+            <div
+              style={{
+                borderLeft: `1px solid ${theme.palette.grayBorder}`,
+                height: "40px",
+              }}
+            />
             <InputBase
               id="currencyName"
               label="Name"
@@ -275,7 +295,7 @@ export default function EditCurrency({
             )
           }
         >
-          add
+          edit
         </Button>
       </Box>
     </CustomDialog>

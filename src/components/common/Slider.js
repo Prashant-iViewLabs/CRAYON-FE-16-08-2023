@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { IconButton, Box } from "@mui/material";
+import React from "react";
 import SmallButton from "./SmallButton";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { truncate } from "lodash";
 import { nanoid } from "@reduxjs/toolkit";
+import { Box } from "@mui/material";
 
 const Slider = ({ items, theme, color }) => {
   return (

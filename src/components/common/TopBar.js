@@ -39,12 +39,13 @@ import {
   setLocalStorage,
   removeLocalStorage,
 } from "../../utils/Common";
-import { login } from "../../redux/login/loginSlice";
+import { login, logout } from "../../redux/login/loginSlice";
 import { Popover, Typography } from "@mui/material";
 import jwt_decode from "jwt-decode";
 
 import userProfile from "../../assets/Padding Included/User_Profile.svg";
 import profileDetail from "../../assets/Padding Included/Profile_Details.svg";
+import { TryOutlined } from "@mui/icons-material";
 
 const StyledTab = styled(Tabs)(({ theme }) => ({
   "& .MuiTab-root": {
@@ -55,16 +56,18 @@ const StyledTab = styled(Tabs)(({ theme }) => ({
     opacity: 1,
   },
   "& .MuiTabs-indicator": {
-      display: 'flex',
-      justifyContent: 'center',
-      backgroundColor: 'transparent',
-      height: "60px",
-      width: "60px !important",
-      margin: "auto",
-      borderRadius: "50%",
-      borderRight: "5px solid transparent",
-      borderLeft: "5px solid transparent",
-      borderBottom: "5px solid orange"
+    backgroundColor: theme.palette.redButton.main,
+    height: "4px",
+    borderRadius: "5px",
+    // display: "flex",
+    // justifyContent: "center",
+    // backgroundColor: "transparent",
+    // height: "60px",
+    // width: "60px  !important",
+    // borderRadius: "50%",
+    // borderRight: "5px solid transparent",
+    // borderLeft: "5px solid transparent",
+    // borderBottom: "5px solid orange",
   },
 }));
 
@@ -259,20 +262,33 @@ export default function TopBar() {
       dispatch(setAlert({ show: true }));
     }
   };
+
   const handlequicklinks = () => {
     setcurrentTabs(PUBLIC_TAB_ITEMS);
   };
-  const handleLogout = () => {
-    removeLocalStorage("token");
-    removeLocalStorage("isLoggedIn");
-    removeLocalStorage("userType");
-    removeLocalStorage("cvComponent");
-    removeLocalStorage("jobComponent");
-    setIsLoggedIn(false);
-    setIsAdmin(false);
-    navigate("jobs", { replace: true });
-    setcurrentTabs(PUBLIC_TAB_ITEMS);
-    setActiveTab("jobs");
+  const handleLogout = async () => {
+    try {
+      const { payload } = await dispatch(logout());
+      if (payload.status === "success") {
+        removeLocalStorage("token");
+        removeLocalStorage("isLoggedIn");
+        removeLocalStorage("userType");
+        removeLocalStorage("cvComponent");
+        removeLocalStorage("jobComponent");
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+        navigate("jobs", { replace: true });
+        setcurrentTabs(PUBLIC_TAB_ITEMS);
+        setActiveTab("jobs");
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Logged out successfully!",
+          })
+        );
+      }
+    } catch (error) {}
   };
   const handleTalent = () => {
     setIsAdmin(true);
@@ -395,6 +411,7 @@ export default function TopBar() {
         color="base"
         sx={{
           borderRadius: 0,
+          height: "80px",
           justifyContent: "center",
         }}
       >

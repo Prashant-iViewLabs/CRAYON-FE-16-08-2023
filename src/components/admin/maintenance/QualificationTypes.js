@@ -45,6 +45,7 @@ export default function QualificationTypes() {
   const [reference, setReference] = useState("");
   const [level, setLevel] = useState();
   const [openEdit, setOpenEdit] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [qualifiationTypeId, setQualifiationTypeId] = useState();
 
   const getTitles = async (lastkeyy) => {
@@ -164,6 +165,11 @@ export default function QualificationTypes() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteJob(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenAdd = () => {
@@ -354,6 +360,9 @@ export default function QualificationTypes() {
         handleOpen={handleOpenDelete}
         handleDelete={removeTitle}
         dialogText={"qualification type"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNewQualification
         show={openAdd}

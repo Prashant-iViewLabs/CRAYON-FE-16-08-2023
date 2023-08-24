@@ -67,6 +67,7 @@ export default function Qualification() {
   const [currQualificationID, setCurrQualificationID] = useState(0);
   const [existingQualification, setExistingQualification] = useState();
   const [existingQualificationType, setExistingQualificationType] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const { qualification } = useSelector((state) => state.myCv);
 
   const getQualifications = async (lastkeyy) => {
@@ -198,6 +199,11 @@ export default function Qualification() {
     setDeleteJob(jobId);
   };
 
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
+  };
+
   const handleOpenEdit = (qualID, qualName, qualType) => {
     setOpenEdit((prevState) => !prevState);
     setCurrQualificationID(qualID);
@@ -235,7 +241,7 @@ export default function Qualification() {
   const getQualificaitonApproved = async (event, jobID) => {
     let approvedJobTitle = {
       qualification_id: jobID,
-      flag: event.target.checked ? 1 : 0,
+      flag: event.target.checked ? 0 : 1,
     };
     try {
       const { payload } = await dispatch(
@@ -251,6 +257,7 @@ export default function Qualification() {
             })
           );
         setOpenApprove(false);
+        await getQualifications(0);
       } else {
         dispatch(
           setAlert({
@@ -422,7 +429,7 @@ export default function Qualification() {
                         <Box sx={{ display: "flex", gap: "8px" }}>
                           <Tooltip title="approve" placement="top-end">
                             <Checkbox
-                              defaultChecked={row.approved}
+                              checked={row.approved}
                               onClick={(event) =>
                                 handleOpenApprove(event, row?.qualification_id)
                               }
@@ -487,6 +494,9 @@ export default function Qualification() {
         handleOpen={handleOpenDelete}
         handleDelete={removeQual}
         dialogText={"qualification"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

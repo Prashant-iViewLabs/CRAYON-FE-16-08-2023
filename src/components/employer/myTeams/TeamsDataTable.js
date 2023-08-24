@@ -670,8 +670,6 @@ import CircleIcon from "@mui/icons-material/Circle";
 import Actions from "./Actions";
 
 export default function TeamsDataTable({ rows, setDeleted, role }) {
-  console.log(rows);
-
   const columns = [
     {
       field: "name",
@@ -696,7 +694,7 @@ export default function TeamsDataTable({ rows, setDeleted, role }) {
       renderCell: (params) => {
         return (
           <div>
-            {params.value.currentStatus === "Active" ? (
+            {params.row.Status === true ? (
               // <ActiveChip label="Active"/>
               <Button
                 startIcon={<CircleIcon />}
@@ -789,11 +787,9 @@ export default function TeamsDataTable({ rows, setDeleted, role }) {
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
-  console.log(selectedRows);
   const handleSelectionChange = (selection) => {
     setSelectedRows(selection);
   };
-  console.log(rows);
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid

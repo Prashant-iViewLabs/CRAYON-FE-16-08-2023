@@ -196,10 +196,10 @@ const JobCardFront = ({
         />
 
         <Box
-        sx={{
-          padding: "10px 0",
-          flexGrow: 1
-        }}
+          sx={{
+            padding: "10px 0",
+            flexGrow: 1,
+          }}
         >
           <Box
             sx={{
@@ -233,7 +233,7 @@ const JobCardFront = ({
               fontSize: 10,
               letterSpacing: "0.75px",
               opacity: 0.8,
-              paddingTop: "8px"
+              paddingTop: "8px",
             }}
           >
             posted {convertDatetimeAgo(job?.updated_at)}
@@ -326,7 +326,6 @@ const JobCardFront = ({
                   />
                 )} */}
         </Box>
-
       </Grid>
       <Box
         sx={{
@@ -351,8 +350,9 @@ const JobCardFront = ({
             placement="top"
           >
             <Link
-              to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${
+                job?.town?.name + " " + job?.town?.region?.name
+              }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -370,7 +370,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-              // onClick={handleJobTitle}
+                // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -711,8 +711,9 @@ const JobCardFront = ({
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-            }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${
+            job?.town?.name + " " + job?.town?.region?.name
+          }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",

@@ -153,7 +153,12 @@ export default function Talent() {
                     }`}
         </style>
       </Grid>
-      <Grid xs={12} sm={6} md={8} lg={9} xl={10}
+      <Grid
+        xs={12}
+        sm={6}
+        md={8}
+        lg={9}
+        xl={10}
         sx={{
           px: 2,
           display: "flex",
@@ -277,7 +282,6 @@ export default function Talent() {
             marginLeft: "1px",
           }}
         >
-
           <ButtonPanel
             panelData={jobStatus}
             side="right"

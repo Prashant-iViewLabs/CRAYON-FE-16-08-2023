@@ -89,7 +89,7 @@ const StyledMenu = styled((props) => (
     },
     "& .MuiMenu-list": {
       padding: 0,
-  },
+    },
   },
   "& .MuiFormControlLabel-root": {
     height: "30px",

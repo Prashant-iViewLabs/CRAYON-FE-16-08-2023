@@ -46,6 +46,7 @@ export default function Nationalities() {
   const [openEdit, setOpenEdit] = useState(false);
   const [editableNationality, setEditableNationality] = useState();
   const [nationalityName, setnationalityName] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const getNationalities = async (lastkeyy) => {
     try {
@@ -158,6 +159,11 @@ export default function Nationalities() {
   const handleOpenDelete = (jobId) => {
     setOpenDelete((prevState) => !prevState);
     setDeleteNationality(jobId);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
   };
 
   const handleOpenAdd = () => {
@@ -337,6 +343,9 @@ export default function Nationalities() {
         handleOpen={handleOpenDelete}
         handleDelete={removeNationality}
         dialogText={"nationality"}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

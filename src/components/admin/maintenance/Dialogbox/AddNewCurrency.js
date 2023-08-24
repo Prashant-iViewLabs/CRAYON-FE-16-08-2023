@@ -19,6 +19,7 @@ export default function AddNewCurrency({
   handleAdd,
   handleNewJob,
   newTitle,
+  currencySymbol,
   currencyName,
   minSalary,
   maxSalary,
@@ -77,7 +78,7 @@ export default function AddNewCurrency({
               onChange={handleNewJob}
               margin="normal"
               sx={{ ml: 2, mr: 2, width: "100%" }}
-              placeholder="enter currency title"
+              placeholder="currency title"
             />
           </Paper>
           <Paper
@@ -87,8 +88,27 @@ export default function AddNewCurrency({
               borderRadius: "25px",
               boxShadow: "none",
               border: `1px solid ${theme.palette.grayBorder}`,
+              width: "40%",
             }}
           >
+            <InputBase
+              id="currencySymbol"
+              label="Symbol"
+              onChange={handleNewJob}
+              value={currencySymbol}
+              margin="normal"
+              sx={{ ml: 2, mr: 2, width: "10%" }}
+              placeholder="$"
+              inputProps={{
+                maxLength: 1, // Change the maximum limit as needed
+              }}
+            />
+            <div
+              style={{
+                borderLeft: `1px solid ${theme.palette.grayBorder}`,
+                height: "40px",
+              }}
+            />
             <InputBase
               id="currencyName"
               label="Name"
@@ -96,7 +116,7 @@ export default function AddNewCurrency({
               value={currencyName}
               margin="normal"
               sx={{ ml: 2, mr: 2, width: "100%" }}
-              placeholder="enter currency name"
+              placeholder="currency name"
               inputProps={{
                 maxLength: 3, // Change the maximum limit as needed
                 style: { textTransform: "uppercase" },
@@ -148,7 +168,7 @@ export default function AddNewCurrency({
               onChange={handleNewJob}
               type="number"
               sx={{ ml: 2, mr: 2, width: "100%" }}
-              placeholder="enter minimum salary"
+              placeholder="minimum salary"
             />
           </Paper>
           <Paper
@@ -166,7 +186,7 @@ export default function AddNewCurrency({
               value={maxSalary}
               type="number"
               sx={{ ml: 2, mr: 2, width: "100%" }}
-              placeholder="enter maximum salary"
+              placeholder="maximum salary"
               onChange={handleNewJob}
             />
           </Paper>
@@ -212,7 +232,7 @@ export default function AddNewCurrency({
               onChange={handleNewJob}
               type="number"
               sx={{ ml: 2, mr: 2, width: "100%" }}
-              placeholder="enter minimum rate"
+              placeholder="minimum rate"
             />
           </Paper>
           <Paper
@@ -231,7 +251,7 @@ export default function AddNewCurrency({
               type="number"
               sx={{ ml: 2, mr: 2, width: "100%" }}
               onChange={handleNewJob}
-              placeholder="enter maximum rate"
+              placeholder="maximum rate"
             />
           </Paper>
         </fieldset>

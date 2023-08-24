@@ -991,6 +991,7 @@ export default function DraggableCard({
                         mr: 1,
                         opacity: 0.75,
                         letterSpacing: "0.75px",
+                        width: "150px",
                         whiteSpace: "nowrap", // Prevents text from wrapping
                         overflow: "hidden", // Hides any overflowing content
                         textOverflow: "ellipsis", // Adds dots at the end of overflowing text

@@ -301,6 +301,10 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
   const i18n = locale.en;
   const theme = useTheme();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const prevLocation = location.pathname;
+  const hasTalentPool = location.pathname.includes("talent-pool");
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [jobClick, setJobClick] = useState(null);
@@ -314,8 +318,6 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
   });
   const { personalities, traits } = useSelector((state) => state.postJobs);
 
-  const location = useLocation();
-  const hasTalentPool = location.pathname.includes("talent-pool");
   // console.log(location);
   console.log(hasTalentPool);
 
@@ -599,7 +601,7 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
               />
             )}
             <Link
-              to={`/candidate-cv/${talentContent?.user_id}`}
+              to={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
               target="_blank"
               style={{
                 textDecoration: "none",

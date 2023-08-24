@@ -315,7 +315,7 @@ const TeamTable = () => {
               nanoid(),
               team?.user_id,
               team?.user,
-              "Offline",
+              team?.user?.is_Logged_in,
               team?.created_at,
               team?.user?.last_login_at,
               team?.employer_role_type !== null &&
@@ -356,7 +356,7 @@ const TeamTable = () => {
             nanoid(),
             team?.user_id,
             team?.user,
-            "Offline",
+            team?.user?.is_Logged_in,
             team?.created_at,
             team?.user?.last_login_at,
             team?.employer_role_type !== null && team?.employer_role_type?.name
