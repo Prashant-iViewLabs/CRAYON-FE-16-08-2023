@@ -126,7 +126,7 @@ export default function CustomDialog(props) {
       }}
     >
       <StyledDialogTitle id="customized-dialog-title" onClose={onDialogClose}>
-        {/* {title} */}
+        {title}
       </StyledDialogTitle>
       <DialogContent sx={{ padding: `${padding} !important` }}>
         {children}

@@ -6,12 +6,10 @@ import {
     getFollowCompany,
 } from "../../../../redux/candidate/myProfileSlice";
 
-import CompanyListLogo from "../../../../assets/Padding Included/Black_Company_Details.svg";
 
 
-const DisplayFollowedCompanies = () => {
+const DisplayFollowedCompanies = ({ openDialog}) => {
     const dispatch = useDispatch();
-    const [openDialog, setOpenDialog] = useState(false)
     const [followedCompany, setFollowedCompany] = useState([]);
 
     const getFollowedCompany = async () => {
@@ -25,33 +23,13 @@ const DisplayFollowedCompanies = () => {
     };
 
     useEffect(() => {
-        if(openDialog){
+        if (openDialog) {
             getFollowedCompany()
         }
     }, [openDialog])
 
     return (
         <>
-            <Button
-                variant="contained"
-                color="blueButton700"
-                sx={{
-                    borderRadius: "0 0 17px 0",
-                }}
-                onClick={() => setOpenDialog(prevState => !prevState)}
-            >
-                <Box
-                    component="img"
-                    sx={{
-                        height: 26,
-                        width: 26,
-                        maxHeight: { xs: 26 },
-                        maxWidth: { xs: 26 },
-                    }}
-                    alt="Company List"
-                    src={CompanyListLogo}
-                />
-            </Button>
             {openDialog ?
                 <Box sx={{
                     position: "absolute",

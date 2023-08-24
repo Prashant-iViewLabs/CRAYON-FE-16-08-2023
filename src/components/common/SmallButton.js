@@ -31,7 +31,7 @@ export default function SmallButton({
         onClick={onClick}
         sx={{
           justifyContent: justifyContent,
-          fontSize: 12,
+          fontSize: 10,
           fontWeight: 300,
           letterSpacing: "0.75px",
           height: height,

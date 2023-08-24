@@ -45,6 +45,8 @@ import profile_contemplator from "../../../assets/Profile Icons_Contemplator.svg
 import { AddCircleOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
 import AddNewCompany from "./dialog/AddNewCompany";
 import DisplayFollowedCompanies from "./dialog/DisplayFollowedCompanies";
+import CompanyListLogo from "../../../assets/Padding Included/Black_Company_Details.svg";
+
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
@@ -203,6 +205,7 @@ export default function ProfileCard() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [errors, setErrors] = useState([]);
   const [openAddCompanyDialog, setOpenCompanyDialog] = useState(false);
+  const [openFollowedDialog, setOpenFollowedListDialog] = useState(false);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -413,6 +416,7 @@ export default function ProfileCard() {
 
   const handleOpenCompanyDialog = () => {
     setOpenCompanyDialog((prevState) => !prevState);
+    setOpenFollowedListDialog(false)
   };
   return (
     <Box>
@@ -844,7 +848,7 @@ export default function ProfileCard() {
                     position: "absolute",
                     bottom: 0,
                     right: 0,
-                    zIndex:10
+                    zIndex: 10
                   }}
                 >
                   <Button
@@ -857,7 +861,27 @@ export default function ProfileCard() {
                   >
                     <AddCircleOutline />
                   </Button>
-                  <DisplayFollowedCompanies />
+                  <Button
+                    variant="contained"
+                    color="blueButton700"
+                    sx={{
+                      borderRadius: "0 0 17px 0",
+                    }}
+                    onClick={() => setOpenFollowedListDialog(prevState => !prevState)}
+                  >
+                    <Box
+                      component="img"
+                      sx={{
+                        height: 26,
+                        width: 26,
+                        maxHeight: { xs: 26 },
+                        maxWidth: { xs: 26 },
+                      }}
+                      alt="Company List"
+                      src={CompanyListLogo}
+                    />
+                  </Button>
+                  <DisplayFollowedCompanies openDialog={openFollowedDialog}/>
                 </Box>
               </Box>
             </Box>
@@ -901,7 +925,7 @@ export default function ProfileCard() {
             display: "flex",
             flexDirection: "column",
             p: 4,
-            pb:0,
+            pb: 0,
             mb: 6
           }}
         >
@@ -959,7 +983,7 @@ export default function ProfileCard() {
             setImageName("My pic");
             setOpenEditImage(false);
           }}
-          title={i18n["myProfile.moveAndScale"]}
+          // title={i18n["myProfile.moveAndScale"]}
           footer={renderFooter}
           isProfile
         >
@@ -1066,7 +1090,7 @@ export default function ProfileCard() {
                     }`}
         </style>
       </StyledAccordion>
-      <AddNewCompany show={openAddCompanyDialog} handleOpen={handleOpenCompanyDialog}/>
+      <AddNewCompany newTitle={"Follow Company"} show={openAddCompanyDialog} handleOpen={handleOpenCompanyDialog} />
     </Box>
   );
 }

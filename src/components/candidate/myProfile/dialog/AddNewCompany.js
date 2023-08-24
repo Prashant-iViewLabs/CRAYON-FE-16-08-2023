@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import CustomDialog from "../../../common/CustomDialog";
-import { Box, Button, InputBase, Paper } from "@mui/material";
+import { Box, Button, InputBase, Paper, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SelectMenu from "../../../common/SelectMenu";
 import { useSelector } from "react-redux";
@@ -29,9 +29,8 @@ export default function AddNewCompany({
 }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  
+
   const [newCompanyName, setNewCompanyName] = useState({})
-  const [followedCompany, setFollowedCompany] = useState([]);
   const [companies, setCompanies] = useState([]);
   const getAllData = async () => {
     try {
@@ -59,15 +58,15 @@ export default function AddNewCompany({
       if (payload.status === "success") {
         console.log(payload);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const handleCompVal = async (newValue) => {
     console.log(newValue)
-    
+
     // let newCompany = { company: { name: newValue.name } };
     // const newData = [...followedCompany, newCompany];
     // console.log(newData);
-    if(Object.keys(newValue).length === 0){
+    if (Object.keys(newValue).length === 0) {
       dispatch(
         setAlert({
           show: true,
@@ -76,8 +75,10 @@ export default function AddNewCompany({
         })
       );
     }
-    else{
+    else {
       await followComp(newValue.company_id);
+      handleOpen()
+      setNewCompanyName('')
     }
   };
 
@@ -88,31 +89,37 @@ export default function AddNewCompany({
   useEffect(() => {
     getAllData()
   }, [])
-  
+
   return (
     <CustomDialog
+      title={newTitle}
       show={show}
       hideButton={false}
       dialogWidth="xs"
       showFooter={false}
-      onDialogClose={handleOpen}
+      onDialogClose={() => {
+        handleOpen()
+        setNewCompanyName('')
+      }}
       padding={0}
     >
       <Box
         sx={{
-          padding: 4,
+          paddingX: 4,
+          paddingY: 2,
         }}
       >
-          <AutoComplete
-            showAddOption={true}
-            allowCustomInput={true}
-            id="company_name"
-            // value={getCompValue()}
-            // value={selectedCompany}
-            onChange={handleValue}
-            placeholder="company you want to follow"
-            data={companies}
-          ></AutoComplete>
+        <AutoComplete
+          showAddOption={true}
+          allowCustomInput={true}
+          id="company_name"
+          // value={getCompValue()}
+          // value={selectedCompany}
+          value={newCompanyName}
+          onChange={handleValue}
+          placeholder="company you want to follow"
+          data={companies}
+        ></AutoComplete>
       </Box>
       <Box>
         <Button
@@ -127,7 +134,10 @@ export default function AddNewCompany({
             padding: 3,
           }}
           variant="contained"
-          onClick={handleOpen}
+          onClick={() => {
+            handleOpen()
+            setNewCompanyName('')
+          }}
         >
           cancel
         </Button>
@@ -142,9 +152,11 @@ export default function AddNewCompany({
           }}
           variant="contained"
           color="redButton100"
-          onClick={() => handleCompVal(newCompanyName)}
+          onClick={() => {
+            handleCompVal(newCompanyName)
+          }}
         >
-          add
+          Follow
         </Button>
       </Box>
     </CustomDialog>
