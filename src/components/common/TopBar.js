@@ -46,6 +46,7 @@ import jwt_decode from "jwt-decode";
 import userProfile from "../../assets/Padding Included/User_Profile.svg";
 import profileDetail from "../../assets/Padding Included/Profile_Details.svg";
 import { TryOutlined } from "@mui/icons-material";
+import ComapnyLogo from "../../assets/Padding Included/Black_Company_Details.svg";
 
 const StyledTab = styled(Tabs)(({ theme }) => ({
   "& .MuiTab-root": {
@@ -689,7 +690,7 @@ export default function TopBar() {
                         cursor: "pointer",
                       }}
                       alt="crayon logo"
-                      src={profileDetail}
+                      src={ComapnyLogo}
                     />
                     {i18n["topBar.join"]}
                   </Button>

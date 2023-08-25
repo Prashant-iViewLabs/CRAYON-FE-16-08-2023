@@ -13,13 +13,13 @@ export default function CandidateFlipInfo({ primary, shadow, gritScore }) {
   const theme = useTheme();
   console.log(primary, shadow);
   return (
-    <Grid sx={{ display: "flex" }}>
+    <Grid sx={{ display: "flex", marginTop: "25px" }}>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           width: "fit-content",
           //   marginLeft: "10px",
         }}
@@ -53,7 +53,7 @@ export default function CandidateFlipInfo({ primary, shadow, gritScore }) {
             }
           />
         ) : null}
-        <Box sx={{ margin: "-8px -8px 0 -8px" }}>
+        <Box sx={{ margin: "-8px" }}>
           <SingleRadialChart
             hollow="52%"
             nameSize="9px"
@@ -74,6 +74,8 @@ export default function CandidateFlipInfo({ primary, shadow, gritScore }) {
         sx={{
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          marginLeft: "6px",
           gap: 1,
         }}
       >

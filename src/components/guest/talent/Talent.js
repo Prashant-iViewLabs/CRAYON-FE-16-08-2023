@@ -360,6 +360,6 @@ export default function Talent() {
           />
         </Paper>
       </Grid>
-    </Grid >
+    </Grid>
   );
 }

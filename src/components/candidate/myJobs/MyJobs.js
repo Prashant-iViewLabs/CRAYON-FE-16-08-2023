@@ -171,10 +171,10 @@ export default function Talent() {
         <InfiniteScroll
           key={`${jobStatusFilter}, ${myStatusFilter}`}
           // style={{ overflow: "hidden" }}
-          height="80vh"
           scrollThreshold={"100px"}
+          height="80vh"
           dataLength={candidateJobs.length}
-            // next={getJobs}
+          //   next={getJobs}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useTheme } from "@mui/material/styles";
@@ -21,10 +22,8 @@ import { getAllTypes } from "../../../redux/allTypes";
 import jwt_decode from "jwt-decode";
 import CustomDialog from "../../common/CustomDialog";
 import ApplyJobs from "./ApplyJobs";
-import { Outlet, useNavigate } from "react-router-dom";
-import { Paper } from "@mui/material";
 
-export default function Jobs() {
+const JobListing = () => {
   const i18n = locale.en;
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -44,11 +43,6 @@ export default function Jobs() {
   const [questions, setQuestions] = useState([]);
   const [openApplyJobDialog, setopenApplyJobDialog] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
-  const [expandedItemId, setExpandedItemId] = useState(null);
-
-  const handleExpand = (itemId) => {
-    setExpandedItemId(itemId === expandedItemId ? null : itemId);
-  };
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -286,215 +280,126 @@ export default function Jobs() {
     );
   };
 
-  //   const getParams = () => {
-  //     let params = new URLSearchParams(window.location.search);
-  //     for (const [key, value] of params.entries()) {
-  //       // console.log(`${key}: ${value}`);
-  //       if (key === "filter") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allIndustries.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "jobType") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allJobTypes.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "stage") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allStages.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "Posts") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = JOBS_RIGHT_STAGES_BUTTON_GROUP.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "Type") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allTypes.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //     }
-  //   };
+  const getParams = () => {
+    let params = new URLSearchParams(window.location.search);
+    for (const [key, value] of params.entries()) {
+      // console.log(`${key}: ${value}`);
+      if (key === "filter") {
+        let filters = value.split(",")?.map((value) => {
+          let selectedJobType = allIndustries.find(
+            (jobtype) => jobtype.name === value
+          );
+          return selectedJobType?.id;
+        });
+        console.log(filters);
+      }
+      if (key === "jobType") {
+        let filters = value.split(",")?.map((value) => {
+          let selectedJobType = allJobTypes.find(
+            (jobtype) => jobtype.name === value
+          );
+          return selectedJobType?.id;
+        });
+        console.log(filters);
+      }
+      if (key === "stage") {
+        let filters = value.split(",")?.map((value) => {
+          let selectedJobType = allStages.find(
+            (jobtype) => jobtype.name === value
+          );
+          return selectedJobType?.id;
+        });
+        console.log(filters);
+      }
+      if (key === "Posts") {
+        let filters = value.split(",")?.map((value) => {
+          let selectedJobType = JOBS_RIGHT_STAGES_BUTTON_GROUP.find(
+            (jobtype) => jobtype.name === value
+          );
+          return selectedJobType?.id;
+        });
+        console.log(filters);
+      }
+      if (key === "Type") {
+        let filters = value.split(",")?.map((value) => {
+          let selectedJobType = allTypes.find(
+            (jobtype) => jobtype.name === value
+          );
+          return selectedJobType?.id;
+        });
+        console.log(filters);
+      }
+    }
+  };
 
   return (
-    <Grid
-      container
-      spacing={0}
-      flexDirection={{ xs: "column", sm: "row" }}
-      justifyContent="space-between"
-    >
-      <Grid
-        item
-        md={2}
-        lg={1}
-        xl={1}
-        className="filterSec"
-        sx={{
-          height: "88vh",
-          overflowY: "scroll",
-        }}
+    <Grid xs={12} sm={6} md={8} lg={9} xl={10}>
+      <SearchBar
+        placeholder={i18n["jobs.searchPlaceholder"]}
+        setAllJobs={setAllJobs}
+        setSearchedJobs={setSearchedJobs}
+      />
+      <InfiniteScroll
+        key={`${filters} + ${filtersJobType} + ${filtersJobStage} + ${filtersType}+${searchedJobs} +${favourite}`}
+        style={{ overflow: "hidden" }}
+        dataLength={allJobs.length} //This is important field to render the next data
+        next={() =>
+          getJobList(
+            filters,
+            filtersJobType,
+            filtersJobStage,
+            filtersType,
+            lastKey,
+            searchedJobs,
+            favourite
+          )
+        }
+        hasMore={true} //{allJobs.length <= allJobs[0]?.TotalJobs}
+        // loader={<h4>Loading...</h4>}
+        endMessage={
+          <p style={{ textAlign: "center" }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
       >
-        <Paper
+        <Grid
+          container
+          spacing={2}
+          flexDirection={{ sx: "column", md: "row" }}
           sx={{
-            background: "transparent",
-            marginRight: "1px",
+            my: 2,
+            display: { xs: "none", md: "flex" },
+            marginTop: "60px",
           }}
         >
-          <ButtonPanel
-            panelData={allIndustries}
-            side="left"
-            onChangeFilter={onChangeFilter}
-          />
-        </Paper>
-
-        <style>
-          {`.filterSec::-webkit-scrollbar {
-                      width: 5px !important;
-                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .filterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
-      </Grid>
-      {/*      <Outlet />*/}
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={8}
-        lg={9}
-        xl={10}
-        sx={{
-          px: 2,
-          display: "flex",
-          flexDirection: "column",
-        }}
-        gap={1}
-        flexGrow="1 !important"
-      >
-        <SearchBar
-          placeholder={i18n["jobs.searchPlaceholder"]}
-          setAllJobs={setAllJobs}
-          setSearchedJobs={setSearchedJobs}
-        />
-
-        <InfiniteScroll
-          key={`${filters} + ${filtersJobType} + ${filtersJobStage} + ${filtersType}+${searchedJobs} +${favourite}`}
-          height="80vh"
-          dataLength={allJobs.length * 4} //This is important field to render the next data
-          next={() =>
-            getJobList(
-              filters,
-              filtersJobType,
-              filtersJobStage,
-              filtersType,
-              lastKey,
-              searchedJobs,
-              favourite
-            )
-          }
-          scrollThreshold={"100px"}
-          hasMore={true} //{allJobs.length <= allJobs[0]?.TotalJobs}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-        >
-          <Grid
-            container
-            spacing={2}
-            flexDirection={{ sx: "column", md: "row" }}
-            sx={{
-              display: { xs: "none", md: "flex" },
-            }}
-            width={"99.5%"}
-          >
-            {allJobs.length > 0
-              ? allJobs?.map((job) => (
-                  <Grid
-                    xl={expandedItemId === job.job_id ? 12 : 3}
-                    lg={expandedItemId === job.job_id ? 12 : 4}
-                    md={expandedItemId === job.job_id ? 12 : 6}
-                    xs={12}
-                    key={job.job_id}
-                    ref={(ref) => {
-                      if (expandedItemId === job.job_id && ref) {
-                        ref.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }
-                    }}
-                  >
-                    <JobCard
-                      index={job.job_id}
-                      job={job}
-                      setQuestions={setQuestions}
-                      onHandleClose={onHandleClose}
-                      setopenApplyJobDialog={setopenApplyJobDialog}
-                      setIsExpanded={handleExpand}
-                    />
-                  </Grid>
-                ))
-              : (allJobs.length = 0 ? (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      textAlign: "center",
-                      mt: 4,
-                      color: theme.palette.placeholder,
-                    }}
-                  >
-                    {i18n["jobs.noData"]}
-                  </Box>
-                ) : null)}
-          </Grid>
-          <style>
-            {`.infinite-scroll-component::-webkit-scrollbar {
-                      width: 5px !important;
-                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .infinite-scroll-component__outerdiv {
-                      height:100%
-                    }
-                    .infinite-scroll-component::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;/* Set the color of the scrollbar thumb */
-                    }`}
-          </style>
-        </InfiniteScroll>
-
-        {/*<Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
-          <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
+          {allJobs.length > 0
+            ? allJobs?.map((job) => (
+                <Grid xl={3} lg={4} md={6} xs={12} key={job.job_id}>
+                  <JobCard
+                    index={job.job_id}
+                    job={job}
+                    setQuestions={setQuestions}
+                    onHandleClose={onHandleClose}
+                    setopenApplyJobDialog={setopenApplyJobDialog}
+                  />
+                </Grid>
+              ))
+            : (allJobs.length = 0 ? (
+                <Box
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                    mt: 4,
+                    color: theme.palette.placeholder,
+                  }}
+                >
+                  {i18n["jobs.noData"]}
+                </Box>
+              ) : null)}
+        </Grid>
+      </InfiniteScroll>
+      <Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
+        {/* <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
             <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
               <JobCard index="11" />
             </Grid>
@@ -513,71 +418,13 @@ export default function Jobs() {
             <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
               <JobCard index="16" />
             </Grid>
-          </SwipeableViews>
-        </Grid>*/}
+          </SwipeableViews> */}
       </Grid>
-      <Grid
-        item
-        md={2}
-        lg={1}
-        xl={1}
-        className="rightfilterSec"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "88vh",
-          overflowY: "scroll",
-          direction: "rtl",
-        }}
-      >
-        <style>
-          {`.rightfilterSec::-webkit-scrollbar {
-                       width: 5px !important;
-                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .rightfilterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
-        <Paper
-          sx={{
-            background: "transparent",
-            marginLeft: "1px",
-          }}
-        >
-          <ButtonPanel
-            topMargin={true}
-            panelData={allJobTypes}
-            side="right"
-            onChangeFilter={onChangeFilterJobType}
-          />
-          <ButtonPanel
-            panelData={allStages}
-            side="right"
-            onChangeFilter={onChangeFilterJobStage}
-          />
-          <ButtonPanel
-            panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
-            onChangeFilter={onChangefavourite}
-            side="right"
-          />
-          <ButtonPanel
-            panelData={allTypes}
-            side="left"
-            onChangeFilter={onChangeFilterType}
-          />
-        </Paper>
-      </Grid>
-
       <CustomDialog
         show={openApplyJobDialog}
         hideButton={false}
         onDialogClose={onHandleClose}
-        dialogWidth="xs"
-        padding={0}
+        dialogWidth="sm"
         showFooter={false}
         // title={isLoggedIn ? i18n["login.login"] : i18n["login.signUp"]}
         isApplyJob
@@ -589,4 +436,6 @@ export default function Jobs() {
       </CustomDialog>
     </Grid>
   );
-}
+};
+
+export default JobListing;

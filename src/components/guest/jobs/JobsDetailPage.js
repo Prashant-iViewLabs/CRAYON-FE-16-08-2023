@@ -1282,7 +1282,7 @@ export default function JobsDetailPage() {
                 maxWidth: { xs: 40 },
               }}
               alt="job_logo"
-              src={job?.profile_url != "No URL" ? job?.profile_url : job_logo}
+              src={job?.profile_url !== "No URL" ? job?.profile_url : job_logo}
             />
             <Typography
               sx={{
@@ -1308,16 +1308,7 @@ export default function JobsDetailPage() {
             >
               About
             </Typography>
-            <Typography>
-              {job?.employer_profile?.notes}
-              Ozow links bussinesses of all sizes in South Africa with 47
-              million bank account holders to transact simply and securly.
-            </Typography>
-            <Typography mt={2}>
-              Millions of South Africans can use Ozow to make lightning-fast
-              bank-to-bank payments with their smart devices, without the need
-              for a card
-            </Typography>
+            <Typography>{job?.employer_profile?.notes}</Typography>
 
             <Button
               sx={{

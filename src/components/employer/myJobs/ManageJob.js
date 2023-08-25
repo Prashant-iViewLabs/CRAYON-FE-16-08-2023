@@ -17,7 +17,7 @@ import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SortButton from "./SortButton";
 import { useParams } from "react-router-dom";
-import { Grid, Paper, Tooltip } from "@mui/material";
+import { Button, Grid, Tooltip } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {
   TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP,
@@ -26,6 +26,9 @@ import {
   JOBS_LEFT_TYPES_BUTTON_GROUP,
 } from "../../../utils/Constants";
 import ButtonPanel from "../../common/ButtonPanel";
+import SmallButton from "../../common/SmallButton";
+import BasicInfo from "./DraggableCardComponents/BasicInfo";
+import CardsTopBar from "./DraggableCardComponents/CardsTopBar";
 
 const StyledBox = (props) => {
   const { children, color } = props;
@@ -122,6 +125,7 @@ export const columnsFromBackend = {
 
 export default function ManageJob() {
   const dispatch = useDispatch();
+  const theme = useTheme();
   // const [isSort, setIsSort] = useState(false);
   const [talentStatus, setTalentStatus] = useState([]);
   const { jobId } = useParams();
@@ -181,17 +185,17 @@ export default function ManageJob() {
         item.count > 0
           ? getTalentStatusApplications(jobId, item.id, manage.payload.data)
           : setTalents((prevTalents) => {
-            const updatedTalents = manage.payload.data?.map((item) => {
-              const existingItem = prevTalents.find(
-                (prevItem) => prevItem.id === item.id
-              );
-              return {
-                ...item,
-                items: existingItem ? existingItem.items : [],
-              };
+              const updatedTalents = manage.payload.data?.map((item) => {
+                const existingItem = prevTalents.find(
+                  (prevItem) => prevItem.id === item.id
+                );
+                return {
+                  ...item,
+                  items: existingItem ? existingItem.items : [],
+                };
+              });
+              return [...updatedTalents];
             });
-            return [...updatedTalents];
-          });
       });
     } catch (error) {
       dispatch(setLoading(false));
@@ -274,8 +278,10 @@ export default function ManageJob() {
 
   const renderColor = (column) => {
     switch (column?.status) {
+      case "incomplete":
+        return "grayButton100";
       case "matched":
-        return "orangeButton";
+        return "QandA";
       case "considering":
         return "blueButton400";
       case "shortlist":
@@ -326,203 +332,155 @@ export default function ManageJob() {
       spacing={0}
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
+      minHeight={"80vh"}
     >
+      <ButtonPanel
+        panelData={TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP}
+        side="left"
+        // onChangeFilter={jobsFilterLeft}
+      />
       <Grid
-        item
-        md={2}
-        lg={1}
-        xl={1}
-        className="filterSec"
-        sx={{
-          height: "88vh",
-          overflowY: "scroll",
-        }}
-      >
-        <Paper
-          sx={{
-            background: "transparent",
-            marginRight: "1px",
-          }}
-        >
-          <ButtonPanel
-            panelData={TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP}
-            side="left"
-          // onChangeFilter={jobsFilterLeft}
-          />
-        </Paper>
-        <style>
-          {`.filterSec::-webkit-scrollbar {
-                      width: 5px !important;
-                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .filterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
-      </Grid>
-      <Grid
-        item
+        Grid
         xs={12}
         sm={6}
         md={8}
         lg={9}
         xl={10}
         sx={{
-          // px: 2,
-          display: "flex",
           overflowX: "scroll",
-          overflowY: "hidden",
-          transform: "rotateX(180deg)"
         }}
-        gap={1}
-        className="centerSection"
-
       >
-        <Box sx={{
-          transform: "rotateX(180deg)"
-        }}>
-
-          <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-            <Box sx={{ display: "flex" }}>
-              {Object.entries(talents).map(([columnId, column], index) => {
-                return (
-                  <Droppable key={`${column?.id}`} droppableId={`${column?.id}`}>
-                    {(provided) => (
-                      <Box
-                        xs={3}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        sx={{
-                          flex: "1 1 0px",
-                          margin: "8px",
-                          minWidth: "325px",
-                        }}
+        <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
+          <CardsTopBar />
+          <Box sx={{ display: "flex", maxHeight: "100%" }}>
+            {Object.entries(talents).map(([columnId, column], index) => {
+              return (
+                <Droppable key={`${column?.id}`} droppableId={`${column?.id}`}>
+                  {(provided) => (
+                    <Box
+                      xs={3}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      sx={{
+                        flex: "1 1 0px",
+                        margin: "8px",
+                        minWidth: "325px",
+                      }}
+                    >
+                      <StyledBox
+                        color={renderColor(column)}
+                        column={column}
+                        jobId={jobId}
                       >
-                        <StyledBox
-                          color={renderColor(column)}
-                          column={column}
-                          jobId={jobId}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
                         >
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            {column?.status} ({column?.count})
-                          </Box>
-                          <SortButton
-                            jobId={jobId}
-                            jobStatusId={column?.id}
-                            handleSortedValue={handleSortedValue}
-                          />
-                        </StyledBox>
-                        <Box id="talentList" sx={{ height: "100%" }}>
-                          <InfiniteScroll
-                            style={{
-                              height: "60vh",
-                              overflowX: "hidden",
-                              scrollbarWidth: "thin",
-                            }}
-                            key={column?.id}
-                            dataLength={talents[index]?.items?.length}
-                            next={() => console.log("HIHIHIHI")}
-                            hasMore={true}
-                            scrollableTarget="talentList"
-                            endMessage={
-                              <p style={{ textAlign: "center" }}>
-                                <b>Yay! You have seen it all</b>
-                              </p>
-                            }
-                          >
-                            {talents[index]?.items?.map((item, index) => (
-                              <DraggableCard
-                                key={item?.user_id}
-                                item={item}
-                                index={index}
-                                droppableId={column?.id}
-                                onDragEnd={onDragEnd}
-                                jobId={jobId}
-                              />
-                            ))}
-
-                          </InfiniteScroll>
-
+                          {column?.status}
                         </Box>
-                        {provided.placeholder}
+                        <Button
+                          variant="contained"
+                          color="base"
+                          label={column?.count}
+                          padding="0 4px"
+                          alignItems="end"
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 700,
+                            letterSpacing: "0.75px",
+                            height: 25,
+                            borderRadius: "6px",
+                            boxShadow: 0,
+                            color: theme.palette[renderColor(column)]?.main,
+                            minWidth: "33px",
+                            padding: "0 8px",
+                          }}
+                        >
+                          {column?.count}
+                        </Button>
+                        <SortButton
+                          jobId={jobId}
+                          jobStatusId={column?.id}
+                          handleSortedValue={handleSortedValue}
+                        />
+                      </StyledBox>
+                      <Box id="talentList" sx={{ height: "100%" }}>
+                        <InfiniteScroll
+                          style={{
+                            height: "100%",
+                            overflowX: "hidden",
+                            scrollbarWidth: "thin",
+                          }}
+                          key={column?.id}
+                          dataLength={talents[index]?.items?.length}
+                          next={() => console.log("HIHIHIHI")}
+                          hasMore={true}
+                          scrollableTarget="talentList"
+                          endMessage={
+                            <p style={{ textAlign: "center" }}>
+                              <b>Yay! You have seen it all</b>
+                            </p>
+                          }
+                        >
+                          {talents[index]?.items?.map((item, index) => (
+                            <DraggableCard
+                              key={item?.user_id}
+                              item={item}
+                              index={index}
+                              droppableId={column?.id}
+                              onDragEnd={onDragEnd}
+                              jobId={jobId}
+                            />
+                          ))}
+                          <style>
+                            {`.infinite-scroll-component::-webkit-scrollbar {
+                            width: 7px !important;
+                            background-color: #F5F5F5; /* Set the background color of the scrollbar */
+                          }
+
+                          .infinite-scroll-component__outerdiv {
+                            height:100%
+                          }
+
+                          .infinite-scroll-component::-webkit-scrollbar-thumb {
+                            background-color: #888c; /* Set the color of the scrollbar thumb */
+                          }`}
+                          </style>
+                        </InfiniteScroll>
                       </Box>
-                    )}
-                  </Droppable>
-                );
-              })}
-            </Box>
-          </DragDropContext>
-        </Box>
-        <style>
-          {`.centerSection::-webkit-scrollbar {
-                      height: 5px !important;
-                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .centerSection::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      height: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;/* Set the color of the scrollbar thumb */
-                    }`}
-        </style>
+                      {provided.placeholder}
+                    </Box>
+                  )}
+                </Droppable>
+              );
+            })}
+          </Box>
+        </DragDropContext>
       </Grid>
-      <Grid
-        item
-        md={2}
-        lg={1}
-        xl={1}
-        className="rightfilterSec"
+      <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "88vh",
-          overflowY: "scroll",
-          direction: "rtl",
         }}
       >
-        <style>
-          {`.rightfilterSec::-webkit-scrollbar {
-                       width: 5px !important;
-                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .rightfilterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
-        <Paper
-          sx={{
-            background: "transparent",
-            marginLeft: "1px",
-          }}
-        >
-          <ButtonPanel
-            panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
-            side="right"
+        <ButtonPanel
+          panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
+          side="right"
           // onChangeFilter={jobsFilter}
-          />
-          <ButtonPanel
-            panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
-            side="right"
+        />
+        <ButtonPanel
+          panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
+          side="right"
           // onChangeFilter={jobsFilter}
-          />
-          <ButtonPanel
-            panelData={JOBS_LEFT_TYPES_BUTTON_GROUP}
-            side="right"
+        />
+        <ButtonPanel
+          panelData={JOBS_LEFT_TYPES_BUTTON_GROUP}
+          side="right"
           // onChangeFilter={jobsFilter}
-          />
-        </Paper>
-      </Grid>
+        />
+      </Box>
     </Grid>
   );
 }

@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import ProfileCard from "./ProfileCard";
 import CheckSharpIcon from "@mui/icons-material/CheckSharp";
 
-
 import { styled } from "@mui/material/styles";
 
 import LinearProgress, {
@@ -17,7 +16,6 @@ import zIndex from "@mui/material/styles/zIndex";
 import { useState } from "react";
 import ProfileProgressButtonLayout from "../../common/ProfileProgressButtonLayout";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
   height: "5px",
@@ -50,8 +48,8 @@ function LinearProgressWithLabel(props) {
 
 export default function MyCV() {
   const i18n = locale.en;
-  const [progressButton, setProgressButton] = useState(false)
-  const theme = useTheme()
+  const [progressButton, setProgressButton] = useState(false);
+  const theme = useTheme();
   return (
     <>
       <Grid
@@ -62,13 +60,19 @@ export default function MyCV() {
         justifyContent="center"
         gap={2}
       >
-        <Grid xs={12} sm={6} md={8} lg={9} xl={10} sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          position: "relative"
-        }}>
-
+        <Grid
+          xs={12}
+          sm={6}
+          md={8}
+          lg={9}
+          xl={10}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            position: "relative",
+          }}
+        >
           <Typography
             sx={{
               width: "60%",
@@ -80,16 +84,26 @@ export default function MyCV() {
           >
             {i18n["myProfile.title"]}
           </Typography>
-          <Box sx={{
-            width: "30%", background: "#ffff",
-            borderRadius: "17px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-            // zIndex: 100,
-            position: "relative",
-            padding: "0 0 16px 32px"
-          }}>
+          <Box
+            sx={{
+              width: "30%",
+              background: "#ffff",
+              borderRadius: "17px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              // zIndex: 100,
+              position: "relative",
+              padding: "0 0 16px 32px",
+            }}
+          >
             <Box sx={{ display: "flex" }}>
-              <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "space-between", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexGrow: 1,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Typography
                   sx={{
                     fontSize: "16px",
@@ -119,20 +133,21 @@ export default function MyCV() {
                   border: 1,
                   borderColor: theme.palette.grayBorder,
                   borderRadius: 0,
-                  borderTopRightRadius: "17px"
-                }} onClick={() => setProgressButton(prevState => !prevState)}
+                  borderTopRightRadius: "17px",
+                }}
+                onClick={() => setProgressButton((prevState) => !prevState)}
                 variant="outlined"
                 color="grayButton"
               >
                 <ProfileProgressButtonLayout />
                 {!progressButton ? <ExpandMore /> : <ExpandLess />}
               </Button>
-
-
             </Box>
-            <Box sx={{
-              paddingRight: "32px"
-            }}>
+            <Box
+              sx={{
+                paddingRight: "32px",
+              }}
+            >
               <LinearProgressWithLabel value={50} />
             </Box>
 
@@ -164,7 +179,7 @@ export default function MyCV() {
               {i18n["empMyProfile.cancelProfile"]}
             </StyledButton>
           )} */}
-            {progressButton &&
+            {progressButton && (
               <Box
                 sx={{
                   backgroundColor: "white",
@@ -177,7 +192,7 @@ export default function MyCV() {
                   zIndex: 999,
                   borderRadius: "17px",
                   borderTopLeftRadius: 0,
-                  borderTopRightRadius: 0
+                  borderTopRightRadius: 0,
                 }}
               >
                 <Box
@@ -192,25 +207,23 @@ export default function MyCV() {
                       fontWeight: 700,
                     }}
                   >
-                    <strong>Remember,</strong> the more you complete, the stronger you
-                    can compete!
+                    <strong>Remember,</strong> the more you complete, the
+                    stronger you can compete!
                   </Typography>
                   <Button
                     variant="contained"
                     color="redButton100"
                     sx={{ mt: 2, borderRadius: 2 }}
-                  // onClick={() => handlePageChange("a")}
+                    // onClick={() => handlePageChange("a")}
                   >
                     Profile
-
                   </Button>
                   <Button
                     variant="outlined"
                     sx={{ mt: 2, borderRadius: 2 }}
-                  // onClick={() => handlePageChange("b")}
+                    // onClick={() => handlePageChange("b")}
                   >
-                    Crayon vitae{" "}
-                    {/* {profileCompletion >= 50 && ( */}
+                    Crayon vitae {/* {profileCompletion >= 50 && ( */}
                     <CheckSharpIcon
                       sx={{
                         position: "absolute",
@@ -227,8 +240,7 @@ export default function MyCV() {
                     // onClick={() => handlePageChange("c")}
                     disabled
                   >
-                    Personality Assessment{" "}
-                    {/* {profileCompletion >= 75 && ( */}
+                    Personality Assessment {/* {profileCompletion >= 75 && ( */}
                     <CheckSharpIcon
                       sx={{
                         position: "absolute",
@@ -245,8 +257,7 @@ export default function MyCV() {
                     // onClick={() => handlePageChange("d")}
                     disabled
                   >
-                    Crayon cam{" "}
-                    {/* {profileCompletion >= 100 && ( */}
+                    Crayon cam {/* {profileCompletion >= 100 && ( */}
                     <CheckSharpIcon
                       sx={{
                         position: "absolute",
@@ -258,9 +269,9 @@ export default function MyCV() {
                     {/* )} */}
                   </Button>
                 </Box>
-              </Box>}
+              </Box>
+            )}
           </Box>
-
         </Grid>
 
         {/* <ButtonPanel panelData={CANDIDATE_MY_CV_LEFT} side='left' /> */}

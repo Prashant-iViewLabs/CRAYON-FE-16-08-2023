@@ -748,31 +748,13 @@ export const TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP = [
   },
   {
     id: 5,
-    name: "no video",
-    color: "blueButton300",
-    // title: true,
-  },
-  {
-    id: 6,
     name: "crayon cam",
     color: "blueButton300",
     // title: true,
   },
   {
-    id: 7,
-    name: "no crayon cam",
-    color: "blueButton300",
-    // title: true,
-  },
-  {
-    id: 8,
+    id: 6,
     name: "portfolio",
-    color: "blueButton300",
-    // title: true,
-  },
-  {
-    id: 9,
-    name: "no portfolio",
     color: "blueButton300",
     // title: true,
   },
@@ -835,7 +817,7 @@ export const TALENT_RIGHT_JOB_INFO_BUTTON_GROUP = [
   },
   {
     id: 11,
-    name: "qulification",
+    name: "qualification",
     color: "blueButton700",
     // title: true,
   },

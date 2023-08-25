@@ -40,7 +40,7 @@ const AdvanceSection = () => {
         }}
         size="small"
         variant="contained"
-        color="white"
+        color={openAdvanceSearch ? "white" : "redButton"}
         endIcon={openAdvanceSearch ? <ExpandLess /> : <ExpandMore />}
         onClick={() => {
           setAdvanceSearch((prevState) => !prevState);

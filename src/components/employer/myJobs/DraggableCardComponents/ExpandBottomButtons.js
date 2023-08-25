@@ -124,7 +124,8 @@ export default function ExpandBottomButtons({
               sx={{
                 fontWeight: 700,
                 fontSize: "14px",
-                ml: 2,
+                marginLeft: "16px !important",
+                margin: "auto",
               }}
             >
               Crayon Cam
@@ -146,8 +147,9 @@ export default function ExpandBottomButtons({
             <Typography
               sx={{
                 fontWeight: 700,
+                marginLeft: "16px !important",
+                margin: "auto",
                 fontSize: "14px",
-                ml: 2,
               }}
             >
               Application Video
@@ -191,7 +193,8 @@ export default function ExpandBottomButtons({
               sx={{
                 fontWeight: 700,
                 fontSize: "14px",
-                ml: 2,
+                marginLeft: "16px !important",
+                margin: "auto",
               }}
             >
               Crayon Vitae
@@ -203,7 +206,8 @@ export default function ExpandBottomButtons({
               sx={{
                 fontWeight: 700,
                 fontSize: "14px",
-                ml: 2,
+                marginLeft: "16px !important",
+                margin: "auto",
               }}
             >
               Original CV
@@ -215,7 +219,8 @@ export default function ExpandBottomButtons({
               sx={{
                 fontWeight: 700,
                 fontSize: "14px",
-                ml: 2,
+                marginLeft: "16px !important",
+                margin: "auto",
               }}
             >
               Portfolio
@@ -272,8 +277,9 @@ export default function ExpandBottomButtons({
                   sx={{
                     fontWeight: 700,
                     fontSize: "14px",
-                    ml: 2,
+                    marginLeft: "16px !important",
                     width: "150px",
+                    margin: "auto",
                     whiteSpace: "nowrap", // Prevents text from wrapping
                     overflow: "hidden", // Hides any overflowing content
                     textOverflow: "ellipsis", // Adds dots at the end of overflowing text
@@ -311,7 +317,8 @@ export default function ExpandBottomButtons({
                 sx={{
                   fontWeight: 700,
                   fontSize: "14px",
-                  ml: 2,
+                  margin: "auto",
+                  marginLeft: "16px !important",
                 }}
               >
                 {phoneNo}
@@ -346,8 +353,9 @@ export default function ExpandBottomButtons({
                   sx={{
                     fontWeight: 700,
                     fontSize: "14px",
-                    ml: 2,
+                    marginLeft: "16px !important",
                     width: "150px",
+                    margin: "auto",
                     whiteSpace: "nowrap", // Prevents text from wrapping
                     overflow: "hidden", // Hides any overflowing content
                     textOverflow: "ellipsis", // Adds dots at the end of overflowing text

@@ -59,8 +59,7 @@ const validationSchema = Yup.object().shape({
   username: Yup.string()
     .required("Email required")
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid Email"),
-  password: Yup.string()
-    .required("Password required")
+  password: Yup.string().required("Password required"),
 });
 
 export default function Login({
@@ -92,7 +91,6 @@ export default function Login({
     initialValues: LOGINDATA,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(decodedToken?.data?.role_id )
       const formBody = {
         username: formik.values.username,
         password: formik.values.password,

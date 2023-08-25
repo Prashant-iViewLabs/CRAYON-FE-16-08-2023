@@ -25,6 +25,7 @@ import profile from "../../../assets/profile.png";
 import drag_dots from "../../../assets/drag_dots.svg";
 import eye from "../../../assets/Black_View.svg";
 import leftArrow from "../../../assets/Black_Left_Previous.svg";
+import rightArrow from "../../../assets/Black_Right_Next.svg";
 import loveThis from "../../../assets/Black_I_Love_This.svg";
 import likethis from "../../../assets/Black_Like.svg";
 import pending from "../../../assets/Black_Pending.svg";
@@ -70,6 +71,8 @@ import { getQandA } from "../../../redux/employer/myJobsSlice";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import ExpandBottomButtons from "./DraggableCardComponents/ExpandBottomButtons";
 import CandidateFlipInfo from "./DraggableCardComponents/CandidateFlipInfo";
+import BasicInfo from "./DraggableCardComponents/BasicInfo";
+import { formatCurrencyWithCommas } from "../../../utils/Currency";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 5,
@@ -218,7 +221,8 @@ export default function DraggableCardNew({
   const [showQuestion, setShowQuestion] = useState(false);
   const [showDetailInfo, setShowDetailInfo] = useState(false);
   const [rejectCandidate, setRejectCandidate] = useState(false);
-  const [showSummaryInfo, setShowSummaryInfo] = useState(false);
+  const [showSummaryInfo, setShowSummaryInfo] = useState(true);
+  const [flip, setFlip] = useState(false);
 
   const onHandleClose = () => {
     setOpenInfoDialog(false);
@@ -241,10 +245,20 @@ export default function DraggableCardNew({
         job_id: jobId,
         user_id: item?.user_id,
       };
-      setExpand(true);
-      setShowSummaryInfo((prev) => !prev);
+      console.log(rejectCandidate);
+      console.log(expand);
       setShowQuestion((prev) => !prev);
-      setShowDetailInfo((prev) => !prev);
+      setShowSummaryInfo((prev) => !prev);
+
+      if (expand) {
+        setExpand(false);
+        setShowInfo(false);
+        setShowDetailInfo(false);
+      }
+      if (rejectCandidate) {
+        setShowSummaryInfo(false);
+        setRejectCandidate(false);
+      }
 
       const { payload } = await dispatch(getQandA(data));
       if (payload?.status === "success") {
@@ -288,10 +302,16 @@ export default function DraggableCardNew({
   };
 
   const toggleAcordion = () => {
-    setShowSummaryInfo(false);
-    setShowQuestion(false);
-    setShowDetailInfo(false);
-    setExpand((prev) => !prev);
+    console.log(showQuestion);
+    if (showQuestion) {
+      setShowSummaryInfo(true);
+      setShowQuestion(false);
+    } else {
+      setExpand((prev) => !prev);
+      setShowQuestion(false);
+      setShowDetailInfo(true);
+      setShowInfo(false);
+    }
   };
 
   const handleDownloadClick = (cvLink) => {
@@ -318,14 +338,30 @@ export default function DraggableCardNew({
   };
 
   const handleFlip = () => {
-    setShowDetailInfo(false);
-    setShowInfo((prev) => !prev);
+    setFlip((prev) => !prev);
+    if (showQuestion) {
+      setShowInfo(true);
+      setShowSummaryInfo(true);
+      setExpand(true);
+      setShowQuestion(false);
+    } else {
+      setShowInfo((prev) => !prev);
+      setShowDetailInfo((prev) => !prev);
+    }
   };
 
   const handleRejectDialog = () => {
-    setExpand(false);
-    setShowSummaryInfo((prev) => !prev);
     setRejectCandidate((prev) => !prev);
+    if (showQuestion) {
+      setShowSummaryInfo(false);
+      setShowQuestion(false);
+    } else {
+      setShowDetailInfo(false);
+      setShowInfo(false);
+      setShowQuestion(false);
+      setShowSummaryInfo((prev) => !prev);
+      setExpand(false);
+    }
   };
 
   return (
@@ -452,27 +488,26 @@ export default function DraggableCardNew({
                   sx={{
                     display: "flex",
                     flexDirection: "column",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      marginLeft: "13px",
-                      mt: 1,
-                    }}
-                  >
-                    Question & Answers:
-                  </Typography>
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "center",
                     }}
                   >
-                    <Box sx={{ width: "90%" }}>
-                      {console.log(questionAnswer)}
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        marginLeft: "13px",
+                        mt: 1,
+                      }}
+                    >
+                      Question & Answers:
+                    </Typography>
+                    <Box sx={{ width: "90%", margin: "auto" }}>
                       {questionAnswer.map((questions, index) => {
                         return (
                           <>
@@ -500,17 +535,46 @@ export default function DraggableCardNew({
                       })}
                     </Box>
                   </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center !important",
+                    }}
+                  >
+                    <SmallButton
+                      color="redButton"
+                      startIcon={
+                        <Box
+                          component="img"
+                          sx={{
+                            height: 26,
+                            width: 26,
+                          }}
+                          alt="Down arrow"
+                          src={upArrow}
+                        />
+                      }
+                      onClick={toggleAcordion}
+                      startIconMargin="4px"
+                      marginTop="5px"
+                      height={19}
+                      width={142}
+                      fontWeight={700}
+                      borderRadius="7px 7px 0px 0px"
+                    />
+                  </Box>
                 </Box>
               )}
-              {!showSummaryInfo && (
+              {showSummaryInfo && (
                 <>
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      justifyContent: "center",
+                      justifyContent: "flex-start",
                       width: "fit-content",
+                      marginTop: "2px",
                     }}
                   >
                     <Box
@@ -545,146 +609,159 @@ export default function DraggableCardNew({
                     </Box>
                   </Box>
 
-                  <Box>
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "fit-content",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box>
                       <Box
-                        component="img"
                         sx={{
-                          width: 25,
+                          width: "100%",
+                          height: "fit-content",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
                         }}
-                        alt="maleIcon"
-                        src={maleIcon}
-                      />
-                      <Tooltip
-                        title={item?.first_name + " " + item?.last_name}
-                        placement="top-end"
                       >
+                        <Box
+                          component="img"
+                          sx={{
+                            width: 25,
+                          }}
+                          alt="maleIcon"
+                          src={maleIcon}
+                        />
+                        <Tooltip
+                          title={item?.first_name + " " + item?.last_name}
+                          placement="top"
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 700,
+                              fontSize: "14px",
+                              width: "170px",
+                              minHeight: "21px",
+                              whiteSpace: "nowrap", // Prevents text from wrapping
+                              overflow: "hidden", // Hides any overflowing content
+                              textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                            }}
+                          >
+                            {item?.first_name + " " + item?.last_name}
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "fit-content",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          sx={{
+                            width: 25,
+                          }}
+                          alt="experience"
+                          src={experience}
+                        />
+                        <Tooltip
+                          title={
+                            item?.candidate_profile?.candidate_info?.job_title
+                              ?.title
+                          }
+                          placement="top"
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 700,
+                              fontSize: "12px",
+                              marginTop: "5px",
+                              width: "170px",
+                              minHeight: "21px",
+                              whiteSpace: "nowrap", // Prevents text from wrapping
+                              overflow: "hidden", // Hides any overflowing content
+                              textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                            }}
+                          >
+                            {item?.candidate_profile?.candidate_info?.job_title
+                              ?.title
+                              ? item?.candidate_profile?.candidate_info
+                                  ?.job_title?.title
+                              : "-"}
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "fit-content",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          sx={{
+                            width: 25,
+                          }}
+                          alt="companyDetail"
+                          src={companyDetail}
+                        />
                         <Typography
                           sx={{
                             fontWeight: 700,
-                            fontSize: "14px",
-                            width: "170px",
+                            fontSize: 13,
+                            letterSpacing: "0.25px",
+                            width: "150px",
                             minHeight: "21px",
                             whiteSpace: "nowrap", // Prevents text from wrapping
                             overflow: "hidden", // Hides any overflowing content
-                            textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                            textOverflow: "ellipsis",
                           }}
                         >
-                          {item?.first_name + " " + item?.last_name}
+                          {"-"}
                         </Typography>
-                      </Tooltip>
-                    </Box>
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "fit-content",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "flex-start",
-                      }}
-                    >
+                      </Box>
                       <Box
-                        component="img"
                         sx={{
-                          width: 25,
+                          width: "100%",
+                          height: "fit-content",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
                         }}
-                        alt="experience"
-                        src={experience}
-                      />
-                      <Tooltip
-                        title={
-                          item?.candidate_profile?.candidate_info?.job_title
-                            ?.title
-                        }
-                        placement="top-end"
                       >
+                        <Box
+                          component="img"
+                          sx={{
+                            width: 25,
+                          }}
+                          alt="salary"
+                          src={salary}
+                        />
                         <Typography
                           sx={{
                             fontWeight: 700,
-                            fontSize: "12px",
-                            marginTop: "5px",
-                            minHeight: "54px",
+                            fontSize: 13,
+                            letterSpacing: "0.25px",
+                            width: "150px",
+                            minHeight: "21px",
+                            whiteSpace: "nowrap", // Prevents text from wrapping
+                            overflow: "hidden", // Hides any overflowing content
+                            textOverflow: "ellipsis",
                           }}
                         >
-                          {item?.candidate_profile?.candidate_info?.job_title
-                            ?.title
-                            ? item?.candidate_profile?.candidate_info?.job_title
-                                ?.title
-                            : "-"}
+                          {item?.currencySymbol}
+                          {formatCurrencyWithCommas(item?.Salary)} per month
                         </Typography>
-                      </Tooltip>
-                    </Box>
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "fit-content",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        sx={{
-                          width: 25,
-                        }}
-                        alt="companyDetail"
-                        src={companyDetail}
-                      />
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: 13,
-                          letterSpacing: "0.25px",
-                          width: "150px",
-                          minHeight: "21px",
-                          whiteSpace: "nowrap", // Prevents text from wrapping
-                          overflow: "hidden", // Hides any overflowing content
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {item?.first_name} {item?.last_name}
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "fit-content",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        sx={{
-                          width: 25,
-                        }}
-                        alt="salary"
-                        src={salary}
-                      />
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: 13,
-                          letterSpacing: "0.25px",
-                          width: "150px",
-                          minHeight: "21px",
-                          whiteSpace: "nowrap", // Prevents text from wrapping
-                          overflow: "hidden", // Hides any overflowing content
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {item?.Salary}
-                      </Typography>
+                      </Box>
                     </Box>
                     {!expand && (
                       <Box>
@@ -719,7 +796,7 @@ export default function DraggableCardNew({
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
                   marginLeft: "auto",
                 }}
               >
@@ -754,7 +831,7 @@ export default function DraggableCardNew({
                       }
                       sx={{
                         height: 26,
-                        width: 26,
+                        width: 25,
                       }}
                     />
                   }
@@ -775,8 +852,8 @@ export default function DraggableCardNew({
                       alt="eye logo"
                       src={QA}
                       sx={{
-                        height: 26,
-                        width: 26,
+                        height: 30,
+                        width: 32,
                         margin: "auto",
                       }}
                     />
@@ -798,8 +875,8 @@ export default function DraggableCardNew({
                       alt="eye logo"
                       src={close}
                       sx={{
-                        height: 26,
-                        width: 26,
+                        height: 32,
+                        width: 32,
                       }}
                     />
                   }
@@ -820,8 +897,8 @@ export default function DraggableCardNew({
                       alt="eye logo"
                       src={quicklinks}
                       sx={{
-                        height: 26,
-                        width: 26,
+                        height: 23,
+                        width: 34,
                       }}
                     />
                   }
@@ -851,9 +928,11 @@ export default function DraggableCardNew({
                   height={32}
                   width={33}
                   fontWeight={700}
-                  borderRadius={expand ? "0" : "0px 0px 20px 0px"}
+                  borderRadius={
+                    expand || showQuestion ? "0" : "0px 0px 20px 0px"
+                  }
                 />
-                {expand && (
+                {(expand || showQuestion) && (
                   <SmallButton
                     color="redButton"
                     startIcon={
@@ -861,7 +940,7 @@ export default function DraggableCardNew({
                         component="img"
                         className="eye"
                         alt="eye logo"
-                        src={leftArrow}
+                        src={flip ? leftArrow : rightArrow}
                         sx={{
                           height: 26,
                           width: 26,
@@ -882,38 +961,60 @@ export default function DraggableCardNew({
           </AccordionSummary>
 
           <AccordionDetails>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                component="img"
-                className="dragDots"
-                alt="drag dots"
-                src={drag_dots}
-                sx={
-                  {
-                    // mr: 1
-                  }
-                }
-              />
-            </Box>
-            <Box
-              sx={{
-                borderRight: `solid 0.5px ${theme.palette.grayBorder}`,
-                opacity: "0.3",
-              }}
-            ></Box>
+            {!showQuestion && (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    className="dragDots"
+                    alt="drag dots"
+                    src={drag_dots}
+                    sx={
+                      {
+                        // mr: 1
+                      }
+                    }
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    borderRight: `solid 0.5px ${theme.palette.grayBorder}`,
+                    opacity: "0.3",
+                  }}
+                ></Box>
+              </>
+            )}
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-
+                marginTop: "-80px",
                 width: "100%",
               }}
             >
+              {showDetailInfo && (
+                <BasicInfo
+                  town={item?.candidate_profile?.town?.name}
+                  region={item?.candidate_profile?.town?.region?.name}
+                  experience={
+                    item?.candidate_profile?.candidate_info?.experience?.year
+                  }
+                  educationInfo={
+                    item?.candidate_profile?.candidate_info
+                      ?.highest_qualification?.descript
+                  }
+                  notice={
+                    item?.candidate_profile?.candidate_info?.notice_period
+                      ?.description
+                  }
+                />
+              )}
+
               {showInfo && (
                 <CandidateFlipInfo
                   primary={
@@ -923,134 +1024,8 @@ export default function DraggableCardNew({
                   gritScore={"50"}
                 />
               )}
-              {!showDetailInfo && (
-                <Box sx={{ marginLeft: "54px" }}>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      height: "fit-content",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      ml: 2,
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      sx={{
-                        width: 25,
-                      }}
-                      alt="location"
-                      src={location}
-                    />
-                    <Typography
-                      sx={{
-                        fontWeight: 700,
-                        fontSize: 13,
-                        letterSpacing: "0.25px",
-                      }}
-                    >
-                      {item?.candidate_profile?.town?.name},{" "}
-                      {item?.candidate_profile?.town?.region?.name}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      height: "fit-content",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      ml: 2,
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      sx={{
-                        width: 25,
-                      }}
-                      alt="experience"
-                      src={experienceLogo}
-                    />
-                    <Typography
-                      sx={{
-                        fontWeight: 700,
-                        fontSize: 13,
-                        letterSpacing: "0.25px",
-                      }}
-                    >
-                      {
-                        item?.candidate_profile?.candidate_info?.experience
-                          ?.year
-                      }{" "}
-                      years
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      minHeight: "40px",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "flex-start",
-                      ml: 2,
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      sx={{
-                        width: 25,
-                      }}
-                      alt="education"
-                      src={education}
-                    />
-                    <Typography
-                      sx={{
-                        fontWeight: 700,
-                        fontSize: 13,
-                        letterSpacing: "0.25px",
-                      }}
-                    >
-                      {
-                        item?.candidate_profile?.candidate_info
-                          ?.highest_qualification?.descript
-                      }
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      height: "fit-content",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      ml: 2,
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      sx={{
-                        width: 25,
-                      }}
-                      alt="noticePeriod"
-                      src={noticePeriod}
-                    />
-                    <Typography
-                      sx={{
-                        fontWeight: 700,
-                        fontSize: 13,
-                        letterSpacing: "0.25px",
-                      }}
-                    >
-                      {
-                        item?.candidate_profile?.candidate_info?.notice_period
-                          ?.description
-                      }
-                    </Typography>
-                  </Box>
-                </Box>
-              )}
-              {!showQuestion && (
+
+              {expand && (
                 <ExpandBottomButtons
                   phoneNo={item?.candidate_profile?.contact_no}
                   emailAddress={item?.email}
@@ -1060,29 +1035,31 @@ export default function DraggableCardNew({
                 />
               )}
 
-              <Box sx={{ margin: "auto" }}>
-                <SmallButton
-                  color="redButton"
-                  startIcon={
-                    <Box
-                      component="img"
-                      sx={{
-                        height: 26,
-                        width: 26,
-                      }}
-                      alt="Down arrow"
-                      src={expand ? upArrow : downArrow}
-                    />
-                  }
-                  onClick={toggleAcordion}
-                  startIconMargin="4px"
-                  marginTop="5px"
-                  height={19}
-                  width={142}
-                  fontWeight={700}
-                  borderRadius="7px 7px 0px 0px"
-                />
-              </Box>
+              {!showQuestion && (
+                <Box sx={{ margin: "auto" }}>
+                  <SmallButton
+                    color="redButton"
+                    startIcon={
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 26,
+                          width: 26,
+                        }}
+                        alt="Down arrow"
+                        src={expand ? upArrow : downArrow}
+                      />
+                    }
+                    onClick={toggleAcordion}
+                    startIconMargin="4px"
+                    marginTop="5px"
+                    height={19}
+                    width={142}
+                    fontWeight={700}
+                    borderRadius="7px 7px 0px 0px"
+                  />
+                </Box>
+              )}
             </Box>
           </AccordionDetails>
         </StyledAccordion>
