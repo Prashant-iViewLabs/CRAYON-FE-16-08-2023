@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import job_logo from "../../../assets/job_logo.svg";
-import job_exp from "../../../assets/job_exp.png";
+import job_exp from "../../../assets/Padding Included/Green_Duration.svg";
+import calendar from "../../../assets/Padding Included/Yellow_Calendar.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
@@ -32,7 +33,6 @@ import JobDescripiton from "../../common/JobDescripiton";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import {
   AccountBalanceWallet,
-  CalendarMonth,
   NavigateNext,
   Circle,
   ExpandLess,
@@ -283,9 +283,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${
-                    job?.town?.name + " " + job?.town?.region?.name
-                  }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+                    }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -357,6 +356,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                     alt="job_exp"
                     src={job_exp}
                   />
+
                   <Typography
                     sx={{
                       fontWeight: 700,
@@ -364,11 +364,23 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
+                    {/* {job?.experience?.minYear} to {job?.experience?.maxYear} years  */}
                     {job?.experience?.year} years Experience
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <CalendarMonth fontSize="string" color="error" />
+                  <Box
+                    component="img"
+                    sx={{
+                      height: 16,
+                      width: 16,
+                      maxHeight: { xs: 15 },
+                      maxWidth: { xs: 15 },
+                      padding: 0
+                    }}
+                    alt="calendar"
+                    src={calendar}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 700,

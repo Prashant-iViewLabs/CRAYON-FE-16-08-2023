@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import profile from "../../../../assets/profile.png";
-import job_exp from "../../../../assets/job_exp.png";
+import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
+import calendar from "../../../../assets/Padding Included/Yellow_Calendar.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
@@ -23,7 +24,6 @@ import { formatCurrencyWithCommas } from "../../../../utils/Currency";
 
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Slider2 from "../../../common/Slider2";
 import { setAlert } from "../../../../redux/configSlice";
@@ -364,7 +364,18 @@ export default function TalentCard({ index, job, setisFlipped }) {
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <CalendarMonthIcon fontSize="string" color="warning" />
+              <Box
+                component="img"
+                sx={{
+                  height: 16,
+                  width: 16,
+                  maxHeight: { xs: 15 },
+                  maxWidth: { xs: 15 },
+                  padding: 0
+                }}
+                alt="calendar"
+                src={calendar}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -606,7 +617,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             fontSize: "10px",
           }}
           color="redButton"
-          // onClick={handleClick}
+        // onClick={handleClick}
         >
           apply
         </Button>

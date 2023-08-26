@@ -36,6 +36,7 @@ import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import smileFace from "../../assets/Characters/Blue_Circle_Smile.svg";
 import ForgotPassword from "./ForgotPassword";
+// import PhoneAutoComplete from "../common/PhoneAutoComplete";
 
 const FORMDATA = {
   firstName: "",
@@ -52,7 +53,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid Email"),
   password: Yup.string().required("Password is required").min(5, "Weak"),
   contact: Yup.string()
-    .required("number is required")
+    .required("Number is required")
     .matches(/^\d{10,15}$/, "Invalid number"),
 });
 export default function Signup({
@@ -65,20 +66,19 @@ export default function Signup({
   const theme = useTheme();
   const dispatch = useDispatch();
   let { pathname } = useLocation();
-  const [userType, setUserType] = useState(USER_TYPES[0]);
+  const [userType, setUserType] = useState();
   const [selectedUserId, setSelectedUserId] = useState();
   const [activeTab, setActiveTab] = useState(pathname.slice(1));
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentTabs, setcurrentTabs] = useState(PUBLIC_TAB_ITEMS);
   const [showPassword, setShowPassword] = useState(false);
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
-
+  const [signupTouched, setSignupTouched] = useState(false)
   const token = localStorage?.getItem("token");
   let decodedToken;
   if (token) {
     decodedToken = jwt_decode(token);
   }
-
   const user = decodedToken?.data?.role_id;
 
   useEffect(() => {
@@ -214,7 +214,12 @@ export default function Signup({
         <DialogTitle onClose={closeFunc}>
           <IconButton
             aria-label="close"
-            onClick={closeFunc}
+            onClick={() => {
+              closeFunc()
+              formik.resetForm()
+              setUserType("");
+              setSignupTouched(false)
+            }}
             sx={{
               position: "absolute",
               right: 8,
@@ -252,14 +257,27 @@ export default function Signup({
           >
             Join crayon
           </Typography>
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontWeight: 500,
-            }}
-          >
-            select a profile below and complete to join
-          </Typography>
+          {console.log(formik.errors)}
+          {Object.keys(formik.errors).length !== 0 &&  Object.keys(formik.touched).some(field => formik.touched[field]) ? (
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: 'red', // You can customize the error color
+              }}
+            >
+              oops! something wasn’t right {/* Display the specific error message */}
+            </Typography>
+          ) : (
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: 500,
+              }}
+            >
+              select a profile below and complete to join
+            </Typography>
+          )}
           <Box
             sx={{
               width: "90%",
@@ -369,12 +387,13 @@ export default function Signup({
               <Paper
                 sx={{
                   display: "flex",
-                  height: "35px",
+                  // height: "35px",
                   borderRadius: "25px",
                   boxShadow: "none",
                   border: `1px solid ${theme.palette.grayBorder}`,
                 }}
               >
+                {/* <PhoneAutoComplete /> */}
                 <InputBase
                   sx={{ ml: 2, mr: 2, width: "100%" }}
                   id="contact"
@@ -481,10 +500,14 @@ export default function Signup({
               }}
               variant="contained"
               color="redButton"
-              onClick={formik.handleSubmit}
+              onClick={() => {
+                formik.handleSubmit()
+                setSignupTouched(true)
+              }}
             >
               {/* {i18n["login.letsGo"]} */}
-              join crayon
+              {signupTouched ? "join crayon" : "sign me up, Scotty!"}
+
             </Button>
           </Box>
         </Box>

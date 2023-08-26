@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import job_logo from "../../../../assets/job_logo.svg";
 import job_volume from "../../../../assets/job_volume.svg";
-import job_exp from "../../../../assets/job_exp.png";
+import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
+import calendar from "../../../../assets/Padding Included/Yellow_Calendar.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
@@ -387,7 +388,18 @@ const JobCardFront = ({
                 gap: 1,
               }}
             >
-              <CalendarMonthIcon fontSize="string" color="warning" />
+              <Box
+                component="img"
+                sx={{
+                  height: 16,
+                  width: 16,
+                  maxHeight: { xs: 15 },
+                  maxWidth: { xs: 15 },
+                  padding: 0
+                }}
+                alt="calendar"
+                src={calendar}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,

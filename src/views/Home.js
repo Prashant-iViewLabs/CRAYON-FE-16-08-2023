@@ -33,6 +33,7 @@ import currencySearch from "../assets/Padding Included/Currency_Search.svg";
 import talentSearch from "../assets/Padding Included/Search_Talent.svg";
 import { Link } from "react-router-dom";
 
+import homePageGif from '../assets/Characters/Final-Gif_2.gif'
 import { BackHand } from "@mui/icons-material";
 import AdvanceSection from "./AdvanceSection";
 import theme from "../utils/Theme";
@@ -90,16 +91,47 @@ export default function Home() {
   };
 
   return (
-    <Grid container spacing={0} flexDirection={{ xs: "column", sm: "row" }}>
-      <Grid item xs={12} sx={{ mt: 2 }}>
+    <Grid container spacing={0} flexDirection={{ xs: "column", sm: "row", }} sx={{
+
+      background: "linear-gradient(#e3f1f9, white)",
+      height: "90vh"
+    }}>
+      <Grid item xs={12} sx={{ mt: 2, }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             position: "relative",
+            gap: 3
           }}
         >
+          <Box sx={{
+            display: "flex",
+            alignItems: "end",
+            gap: 1
+          }}>
+            <Box
+              component={"img"}
+              src={homePageGif}
+              height={140}
+              width={170}
+              paddingBottom={0.2}
+            />
+            <Typography
+              sx={{
+                //   fontSize: { xs: "32px", sm: "35px", lg:"50px"},
+                display: "flex",
+                alignItems: "baseline",
+                fontSize: { xs: "32px", sm: "35px", lg: "45px" },
+                fontWeight: 700,
+                mr: 1,
+              }}
+            >
+              <span> Talent. Differently.</span>
+            </Typography>
+          </Box>
+
           <Paper
             elevation={3}
             sx={{
@@ -108,25 +140,26 @@ export default function Home() {
               alignItems: "center",
               borderRadius: "15px",
               width: "100%",
-              height: "45px",
+              height: "65px",
               maxWidth: { xs: "90%", sm: "70%" },
+              overflow: "hidden"
             }}
           >
             <IconButton
               aria-label="search job"
               component="button"
               sx={{
-                ml: 3,
-                height: "30px",
-                width: "30px",
+                height: "100%",
+                width: "6%",
                 color: "white",
+                borderRadius: 0,
                 background: theme.palette.greenButton.main,
                 "&:hover": {
                   background: theme.palette.greenButton.main, // Set the same background color for hover
                 },
               }}
             >
-              <SearchIcon fontSize="small" />
+              <SearchIcon fontSize="large" />
             </IconButton>
             <Paper
               elevation={0}
@@ -151,18 +184,13 @@ export default function Home() {
               aria-label="search Location"
               component="button"
               sx={{
-                mr: 1,
-                height: "30px",
-                width: "30px",
-                color: "white",
-                background: theme.palette.redButton.main,
-                "&:hover": {
-                  background: theme.palette.redButton.main, // Set the same background color for hover
-                },
+                height: "65px",
+                color: theme.palette.redButton.main,
+                width: "65px"
               }}
               onClick={showLocationInput}
             >
-              <PlaceIcon fontSize="small" />
+              <PlaceIcon fontSize="large" />
             </IconButton>
             <Paper
               elevation={0}
@@ -187,72 +215,80 @@ export default function Home() {
                 display: "flex",
                 borderRadius: "15px",
                 overflow: "hidden",
+                justifyContent: "space-between",
                 minWidth: 235.5,
               }}
             >
-              <Link
-                to={"jobs"}
-                sx={{
-                  width: "50%",
-                }}
-              >
-                <Button
-                  sx={{
-                    borderRadius: 0,
-                    justifyContent: "space-between",
-                    fontSize: "11.5px",
-                    height: "45px",
-                    boxShadow: 0,
-                    lineHeight: { sm: "15px", xs: "15px" },
-                  }}
-                  variant="contained"
-                  color="yellowButton100"
+              <Box sx={{
+                width: "50%"
+              }}>
+
+                <Link
+                  to={"jobs"}
                 >
-                  <Box
-                    component="img"
+                  <Button
                     sx={{
-                      height: 25,
-                      cursor: "pointer",
+                      borderRadius: 0,
+                      // justifyContent: "space-between",
+                      flexDirection: "column",
+                      fontSize: "11.5px",
+                      height: "100%",
+                      width: "100%",
+                      boxShadow: 0,
+                      lineHeight: { sm: "15px", xs: "15px" },
                     }}
-                    alt="crayon logo"
-                    src={currencySearch}
-                  />
-                  {i18n["login.findWork"]}
-                </Button>
-              </Link>
-              <Link
-                to={"talent"}
-                sx={{
-                  width: "50%",
-                }}
-              >
-                <Button
-                  sx={{
-                    borderRadius: 0,
-                    justifyContent: "space-between",
-                    fontSize: "11.5px",
-                    height: "45px",
-                    boxShadow: 0,
-                    lineHeight: { sm: "15px", xs: "15px" },
-                  }}
-                  variant="contained"
-                  color="lightGreenButton300"
+                    variant="contained"
+                    color="yellowButton100"
+                  >
+                    <Box
+                      component="img"
+                      sx={{
+                        height: "40%",
+                        cursor: "pointer",
+                      }}
+                      alt="crayon logo"
+                      src={currencySearch}
+                    />
+                    {i18n["login.findWork"]}
+                  </Button>
+                </Link>
+              </Box>
+              <Box sx={{
+                width: "50%"
+              }}>
+                <Link
+                  to={"talent"}
                 >
-                  <Box
-                    component="img"
+                  <Button
                     sx={{
-                      height: 25,
-                      cursor: "pointer",
+                      borderRadius: 0,
+                      // justifyContent: "space-between",
+                      flexDirection: "column",
+                      fontSize: "11.5px",
+                      height: "100%",
+                      width: "100%",
+                      boxShadow: 0,
+                      lineHeight: { sm: "15px", xs: "15px" },
                     }}
-                    alt="crayon logo"
-                    src={talentSearch}
-                  />
-                  {i18n["login.findTalent"]}
-                </Button>
-              </Link>
+                    variant="contained"
+                    color="blueButton800"
+                  >
+                    <Box
+                      component="img"
+                      sx={{
+                        height: "40%",
+                        cursor: "pointer",
+                      }}
+                      alt="crayon logo"
+                      src={talentSearch}
+                    />
+                    {i18n["login.findTalent"]}
+                  </Button>
+                </Link>
+              </Box>
             </Box>
           </Paper>
-          <Box
+          {/* <Box
             sx={{
               position: "absolute",
               // left: 0,
@@ -264,7 +300,7 @@ export default function Home() {
             }}
           >
             <AdvanceSection />
-          </Box>
+          </Box> */}
         </Box>
         <StyledGrid
           container
@@ -274,7 +310,7 @@ export default function Home() {
           alignItems={"center"}
           paddingBottom={1}
         >
-          <Box
+          {/* <Box
             sx={{
               pt: 2,
               width: "70%",
@@ -304,16 +340,16 @@ export default function Home() {
               {/* <span>{i18n["login.done"]}</span>
                 <span className="fast">{i18n["login.fast"]}</span>
                 <span>{i18n["login.title2"]}</span> */}
-            </Typography>
+          {/*</Typography>
             <Button
               sx={{ width: 150, mt: 3 }}
               variant="contained"
               color="redButton"
             >
               {/* {i18n["login.viewPlans"]} */}
-              learn more
+          {/*learn more
             </Button>
-          </Box>
+          </Box> */}
           <Box
             sx={{
               margin: "auto",

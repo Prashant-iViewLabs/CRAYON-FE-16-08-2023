@@ -5,5 +5,6 @@ export const formatCurrency = (value, currencyCode = "USD") => {
 };
 
 export const formatCurrencyWithCommas = (value, currencyCode) => {
-  return currencyFormatter.format(value, { thousand: "," });
+  const formattedValue = currencyFormatter.format(value, { thousand: "," });
+  return formattedValue.replace(".00", "");
 };

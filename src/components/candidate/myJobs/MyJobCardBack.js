@@ -4,7 +4,8 @@ import job_logo from "../../../assets/job_logo.svg";
 import job_volume from "../../../assets/job_volume.svg";
 import job_star from "../../../assets/job_star.svg";
 import job_star_selected from "../../../assets/job_star_selected.svg";
-import job_exp from "../../../assets/job_exp.png";
+import job_exp from "../../../assets/Padding Included/Green_Duration.svg";
+import calendar from "../../../assets/Padding Included/Yellow_Calendar.svg";
 import job_apply from "../../../assets/job_apply.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -43,7 +44,6 @@ import { Link } from "react-router-dom";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import {
   AccountBalanceWallet,
-  CalendarMonth,
   NavigateBefore,
   Circle,
   ExpandLess,
@@ -323,9 +323,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${
-                    job?.town?.name + " " + job?.town?.region?.name
-                  }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
+                    }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -404,11 +403,23 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
+                    {/* {job?.experience?.minYear} to {job?.experience?.maxYear} years  */}
                     {job?.experience?.year} years Experience
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <CalendarMonth fontSize="string" color="error" />
+                  <Box
+                    component="img"
+                    sx={{
+                      height: 16,
+                      width: 16,
+                      maxHeight: { xs: 15 },
+                      maxWidth: { xs: 15 },
+                      padding: 0
+                    }}
+                    alt="calendar"
+                    src={calendar}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 700,

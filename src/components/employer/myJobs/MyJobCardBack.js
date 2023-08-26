@@ -3,7 +3,8 @@ import { useTheme } from "@mui/material/styles";
 import job_volume from "../../../assets/job_volume.svg";
 import job_star from "../../../assets/job_star.svg";
 import job_star_selected from "../../../assets/job_star_selected.svg";
-import job_exp from "../../../assets/job_exp.png";
+import job_exp from "../../../assets/Padding Included/Green_Duration.svg";
+import calendar from "../../../assets/Padding Included/Yellow_Calendar.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
@@ -225,9 +226,8 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/employer/job-detail/${`${
-                    job?.townName + " " + job?.townRegionName
-                  }`}/${job?.job_id}`}
+                  to={`/employer/job-detail/${`${job?.townName + " " + job?.townRegionName
+                    }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -311,7 +311,18 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <CalendarMonth fontSize="string" color="error" />
+                  <Box
+                    component="img"
+                    sx={{
+                      height: 16,
+                      width: 16,
+                      maxHeight: { xs: 15 },
+                      maxWidth: { xs: 15 },
+                      padding: 0
+                    }}
+                    alt="calendar"
+                    src={calendar}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 700,
@@ -541,9 +552,8 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
               <ManageButtonMenu job={job} />
             </Box>
             <Link
-              to={`/jobs/job-detail/${`${
-                job?.townName + " " + job?.townRegionName
-              }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${job?.townName + " " + job?.townRegionName
+                }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -584,7 +594,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                   variant="contained"
                   color="redButton100"
                   startIcon={<GroupsIcon />}
-                  // onClick={() => showManageJob()}
+                // onClick={() => showManageJob()}
                 >
                   {i18n["manageJob.talentBtn"]}
                 </Button>

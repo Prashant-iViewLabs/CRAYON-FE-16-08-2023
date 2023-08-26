@@ -29,15 +29,15 @@ export const USER_ROLES = [
     description: "An employer user",
   },
   {
-    role_id: 5,
+    "role_id": 5,
+    "name": "recruiter",
+    "description": "A recruiter user"
+  },
+  {
+    role_id: 6,
     name: "promoter",
     description: "A crayon promoter user",
   },
-  // {
-  //     "role_id": 6,
-  //     "name": "recruiter",
-  //     "description": "A recruiter user"
-  // },
   // {
   //     "role_id": 7,
   //     "name": "coach",
@@ -47,7 +47,7 @@ export const USER_ROLES = [
 
 export const ERROR_MSG = "Something went wrong! Please try again later!";
 
-export const USER_TYPES = ["Candidate", "Employer", "Promoter", "Recruiter"];
+export const USER_TYPES = ["Candidate", "Employer", "Recruiter", "Promoter"];
 
 export const LOGIN_TYPE = ["login", "signup"];
 

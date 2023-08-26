@@ -59,6 +59,10 @@ const theme = createTheme({
       main: "#0A66C2",
       contrastText: "#FFFFFF",
     },
+    blueButton800: {
+      main: "#228cce",
+      contrastText: "#FFFFFF"
+    },
     yellowButton100: {
       main: "#F8B318",
       contrastText: "#FFFFFF",

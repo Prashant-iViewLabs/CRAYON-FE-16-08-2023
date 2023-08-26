@@ -73,6 +73,7 @@ export default function Login({
   const [showPassword, setShowPassword] = useState(false);
   const [inputType, setInputType] = useState("password");
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
+  const [loginTouched, setLoginTouched] = useState(false)
 
   const handleShowPassword = () => {
     if (showPassword) setInputType("password");
@@ -132,7 +133,11 @@ export default function Login({
         <DialogTitle onClose={closeFunc}>
           <IconButton
             aria-label="close"
-            onClick={closeFunc}
+            onClick={() => {
+              closeFunc()
+              setLoginTouched(false)
+              formik.resetForm()
+            }}
             sx={{
               position: "absolute",
               right: 8,
@@ -172,6 +177,17 @@ export default function Login({
             {/* {(formik.errors.username || formik.errors.password) &&
         <span className="error-div">oops! Something wasn't right</span>} */}
           </Typography>
+          {Object.keys(formik.errors).length !== 0 &&  Object.keys(formik.touched).some(field => formik.touched[field])  ? (
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: 'red', // You can customize the error color
+              }}
+            >
+              oops! something wasn’t right {/* Display the specific error message */}
+            </Typography>
+          ) : " "}
           <Box sx={{ mt: 3, width: "90%", padding: 0 }}>
             <Paper
               sx={{
@@ -250,9 +266,9 @@ export default function Login({
             </Typography>
             <BlueSwitch
               defaultChecked={false}
-              // onChange={(event) =>
-              //   handleJobAccess(event, row.job_id)
-              // }
+            // onChange={(event) =>
+            //   handleJobAccess(event, row.job_id)
+            // }
             />
           </Box>
           <Box
@@ -316,9 +332,13 @@ export default function Login({
               }}
               variant="contained"
               color="redButton"
-              onClick={formik.handleSubmit}
+              onClick={() => {
+                formik.handleSubmit()
+                setLoginTouched(true)
+              }}
             >
-              {i18n["login.login"]}
+
+              {loginTouched ? "Sign in" : "let's go"}
             </Button>
           </Box>
         </Box>
