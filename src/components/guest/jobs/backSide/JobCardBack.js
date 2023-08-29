@@ -377,7 +377,7 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.experience?.year} years Experience
+              {job?.experience?.year_start} to  {job?.experience?.year_end} years
               </Typography>
             </Box>
             <Box

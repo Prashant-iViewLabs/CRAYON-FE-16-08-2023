@@ -46,16 +46,17 @@ import AddNewCompany from "./dialog/AddNewCompany";
 import DisplayFollowedCompanies from "./dialog/DisplayFollowedCompanies";
 import CompanyListLogo from "../../../assets/Padding Included/Black_Company_Details.svg";
 import ProfileProgressButtonLayout from "../../common/ProfileProgressButtonLayout";
+import SavaAndExit from "./dialog/SavaAndExit";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
   borderRadius: "17px",
   position: "unset",
   boxShadow: "none",
-  height: "75vh",
+  // height: "75vh",
   width: "100%",
-  overflow: "scroll",
-  overflowX: "hidden",
+  // overflow: "scroll",
+  // overflowX: "hidden",
   backgroundColor: "transparent",
   "& .MuiAccordionSummary-root": {
     padding: "16px 32px",
@@ -180,10 +181,16 @@ const PROFILE = {
   seeking_job: 1,
   hide_age: 0,
   hide_profile: 0,
+  grit_score: 0,
+  primary: {},
+  shadow: {},
   hide_video: 0,
   linkedin_profile_link: "",
   country_id: 0,
   profile_percent_complete: 0,
+  totoalapplicant: 0,
+  totoalinterviewed: 0,
+  totoalshortlisted:0
 };
 
 export default function ProfileCard() {
@@ -200,7 +207,8 @@ export default function ProfileCard() {
     profileCompletion: 0,
     cvBasics: 0,
     workLife: 0,
-    studyLife: 0
+    studyLife: 0,
+    refrences: 0
   });
   const [openEditImage, setOpenEditImage] = useState(false);
   const [imagePreview, setImagePreview] = useState([]);
@@ -209,7 +217,10 @@ export default function ProfileCard() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [errors, setErrors] = useState([]);
   const [openAddCompanyDialog, setOpenCompanyDialog] = useState(false);
+  const [openSaveAndExitDialog, setOpenSaveAndExitDialog] = useState(false);
   const [openFollowedDialog, setOpenFollowedListDialog] = useState(false);
+  
+  const boxRef = useRef(null);
 
   const [progressButton, setProgressButton] = useState(false);
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -326,11 +337,12 @@ export default function ProfileCard() {
           setImage(payload.data.profile_url);
           const profileCompletionPercentage = {
             profileCompletion: payload.data.profile_percent_complete,
-            cvBasics: payload.data.cv_basic_completed,
-            workLife: payload.data.work_life_completed,
-            studyLife: payload.data.study_life_completed
+            cvBasics: payload.data.cv_basic_completed ? 10 : 0,
+            workLife: payload.data.work_life_completed ? 5 : 0,
+            studyLife: payload.data.study_life_completed ? 5 : 0,
           }
           setProfileCompletion(profileCompletionPercentage);
+          console.log(payload.data)
         }
       } else {
         dispatch(
@@ -411,7 +423,7 @@ export default function ProfileCard() {
         );
         setErrors([]);
         getAllData();
-        navigate("/candidate/my-cv");
+        // navigate("/candidate/my-cv");
       } else if (payload?.data?.status == "error") {
         setErrors(payload?.data?.message);
       } else {
@@ -457,6 +469,23 @@ export default function ProfileCard() {
     setOpenCompanyDialog((prevState) => !prevState);
     setOpenFollowedListDialog(false);
   };
+  const handleOpenSaveAndExitDialog = () => {
+    setOpenSaveAndExitDialog((prevState) => !prevState)
+  }
+
+  const handleClickOutside = (event) => {
+    if (boxRef.current && !boxRef.current.contains(event.target)) {
+      setProgressButton(false);
+    }
+    setOpenFollowedListDialog(false)
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <Grid
       container
@@ -588,6 +617,8 @@ export default function ProfileCard() {
           )} */}
           {progressButton && (
             <Box
+
+              ref={boxRef}
               sx={{
                 backgroundColor: "white",
                 position: "absolute",
@@ -685,6 +716,7 @@ export default function ProfileCard() {
                     justifyContent: "end",
                     alignItems: "center"
                   }}>
+
                     <Button
                       variant="contained"
                       color={profileCompletion.cvBasics ? "greenButton" : "grayButton400"}
@@ -727,7 +759,7 @@ export default function ProfileCard() {
                     ></Button>
                   </Box>
 
-                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.profileCompletion ? "25%" : "0%"}</Typography>
+                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.cvBasics + profileCompletion.workLife + profileCompletion.studyLife}%</Typography>
                 </Box>
 
                 <Box sx={{
@@ -1166,44 +1198,44 @@ export default function ProfileCard() {
                 >
                   {!expanded && (
                     <>
-                      {/* { */}
-                      {/*  job?.primary?.name && ( */}
-                      <Box
-                        component="img"
-                        height={80}
-                        alt="Primary personality"
-                        src={
-                          profile_challenger
-                          // (job?.primary?.name === "collaborator" && profile_collaborator)
-                          //   (job?.primary?.name === "challenger" && profile_challenger) ||
-                          //   (job?.primary?.name === "character" && profile_character) ||
-                          //   (job?.primary?.name === "contemplator" && profile_contemplator)
-                        }
-                      />
-                      {/*  ) */}
-                      {/* } */}
+                      {
+                        profile?.primary?.name && (
+                          <Box
+                            component="img"
+                            height={80}
+                            alt="Primary personality"
+                            src={
+                              profile_challenger
+                              // (job?.primary?.name === "collaborator" && profile_collaborator)
+                              //   (job?.primary?.name === "challenger" && profile_challenger) ||
+                              //   (job?.primary?.name === "character" && profile_character) ||
+                              //   (job?.primary?.name === "contemplator" && profile_contemplator)
+                            }
+                          />
+                        )
+                      }
                       {/* </Box> */}
-                      {/* { */}
-                      {/* job?.shadow?.name && ( */}
-                      <Box
-                        component="img"
-                        height={80}
-                        alt="Shadow personality"
-                        src={
-                          profile_collaborator
-                          // (job?.shadow?.name === "collaborator" && profile_collaborator) ||
-                          // (job?.shadow?.name === "challenger" && profile_challenger) ||
-                          // (job?.shadow?.name === "character" && profile_character) ||
-                          // (job?.shadow?.name === "contemplator" && profile_contemplator)
-                        }
-                      />
-                      {/* ) */}
-                      {/* } */}
+                      {
+                        profile?.shadow?.name && (
+                          <Box
+                            component="img"
+                            height={80}
+                            alt="Shadow personality"
+                            src={
+                              // profile_collaborator
+                              (profile?.shadow?.name === "collaborator" && profile_collaborator) ||
+                              (profile?.shadow?.name === "challenger" && profile_challenger) ||
+                              (profile?.shadow?.name === "character" && profile_character) ||
+                              (profile?.shadow?.name === "contemplator" && profile_contemplator)
+                            }
+                          />
+                        )
+                      }
                       <Box sx={{ margin: "0 -22px 0 -22px" }}>
                         <SingleRadialChart
                           max={1000}
                           labelsData={"grit score"}
-                          series={[80]}
+                          series={[profile.grit_score]}
                           width={120}
                           color={theme.palette.chart.red}
                           isHovered={true}
@@ -1225,7 +1257,7 @@ export default function ProfileCard() {
                         <SingleRadialChart
                           max={10000}
                           labelsData={"applications"}
-                          series={[4000]}
+                          series={[profile.totoalapplicant]}
                           width={120}
                           color={theme.palette.chart.green200}
                           isHovered={true}
@@ -1235,7 +1267,7 @@ export default function ProfileCard() {
                         <SingleRadialChart
                           max={1000}
                           labelsData={"shortlistings"}
-                          series={[123]}
+                          series={[profile.totoalshortlisted]}
                           width={120}
                           color={theme.palette.chart.green200}
                           isHovered={true}
@@ -1245,7 +1277,7 @@ export default function ProfileCard() {
                         <SingleRadialChart
                           max={1000}
                           labelsData={"interviews"}
-                          series={[3]}
+                          series={[profile.totoalinterviewed]}
                           width={120}
                           color={theme.palette.chart.green200}
                           isHovered={true}
@@ -1359,7 +1391,10 @@ export default function ProfileCard() {
                 }}
               >
                 <Button
-                  onClick={onSaveProfile}
+                  onClick={() => {
+                    onSaveProfile()
+                    handleOpenSaveAndExitDialog()
+                  }}
                   variant="contained"
                   color="grayButton200"
                   sx={{
@@ -1372,7 +1407,10 @@ export default function ProfileCard() {
                   save & exit
                 </Button>
                 <Button
-                  onClick={onSaveProfile}
+                  onClick={() => {
+                    onSaveProfile()
+                    handleOpenSaveAndExitDialog()
+                  }}
                   variant="contained"
                   color="redButton100"
                   sx={{
@@ -1508,6 +1546,9 @@ export default function ProfileCard() {
         show={openAddCompanyDialog}
         handleOpen={handleOpenCompanyDialog}
       />
+      <SavaAndExit
+        show={openSaveAndExitDialog}
+        handleOpen={handleOpenSaveAndExitDialog} />
     </Grid>
   );
 }

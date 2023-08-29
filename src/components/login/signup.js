@@ -27,7 +27,7 @@ import { handleSignState } from "../../redux/signUp/action";
 import PrivacyPolicy from "../../assets/crayon-privacy-policy.pdf";
 import TermsandServices from "../../assets/crayon-terms-of-service.pdf";
 import jwt_decode from "jwt-decode";
-import { Avatar, DialogTitle, InputBase } from "@mui/material";
+import { Avatar, DialogTitle, InputAdornment, InputBase, MenuItem, Select } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -36,6 +36,9 @@ import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import smileFace from "../../assets/Characters/Blue_Circle_Smile.svg";
 import ForgotPassword from "./ForgotPassword";
+import PhoneAutoCOmplete from "../common/PhoneAutoComplete";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css'
 // import PhoneAutoComplete from "../common/PhoneAutoComplete";
 
 const FORMDATA = {
@@ -44,17 +47,27 @@ const FORMDATA = {
   email: "",
   password: "",
   contact: "",
+  roleId: 3
 };
+
+
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("required"),
   lastName: Yup.string().required("required"),
   email: Yup.string()
     .required("Email address is required")
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid Email"),
-  password: Yup.string().required("Password is required").min(5, "Weak"),
+  password: Yup.string().required("Password is required").test("password", "Weak", value => {
+    if (value && value.length >= 5 && value.length <= 10) {
+      return true;
+    }
+    return "medium";
+  }).min(5, "Weak"),
   contact: Yup.string()
-    .required("Number is required")
-    .matches(/^\d{10,15}$/, "Invalid number"),
+    .required("invalid Number")
+  // .test("validPhoneNumber", "Invalid number", function (value) {
+  //   return validatePhoneNumber(this.parent.countryCode, value, countries);
+  // }),
 });
 export default function Signup({
   onDialogClose,
@@ -105,7 +118,6 @@ export default function Signup({
       setcurrentTabs(PUBLIC_TAB_ITEMS);
     }
   }, []);
-
   const formik = useFormik({
     initialValues: FORMDATA,
     validationSchema: validationSchema,
@@ -120,7 +132,7 @@ export default function Signup({
         is_verified: 0,
         referrer_id: 1,
         terms: 1,
-        role_id: selectedUserId?.role_id || USER_ROLES[0].role_id,
+        role_id: formik.values.roleId,
         fileName:
           decodedToken?.data?.role_id === undefined
             ? getLocalStorage("fileName")
@@ -198,6 +210,7 @@ export default function Signup({
   const handleCloseForgotPassword = () => {
     setOpenForgotPassword(false);
   };
+
   return (
     <>
       <Dialog
@@ -227,7 +240,17 @@ export default function Signup({
               color: (theme) => theme.palette.grey[500],
             }}
           >
-            <CloseIcon />
+            {/* <CloseIcon /> */}
+            <Box sx={{
+              width: "20px",
+              height: "20px",
+              color: "#000000",
+              border: 2,
+              fontSize: "18px",
+              borderRadius: "5px"
+            }}>
+              X
+            </Box>
           </IconButton>
         </DialogTitle>
         <Box
@@ -258,15 +281,15 @@ export default function Signup({
             Join crayon
           </Typography>
           {console.log(formik.errors)}
-          {Object.keys(formik.errors).length !== 0 &&  Object.keys(formik.touched).some(field => formik.touched[field]) ? (
+          {Object.keys(formik.errors).length !== 0 && Object.keys(formik.touched).some(field => formik.touched[field]) && signupTouched ? (
             <Typography
               sx={{
                 fontSize: '14px',
                 fontWeight: 500,
-                color: 'red', // You can customize the error color
+                color: 'red',
               }}
             >
-              oops! something wasn’t right {/* Display the specific error message */}
+              oops! something wasn’t right
             </Typography>
           ) : (
             <Typography
@@ -278,6 +301,7 @@ export default function Signup({
               select a profile below and complete to join
             </Typography>
           )}
+
           <Box
             sx={{
               width: "90%",
@@ -291,6 +315,7 @@ export default function Signup({
               <SwipeableButton
                 selectedUser={userType}
                 onButtonToggle={onHandleButtonToggle}
+                setSignupTouched={setSignupTouched}
               />
             </Box>
             <Box sx={{ display: "flex", mt: 1 }}>
@@ -393,20 +418,30 @@ export default function Signup({
                   border: `1px solid ${theme.palette.grayBorder}`,
                 }}
               >
-                {/* <PhoneAutoComplete /> */}
-                <InputBase
-                  sx={{ ml: 2, mr: 2, width: "100%" }}
-                  id="contact"
-                  value={formik.values.contact}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  placeholder={i18n["login.contact"]}
-                  style={{ width: "100%" }}
-                  type="number"
-                  classes={{
-                    input: "custom-input", // This class name can be used for styling
+                <PhoneInput
+                  inputStyle={{
+                    width: "auto",
+                    // borderRadius: "25px",
+                    border: 0
                   }}
+                  buttonStyle={{
+                    borderRadius: "25px 0 0 25px",
+                  }}
+                  dropdownStyle={{
+                    maxHeight: "100px"
+                  }}
+                  country={"us"}
+                  inputProps={{
+                    name: 'contact',
+                  }}
+                  // className="marginBottom"
+                  value={formik.values.contact}
+                  onChange={(value) => {
+                    formik.setFieldValue('contact', value);
+                  }}
+                  onBlur={formik.handleBlur}
                 />
+
                 {formik.errors.contact && formik.touched.contact && (
                   <span className="error-div">
                     {formik.errors.contact} <CancelIcon fontSize="small" />

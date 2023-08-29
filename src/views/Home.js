@@ -92,9 +92,9 @@ export default function Home() {
 
   return (
     <Grid container spacing={0} flexDirection={{ xs: "column", sm: "row", }} sx={{
-
-      background: "linear-gradient(#e3f1f9, white)",
-      height: "90vh"
+      background: "#E3F1F9",
+      background: "linear-gradient(to bottom, #E3F1F9 75%, #FFFFFF 100%)",
+      height: "88vh"
     }}>
       <Grid item xs={12} sx={{ mt: 2, }}>
         <Box

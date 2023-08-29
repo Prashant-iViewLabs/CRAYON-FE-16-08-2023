@@ -12,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import MenuItem from "@mui/material/MenuItem";
-import { FormControl, InputLabel } from "@mui/material";
+import { FormControl, InputLabel, alpha, useTheme } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Tooltip from "@mui/material/Tooltip";
@@ -30,7 +30,6 @@ import {
 } from "../../../redux/candidate/myProfileSlice";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
-import { useTheme } from "@emotion/react";
 import ToggleSwitch from "../../common/ToggleSwitch";
 import getCroppedImg from "../../../utils/cropImage";
 import AutoComplete from "../../common/AutoComplete";
@@ -48,8 +47,31 @@ import femaleBlack from "../../../assets/female_black.svg";
 import femaleWhite from "../../../assets/female_white.svg";
 import SelectMenu from "../../common/SelectMenu";
 import "dayjs/locale/en-gb";
+import Switch from "@mui/material/Switch";
 dayjs.locale("en-gb");
 
+
+const BlueSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: theme.palette.blueButton700.main,
+    "&:hover": {
+      backgroundColor: alpha(
+        theme.palette.blueButton700.main,
+        theme.palette.action.hoverOpacity
+      ),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: theme.palette.blueButton700.main,
+  },
+  "& .MuiSwitch-track": {
+    margin: "auto",
+    height: "60% !important",
+  },
+  "& .css-jsexje-MuiSwitch-thumb": {
+    borderRadius: "15% !important",
+  },
+}));
 export default function TheBasics({
   handleProfileData,
   profile,
@@ -108,6 +130,7 @@ export default function TheBasics({
   };
 
   const handleSwitch = (event) => {
+    console.log(event.target.id);
     const newProfileData = {
       ...profileData,
       [event.target.id]: Number(event.target.checked),
@@ -515,9 +538,8 @@ export default function TheBasics({
           {profileData.contact_no === "" &&
             errors?.find((error) => error.key == "contact_no") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "contact_no").message
-                }`}
+                {`*${errors?.find((error) => error.key == "contact_no").message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -552,6 +574,9 @@ export default function TheBasics({
                       height: "40px",
                       width: "100%",
                       borderRadius: "40px",
+                    },
+                    '& .MuiIconButton-root': {
+                      color: theme.palette.yellowColor, // Change this to the desired color
                     },
                   }}
                 />
@@ -598,9 +623,8 @@ export default function TheBasics({
           {!profileData.country_id &&
             errors?.find((error) => error.key == "country_id") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "country_id").message
-                }`}
+                {`*${errors?.find((error) => error.key == "country_id").message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -640,9 +664,8 @@ export default function TheBasics({
             {!towns.find((val) => val.town_id == profileData.town_id)?.name &&
               errors?.find((error) => error.key == "town_id") && (
                 <Typography color={"red !important"}>
-                  {`*${
-                    errors?.find((error) => error.key == "town_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "town_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -654,11 +677,15 @@ export default function TheBasics({
           >
             {i18n["myProfile.willingToRelocate"]}
           </Typography>
-          <ToggleSwitch
+          {/* <ToggleSwitch
             id="relocate"
             checked={!!Number(profileData.relocate)}
             onChange={handleSwitch}
-          />
+          /> */}
+          <BlueSwitch
+            id="relocate"
+            checked={!!Number(profileData.relocate)}
+            onChange={handleSwitch} />
           {!profileData.relocate &&
             errors?.find((error) => error.key == "relocate") && (
               <Typography color={"red !important"}>
@@ -701,10 +728,9 @@ export default function TheBasics({
           {getNatiValue() == "" &&
             errors?.find((error) => error.key == "nationality_ids") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "nationality_ids")
-                    .message
-                }`}
+                {`*${errors?.find((error) => error.key == "nationality_ids")
+                  .message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -734,9 +760,8 @@ export default function TheBasics({
           {getLangValue() == "" &&
             errors?.find((error) => error.key == "language_ids") && (
               <Typography color={"red !important"}>
-                {`*${
-                  errors?.find((error) => error.key == "language_ids").message
-                }`}
+                {`*${errors?.find((error) => error.key == "language_ids").message
+                  }`}
               </Typography>
             )}
         </Box>
@@ -869,10 +894,9 @@ export default function TheBasics({
               !profileData.linkedin_profile_link.startsWith("http"))) &&
             errors?.find((error) => error.key === "linkedin_profile_link") && (
               <Typography color="red !important">
-                {`*${
-                  errors?.find((error) => error.key === "linkedin_profile_link")
-                    .message
-                }`}
+                {`*${errors?.find((error) => error.key === "linkedin_profile_link")
+                  .message
+                  }`}
               </Typography>
             )}
         </Box>

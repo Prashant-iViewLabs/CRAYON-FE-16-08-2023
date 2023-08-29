@@ -29,6 +29,10 @@ const theme = createTheme({
       contrastText: "#FFFFFF",
       light: "#ff9800",
     },
+    orangeButton100: {
+      main: "#F09248",
+      contrastText: "#FFFFFF"
+    },
     blueButton100: {
       main: "#52CBDC",
       contrastText: "#FFFFFF",
@@ -75,6 +79,10 @@ const theme = createTheme({
     yellowButton300: {
       main: "#F3AA18",
       contrastText: "#FFFFFF",
+    },
+    yellowButton400: {
+      main: "#C19C47",
+      contrastText: "#FFFFFF"
     },
     grayButton: {
       main: "#747474",
@@ -178,6 +186,7 @@ const theme = createTheme({
     placeholder: "#C6CACC",
     grayIcon: "#545974",
     picNameColor: "#069697",
+    yellowColor: "#DC9B53",
     chart: {
       red: "#EC5D60",
       green: "#B6C773",

@@ -5,8 +5,11 @@ import { styled, useTheme } from "@mui/material/styles";
 import locale from "../../i18n/locale";
 import Typography from "@mui/material/Typography";
 import { USER_TYPES } from "../../utils/Constants";
-
-export default function SwipeableButton({ selectedUser, onButtonToggle }) {
+export default function SwipeableButton({
+  selectedUser,
+  onButtonToggle,
+  setSignupTouched,
+}) {
   const i18n = locale.en;
   const slider = useRef();
   const container = useRef();
@@ -41,11 +44,13 @@ export default function SwipeableButton({ selectedUser, onButtonToggle }) {
       </Button>
     );
   };
-
   const TypographyComponent = ({ user, children, ...otherStyles }) => {
     return (
       <Typography
-        onClick={(e) => onButtonToggle(e, user)}
+        onClick={(e) => {
+          onButtonToggle(e, user);
+          setSignupTouched(true);
+        }}
         sx={{
           fontWeight: 300,
           fontSize: 14,
