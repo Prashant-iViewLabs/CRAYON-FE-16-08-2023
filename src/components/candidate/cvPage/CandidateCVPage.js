@@ -49,12 +49,15 @@ export default function CandidateCVPage({ changeStep }) {
     decodedToken = jwt_decode(token);
   }
 
+  console.log(decodedToken?.data?.user_id);
+  console.log(id);
+
   const handleCandidateCV = async () => {
     try {
       const user = {
         user_id: id !== undefined ? id : decodedToken?.data?.user_id,
       };
-
+      console.log(user);
       const { payload } = await dispatch(getCandidateCV(user));
 
       if (payload?.status == "success") {
@@ -80,7 +83,7 @@ export default function CandidateCVPage({ changeStep }) {
       sx={{
         padding: "20px",
       }}
-      height={"100%"}
+      // height={"100%"}
       maxWidth={"750px"}
       margin="auto"
     >

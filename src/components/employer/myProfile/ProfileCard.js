@@ -206,8 +206,7 @@ export default function ProfileCard() {
   const [errors, setErrors] = useState([]);
   const [industries, setIndustries] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [progressButton, setProgressButton] = useState(false)
-
+  const [progressButton, setProgressButton] = useState(false);
 
   const handleZoom = (direction) => {
     const step = 0.5;
@@ -504,7 +503,7 @@ export default function ProfileCard() {
   );
 
   const handleAccordion = () => {
-    setExpanded(prevState => !prevState);
+    setExpanded((prevState) => !prevState);
   };
 
   const handleUpdateProfile = () => {
@@ -514,23 +513,22 @@ export default function ProfileCard() {
       setColor("2");
     } else {
     }
-    setExpanded(true)
-
+    setExpanded(true);
   };
 
   const handleCancelProfile = () => {
     setExpanded(false);
-    setCurrentCompIndex(null)
-    setCurrentComp("info")
+    setCurrentCompIndex(null);
+    setCurrentComp("info");
     setColor("");
   };
   const handleOpenClose = () => {
     if (expanded) {
-      handleCancelProfile()
+      handleCancelProfile();
     } else {
-      handleUpdateProfile()
+      handleUpdateProfile();
     }
-  }
+  };
 
   // useEffect(() => {
   //     calProfileCompletion()
@@ -586,9 +584,9 @@ export default function ProfileCard() {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -639,13 +637,15 @@ export default function ProfileCard() {
         justifyContent="center"
         gap={2}
       >
-        <Box sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          position: "relative"
-        }}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            position: "relative",
+          }}
+        >
           <Typography
             sx={{
               width: "60%",
@@ -657,16 +657,26 @@ export default function ProfileCard() {
           >
             {i18n["myProfile.title"]}
           </Typography>
-          <Box sx={{
-            width: "30%", background: "#ffff",
-            borderRadius: "17px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-            // zIndex: 100,
-            position: "relative",
-            padding: "0 0 16px 32px"
-          }}>
+          <Box
+            sx={{
+              width: "30%",
+              background: "#ffff",
+              borderRadius: "17px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              // zIndex: 100,
+              position: "relative",
+              padding: "0 0 16px 32px",
+            }}
+          >
             <Box sx={{ display: "flex" }}>
-              <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "space-between", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexGrow: 1,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Typography
                   sx={{
                     fontSize: "16px",
@@ -696,20 +706,21 @@ export default function ProfileCard() {
                   border: 1,
                   borderColor: theme.palette.grayBorder,
                   borderRadius: 0,
-                  borderTopRightRadius: "17px"
-                }} onClick={() => setProgressButton(prevState => !prevState)}
+                  borderTopRightRadius: "17px",
+                }}
+                onClick={() => setProgressButton((prevState) => !prevState)}
                 variant="outlined"
                 color="grayButton"
               >
                 <ProfileProgressButtonLayout />
                 {!progressButton ? <ExpandMore /> : <ExpandLess />}
               </Button>
-
-
             </Box>
-            <Box sx={{
-              paddingRight: "32px"
-            }}>
+            <Box
+              sx={{
+                paddingRight: "32px",
+              }}
+            >
               <LinearProgressWithLabel value={profileCompletion} />
             </Box>
 
@@ -741,7 +752,7 @@ export default function ProfileCard() {
               {i18n["empMyProfile.cancelProfile"]}
             </StyledButton>
           )} */}
-            {progressButton &&
+            {progressButton && (
               <Box
                 ref={boxRef}
                 sx={{
@@ -755,11 +766,16 @@ export default function ProfileCard() {
                   zIndex: 999,
                   borderRadius: "17px",
                   borderTopLeftRadius: 0,
-                  borderTopRightRadius: 0
+                  borderTopRightRadius: 0,
                 }}
               >
                 <Box
-                  sx={{ display: "flex", flexDirection: "column", p: 2, gap: 2 }}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    p: 2,
+                    gap: 2,
+                  }}
                   className="employer-profile-viewer-dropdown"
                 >
                   <Typography
@@ -770,39 +786,57 @@ export default function ProfileCard() {
                       fontWeight: 700,
                     }}
                   >
-                    <strong>Remember,</strong> the more you complete, the stronger you
-                    can compete!
+                    <strong>Remember,</strong> the more you complete, the
+                    stronger you can compete!
                   </Typography>
-                  <Box sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 1
-                  }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="redButton100"
-                      sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
-                    // onClick={() => handlePageChange("a")}
+                      sx={{
+                        borderRadius: 2,
+                        width: "70%",
+                        display: "flex",
+                        justifyContent: "start",
+                        gap: 1,
+                      }}
+                      // onClick={() => handlePageChange("a")}
                     >
-                      <Box sx={{
-                        borderRadius: "50%",
-                        background: "white",
-                        width: 25,
-                        height: 25,
-                        color: "red"
-                      }}>1</Box>
+                      <Box
+                        sx={{
+                          borderRadius: "50%",
+                          background: "white",
+                          width: 25,
+                          height: 25,
+                          color: "red",
+                        }}
+                      >
+                        1
+                      </Box>
                       My info
                     </Button>
-                    <Box sx={{
-                      flexGrow: 1,
-                      display: "flex",
-                      justifyContent: "end",
-                      alignItems: "center"
-                    }}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        display: "flex",
+                        justifyContent: "end",
+                        alignItems: "center",
+                      }}
+                    >
                       <Button
                         variant="contained"
-                        color={profileCompletion >= 25 ? "greenButton" : "grayButton400"}
+                        color={
+                          profileCompletion >= 25
+                            ? "greenButton"
+                            : "grayButton400"
+                        }
                         sx={{
                           height: "6px",
                           minWidth: 10,
@@ -812,38 +846,58 @@ export default function ProfileCard() {
                       ></Button>
                     </Box>
 
-                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion >= 25 ? "25%" : "0%"}</Typography>
+                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                      {profileCompletion >= 25 ? "25%" : "0%"}
+                    </Typography>
                   </Box>
-                  <Box sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 1
-                  }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="grayButton100"
-                      sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
-                    // onClick={() => handlePageChange("b")}
+                      sx={{
+                        borderRadius: 2,
+                        width: "70%",
+                        display: "flex",
+                        justifyContent: "start",
+                        gap: 1,
+                      }}
+                      // onClick={() => handlePageChange("b")}
                     >
-                      <Box sx={{
-                        borderRadius: "50%",
-                        background: "lightGray",
-                        width: 25,
-                        height: 25,
-                        color: "black"
-                      }}>2</Box>
+                      <Box
+                        sx={{
+                          borderRadius: "50%",
+                          background: "lightGray",
+                          width: 25,
+                          height: 25,
+                          color: "black",
+                        }}
+                      >
+                        2
+                      </Box>
                       Company Info
                     </Button>
-                    <Box sx={{
-                      flexGrow: 1,
-                      display: "flex",
-                      justifyContent: "end",
-                      alignItems: "center"
-                    }}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        display: "flex",
+                        justifyContent: "end",
+                        alignItems: "center",
+                      }}
+                    >
                       <Button
                         variant="contained"
-                        color={profileCompletion >= 50 ? "greenButton" : "grayButton400"}
+                        color={
+                          profileCompletion >= 50
+                            ? "greenButton"
+                            : "grayButton400"
+                        }
                         sx={{
                           height: "6px",
                           minWidth: 10,
@@ -853,38 +907,58 @@ export default function ProfileCard() {
                       ></Button>
                     </Box>
 
-                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion >= 50 ? "25%" : "0%"}</Typography>
+                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                      {profileCompletion >= 50 ? "25%" : "0%"}
+                    </Typography>
                   </Box>
-                  <Box sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 1
-                  }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="grayButton100"
-                      sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
-                    // onClick={() => handlePageChange("b")}
+                      sx={{
+                        borderRadius: 2,
+                        width: "70%",
+                        display: "flex",
+                        justifyContent: "start",
+                        gap: 1,
+                      }}
+                      // onClick={() => handlePageChange("b")}
                     >
-                      <Box sx={{
-                        borderRadius: "50%",
-                        background: "lightGray",
-                        width: 25,
-                        height: 25,
-                        color: "black"
-                      }}>3</Box>
+                      <Box
+                        sx={{
+                          borderRadius: "50%",
+                          background: "lightGray",
+                          width: 25,
+                          height: 25,
+                          color: "black",
+                        }}
+                      >
+                        3
+                      </Box>
                       My Plan
                     </Button>
-                    <Box sx={{
-                      flexGrow: 1,
-                      display: "flex",
-                      justifyContent: "end",
-                      alignItems: "center"
-                    }}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        display: "flex",
+                        justifyContent: "end",
+                        alignItems: "center",
+                      }}
+                    >
                       <Button
                         variant="contained"
-                        color={profileCompletion.profileCompletion ? "greenButton" : "grayButton400"}
+                        color={
+                          profileCompletion.profileCompletion
+                            ? "greenButton"
+                            : "grayButton400"
+                        }
                         sx={{
                           height: "6px",
                           minWidth: 10,
@@ -894,38 +968,58 @@ export default function ProfileCard() {
                       ></Button>
                     </Box>
 
-                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.profileCompletion ? "25%" : "0%"}</Typography>
+                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                      {profileCompletion.profileCompletion ? "25%" : "0%"}
+                    </Typography>
                   </Box>
-                  <Box sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 1
-                  }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="grayButton100"
-                      sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
-                    // onClick={() => handlePageChange("b")}
+                      sx={{
+                        borderRadius: 2,
+                        width: "70%",
+                        display: "flex",
+                        justifyContent: "start",
+                        gap: 1,
+                      }}
+                      // onClick={() => handlePageChange("b")}
                     >
-                      <Box sx={{
-                        borderRadius: "50%",
-                        background: "lightGray",
-                        width: 25,
-                        height: 25,
-                        color: "black"
-                      }}>4</Box>
+                      <Box
+                        sx={{
+                          borderRadius: "50%",
+                          background: "lightGray",
+                          width: 25,
+                          height: 25,
+                          color: "black",
+                        }}
+                      >
+                        4
+                      </Box>
                       Billing
                     </Button>
-                    <Box sx={{
-                      flexGrow: 1,
-                      display: "flex",
-                      justifyContent: "end",
-                      alignItems: "center"
-                    }}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        display: "flex",
+                        justifyContent: "end",
+                        alignItems: "center",
+                      }}
+                    >
                       <Button
                         variant="contained"
-                        color={profileCompletion.profileCompletion ? "greenButton" : "grayButton400"}
+                        color={
+                          profileCompletion.profileCompletion
+                            ? "greenButton"
+                            : "grayButton400"
+                        }
                         sx={{
                           height: "6px",
                           minWidth: 10,
@@ -935,10 +1029,13 @@ export default function ProfileCard() {
                       ></Button>
                     </Box>
 
-                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.profileCompletion ? "25%" : "0%"}</Typography>
+                    <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                      {profileCompletion.profileCompletion ? "25%" : "0%"}
+                    </Typography>
                   </Box>
                 </Box>
-              </Box>}
+              </Box>
+            )}
           </Box>
         </Box>
 
@@ -1146,7 +1243,6 @@ export default function ProfileCard() {
                 </Box>
               </Box>
               <Box sx={{ display: "flex", gap: 3 }}>
-
                 {!expanded && (
                   <>
                     <Box sx={{ margin: "0 -22px 0 -22px" }}>

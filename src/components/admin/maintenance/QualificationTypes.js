@@ -82,6 +82,7 @@ export default function QualificationTypes() {
             msg: "Qualification type removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getTitles(0);
       }
     } catch (error) {}
@@ -89,7 +90,7 @@ export default function QualificationTypes() {
 
   const handleAddNewJob = async () => {
     try {
-      if (newJobTitle !== "") {
+      if (newJobTitle.trim().length !== 0) {
         const data = {
           title: newJobTitle,
           level: level,
@@ -233,6 +234,7 @@ export default function QualificationTypes() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getTitles(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

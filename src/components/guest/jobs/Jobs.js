@@ -472,7 +472,7 @@ export default function Jobs() {
                       color: theme.palette.placeholder,
                     }}
                   >
-                    {i18n["jobs.noData"]}
+                    {""}
                   </Box>
                 ) : null)}
           </Grid>

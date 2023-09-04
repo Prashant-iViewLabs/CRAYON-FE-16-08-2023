@@ -95,7 +95,6 @@ export default function Qualification() {
       };
       const { payload } = await dispatch(removeQualification(data));
       if (payload.status === "success") {
-        setOpenDelete(false);
         setTableData([]);
         dispatch(
           setAlert({
@@ -105,14 +104,16 @@ export default function Qualification() {
           })
         );
         setOpenDelete(false);
+        setConfirmDelete(false);
         await getQualifications(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewQual = async (qualId) => {
     try {
-      if (qualifications !== "") {
+      if (qualifications.trim().length !== 0) {
         const data = {
           title: qualifications,
           qualification_type_id: qualId,
@@ -130,6 +131,7 @@ export default function Qualification() {
           );
           setOpenAdd(false);
           await getQualifications(0);
+          await getAllData();
         } else {
           console.log(payload);
           dispatch(
@@ -182,6 +184,7 @@ export default function Qualification() {
         );
         setOpenEdit(false);
         await getQualifications(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -353,6 +356,7 @@ export default function Qualification() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getQualifications(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

@@ -340,7 +340,7 @@ export default function JobCard({
               letterSpacing: "0.25px",
             }}
           >
-            {job?.experience?.year} years Experience
+            {job?.experience?.year} years
           </Typography>
         </Box>
         <Box

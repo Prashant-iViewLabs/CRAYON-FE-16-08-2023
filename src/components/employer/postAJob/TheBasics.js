@@ -104,7 +104,6 @@ const BASIC = {
   experience_id: "",
   required_qualification_id: "",
   preferred_qualification_ids: [],
-
 };
 
 const SALARY_OBJ = {
@@ -221,12 +220,18 @@ const scrollToTop = () => {
   // Scroll to the top of the page with smooth behavior
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
-}
-export default function TheBasics({ changeStep, handleComplete, handleJobType, selectedJobType, handleOpenSaveAndExitDialog }) {
+};
+export default function TheBasics({
+  changeStep,
+  handleComplete,
+  handleJobType,
+  selectedJobType,
+  handleOpenSaveAndExitDialog,
+}) {
   const dispatch = useDispatch();
-  const theme = useTheme()
+  const theme = useTheme();
   const [basicData, setBasicData] = useState(BASIC);
   const [selectedValue, setSelectedValue] = useState("crayon recruit");
   const [salary, setSalary] = useState([]);
@@ -249,23 +254,21 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
     roleTypes,
     workSetup,
   } = useSelector((state) => state.postJobs);
-  const {
-    industries,
-  } = useSelector((state) => state.myCv);
+  const { industries } = useSelector((state) => state.myCv);
 
   const { jobId, duplicate } = useParams();
 
-  console.log(basicData)
+  console.log(basicData);
   const getAllTheBasics = async () => {
     try {
       dispatch(setLoading(true));
       const { payload } = await dispatch(getBasicData(jobId)); //basicData.job_id
       if (payload?.status == "success") {
         const basic = payload?.data;
-        console.clear()
-        console.log(payload?.data)
+        console.clear();
+        console.log(payload?.data);
         if (basic.job_type) {
-          handleJobType(basic.job_type)
+          handleJobType(basic.job_type);
         }
         const salary = basic.salary.map((item) => {
           return basic.job_role_type != "freelance" ? item / 1000 : item / 5;
@@ -367,7 +370,7 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
         // [name || id]: slider ? sliderValue : value,
         job_type: selectedJobType,
       };
-      console.log(newBasicData)
+      console.log(newBasicData);
       const { payload } = await dispatch(addBasicData(newBasicData));
       if (payload?.status == "success") {
         dispatch(
@@ -378,12 +381,12 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
           })
         );
         history(`/employer/post-a-job/${payload?.data?.job_id}`);
-        handleComplete(1)
-        changeStep(2)
+        handleComplete(1);
+        changeStep(2);
         setErrors([]);
       } else if (payload?.status === "error") {
-        console.log(payload?.errors)
-        console.log(errors?.find((error) => error.key === "job_type"))
+        console.log(payload?.errors);
+        console.log(errors?.find((error) => error.key === "job_type"));
         if (payload?.errors?.find((error) => error.key === "job_type")) {
           dispatch(
             setAlert({
@@ -392,12 +395,10 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
               msg: "Please Select Job Type First",
             })
           );
-        }
-        else {
+        } else {
           setErrors(payload?.errors);
         }
-        scrollToTop()
-
+        scrollToTop();
       } else {
         dispatch(
           setAlert({
@@ -468,10 +469,10 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
   const handleContractDurationChange = (event) => {
     const newBasicData = {
       ...basicData,
-      contract_duration: event.target.value
-    }
-    setBasicData(newBasicData)
-  }
+      contract_duration: event.target.value,
+    };
+    setBasicData(newBasicData);
+  };
 
   const handleChange = (event) => {
     const {
@@ -598,14 +599,15 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
     );
   };
   const getIndustriesValue = () => {
-
     if (basicData.industry_id?.length === 0) {
       // console.log(basicData.industries)
-      return []
+      return [];
     }
     // return [1, 4]
-    return basicData.industry_id.map(id => industries?.find(industry => industry.industry_id === id) || id)
-  }
+    return basicData.industry_id.map(
+      (id) => industries?.find((industry) => industry.industry_id === id) || id
+    );
+  };
 
   const handleRequiredQualificationLevel = (event) => {
     const {
@@ -639,8 +641,8 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
     setBasicData(newBasicData);
   };
   const handleSwitch = (event) => {
-    console.clear()
-    console.log(event.target.checked)
+    console.clear();
+    console.log(event.target.checked);
     const newBasicData = {
       ...basicData,
       [event.target.id]: Number(event.target.checked),
@@ -679,7 +681,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
 
   return (
     <Box>
-
       <Box>
         <Typography
           sx={{
@@ -692,7 +693,14 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
           {CV_STEPS[0]}
         </Typography>
         {/* Job Title, Role Type, Contract Duration */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 3,
+            gap: 8,
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
               htmlFor="job_title_id"
@@ -723,13 +731,16 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
               !basicData.job_title_id &&
               errors?.find((error) => error.key == "job_title_id") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "job_title_id").message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "job_title_id").message
+                  }`}
                 </Typography>
               )}
           </Box>
           <Box sx={{ display: "flex", gap: 4, width: "50%" }}>
-            <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", width: "50%" }}
+            >
               <InputLabel
                 htmlFor="job_role_type"
                 sx={{
@@ -752,13 +763,16 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
               {!basicData.job_role_type &&
                 errors?.find((error) => error.key == "job_role_type") && (
                   <Typography color={"red"}>
-                    {`*${errors?.find((error) => error.key == "job_role_type")
-                      .message
-                      }`}
+                    {`*${
+                      errors?.find((error) => error.key == "job_role_type")
+                        .message
+                    }`}
                   </Typography>
                 )}
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", width: "50%" }}
+            >
               <InputLabel
                 htmlFor="Contract_Duration"
                 sx={{
@@ -779,8 +793,8 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
                   height: "40px",
                   boxShadow: "none",
                   border: `1px solid ${theme.palette.grayBorder}`,
-                }}>
-
+                }}
+              >
                 <InputBase
                   sx={{ ml: 2, mr: 2, width: "100%" }}
                   id="contract_duration"
@@ -811,15 +825,15 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
               )} */}
             </Box>
           </Box>
-
         </Box>
         {/* Associated Industries */}
         <Box
           sx={{
-            display: "flex", flexDirection: "column", mb: 3
+            display: "flex",
+            flexDirection: "column",
+            mb: 3,
           }}
         >
-
           <InputLabel
             htmlFor="associated_industries"
             sx={{
@@ -831,7 +845,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             }}
           >
             {i18n["postAJob.associated_industriesLabel"]}
-
           </InputLabel>
           <AutoComplete
             multiple={true}
@@ -841,14 +854,20 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             disableCloseOnSelect={true}
             value={getIndustriesValue()}
             onChange={handleMultipleAutoComplete}
-
             sx={{ display: "inline-table" }}
             placeholder={"Enter any industry(ies) relevant to the role"}
             data={industries}
           ></AutoComplete>
         </Box>
         {/* Region, Town */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 3,
+            gap: 8,
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
               htmlFor="country_id"
@@ -874,9 +893,10 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             {!basicData.country_id &&
               errors?.find((error) => error.key == "job_role_type") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "job_role_type")
-                    .message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "job_role_type")
+                      .message
+                  }`}
                 </Typography>
               )}
           </Box>
@@ -908,14 +928,22 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             {!town?.find((val) => val.town_id == basicData.town_id)?.name &&
               errors?.find((error) => error.key == "town_id") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "town_id").message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "town_id").message
+                  }`}
                 </Typography>
               )}
           </Box>
         </Box>
         {/* Work setup,  language */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 3,
+            gap: 8,
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
               htmlFor="work_setup"
@@ -939,8 +967,9 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             {!basicData.work_setup &&
               errors?.find((error) => error.key == "work_setup") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "work_setup").message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "work_setup").message
+                  }`}
                 </Typography>
               )}
           </Box>
@@ -1037,7 +1066,14 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             )}
         </Box>
         {/* Required Qualification, currency */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 3,
+            gap: 8,
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
               htmlFor="required_qualification_id"
@@ -1063,10 +1099,11 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
                 (error) => error.key == "required_qualification_id"
               ) && (
                 <Typography color={"red"}>
-                  {`*${errors?.find(
-                    (error) => error.key == "required_qualification_id"
-                  ).message
-                    }`}
+                  {`*${
+                    errors?.find(
+                      (error) => error.key == "required_qualification_id"
+                    ).message
+                  }`}
                 </Typography>
               )}
           </Box>
@@ -1093,13 +1130,12 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             {!basicData.currency_id &&
               errors?.find((error) => error.key == "currency_id") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "currency_id").message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "currency_id").message
+                  }`}
                 </Typography>
               )}
           </Box>
-
-
         </Box>
         {/* work experience , salary */}
         <Box
@@ -1107,7 +1143,7 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             display: "flex",
             justifyContent: "space-between",
             mb: 3,
-            gap: 8
+            gap: 8,
           }}
         >
           <Box
@@ -1160,8 +1196,9 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             />
             {errors?.find((error) => error.key === "experience") && (
               <Typography color={"red"}>
-                {`*${errors?.find((error) => error.key === "experience").message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key === "experience").message
+                }`}
               </Typography>
             )}
           </Box>
@@ -1220,7 +1257,8 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
                   : rangeMarks
               }
               sx={{
-                width: "80%", ml: 1,
+                width: "80%",
+                ml: 1,
                 "& .MuiSlider-rail": {
                   backgroundColor: theme.palette.eyeview100.main,
                   height: "10px",
@@ -1267,13 +1305,14 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
           {errors?.find(
             (error) => error.key == "preferred_qualification_ids"
           ) && (
-              <Typography color={"red"}>
-                {`*${errors?.find(
+            <Typography color={"red"}>
+              {`*${
+                errors?.find(
                   (error) => error.key == "preferred_qualification_ids"
                 ).message
-                  }`}
-              </Typography>
-            )}
+              }`}
+            </Typography>
+          )}
         </Box>
         {/* Preferred Associations */}
         <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
@@ -1317,41 +1356,40 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
           minWidth: "28%",
           marginBottom: 3,
           gap: 3,
-          flexWrap: "wrap"
+          flexWrap: "wrap",
         }}
       >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 1
+            gap: 1,
           }}
         >
           <Typography
             sx={{
-
               minWidth: "fit-content",
             }}
           >
             {i18n["postAJob.displaySalary"]}
           </Typography>
           <Typography
-                sx={{
-                  padding: "5px",
-                  height: "8px",
-                  width: "8px",
-                  borderRadius: "5px",
-                  fontSize: "15px",
-                  /* text-align: center; */
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                  border: 1,
-                }}
-              >
-                i
-              </Typography>
+            sx={{
+              padding: "5px",
+              height: "8px",
+              width: "8px",
+              borderRadius: "5px",
+              fontSize: "15px",
+              /* text-align: center; */
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 900,
+              border: 1,
+            }}
+          >
+            i
+          </Typography>
           {/* <ToggleSwitch
             id="hide_salary"
             checked={!!basicData.hide_salary}
@@ -1361,7 +1399,7 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             id="hide_salary"
             checked={!!basicData.hide_salary}
             onChange={handleSwitch}
-            />
+          />
         </Box>
         <Box
           sx={{
@@ -1371,7 +1409,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
         >
           <Typography
             sx={{
-
               minWidth: "fit-content",
             }}
           >
@@ -1386,18 +1423,16 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             id="salary_negotiate"
             checked={!!basicData.salary_negotiate}
             onChange={handleSwitch}
-            />
+          />
         </Box>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-
           }}
         >
           <Typography
             sx={{
-
               minWidth: "fit-content",
             }}
           >
@@ -1413,8 +1448,7 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             id="own_transport"
             checked={!!basicData.own_transport}
             onChange={handleSwitch}
-            />
-
+          />
         </Box>
         <Box
           sx={{
@@ -1424,7 +1458,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
         >
           <Typography
             sx={{
-
               minWidth: "fit-content",
             }}
           >
@@ -1440,7 +1473,7 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             id="own_equipment"
             checked={!!basicData.own_equipment}
             onChange={handleSwitch}
-            />
+          />
         </Box>
         <Box
           sx={{
@@ -1450,7 +1483,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
         >
           <Typography
             sx={{
-
               minWidth: "fit-content",
             }}
           >
@@ -1466,7 +1498,7 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
             id="internet_access"
             checked={!!basicData.internet_access}
             onChange={handleSwitch}
-            />
+          />
         </Box>
       </Box>
       <Box
@@ -1492,7 +1524,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
           variant="contained"
           color="redButton"
           sx={{
-
             width: "229px",
             height: "57px",
             fontSize: "15px",
@@ -1518,7 +1549,6 @@ export default function TheBasics({ changeStep, handleComplete, handleJobType, s
           {i18n["postAJob.theDetails"]}
         </StyledButton>
       </Box> */}
-
     </Box>
   );
 }

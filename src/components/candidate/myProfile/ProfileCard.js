@@ -41,7 +41,12 @@ import profile_challenger from "../../../assets/Profile Icons_Challenger.svg";
 import profile_character from "../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../assets/Profile Icons_Collaborator.svg";
 import profile_contemplator from "../../../assets/Profile Icons_Contemplator.svg";
-import { AddCircleOutline, CheckCircle, ExpandLess, ExpandMore } from "@mui/icons-material";
+import {
+  AddCircleOutline,
+  CheckCircle,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
 import AddNewCompany from "./dialog/AddNewCompany";
 import DisplayFollowedCompanies from "./dialog/DisplayFollowedCompanies";
 import CompanyListLogo from "../../../assets/Padding Included/Black_Company_Details.svg";
@@ -190,7 +195,7 @@ const PROFILE = {
   profile_percent_complete: 0,
   totoalapplicant: 0,
   totoalinterviewed: 0,
-  totoalshortlisted:0
+  totoalshortlisted: 0,
 };
 
 export default function ProfileCard() {
@@ -208,7 +213,7 @@ export default function ProfileCard() {
     cvBasics: 0,
     workLife: 0,
     studyLife: 0,
-    refrences: 0
+    refrences: 0,
   });
   const [openEditImage, setOpenEditImage] = useState(false);
   const [imagePreview, setImagePreview] = useState([]);
@@ -219,7 +224,7 @@ export default function ProfileCard() {
   const [openAddCompanyDialog, setOpenCompanyDialog] = useState(false);
   const [openSaveAndExitDialog, setOpenSaveAndExitDialog] = useState(false);
   const [openFollowedDialog, setOpenFollowedListDialog] = useState(false);
-  
+
   const boxRef = useRef(null);
 
   const [progressButton, setProgressButton] = useState(false);
@@ -340,9 +345,9 @@ export default function ProfileCard() {
             cvBasics: payload.data.cv_basic_completed ? 10 : 0,
             workLife: payload.data.work_life_completed ? 5 : 0,
             studyLife: payload.data.study_life_completed ? 5 : 0,
-          }
+          };
           setProfileCompletion(profileCompletionPercentage);
-          console.log(payload.data)
+          console.log(payload.data);
         }
       } else {
         dispatch(
@@ -470,20 +475,20 @@ export default function ProfileCard() {
     setOpenFollowedListDialog(false);
   };
   const handleOpenSaveAndExitDialog = () => {
-    setOpenSaveAndExitDialog((prevState) => !prevState)
-  }
+    setOpenSaveAndExitDialog((prevState) => !prevState);
+  };
 
   const handleClickOutside = (event) => {
     if (boxRef.current && !boxRef.current.contains(event.target)) {
       setProgressButton(false);
     }
-    setOpenFollowedListDialog(false)
+    setOpenFollowedListDialog(false);
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   return (
@@ -583,7 +588,9 @@ export default function ProfileCard() {
               paddingRight: "32px",
             }}
           >
-            <LinearProgressWithLabel value={profileCompletion.profileCompletion} />
+            <LinearProgressWithLabel
+              value={profileCompletion.profileCompletion}
+            />
             {console.log(profileCompletion)}
           </Box>
 
@@ -617,7 +624,6 @@ export default function ProfileCard() {
           )} */}
           {progressButton && (
             <Box
-
               ref={boxRef}
               sx={{
                 backgroundColor: "white",
@@ -645,39 +651,57 @@ export default function ProfileCard() {
                     fontWeight: 700,
                   }}
                 >
-                  <strong>Remember,</strong> the more you complete, the
-                  stronger you can compete!
+                  <strong>Remember,</strong> the more you complete, the stronger
+                  you can compete!
                 </Typography>
-                <Box sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 1
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color="redButton100"
-                    sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
+                    sx={{
+                      borderRadius: 2,
+                      width: "70%",
+                      display: "flex",
+                      justifyContent: "start",
+                      gap: 1,
+                    }}
                     onClick={() => handlePageChange("a")}
                   >
-                    <Box sx={{
-                      borderRadius: "50%",
-                      background: "white",
-                      width: 25,
-                      height: 25,
-                      color: "red"
-                    }}>1</Box>
+                    <Box
+                      sx={{
+                        borderRadius: "50%",
+                        background: "white",
+                        width: 25,
+                        height: 25,
+                        color: "red",
+                      }}
+                    >
+                      1
+                    </Box>
                     Profile
                   </Button>
-                  <Box sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center"
-                  }}>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                    }}
+                  >
                     <Button
                       variant="contained"
-                      color={profileCompletion.profileCompletion ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.profileCompletion
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -687,39 +711,58 @@ export default function ProfileCard() {
                     ></Button>
                   </Box>
 
-                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.profileCompletion ? "25%" : "0%"}</Typography>
+                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                    {profileCompletion.profileCompletion ? "25%" : "0%"}
+                  </Typography>
                 </Box>
-                <Box sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 1
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color="grayButton100"
-                    sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
+                    sx={{
+                      borderRadius: 2,
+                      width: "70%",
+                      display: "flex",
+                      justifyContent: "start",
+                      gap: 1,
+                    }}
                     onClick={() => handlePageChange("b")}
                   >
-                    <Box sx={{
-                      borderRadius: "50%",
-                      background: "lightGray",
-                      width: 25,
-                      height: 25,
-                      color: "black"
-                    }}>2</Box>
+                    <Box
+                      sx={{
+                        borderRadius: "50%",
+                        background: "lightGray",
+                        width: 25,
+                        height: 25,
+                        color: "black",
+                      }}
+                    >
+                      2
+                    </Box>
                     Crayon vitae
                   </Button>
-                  <Box sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center"
-                  }}>
-
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                    }}
+                  >
                     <Button
                       variant="contained"
-                      color={profileCompletion.cvBasics ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.cvBasics
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -729,7 +772,11 @@ export default function ProfileCard() {
                     ></Button>
                     <Button
                       variant="contained"
-                      color={profileCompletion.workLife ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.workLife
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -739,7 +786,11 @@ export default function ProfileCard() {
                     ></Button>
                     <Button
                       variant="contained"
-                      color={profileCompletion.studyLife ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.studyLife
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -749,7 +800,11 @@ export default function ProfileCard() {
                     ></Button>
                     <Button
                       variant="contained"
-                      color={profileCompletion.refrences ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.refrences
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -759,40 +814,63 @@ export default function ProfileCard() {
                     ></Button>
                   </Box>
 
-                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.cvBasics + profileCompletion.workLife + profileCompletion.studyLife}%</Typography>
+                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                    {profileCompletion.cvBasics +
+                      profileCompletion.workLife +
+                      profileCompletion.studyLife}
+                    %
+                  </Typography>
                 </Box>
 
-                <Box sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 1
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color="grayButton100"
-                    sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
+                    sx={{
+                      borderRadius: 2,
+                      width: "70%",
+                      display: "flex",
+                      justifyContent: "start",
+                      gap: 1,
+                    }}
                     // onClick={() => handlePageChange("a")}
                     disabled
                   >
-                    <Box sx={{
-                      borderRadius: "50%",
-                      background: "lightGray",
-                      width: 25,
-                      height: 25,
-                      color: "black"
-                    }}>3</Box>
+                    <Box
+                      sx={{
+                        borderRadius: "50%",
+                        background: "lightGray",
+                        width: 25,
+                        height: 25,
+                        color: "black",
+                      }}
+                    >
+                      3
+                    </Box>
                     Personality Assessment
                   </Button>
-                  <Box sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center"
-                  }}>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                    }}
+                  >
                     <Button
                       variant="contained"
-                      color={profileCompletion.personalAssessment ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.personalAssessment
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -802,39 +880,59 @@ export default function ProfileCard() {
                     ></Button>
                   </Box>
 
-                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.personalAssessment ? "25%" : "0%"}</Typography>
+                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                    {profileCompletion.personalAssessment ? "25%" : "0%"}
+                  </Typography>
                 </Box>
-                <Box sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 1
-                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color="grayButton100"
-                    sx={{ borderRadius: 2, width: "70%", display: "flex", justifyContent: "start", gap: 1 }}
+                    sx={{
+                      borderRadius: 2,
+                      width: "70%",
+                      display: "flex",
+                      justifyContent: "start",
+                      gap: 1,
+                    }}
                     // onClick={() => handlePageChange("a")}
                     disabled
                   >
-                    <Box sx={{
-                      borderRadius: "50%",
-                      background: "lightGray",
-                      width: 25,
-                      height: 25,
-                      color: "black"
-                    }}>4</Box>
+                    <Box
+                      sx={{
+                        borderRadius: "50%",
+                        background: "lightGray",
+                        width: 25,
+                        height: 25,
+                        color: "black",
+                      }}
+                    >
+                      4
+                    </Box>
                     Crayon cam
                   </Button>
-                  <Box sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center"
-                  }}>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                    }}
+                  >
                     <Button
                       variant="contained"
-                      color={profileCompletion.crayonCam ? "greenButton" : "grayButton400"}
+                      color={
+                        profileCompletion.crayonCam
+                          ? "greenButton"
+                          : "grayButton400"
+                      }
                       sx={{
                         height: "6px",
                         minWidth: 10,
@@ -844,16 +942,16 @@ export default function ProfileCard() {
                     ></Button>
                   </Box>
 
-                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>{profileCompletion.crayonCam ? "25%" : "0%"}</Typography>
+                  <Typography sx={{ fontSize: "12px" }} color={"GrayText"}>
+                    {profileCompletion.crayonCam ? "25%" : "0%"}
+                  </Typography>
                 </Box>
-
               </Box>
             </Box>
           )}
         </Box>
       </Grid>
       <Grid xs={12} sm={6} md={8} lg={9} xl={10}>
-
         <StyledAccordion expanded={expanded} className="accordianSection">
           <AccordionSummary
             // expandIcon={<ExpandMoreIcon onClick={handleProfilePop} />}
@@ -1198,39 +1296,39 @@ export default function ProfileCard() {
                 >
                   {!expanded && (
                     <>
-                      {
-                        profile?.primary?.name && (
-                          <Box
-                            component="img"
-                            height={80}
-                            alt="Primary personality"
-                            src={
-                              profile_challenger
-                              // (job?.primary?.name === "collaborator" && profile_collaborator)
-                              //   (job?.primary?.name === "challenger" && profile_challenger) ||
-                              //   (job?.primary?.name === "character" && profile_character) ||
-                              //   (job?.primary?.name === "contemplator" && profile_contemplator)
-                            }
-                          />
-                        )
-                      }
+                      {profile?.primary?.name && (
+                        <Box
+                          component="img"
+                          height={80}
+                          alt="Primary personality"
+                          src={
+                            profile_challenger
+                            // (job?.primary?.name === "collaborator" && profile_collaborator)
+                            //   (job?.primary?.name === "challenger" && profile_challenger) ||
+                            //   (job?.primary?.name === "character" && profile_character) ||
+                            //   (job?.primary?.name === "contemplator" && profile_contemplator)
+                          }
+                        />
+                      )}
                       {/* </Box> */}
-                      {
-                        profile?.shadow?.name && (
-                          <Box
-                            component="img"
-                            height={80}
-                            alt="Shadow personality"
-                            src={
-                              // profile_collaborator
-                              (profile?.shadow?.name === "collaborator" && profile_collaborator) ||
-                              (profile?.shadow?.name === "challenger" && profile_challenger) ||
-                              (profile?.shadow?.name === "character" && profile_character) ||
-                              (profile?.shadow?.name === "contemplator" && profile_contemplator)
-                            }
-                          />
-                        )
-                      }
+                      {profile?.shadow?.name && (
+                        <Box
+                          component="img"
+                          height={80}
+                          alt="Shadow personality"
+                          src={
+                            // profile_collaborator
+                            (profile?.shadow?.name === "collaborator" &&
+                              profile_collaborator) ||
+                            (profile?.shadow?.name === "challenger" &&
+                              profile_challenger) ||
+                            (profile?.shadow?.name === "character" &&
+                              profile_character) ||
+                            (profile?.shadow?.name === "contemplator" &&
+                              profile_contemplator)
+                          }
+                        />
+                      )}
                       <Box sx={{ margin: "0 -22px 0 -22px" }}>
                         <SingleRadialChart
                           max={1000}
@@ -1392,8 +1490,8 @@ export default function ProfileCard() {
               >
                 <Button
                   onClick={() => {
-                    onSaveProfile()
-                    handleOpenSaveAndExitDialog()
+                    onSaveProfile();
+                    handleOpenSaveAndExitDialog();
                   }}
                   variant="contained"
                   color="grayButton200"
@@ -1408,8 +1506,8 @@ export default function ProfileCard() {
                 </Button>
                 <Button
                   onClick={() => {
-                    onSaveProfile()
-                    handleOpenSaveAndExitDialog()
+                    onSaveProfile();
+                    handleOpenSaveAndExitDialog();
                   }}
                   variant="contained"
                   color="redButton100"
@@ -1548,7 +1646,8 @@ export default function ProfileCard() {
       />
       <SavaAndExit
         show={openSaveAndExitDialog}
-        handleOpen={handleOpenSaveAndExitDialog} />
+        handleOpen={handleOpenSaveAndExitDialog}
+      />
     </Grid>
   );
 }

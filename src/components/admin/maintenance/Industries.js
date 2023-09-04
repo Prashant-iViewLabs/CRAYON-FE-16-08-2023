@@ -73,6 +73,7 @@ export default function Industries() {
             msg: "Industry removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getindustry(0);
       }
     } catch (error) {}
@@ -165,6 +166,7 @@ export default function Industries() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getindustry(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

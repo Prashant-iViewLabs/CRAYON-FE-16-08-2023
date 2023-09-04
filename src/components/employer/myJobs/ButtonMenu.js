@@ -271,7 +271,12 @@ export default function ButtomMenu({ jobId, closeFunc }) {
                     teamMember?.role_type_id === 1 ||
                     teamMember?.role_type_id === 2
                   }
-                  // disabled={teamMember?.role_type_id === 1 ? true : false}
+                  disabled={
+                    teamMember?.role_type_id === 1 ||
+                    teamMember?.role_type_id === 2
+                      ? true
+                      : false
+                  }
                   onChange={(event) =>
                     handleJobAccess(event, teamMember.user_id)
                   }
@@ -295,7 +300,7 @@ export default function ButtomMenu({ jobId, closeFunc }) {
           </style>
         </InfiniteScroll>
       </Box>
-      <Box sx={{ display: "flex" , width: "100%" }}>
+      <Box sx={{ display: "flex", width: "100%" }}>
         <Button
           variant="contained"
           color="grayButton200"
@@ -303,7 +308,7 @@ export default function ButtomMenu({ jobId, closeFunc }) {
             borderRadius: "0 0 0 25px",
             width: "30%",
             padding: "25px 40px",
-            fontSize: "10px"
+            fontSize: "10px",
           }}
           onClick={() => closeFunc(false)}
         >
@@ -314,7 +319,7 @@ export default function ButtomMenu({ jobId, closeFunc }) {
           style={{
             textDecoration: "none",
             color: theme.palette.black,
-            flexGrow: 1
+            flexGrow: 1,
           }}
         >
           <Button
@@ -324,7 +329,7 @@ export default function ButtomMenu({ jobId, closeFunc }) {
               borderRadius: "0 0 25px 0",
               width: "100%",
               padding: "25px 20px",
-              fontSize: "10px"
+              fontSize: "10px",
             }}
             color="redButton100"
           >

@@ -55,14 +55,15 @@ export default function JobTitles() {
   const [companyName, setcompanyName] = useState("");
   const [existingCompany, setExistingCompany] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // const [getRefresh, setGetRefresh] = useState(false);
 
   const { titles } = useSelector((state) => state.myCv);
 
   const getAllData = async () => {
     try {
-      dispatch(setLoading(true));
+      // dispatch(setLoading(true));
       await dispatch(getTitles());
-      dispatch(setLoading(false));
+      // dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
       dispatch(setLoading(false));
@@ -110,7 +111,17 @@ export default function JobTitles() {
             msg: "Job title removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getTitle(0);
+        await getAllData();
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message?.message,
+          })
+        );
       }
     } catch (error) {}
   };
@@ -133,6 +144,7 @@ export default function JobTitles() {
         );
         setOpenEdit(false);
         await getTitle(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -147,7 +159,7 @@ export default function JobTitles() {
 
   const handleAddNewJob = async () => {
     try {
-      if (newJobTitle !== "") {
+      if (newJobTitle.trim().length !== 0) {
         const data = {
           title: newJobTitle,
         };
@@ -164,6 +176,7 @@ export default function JobTitles() {
             })
           );
           await getTitle(0);
+          await getAllData();
         } else {
           dispatch(
             setAlert({
@@ -248,6 +261,7 @@ export default function JobTitles() {
           );
         setOpenApprove(false);
         await getTitle(0);
+        // await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -308,6 +322,7 @@ export default function JobTitles() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getTitle(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

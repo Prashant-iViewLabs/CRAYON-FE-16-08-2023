@@ -23,7 +23,6 @@ import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
 dayjs.locale("en-gb");
 
-
 const StyledButton = styled(Button)(({ theme }) => ({
   marginRight: "24px",
   fontSize: "14px",
@@ -38,13 +37,17 @@ const DETAIL = {
   role_summary: "",
   role_responsibilty: "",
   role_requirements: "",
-  job_start_date: null
+  job_start_date: null,
 };
 
 const i18n = locale.en;
-export default function TheDetails({ changeStep, handleComplete, handleOpenSaveAndExitDialog }) {
+export default function TheDetails({
+  changeStep,
+  handleComplete,
+  handleOpenSaveAndExitDialog,
+}) {
   const fileAccept = "application/pdf, application/doc, application/docx";
-  const theme = useTheme()
+  const theme = useTheme();
   const currentDate = new Date();
 
   const dispatch = useDispatch();
@@ -101,7 +104,7 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
           })
         );
         changeStep(3);
-        handleComplete(2)
+        handleComplete(2);
         setErrors([]);
       } else if (payload?.status == "error") {
         setErrors(payload?.errors);
@@ -143,7 +146,9 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
       ...detailData,
       job_start_date: dayjs(newValue).format("DD-MM-YYYY"),
     };
-    const filteredErrors = errors?.filter((item) => item.key != "job_start_date");
+    const filteredErrors = errors?.filter(
+      (item) => item.key != "job_start_date"
+    );
     setErrors(filteredErrors);
     setDetailData(newDetailData);
   };
@@ -181,11 +186,13 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
   };
 
   return (
-    <Box sx={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 3
-    }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+      }}
+    >
       <Box
         sx={{
           flexGrow: 1,
@@ -258,8 +265,9 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
           {detailData?.role_summary == null &&
             errors.find((error) => error.key == "role_summary") && (
               <Typography color={"red"}>
-                {`*${errors.find((error) => error.key == "role_summary").message
-                  }`}
+                {`*${
+                  errors.find((error) => error.key == "role_summary").message
+                }`}
               </Typography>
             )}
         </Box>
@@ -285,14 +293,14 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
           {detailData?.role_responsibilty == null &&
             errors.find((error) => error.key == "role_responsibilty") && (
               <Typography color={"red"}>
-                {`*${errors.find((error) => error.key == "role_responsibilty")
-                  .message
-                  }`}
+                {`*${
+                  errors.find((error) => error.key == "role_responsibilty")
+                    .message
+                }`}
               </Typography>
             )}
         </Box>
         <Box sx={{ mt: 3 }}>
-
           <InputLabel
             htmlFor="roleRequirement"
             sx={{
@@ -314,9 +322,10 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
           {detailData.role_requirements == null &&
             errors.find((error) => error.key == "role_requirements") && (
               <Typography color={"red"}>
-                {`*${errors.find((error) => error.key == "role_requirements")
-                  .message
-                  }`}
+                {`*${
+                  errors.find((error) => error.key == "role_requirements")
+                    .message
+                }`}
               </Typography>
             )}
         </Box>
@@ -343,7 +352,6 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
                 <TextField
                   {...params}
                   value={detailData.job_start_date}
-
                   inputProps={{
                     placeholder: "dd/mm/yyyy",
                   }}
@@ -355,7 +363,7 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
                       borderRadius: "40px",
                       // border: 1
                     },
-                    '& .MuiIconButton-root': {
+                    "& .MuiIconButton-root": {
                       color: theme.palette.yellowColor, // Change this to the desired color
                     },
                   }}
@@ -366,7 +374,9 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
 
           {errors?.find((error) => error.key == "job_start_date") && (
             <Typography color={"red !important"}>
-              {`*${errors?.find((error) => error.key == "job_start_date").message}`}
+              {`*${
+                errors?.find((error) => error.key == "job_start_date").message
+              }`}
             </Typography>
           )}
         </Box>
@@ -387,8 +397,8 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
             fontSize: "15px",
             borderRadius: "26px 0 0 0",
           }}
-        // onClick={handle }
-        onClick={handleOpenSaveAndExitDialog}
+          // onClick={handle }
+          onClick={handleOpenSaveAndExitDialog}
         >
           Save and Exit
         </Button>
@@ -396,7 +406,6 @@ export default function TheDetails({ changeStep, handleComplete, handleOpenSaveA
           variant="contained"
           color="redButton"
           sx={{
-
             width: "229px",
             height: "57px",
             fontSize: "15px",

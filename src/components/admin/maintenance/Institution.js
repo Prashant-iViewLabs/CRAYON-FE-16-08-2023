@@ -113,14 +113,16 @@ export default function Institution() {
             msg: "Institution removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getInstituion(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewInstitution = async () => {
     try {
-      if (newInstitutionTitle !== "") {
+      if (newInstitutionTitle.trim().length !== 0) {
         const data = {
           title: newInstitutionTitle,
         };
@@ -137,6 +139,7 @@ export default function Institution() {
             })
           );
           await getInstituion(0);
+          await getAllData();
         } else {
           dispatch(
             setAlert({
@@ -177,6 +180,7 @@ export default function Institution() {
         );
         setOpenEdit(false);
         await getInstituion(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -312,6 +316,7 @@ export default function Institution() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getInstituion(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

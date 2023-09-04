@@ -67,7 +67,16 @@ export default function AutoComplete({
         onChange={(event, newValue) => onChange(event, newValue, id, index)}
         // filterOptions={filterFunction}
         filterOptions={(options, params) => {
-          const newOptionsArr = options.filter((val) => val?.name != "");
+          const filteredOptions = options
+            .filter((val) => val.name !== "") // Filter out objects with empty names
+            .reduce((uniqueMap, obj) => {
+              if (!uniqueMap[obj.name]) {
+                uniqueMap[obj.name] = obj;
+              }
+              return uniqueMap;
+            }, {});
+
+          const newOptionsArr = Object.values(filteredOptions);
           const { inputValue } = params;
 
           if (
@@ -112,10 +121,6 @@ export default function AutoComplete({
         clearOnBlur
         handlehomeendkeysfilter="true"
         options={optionData}
-        // getOptionLabel={(option) => {
-        //   console.log(option)
-        //   return option
-        // }}
         getOptionLabel={(option) => {
           // Value selected with enter, right from the input
           if (typeof option === "string") {

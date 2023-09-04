@@ -8,6 +8,16 @@ const initialState = {
   adminMaintenance: [],
 };
 
+export const getMaintenanceCount = createAsyncThunk(
+  "getMaintenanceCount",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi("/admin/maintenance/counter", true);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getAllCompanies = createAsyncThunk(
   "getAllCompanies",
   async ({ lastKey }, { dispatch }) => {

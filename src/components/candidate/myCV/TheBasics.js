@@ -574,6 +574,7 @@ export default function TheBasics({ changeStep }) {
     if (basicData.tags?.length == 0) {
       return [];
     }
+    console.log(skills);
     return basicData.tags?.map(
       (skill) => skills?.find((sk) => sk.id == skill) || skill
     );
@@ -671,12 +672,17 @@ export default function TheBasics({ changeStep }) {
             >
               {i18n["myCV.currentJobTitleLabel"]}
             </InputLabel>
-            {console.log(basicData)}
+            {console.log(
+              titles?.find(
+                (title) => title.job_title_id == basicData.current_job_title_id
+              )
+            )}
             <AutoComplete
               id="current_job_title_id"
               value={
                 titles?.find(
-                  (title) => title.id == basicData.current_job_title_id
+                  (title) =>
+                    title.job_title_id == basicData.current_job_title_id
                 ) || basicData.current_job_title_id
               }
               // defaultValue={basicData.current_job_title_id}
@@ -687,7 +693,7 @@ export default function TheBasics({ changeStep }) {
               showAddOption={true}
             ></AutoComplete>
             {!titles?.find(
-              (title) => title.id == basicData.current_job_title_id
+              (title) => title.job_title_id == basicData.current_job_title_id
             ) &&
               !basicData.current_job_title_id &&
               errors?.find((error) => error.key == "current_job_title_id") && (
@@ -716,7 +722,7 @@ export default function TheBasics({ changeStep }) {
               id="dream_job_title_id"
               value={
                 titles?.find(
-                  (title) => title.id == basicData.dream_job_title_id
+                  (title) => title.job_title_id == basicData.dream_job_title_id
                 ) || basicData.dream_job_title_id
               }
               onChange={handleAutoComplete}
@@ -726,7 +732,7 @@ export default function TheBasics({ changeStep }) {
               showAddOption={true}
             ></AutoComplete>
             {!titles?.find(
-              (title) => title.id == basicData.dream_job_title_id
+              (title) => title.job_title_id == basicData.dream_job_title_id
             ) &&
               !basicData.dream_job_title_id &&
               errors?.find((error) => error.key == "dream_job_title_id") && (

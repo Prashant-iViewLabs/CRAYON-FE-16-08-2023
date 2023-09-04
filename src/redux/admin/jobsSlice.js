@@ -8,6 +8,20 @@ const initialState = {
   jobs: [],
 };
 
+export const getSearchResult = createAsyncThunk(
+  "getSearchResult",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/admin/buildsearch?lastKey=",
+      payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getAllJobs = createAsyncThunk(
   "getAllJobs",
   async (payload, { dispatch }) => {

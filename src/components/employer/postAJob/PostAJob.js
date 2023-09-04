@@ -6,7 +6,13 @@ import ButtonPanel from "../../common/ButtonPanel";
 import { EMPLOYER_JOB_POSTING_SPEC_LEFT } from "../../../utils/Constants";
 import locale from "../../../i18n/locale";
 import { useState } from "react";
-import { Step, StepButton, StepLabel, Stepper, Typography } from "@mui/material";
+import {
+  Step,
+  StepButton,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
 import TheBasicsNew from "./TheBasics";
 import TheDetailsNew from "./TheDetails";
 import CultureAddNew from "./CultureAdd";
@@ -18,17 +24,18 @@ const i18n = locale.en;
 
 const steps = [
   {
-    label: 'Job Type'
+    label: "Job Type",
   },
   {
-    label: "the basics"
+    label: "the basics",
   },
   {
-    label: "the details"
+    label: "the details",
   },
   {
-    label: "culture add"
-  }]
+    label: "culture add",
+  },
+];
 const StyledButtonLeft = styled(Button)(({ theme }) => ({
   // marginRight: "24px",
   fontSize: "14px",
@@ -46,13 +53,12 @@ export default function MyCV() {
   const [activeStep, setActiveStep] = useState(0);
 
   const [completed, setCompleted] = useState({});
-  const [jobType, setJobType] = useState("")
-  const { jobId } = useParams()
-  
+  const [jobType, setJobType] = useState("");
+  const { jobId } = useParams();
+
   const [openSaveAndExitDialog, setOpenSaveAndExitDialog] = useState(false);
 
-  console.log(jobId)
-
+  console.log(jobId);
 
   const handleRightButtonClick = (param) => {
     setStep(param);
@@ -77,24 +83,24 @@ export default function MyCV() {
     // Scroll to the top of the page with smooth behavior
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
-  }
+  };
   const handleStep = (step) => {
     setActiveStep(step);
-    scrollToTop()
+    scrollToTop();
   };
   const handleComplete = (step) => {
     const newCompleted = completed;
     newCompleted[step || activeStep] = true;
     setCompleted(newCompleted);
-    console.log(activeStep)
+    console.log(activeStep);
     // handleNext();
-    scrollToTop()
+    scrollToTop();
   };
   const handleOpenSaveAndExitDialog = () => {
-    setOpenSaveAndExitDialog((prevState) => !prevState)
-  }
+    setOpenSaveAndExitDialog((prevState) => !prevState);
+  };
 
   return (
     <>
@@ -104,15 +110,12 @@ export default function MyCV() {
         flexDirection={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
       >
-        <Grid
-          item
-          md={2}
-          lg={1}
-          xl={1}
-          className="filterSec"
-        >
+        <Grid item md={2} lg={1} xl={1} className="filterSec">
           <Box>
-            <ButtonPanel panelData={EMPLOYER_JOB_POSTING_SPEC_LEFT} side="left" />
+            <ButtonPanel
+              panelData={EMPLOYER_JOB_POSTING_SPEC_LEFT}
+              side="left"
+            />
           </Box>
         </Grid>
         <Grid
@@ -126,7 +129,7 @@ export default function MyCV() {
             px: 2,
             display: "flex",
             flexDirection: "column",
-            paddingBottom: 6
+            paddingBottom: 6,
           }}
           gap={1}
           flexGrow="1 !important"
@@ -152,14 +155,41 @@ export default function MyCV() {
               flexDirection: "column",
               justifyContent: "space-between",
               background: "#FFFFFF",
-              paddingBottom: 0
+              paddingBottom: 0,
             }}
           >
             <Box>
-              {activeStep === 0 && <JobType changeStep={handleStep} handleComplete={handleComplete} handleJobType={setJobType} selectedJobType={jobType} jobId={jobId} />}
-              {activeStep === 1 && <TheBasicsNew changeStep={handleStep} handleComplete={handleComplete} handleJobType={setJobType} selectedJobType={jobType} handleOpenSaveAndExitDialog={handleOpenSaveAndExitDialog}/>}
-              {activeStep === 2 && <TheDetailsNew changeStep={handleStep} handleComplete={handleComplete} handleOpenSaveAndExitDialog={handleOpenSaveAndExitDialog}/>}
-              {activeStep === 3 && <CultureAddNew changeStep={handleStep} handleOpenSaveAndExitDialog={handleOpenSaveAndExitDialog}/>}
+              {activeStep === 0 && (
+                <JobType
+                  changeStep={handleStep}
+                  handleComplete={handleComplete}
+                  handleJobType={setJobType}
+                  selectedJobType={jobType}
+                  jobId={jobId}
+                />
+              )}
+              {activeStep === 1 && (
+                <TheBasicsNew
+                  changeStep={handleStep}
+                  handleComplete={handleComplete}
+                  handleJobType={setJobType}
+                  selectedJobType={jobType}
+                  handleOpenSaveAndExitDialog={handleOpenSaveAndExitDialog}
+                />
+              )}
+              {activeStep === 2 && (
+                <TheDetailsNew
+                  changeStep={handleStep}
+                  handleComplete={handleComplete}
+                  handleOpenSaveAndExitDialog={handleOpenSaveAndExitDialog}
+                />
+              )}
+              {activeStep === 3 && (
+                <CultureAddNew
+                  changeStep={handleStep}
+                  handleOpenSaveAndExitDialog={handleOpenSaveAndExitDialog}
+                />
+              )}
             </Box>
           </Box>
           <style>
@@ -234,22 +264,24 @@ export default function MyCV() {
                     backgroundColor: step.backgroundColor,
                     color: "green",
                     border: `2px solid ${step.borderColor}`,
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    paddingRight: 0
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    paddingRight: 0,
                   }}
                 >
                   {step.label}
                 </StepLabel>
-              </Step>))}
+              </Step>
+            ))}
           </Stepper>
         </Grid>
 
         {/* <ButtonPanel panelData={CANDIDATE_MY_CV_RIGHT} side='right' /> */}
-      </Grid >
+      </Grid>
       <SavaAndExit
         show={openSaveAndExitDialog}
-        handleOpen={handleOpenSaveAndExitDialog} />
+        handleOpen={handleOpenSaveAndExitDialog}
+      />
     </>
   );
 }

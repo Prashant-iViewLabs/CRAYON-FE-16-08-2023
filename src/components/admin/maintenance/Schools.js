@@ -105,14 +105,16 @@ export default function Schools() {
             msg: "School removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getSchools(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewSchool = async () => {
     try {
-      if (newSchoolTitle !== "") {
+      if (newSchoolTitle.trim().length !== 0) {
         const data = {
           title: newSchoolTitle,
         };
@@ -129,6 +131,7 @@ export default function Schools() {
             })
           );
           await getSchools(0);
+          await getAllData();
         } else {
           dispatch(
             setAlert({
@@ -168,6 +171,7 @@ export default function Schools() {
         );
         setOpenEdit(false);
         await getSchools(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -303,6 +307,7 @@ export default function Schools() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getSchools(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

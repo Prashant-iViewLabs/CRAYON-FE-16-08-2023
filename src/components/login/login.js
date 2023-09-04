@@ -73,7 +73,7 @@ export default function Login({
   const [showPassword, setShowPassword] = useState(false);
   const [inputType, setInputType] = useState("password");
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
-  const [loginTouched, setLoginTouched] = useState(false)
+  const [loginTouched, setLoginTouched] = useState(false);
 
   const handleShowPassword = () => {
     if (showPassword) setInputType("password");
@@ -109,7 +109,7 @@ export default function Login({
             : "",
       };
       await handleLogin(formBody);
-      setLoginTouched(false)
+      setLoginTouched(false);
     },
   });
   const handleForgotPassword = () => {
@@ -119,7 +119,7 @@ export default function Login({
   const handleCloseForgotPassword = () => {
     setOpenForgotPassword(false);
   };
-  
+
   return (
     <>
       <Dialog
@@ -137,9 +137,9 @@ export default function Login({
           <IconButton
             aria-label="close"
             onClick={() => {
-              closeFunc()
-              setLoginTouched(false)
-              formik.resetForm()
+              closeFunc();
+              setLoginTouched(false);
+              formik.resetForm();
             }}
             sx={{
               position: "absolute",
@@ -148,14 +148,16 @@ export default function Login({
               color: (theme) => theme.palette.grey[500],
             }}
           >
-            <Box sx={{
-              width: "20px",
-              height: "20px",
-              color: "#000000",
-              border: 2,
-              fontSize: "18px",
-              borderRadius: "5px"
-            }}>
+            <Box
+              sx={{
+                width: "20px",
+                height: "20px",
+                color: "#000000",
+                border: 2,
+                fontSize: "18px",
+                borderRadius: "5px",
+              }}
+            >
               X
             </Box>
           </IconButton>
@@ -176,7 +178,7 @@ export default function Login({
               fontWeight: 700,
             }}
           >
-             guess who’s back, back again
+            guess who’s back, back again
           </Typography>
           <Typography
             sx={{
@@ -189,17 +191,22 @@ export default function Login({
             {/* {(formik.errors.username || formik.errors.password) &&
         <span className="error-div">oops! Something wasn't right</span>} */}
           </Typography>
-          {Object.keys(formik.errors).length !== 0 &&  Object.keys(formik.touched).some(field => formik.touched[field]) && loginTouched  ? (
+          {Object.keys(formik.errors).length !== 0 &&
+          Object.keys(formik.touched).some((field) => formik.touched[field]) &&
+          loginTouched ? (
             <Typography
               sx={{
-                fontSize: '14px',
+                fontSize: "14px",
                 fontWeight: 500,
-                color: 'red', // You can customize the error color
+                color: "red", // You can customize the error color
               }}
             >
-              oops! something wasn’t right {/* Display the specific error message */}
+              oops! something wasn’t right{" "}
+              {/* Display the specific error message */}
             </Typography>
-          ) : " "}
+          ) : (
+            " "
+          )}
           <Box sx={{ mt: 3, width: "90%", padding: 0 }}>
             <Paper
               sx={{
@@ -278,9 +285,9 @@ export default function Login({
             </Typography>
             <BlueSwitch
               defaultChecked={false}
-            // onChange={(event) =>
-            //   handleJobAccess(event, row.job_id)
-            // }
+              // onChange={(event) =>
+              //   handleJobAccess(event, row.job_id)
+              // }
             />
           </Box>
           <Box
@@ -345,12 +352,11 @@ export default function Login({
               variant="contained"
               color="redButton"
               onClick={() => {
-                formik.handleSubmit()
-                setLoginTouched(true)
+                formik.handleSubmit();
+                setLoginTouched(true);
               }}
               type="submit"
             >
-
               {loginTouched ? "Sign in" : "let's go"}
             </Button>
           </Box>

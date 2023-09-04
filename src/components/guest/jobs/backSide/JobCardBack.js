@@ -42,6 +42,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 import Slider2 from "../../../common/Slider2";
 import Slider from "../../../common/Slider";
+import { truncate } from "lodash";
 
 const JobCardFront = ({
   index,
@@ -146,7 +147,6 @@ const JobCardFront = ({
         overflow={"hidden"}
         sx={{
           borderRadius: "25px 25px 0 0",
-          flexWrap: "nowrap"
           //   gap: 3,
         }}
       >
@@ -193,7 +193,8 @@ const JobCardFront = ({
               <SmallButton
                 color="lightGreenButton300"
                 mr={1}
-                label={job?.stage?.name}
+                value={job?.stage?.name}
+                label={truncate(job?.stage?.name, { length: 9 })}
               />
             )}
           </Box>
@@ -378,7 +379,8 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-              {job?.experience?.year_start} to  {job?.experience?.year_end} years
+                {job?.experience?.year_start} to {job?.experience?.year_end}
+                years
               </Typography>
             </Box>
             <Box
@@ -396,7 +398,7 @@ const JobCardFront = ({
                   width: 16,
                   maxHeight: { xs: 15 },
                   maxWidth: { xs: 15 },
-                  padding: 0
+                  padding: 0,
                 }}
                 alt="calendar"
                 src={calendar}
@@ -526,10 +528,9 @@ const JobCardFront = ({
         alignItems="center"
         overflow={"hidden"}
         sx={{
-          // background: "green",
           width: "100%",
           borderRadius: "0 0 25px 25px",
-          height: 50,
+          height: 51,
         }}
       >
         <Button

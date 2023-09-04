@@ -330,7 +330,7 @@ export default function MyJobsCard({ index, job, getJobs }) {
               letterSpacing: "0.25px",
             }}
           >
-            {job?.experience?.year} years Experience
+            {job?.experience?.year} years 
           </Typography>
         </Box>
         <Box

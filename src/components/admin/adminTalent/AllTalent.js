@@ -143,6 +143,7 @@ export default function AllTalent() {
         style={{ overflow: "hidden" }}
         dataLength={allJobs.length}
         next={() => getJobList(lastKey)}
+        scrollThreshold={"10px"}
         hasMore={true}
         endMessage={
           <p style={{ textAlign: "center" }}>

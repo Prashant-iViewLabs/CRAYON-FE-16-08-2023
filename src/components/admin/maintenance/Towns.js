@@ -86,14 +86,16 @@ export default function Towns() {
             msg: "Town removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getTowns(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewTowns = async (regionID) => {
     try {
-      if (newTownTitle !== "") {
+      if (newTownTitle.trim().length !== 0) {
         const data = {
           title: newTownTitle,
           region_id: regionID,
@@ -111,6 +113,7 @@ export default function Towns() {
             })
           );
           await getTowns(0);
+          await getAllData();
         } else {
           dispatch(
             setAlert({
@@ -154,6 +157,7 @@ export default function Towns() {
         );
         setOpenEdit(false);
         await getTowns(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -255,6 +259,7 @@ export default function Towns() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getTowns(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

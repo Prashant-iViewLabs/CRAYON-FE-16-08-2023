@@ -15,6 +15,8 @@ const initialState = {
   institution: [],
   qualification: [],
   typeOfQualification: [],
+  nationality: [],
+  language: [],
   association: [],
 };
 export const getCV = createAsyncThunk(
@@ -155,6 +157,28 @@ export const addWorkData = createAsyncThunk(
   }
 );
 
+export const addReferenceData = createAsyncThunk(
+  "addReferenceData",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi("/cv/reference", payload, true);
+    dispatch(setLoading(false));
+    console.log(data);
+    return data;
+  }
+);
+
+export const getReferenceData = createAsyncThunk(
+  "getReferenceData",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi("/cv/getreference", true);
+    dispatch(setLoading(false));
+    console.log(data);
+    return data;
+  }
+);
+
 export const addStudyData = createAsyncThunk(
   "addStudyData",
   async (payload, { dispatch }) => {
@@ -205,6 +229,22 @@ export const getQualification = createAsyncThunk(
   }
 );
 
+export const getNationality = createAsyncThunk(
+  "getNationality",
+  async (payload, { dispatch }) => {
+    const { data } = await getApi("/nationalities", true);
+    return data;
+  }
+);
+
+export const getLanguage = createAsyncThunk(
+  "getLanguage",
+  async (payload, { dispatch }) => {
+    const { data } = await getApi("/languages", true);
+    return data;
+  }
+);
+
 export const myCvSlice = createSlice({
   name: "myCv",
   initialState,
@@ -215,6 +255,20 @@ export const myCvSlice = createSlice({
         state.titles = action.payload.data.map((title) => {
           title.id = title.job_title_id;
           title.name = title.title;
+          return title;
+        });
+      })
+      .addCase(getNationality.fulfilled, (state, action) => {
+        state.nationality = action.payload.data.map((title) => {
+          title.id = title.nationality_id;
+          title.name = title.nationality;
+          return title;
+        });
+      })
+      .addCase(getLanguage.fulfilled, (state, action) => {
+        state.language = action.payload.data.map((title) => {
+          title.id = title.language_id;
+          title.name = title.language;
           return title;
         });
       })
@@ -265,6 +319,7 @@ export const myCvSlice = createSlice({
       .addCase(getSchool.fulfilled, (state, action) => {
         state.school = action.payload.data.map((sch) => {
           sch.id = sch.school_id;
+          sch.name = sch.name;
           return sch;
         });
       })
@@ -282,7 +337,8 @@ export const myCvSlice = createSlice({
       })
       .addCase(getAssociation.fulfilled, (state, action) => {
         state.association = action.payload.data.map((inst) => {
-          inst.id = inst.id;
+          inst.id = inst.association_id;
+          inst.name = inst.name;
           return inst;
         });
       })

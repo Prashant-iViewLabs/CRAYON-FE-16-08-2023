@@ -8,10 +8,22 @@ import profile_character from "../../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../../assets/Profile Icons_Collaborator.svg";
 import profile_contemplator from "../../../../assets/Profile Icons_Contemplator.svg";
 import SingleRadialChart from "../../../common/SingleRadialChart";
+import TagsSlider from "./TagsSlider";
 
-export default function CandidateFlipInfo({ primary, shadow, gritScore }) {
+export default function CandidateFlipInfo({
+  primary,
+  shadow,
+  gritScore,
+  skills,
+  traits,
+  tools,
+}) {
   const theme = useTheme();
-  console.log(primary, shadow);
+  const jobTags = skills.map((tag) => tag?.tag?.tag);
+  const traitsTags = traits.map((trait) => trait?.trait?.name);
+  const toolTags = tools.map((tool) => tool?.tool?.name);
+  console.log(toolTags);
+
   return (
     <Grid sx={{ display: "flex", marginTop: "25px" }}>
       <Box
@@ -61,7 +73,7 @@ export default function CandidateFlipInfo({ primary, shadow, gritScore }) {
             nameOffsetY="11"
             valueOffsetY="-17"
             labelsData={"grit score"}
-            series={[50]}
+            series={[gritScore]}
             width={86}
             color={theme.palette.chart.green200}
             index={1}
@@ -74,32 +86,15 @@ export default function CandidateFlipInfo({ primary, shadow, gritScore }) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           marginLeft: "6px",
+          marginBottom: "8px",
           gap: 1,
         }}
       >
-        <Slider
-          items={["full time", "accounts", "sales", "Numbers", "Credit"]}
-          color={"yellowButton200"}
-          theme={theme}
-        />
-        <Slider
-          items={["xero", "excel", "SAP", "Pastel"]}
-          theme={theme}
-          color={"yellowButton100"}
-        />
-        <Slider
-          items={[
-            "organised",
-            "detailed",
-            "proactive",
-            "thrives on stress",
-            "adapatable",
-          ]}
-          theme={theme}
-          color={"grayButton200"}
-        />
+        <TagsSlider items={jobTags} color={"yellowButton200"} theme={theme} />
+        <TagsSlider items={toolTags} theme={theme} color={"yellowButton100"} />
+        <TagsSlider items={traitsTags} theme={theme} color={"grayButton200"} />
       </Box>
     </Grid>
   );

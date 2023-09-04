@@ -226,8 +226,9 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/employer/job-detail/${`${job?.townName + " " + job?.townRegionName
-                    }`}/${job?.job_id}`}
+                  to={`/employer/job-detail/${`${
+                    job?.townName + " " + job?.townRegionName
+                  }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -307,7 +308,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.experiance} years Experience
+                    {job?.experiance} years
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -318,7 +319,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       width: 16,
                       maxHeight: { xs: 15 },
                       maxWidth: { xs: 15 },
-                      padding: 0
+                      padding: 0,
                     }}
                     alt="calendar"
                     src={calendar}
@@ -484,8 +485,8 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
           >
             <Box sx={{ margin: "0 -22px 0 -22px" }}>
               <SingleRadialChart
-                labelsData={"Grit Score"}
-                series={[job?.TotalUserCount]}
+                labelsData={"grit score"}
+                series={[job?.grit_score]}
                 width={120}
                 color={theme.palette.chart.red}
                 index={index}
@@ -541,41 +542,13 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             sx={{
               width: "100%",
               borderRadius: "0 0 25px 25px",
-              height: 50,
+              height: 51,
             }}
           >
-            {/* <Box sx={{ width: "66%", paddingRight: "10px" }}> */}
-
-            {/* </Box> */}
-
             <Box sx={{ width: "33.33%" }}>
               <ManageButtonMenu job={job} />
             </Box>
-            <Link
-              to={`/jobs/job-detail/${`${job?.townName + " " + job?.townRegionName
-                }`}/${job?.job_id}`}
-              target={"_blank"}
-              style={{
-                textDecoration: "none",
-                color: theme.palette.black,
-                width: "33.33%",
-                height: "100%",
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{
-                  borderRadius: 0,
-                  fontSize: "10px",
-                  height: "100%",
-                  width: "100%",
-                }}
-                color="grayButton200"
-              >
-                View More
-              </Button>
-            </Link>
-            <Box sx={{ width: "33.33%" }}>
+            <Box sx={{ width: "66.66%" }}>
               <Link
                 to={`/employer/manage-talent/${job?.job_id}`}
                 target="_blank"
@@ -593,8 +566,9 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                   }}
                   variant="contained"
                   color="redButton100"
+                  // onClick={() => showManageJob()}
+
                   startIcon={<GroupsIcon />}
-                // onClick={() => showManageJob()}
                 >
                   {i18n["manageJob.talentBtn"]}
                 </Button>

@@ -262,7 +262,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
               marginBottom: "8px",
             }}
           >
-            posted {convertDatetimeAgo(job?.updated_at)}
+            joined {convertDatetimeAgo(job?.updated_at)}
           </Typography>
         </Box>
       </Grid>
@@ -410,7 +410,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   width: 16,
                   maxHeight: { xs: 15 },
                   maxWidth: { xs: 15 },
-                  padding: 0
+                  padding: 0,
                 }}
                 alt="calendar"
                 src={calendar}
@@ -709,7 +709,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           }}
         >
           <SingleRadialChart
-            labelsData={"grit Score"}
+            labelsData={"grit score"}
             series={[job?.candidate_profile?.candidate_info?.grit_score]}
             width={120}
             color={theme.palette.chart.red}
@@ -770,10 +770,9 @@ export default function TalentCard({ index, job, setisFlipped }) {
         alignItems="center"
         overflow={"hidden"}
         sx={{
-          background: "green",
           width: "100%",
           borderRadius: "0 0 25px 25px",
-          height: 50,
+          height: 51,
         }}
       >
         <Button

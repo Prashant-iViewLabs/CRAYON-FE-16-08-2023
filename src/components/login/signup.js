@@ -27,7 +27,14 @@ import { handleSignState } from "../../redux/signUp/action";
 import PrivacyPolicy from "../../assets/crayon-privacy-policy.pdf";
 import TermsandServices from "../../assets/crayon-terms-of-service.pdf";
 import jwt_decode from "jwt-decode";
-import { Avatar, DialogTitle, InputAdornment, InputBase, MenuItem, Select } from "@mui/material";
+import {
+  Avatar,
+  DialogTitle,
+  InputAdornment,
+  InputBase,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -36,10 +43,8 @@ import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import smileFace from "../../assets/Characters/Blue_Circle_Smile.svg";
 import ForgotPassword from "./ForgotPassword";
-import PhoneAutoCOmplete from "../common/PhoneAutoComplete";
 import PhoneInput from "react-phone-input-2";
-import 'react-phone-input-2/lib/style.css'
-// import PhoneAutoComplete from "../common/PhoneAutoComplete";
+import "react-phone-input-2/lib/style.css";
 
 const FORMDATA = {
   firstName: "",
@@ -47,9 +52,8 @@ const FORMDATA = {
   email: "",
   password: "",
   contact: "",
-  roleId: 3
+  roleId: 3,
 };
-
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("required"),
@@ -57,14 +61,16 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .required("Email address is required")
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid Email"),
-  password: Yup.string().required("Password is required").test("password", "Weak", value => {
-    if (value && value.length >= 5 && value.length <= 10) {
-      return true;
-    }
-    return "medium";
-  }).min(5, "Weak"),
-  contact: Yup.string()
-    .required("invalid Number")
+  password: Yup.string()
+    .required("Password is required")
+    .test("password", "Weak", (value) => {
+      if (value && value.length >= 5 && value.length <= 10) {
+        return true;
+      }
+      return "medium";
+    })
+    .min(5, "Weak"),
+  contact: Yup.string().required("invalid Number"),
   // .test("validPhoneNumber", "Invalid number", function (value) {
   //   return validatePhoneNumber(this.parent.countryCode, value, countries);
   // }),
@@ -86,7 +92,7 @@ export default function Signup({
   const [currentTabs, setcurrentTabs] = useState(PUBLIC_TAB_ITEMS);
   const [showPassword, setShowPassword] = useState(false);
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
-  const [signupTouched, setSignupTouched] = useState(false)
+  const [signupTouched, setSignupTouched] = useState(false);
   const token = localStorage?.getItem("token");
   let decodedToken;
   if (token) {
@@ -228,10 +234,10 @@ export default function Signup({
           <IconButton
             aria-label="close"
             onClick={() => {
-              closeFunc()
-              formik.resetForm()
+              closeFunc();
+              formik.resetForm();
               setUserType("");
-              setSignupTouched(false)
+              setSignupTouched(false);
             }}
             sx={{
               position: "absolute",
@@ -241,14 +247,16 @@ export default function Signup({
             }}
           >
             {/* <CloseIcon /> */}
-            <Box sx={{
-              width: "20px",
-              height: "20px",
-              color: "#000000",
-              border: 2,
-              fontSize: "18px",
-              borderRadius: "5px"
-            }}>
+            <Box
+              sx={{
+                width: "20px",
+                height: "20px",
+                color: "#000000",
+                border: 2,
+                fontSize: "18px",
+                borderRadius: "5px",
+              }}
+            >
               X
             </Box>
           </IconButton>
@@ -281,12 +289,14 @@ export default function Signup({
             Join crayon
           </Typography>
           {console.log(formik.errors)}
-          {Object.keys(formik.errors).length !== 0 && Object.keys(formik.touched).some(field => formik.touched[field]) && signupTouched ? (
+          {Object.keys(formik.errors).length !== 0 &&
+          Object.keys(formik.touched).some((field) => formik.touched[field]) &&
+          signupTouched ? (
             <Typography
               sx={{
-                fontSize: '14px',
+                fontSize: "14px",
                 fontWeight: 500,
-                color: 'red',
+                color: "red",
               }}
             >
               oops! something wasn’t right
@@ -294,7 +304,7 @@ export default function Signup({
           ) : (
             <Typography
               sx={{
-                fontSize: '14px',
+                fontSize: "14px",
                 fontWeight: 500,
               }}
             >
@@ -422,22 +432,22 @@ export default function Signup({
                   inputStyle={{
                     width: "auto",
                     // borderRadius: "25px",
-                    border: 0
+                    border: 0,
                   }}
                   buttonStyle={{
                     borderRadius: "25px 0 0 25px",
                   }}
                   dropdownStyle={{
-                    maxHeight: "100px"
+                    maxHeight: "100px",
                   }}
                   country={"us"}
                   inputProps={{
-                    name: 'contact',
+                    name: "contact",
                   }}
                   // className="marginBottom"
                   value={formik.values.contact}
                   onChange={(value) => {
-                    formik.setFieldValue('contact', value);
+                    formik.setFieldValue("contact", value);
                   }}
                   onBlur={formik.handleBlur}
                 />
@@ -536,13 +546,12 @@ export default function Signup({
               variant="contained"
               color="redButton"
               onClick={() => {
-                formik.handleSubmit()
-                setSignupTouched(true)
+                formik.handleSubmit();
+                setSignupTouched(true);
               }}
             >
               {/* {i18n["login.letsGo"]} */}
               {signupTouched ? "join crayon" : "sign me up, Scotty!"}
-
             </Button>
           </Box>
         </Box>

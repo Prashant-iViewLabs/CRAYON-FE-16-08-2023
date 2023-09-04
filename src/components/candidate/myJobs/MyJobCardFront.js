@@ -283,8 +283,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                    }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${
+                    job?.town?.name + " " + job?.town?.region?.name
+                  }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -365,7 +366,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                     }}
                   >
                     {/* {job?.experience?.minYear} to {job?.experience?.maxYear} years  */}
-                    {job?.experience?.year} years Experience
+                    {job?.experience?.year} years
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -376,7 +377,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                       width: 16,
                       maxHeight: { xs: 15 },
                       maxWidth: { xs: 15 },
-                      padding: 0
+                      padding: 0,
                     }}
                     alt="calendar"
                     src={calendar}
@@ -487,7 +488,7 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
             sx={{
               width: "100%",
               borderRadius: "0 0 25px 25px",
-              height: 50,
+              height: 51,
             }}
           >
             <Button

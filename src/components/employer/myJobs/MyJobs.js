@@ -31,7 +31,7 @@ export default function MyJobs() {
   const [jobListFilter, setJobListFilter] = useState([allStages[0]?.id]);
   const [jobStatusFilter, setJobStatusFilter] = useState([jobStatus[0]?.id]);
   const [talents, setTalents] = useState([]);
-  const [jobTypeID, setjobTypeID] = useState()
+  const [jobTypeID, setjobTypeID] = useState();
 
   const allJobsFilter = async () => {
     await dispatch(getAllEmployerJobs());
@@ -214,7 +214,7 @@ export default function MyJobs() {
                   color: "black",
                 }}
               >
-                {i18n["jobs.noData"]}
+                {""}
               </Box>
             )}
           </Grid>
@@ -289,7 +289,6 @@ export default function MyJobs() {
             marginLeft: "1px",
           }}
         >
-
           <ButtonPanel
             panelData={allStages}
             side="right"

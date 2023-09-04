@@ -43,6 +43,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Slider2 from "../../../common/Slider2";
 import Fade from "@mui/material/Fade";
 import JobDescripiton from "../../../common/JobDescripiton";
+import { truncate } from "lodash";
 
 const label1 = "applied";
 const label2 = "shortlisted";
@@ -177,7 +178,6 @@ const JobCardFront = ({
         overflow={"hidden"}
         sx={{
           borderRadius: "25px 25px 0 0",
-          flexWrap: "nowrap"
           //   gap: 2,
         }}
       >
@@ -225,7 +225,8 @@ const JobCardFront = ({
               <SmallButton
                 color="lightGreenButton300"
                 mr={1}
-                label={job?.stage?.name}
+                value={job?.stage?.name}
+                label={truncate(job?.stage?.name, { length: 9 })}
               />
             )}
           </Box>
@@ -352,8 +353,9 @@ const JobCardFront = ({
             placement="top"
           >
             <Link
-              to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${
+                job?.town?.name + " " + job?.town?.region?.name
+              }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -371,7 +373,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-              // onClick={handleJobTitle}
+                // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -449,7 +451,8 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.experience?.year_start} to  {job?.experience?.year_end} years
+                {job?.experience?.year_start} to {job?.experience?.year_end}{" "}
+                years
               </Typography>
             </Box>
             <Box
@@ -467,7 +470,7 @@ const JobCardFront = ({
                   width: 16,
                   maxHeight: { xs: 15 },
                   maxWidth: { xs: 15 },
-                  padding: 0
+                  padding: 0,
                 }}
                 alt="calendar"
                 src={calendar}
@@ -663,10 +666,9 @@ const JobCardFront = ({
         alignItems="center"
         overflow={"hidden"}
         sx={{
-          background: "green",
           width: "100%",
           borderRadius: "0 0 25px 25px",
-          height: 50,
+          height: 51,
         }}
       >
         {/* <Box
@@ -722,8 +724,9 @@ const JobCardFront = ({
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-            }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${
+            job?.town?.name + " " + job?.town?.region?.name
+          }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",

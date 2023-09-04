@@ -40,6 +40,7 @@ export default function Followers() {
         style={{ overflow: "hidden" }}
         dataLength={allFollowers.length}
         next={() => getFollowedCompany(lastKey)}
+        scrollThreshold={"10px"}
         hasMore={true}
         endMessage={
           <p style={{ textAlign: "center" }}>

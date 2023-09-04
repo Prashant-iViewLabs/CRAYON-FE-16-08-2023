@@ -58,6 +58,7 @@ export default function Tools() {
   const [editableTool, setEditableTool] = useState();
   const [toolName, settoolName] = useState("");
   const [existingTool, setExistingTool] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const { tools } = useSelector((state) => state.postJobs);
 
@@ -111,15 +112,16 @@ export default function Tools() {
             msg: "Tool removed successfully",
           })
         );
-        setOpenDelete(false);
+        setConfirmDelete(false);
         await getTool(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewTool = async () => {
     try {
-      if (newTool !== "") {
+      if (newTool.trim().length !== 0) {
         const data = {
           title: newTool,
         };
@@ -136,6 +138,7 @@ export default function Tools() {
           );
           setOpenAdd(false);
           await getTool(0);
+          await getAllData();
         } else {
           console.log(payload);
           dispatch(
@@ -176,6 +179,7 @@ export default function Tools() {
         );
         setOpenEdit(false);
         await getTool(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -249,6 +253,11 @@ export default function Tools() {
     setJobID(jobId);
   };
 
+  const handleCancelDelete = () => {
+    setOpenDelete((prevState) => !prevState);
+    setConfirmDelete(false);
+  };
+
   const handleEdit = (event) => {
     if (event.target.id === "edit_input") {
       setExistingTool(null);
@@ -301,6 +310,7 @@ export default function Tools() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getTool(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>
@@ -430,6 +440,9 @@ export default function Tools() {
         show={openDelete}
         handleOpen={handleOpenDelete}
         handleDelete={removeTool}
+        handleCancel={handleCancelDelete}
+        confirmDelete={confirmDelete}
+        setConfirmDelete={setConfirmDelete}
       />
       <AddNew
         show={openAdd}

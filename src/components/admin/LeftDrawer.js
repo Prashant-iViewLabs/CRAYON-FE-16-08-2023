@@ -22,6 +22,9 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useNavigate, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import { getMaintenanceCount } from "../../redux/admin/maintenance";
+import { useDispatch } from "react-redux";
+import { Typography } from "@mui/material";
 
 const StyledList = styled(List)(({ theme }) => ({
   "& .MuiButtonBase-root": {
@@ -69,11 +72,12 @@ const StyledList = styled(List)(({ theme }) => ({
 export default function LeftDrawer() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   let { pathname } = useLocation();
 
-  const [open, setOpen] = useState(
-    ADMIN_LFET_PANEL.map((item, index) => (index == 0 ? true : false))
-  );
+  const [counter, setCounter] = useState([]);
+
+  const [open, setOpen] = useState(false);
   const [subMenuIndex, setSubMenuIndex] = useState(0);
 
   const handleClick = (event, parentPath, childPath, menuIndex) => {
@@ -99,8 +103,6 @@ export default function LeftDrawer() {
     decodedToken = jwt_decode(token);
   }
 
-  console.log(decodedToken?.data?.role_id);
-
   const renderIcon = ({ icon, color }) => {
     switch (icon) {
       case "CreditCardIcon":
@@ -119,6 +121,28 @@ export default function LeftDrawer() {
         return <CreditCardIcon color={color} />;
     }
   };
+
+  const getCount = async () => {
+    try {
+      const { payload } = await dispatch(getMaintenanceCount());
+      if (payload.status === "success") {
+        setCounter(payload.data);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getCount();
+    const parts = pathname.split("/");
+    const openIndex = ADMIN_LFET_PANEL.find((item) => item.path === parts[2]);
+    const subIndex = openIndex.menuItems.find((item) => item.path === parts[3]);
+    setSubMenuIndex(subIndex.id);
+    setOpen(
+      ADMIN_LFET_PANEL.map((item, index) =>
+        index == openIndex.id ? true : false
+      )
+    );
+  }, []);
 
   return (
     <StyledList
@@ -176,6 +200,20 @@ export default function LeftDrawer() {
                       },
                     }}
                   />
+
+                  {item.title === "Maintenance" && (
+                    <Typography
+                      sx={{
+                        fontWeight: subIndex == subMenuIndex ? "bold" : "",
+                        fontSize: "14px",
+                        ":hover": {
+                          fontWeight: "bold",
+                        },
+                      }}
+                    >
+                      ({counter[`${subMenuItem.counter}`]})
+                    </Typography>
+                  )}
                 </ListItemButton>
               ))}
             </List>

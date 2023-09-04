@@ -5,16 +5,18 @@ import { styled, useTheme } from "@mui/material/styles";
 import locale from "../../i18n/locale";
 import Typography from "@mui/material/Typography";
 import { USER_TYPES } from "../../utils/Constants";
+
 export default function SwipeableButton({
   selectedUser,
   onButtonToggle,
   setSignupTouched,
-  error
+  error,
 }) {
   const i18n = locale.en;
   const slider = useRef();
   const container = useRef();
   const theme = useTheme();
+  console.log(selectedUser);
   const selectedColor = (selectedUser) => {
     console.log(selectedUser);
     switch (selectedUser) {
@@ -45,6 +47,7 @@ export default function SwipeableButton({
       </Button>
     );
   };
+
   const TypographyComponent = ({ user, children, ...otherStyles }) => {
     return (
       <Typography
@@ -55,7 +58,9 @@ export default function SwipeableButton({
         sx={{
           fontWeight: 300,
           fontSize: 14,
-          color: error ? 'red' : theme.palette.lightGray,
+          color: error
+            ? theme.palette.redButton100.main
+            : theme.palette.lightGray,
           cursor: "pointer",
           width: 100,
           textAlign: "center",
@@ -87,7 +92,10 @@ export default function SwipeableButton({
       {selectedUser === USER_TYPES[0] ? (
         <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[1]} />
       ) : (
-        <TypographyComponent user={USER_TYPES[0]}>
+        <TypographyComponent
+          user={USER_TYPES[0]}
+          color={selectedUser === undefined && "redButton100"}
+        >
           {USER_TYPES[0]}
         </TypographyComponent>
       )}
@@ -96,8 +104,9 @@ export default function SwipeableButton({
       ) : (
         <TypographyComponent
           user={USER_TYPES[1]}
-        // mr={selectedUser === USER_TYPES[0] ? 3 : 0}
-        // ml={selectedUser === USER_TYPES[2] ? 3 : 0}
+          color={selectedUser === undefined && "redButton100"}
+          // mr={selectedUser === USER_TYPES[0] ? 3 : 0}
+          // ml={selectedUser === USER_TYPES[2] ? 3 : 0}
         >
           {USER_TYPES[1]}
         </TypographyComponent>
@@ -107,8 +116,9 @@ export default function SwipeableButton({
       ) : (
         <TypographyComponent
           user={USER_TYPES[2]}
-        // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
-        // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
+          color={selectedUser === undefined && "redButton100"}
+          // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
+          // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
         >
           {USER_TYPES[2]}
         </TypographyComponent>
@@ -116,7 +126,10 @@ export default function SwipeableButton({
       {selectedUser === USER_TYPES[3] ? (
         <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[0]} />
       ) : (
-        <TypographyComponent user={USER_TYPES[3]}>
+        <TypographyComponent
+          user={USER_TYPES[3]}
+          color={selectedUser === undefined && "redButton100"}
+        >
           {USER_TYPES[3]}
         </TypographyComponent>
       )}

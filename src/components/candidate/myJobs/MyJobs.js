@@ -206,7 +206,7 @@ export default function Talent() {
                   color: theme.palette.placeholder,
                 }}
               >
-                {i18n["jobs.noData"]}
+                {""}
               </Box>
             )}
           </Grid>

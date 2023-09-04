@@ -19,18 +19,22 @@ import { useDispatch } from "react-redux";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
+import { Link } from "react-router-dom";
+import { useTheme } from "@emotion/react";
 
 export default function ExpandBottomButtons({
   phoneNo,
   emailAddress,
   linkedinAddress,
+  userID,
+  cvLink,
 }) {
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [opeVideoDialog, setOpeVideoDialog] = useState(false);
   const [personalDetails, setPersonalDetail] = useState(false);
   const dispatch = useDispatch();
-
+  const theme = useTheme();
   const onHandleClose = () => {
     setOpenInfoDialog(false);
     setAnchorEl(null);
@@ -65,7 +69,7 @@ export default function ExpandBottomButtons({
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        margin: "16px",
+        margin: "16px 50px",
       }}
     >
       <SmallButton
@@ -187,32 +191,53 @@ export default function ExpandBottomButtons({
           >
             Documents:
           </Typography>
-          <Box sx={{ display: "flex", pt: 1 }}>
-            <SVGButton color={"redButton"} source={user} />
-            <Typography
-              sx={{
-                fontWeight: 700,
-                fontSize: "14px",
-                marginLeft: "16px !important",
-                margin: "auto",
-              }}
-            >
-              Crayon Vitae
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", pt: 1 }}>
-            <SVGButton color={"redButton"} source={cv} />
-            <Typography
-              sx={{
-                fontWeight: 700,
-                fontSize: "14px",
-                marginLeft: "16px !important",
-                margin: "auto",
-              }}
-            >
-              Original CV
-            </Typography>
-          </Box>
+          <Link
+            to={`/candidate-cv/${userID}`}
+            target="_blank"
+            style={{
+              textDecoration: "none",
+              color: theme.palette.black,
+              cursor: "pointer",
+            }}
+          >
+            <Box sx={{ display: "flex", pt: 1 }}>
+              <SVGButton color={"redButton"} source={user} />
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "14px",
+                  marginLeft: "16px !important",
+                  margin: "auto",
+                }}
+              >
+                Crayon Vitae
+              </Typography>
+            </Box>
+          </Link>
+          <Link
+            to={`${cvLink}`}
+            target="_blank"
+            style={{
+              textDecoration: "none",
+              color: theme.palette.black,
+              cursor: "pointer",
+            }}
+          >
+            <Box sx={{ display: "flex", pt: 1 }}>
+              <SVGButton color={"redButton"} source={cv} />
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "14px",
+                  marginLeft: "16px !important",
+                  margin: "auto",
+                }}
+                // onClick={() => handleDownloadClick(cvLink)}
+              >
+                Original CV
+              </Typography>
+            </Box>
+          </Link>
           <Box sx={{ display: "flex", pt: 1 }}>
             <SVGButton color={"redButton"} source={user} />
             <Typography
@@ -346,25 +371,35 @@ export default function ExpandBottomButtons({
               alignItems: "center",
             }}
           >
-            <Box sx={{ display: "flex", pt: 1 }}>
-              <SVGButton color={"white"} source={linkedin} />
-              <Tooltip title={linkedinAddress} placement="top">
-                <Typography
-                  sx={{
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    marginLeft: "16px !important",
-                    width: "150px",
-                    margin: "auto",
-                    whiteSpace: "nowrap", // Prevents text from wrapping
-                    overflow: "hidden", // Hides any overflowing content
-                    textOverflow: "ellipsis", // Adds dots at the end of overflowing text
-                  }}
-                >
-                  {linkedinAddress !== null ? linkedinAddress : "-"}
-                </Typography>
-              </Tooltip>
-            </Box>
+            <Link
+              to={`${linkedinAddress}`}
+              target="_blank"
+              style={{
+                textDecoration: "none",
+                color: theme.palette.black,
+                cursor: "pointer",
+              }}
+            >
+              <Box sx={{ display: "flex", pt: 1 }}>
+                <SVGButton color={"white"} source={linkedin} />
+                <Tooltip title={linkedinAddress} placement="top">
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: "14px",
+                      marginLeft: "16px !important",
+                      width: "150px",
+                      margin: "auto",
+                      whiteSpace: "nowrap", // Prevents text from wrapping
+                      overflow: "hidden", // Hides any overflowing content
+                      textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                    }}
+                  >
+                    {linkedinAddress !== null ? linkedinAddress : "-"}
+                  </Typography>
+                </Tooltip>
+              </Box>
+            </Link>
             <CopyToClipboard
               text={linkedinAddress}
               onCopy={() => {

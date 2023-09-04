@@ -118,14 +118,16 @@ export default function Skills() {
             msg: "Skill removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getSkiils(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewJob = async () => {
     try {
-      if (newTagTitle !== "") {
+      if (newTagTitle.trim().length !== 0) {
         const data = {
           title: newTagTitle,
         };
@@ -142,6 +144,7 @@ export default function Skills() {
             })
           );
           await getSkiils(0);
+          await getAllData();
         } else {
           dispatch(
             setAlert({
@@ -195,6 +198,7 @@ export default function Skills() {
         );
         setOpenEdit(false);
         await getSkiils(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -314,6 +318,7 @@ export default function Skills() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getSkiils(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>
@@ -442,6 +447,7 @@ export default function Skills() {
         show={openDelete}
         handleOpen={handleOpenDelete}
         handleDelete={removeTitle}
+        dialogText={"skill"}
         handleCancel={handleCancelDelete}
         confirmDelete={confirmDelete}
         setConfirmDelete={setConfirmDelete}

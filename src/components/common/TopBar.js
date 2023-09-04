@@ -45,8 +45,8 @@ import jwt_decode from "jwt-decode";
 
 import userProfile from "../../assets/Padding Included/User_Profile.svg";
 import profileDetail from "../../assets/Padding Included/Profile_Details.svg";
-import CompanyListLogo from "../../assets/Padding Included/Black_Company_Details.svg";
-
+import { TryOutlined } from "@mui/icons-material";
+import ComapnyLogo from "../../assets/Padding Included/Black_Company_Details.svg";
 
 const StyledTab = styled(Tabs)(({ theme }) => ({
   "& .MuiTab-root": {
@@ -246,7 +246,7 @@ export default function TopBar() {
           setAlert({
             show: true,
             type: ALERT_TYPE.SUCCESS,
-            msg: "Successfully Login!",
+            msg: "Login successful",
           })
         );
       } else {
@@ -271,23 +271,12 @@ export default function TopBar() {
     try {
       const { payload } = await dispatch(logout());
       if (payload.status === "success") {
-        removeLocalStorage("token");
-        removeLocalStorage("isLoggedIn");
-        removeLocalStorage("userType");
-        removeLocalStorage("cvComponent");
-        removeLocalStorage("jobComponent");
+        localStorage.clear();
         setIsLoggedIn(false);
         setIsAdmin(false);
         navigate("jobs", { replace: true });
         setcurrentTabs(PUBLIC_TAB_ITEMS);
         setActiveTab("jobs");
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.SUCCESS,
-            msg: "Logged out successfully!",
-          })
-        );
       }
     } catch (error) {}
   };
@@ -498,10 +487,10 @@ export default function TopBar() {
                         ref={
                           label === "quick links" ? quickLinksButtonRef : null
                         }
-                        onClick={label === "quick links" && handleTabClick}
+                        onClick={label == "quick links" && handleTabClick}
                         key={path}
                         value={path}
-                        to={label !== "quick links" ? path : null}
+                        to={label != "quick links" ? path : null}
                         label={label}
                         component={Link}
                         sx={{
@@ -511,7 +500,7 @@ export default function TopBar() {
                           minHeight: "48px !important",
                         }}
                         icon={
-                          label === "quick links" ? (
+                          label == "quick links" ? (
                             <>
                               {open ? (
                                 <KeyboardArrowUpIcon />
@@ -543,13 +532,15 @@ export default function TopBar() {
                     <Tabs orientation="vertical" onChange={handlequicklinks}>
                       {publicTabs?.map(({ label, path }) => (
                         <Tab
-                          key={path}
                           sx={{
+                            width: "130px",
                             textTransform: "none",
                             color: "#000000",
                             fontSize: "16px",
-                            fontWeight: "700"
+                            fontWeight: 700,
+                            opacity: 1,
                           }}
+                          key={path}
                           value={path}
                           to={path}
                           label={label}
@@ -669,7 +660,7 @@ export default function TopBar() {
                     <Box
                       component="img"
                       sx={{
-                        height: 25,
+                        height: 27,
                         cursor: "pointer",
                       }}
                       alt="crayon logo"
@@ -691,11 +682,12 @@ export default function TopBar() {
                     <Box
                       component="img"
                       sx={{
-                        height: 25,
+                        height: 32,
+                        // marginRight: 1,
                         cursor: "pointer",
                       }}
                       alt="crayon logo"
-                      src={CompanyListLogo}
+                      src={ComapnyLogo}
                     />
                     {i18n["topBar.join"]}
                   </Button>

@@ -189,6 +189,7 @@ export default function TalentPoolInfo() {
         dataLength={allJobs.length}
         next={() => getJobList(lastKey)}
         hasMore={true}
+        scrollThreshold={"10px"}
         endMessage={
           <p style={{ textAlign: "center" }}>
             <b>Yay! You have seen it all</b>

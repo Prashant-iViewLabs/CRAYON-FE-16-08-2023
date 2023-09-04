@@ -81,6 +81,21 @@ export const uploadProfilePic = createAsyncThunk(
     return data;
   }
 );
+
+export const uploadCompanyLogo = createAsyncThunk(
+  "uploadCompanyLogo",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/upload/companylogo",
+      payload,
+      true,
+      "multipart/form-data"
+    ); //"multipart/form-data"
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 export const followCompany = createAsyncThunk(
   "followCompany",
   async (payload, { dispatch }) => {

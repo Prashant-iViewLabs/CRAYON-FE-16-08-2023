@@ -17,7 +17,7 @@ import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SortButton from "./SortButton";
 import { useParams } from "react-router-dom";
-import { Button, Grid, Tooltip } from "@mui/material";
+import { Button, Grid, Paper, Tooltip } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {
   TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP,
@@ -128,6 +128,7 @@ export default function ManageJob() {
   const theme = useTheme();
   // const [isSort, setIsSort] = useState(false);
   const [talentStatus, setTalentStatus] = useState([]);
+  const [jobDetail, setJobDetail] = useState([]);
   const { jobId } = useParams();
 
   const [talents, setTalents] = useState([]);
@@ -180,6 +181,7 @@ export default function ManageJob() {
       const [manage] = await Promise.all([
         dispatch(getTalentJobStatusCount({ job_id: jobId })),
       ]);
+      setJobDetail(manage.payload.jobdetail);
       setTalentStatus(manage.payload.data);
       manage.payload.data.map((item) => {
         item.count > 0
@@ -332,13 +334,43 @@ export default function ManageJob() {
       spacing={0}
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
-      minHeight={"80vh"}
     >
-      <ButtonPanel
-        panelData={TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP}
-        side="left"
-        // onChangeFilter={jobsFilterLeft}
-      />
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        className="filterSec"
+        sx={{
+          height: "88vh",
+          overflowY: "scroll",
+        }}
+      >
+        <Paper
+          sx={{
+            background: "transparent",
+            marginRight: "1px",
+          }}
+        >
+          <ButtonPanel
+            panelData={TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP}
+            side="left"
+            // onChangeFilter={jobsFilterLeft}
+          />
+        </Paper>
+        <style>
+          {`.filterSec::-webkit-scrollbar {
+                  width: 5px !important;
+                  background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                }
+                .filterSec::-webkit-scrollbar-thumb {
+                  background-color: white;
+                  width: 5px;
+                  box-shadow: 0px 3px 3px #00000029;
+                  border-radius: 3px;
+                }`}
+        </style>
+      </Grid>
       <Grid
         Grid
         xs={12}
@@ -347,12 +379,21 @@ export default function ManageJob() {
         lg={9}
         xl={10}
         sx={{
+          // display: "flex",
           overflowX: "scroll",
+          overflowY: "hidden",
+          // transform: "rotateX(180deg)",
         }}
+        className="centerSection"
       >
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-          <CardsTopBar />
-          <Box sx={{ display: "flex", maxHeight: "100%" }}>
+          <CardsTopBar jobDetail={jobDetail} />
+          <Box
+            sx={{
+              display: "flex",
+              maxHeight: "100%",
+            }}
+          >
             {Object.entries(talents).map(([columnId, column], index) => {
               return (
                 <Droppable key={`${column?.id}`} droppableId={`${column?.id}`}>
@@ -406,10 +447,10 @@ export default function ManageJob() {
                           handleSortedValue={handleSortedValue}
                         />
                       </StyledBox>
-                      <Box id="talentList" sx={{ height: "100%" }}>
+                      <Box id="talentList">
                         <InfiniteScroll
                           style={{
-                            height: "100%",
+                            height: "600px",
                             overflowX: "hidden",
                             scrollbarWidth: "thin",
                           }}
@@ -418,6 +459,7 @@ export default function ManageJob() {
                           next={() => console.log("HIHIHIHI")}
                           hasMore={true}
                           scrollableTarget="talentList"
+                          scrollThreshold={"10px"}
                           endMessage={
                             <p style={{ textAlign: "center" }}>
                               <b>Yay! You have seen it all</b>
@@ -432,20 +474,20 @@ export default function ManageJob() {
                               droppableId={column?.id}
                               onDragEnd={onDragEnd}
                               jobId={jobId}
+                              talentStatus={talentStatus}
                             />
                           ))}
                           <style>
                             {`.infinite-scroll-component::-webkit-scrollbar {
                             width: 7px !important;
-                            background-color: #F5F5F5; /* Set the background color of the scrollbar */
-                          }
-
-                          .infinite-scroll-component__outerdiv {
-                            height:100%
+                            background-color: #EFEEEE; /* Set the background color of the scrollbar */
                           }
 
                           .infinite-scroll-component::-webkit-scrollbar-thumb {
-                            background-color: #888c; /* Set the color of the scrollbar thumb */
+                            background-color: white;
+                            width: 5px;
+                            // box-shadow: 0px 3px 3px #00000029;
+                            border-radius: 3px;
                           }`}
                           </style>
                         </InfiniteScroll>
@@ -458,29 +500,68 @@ export default function ManageJob() {
             })}
           </Box>
         </DragDropContext>
+        <style>
+          {`.centerSection::-webkit-scrollbar {
+                    height: 5px !important;
+                    background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                  }
+                  .centerSection::-webkit-scrollbar-thumb {
+                    background-color: white;
+                    height: 5px;
+                    box-shadow: 0px 3px 3px #00000029;
+                    border-radius: 3px;/* Set the color of the scrollbar thumb */
+                  }`}
+        </style>
       </Grid>
-      <Box
+      <Grid
+        item
+        md={2}
+        lg={1}
+        xl={1}
+        className="rightfilterSec"
         sx={{
           display: "flex",
           flexDirection: "column",
+          height: "88vh",
+          overflowY: "scroll",
+          direction: "rtl",
         }}
       >
-        <ButtonPanel
-          panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
-          side="right"
-          // onChangeFilter={jobsFilter}
-        />
-        <ButtonPanel
-          panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
-          side="right"
-          // onChangeFilter={jobsFilter}
-        />
-        <ButtonPanel
-          panelData={JOBS_LEFT_TYPES_BUTTON_GROUP}
-          side="right"
-          // onChangeFilter={jobsFilter}
-        />
-      </Box>
+        <style>
+          {`.rightfilterSec::-webkit-scrollbar {
+                       width: 5px !important;
+                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .rightfilterSec::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 5px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+        </style>
+        <Paper
+          sx={{
+            background: "transparent",
+            marginLeft: "1px",
+          }}
+        >
+          <ButtonPanel
+            panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
+            side="right"
+            // onChangeFilter={jobsFilter}
+          />
+          <ButtonPanel
+            panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
+            side="right"
+            // onChangeFilter={jobsFilter}
+          />
+          <ButtonPanel
+            panelData={JOBS_LEFT_TYPES_BUTTON_GROUP}
+            side="right"
+            // onChangeFilter={jobsFilter}
+          />
+        </Paper>
+      </Grid>
     </Grid>
   );
 }

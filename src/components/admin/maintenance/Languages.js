@@ -86,6 +86,7 @@ export default function Languages() {
             msg: "Language removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getLanguages(0);
       }
     } catch (error) {}
@@ -93,7 +94,7 @@ export default function Languages() {
 
   const handleAddNewLanguage = async () => {
     try {
-      if (newLanguageTitle !== "") {
+      if (newLanguageTitle.trim().length !== 0) {
         const data = {
           title: newLanguageTitle,
         };
@@ -224,6 +225,7 @@ export default function Languages() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getLanguages(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

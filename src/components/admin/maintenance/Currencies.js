@@ -85,6 +85,7 @@ export default function Currencies() {
             msg: "Currency removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getTitles(0);
       }
     } catch (error) {}
@@ -92,7 +93,7 @@ export default function Currencies() {
 
   const handleAddNewJob = async () => {
     try {
-      if (currencyTitle !== "") {
+      if (currencyTitle.trim().length !== 0) {
         const data = {
           title: currencyTitle,
           min_salary: minSalary,
@@ -144,7 +145,7 @@ export default function Currencies() {
 
   const handleEditCurrency = async () => {
     try {
-      if (currencyTitle !== "") {
+      if (currencyTitle.trim().length !== 0) {
         const data = {
           currency_id: currencyID,
           title: currencyTitle,
@@ -283,6 +284,7 @@ export default function Currencies() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getTitles(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

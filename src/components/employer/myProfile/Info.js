@@ -427,9 +427,9 @@ export default function Info({ handleInfoData, profile, errors, setErrors }) {
                 {i18n["empMyProfile.female"]}
               </Button>
             </Box>
-            {errors?.find((error) => error.key == "gender") && (
-              <Typography color={"red !important"}>
-                {`*${errors?.find((error) => error.key == "gender").message}`}
+            {errors && errors["gender"] && (
+              <Typography style={{ color: "red" }}>
+                {`*${errors["gender"].message}`}
               </Typography>
             )}
           </Paper>

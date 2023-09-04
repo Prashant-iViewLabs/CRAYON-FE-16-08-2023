@@ -82,6 +82,7 @@ export default function Nationalities() {
             msg: "Nationality removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getNationalities(0);
       }
     } catch (error) {}
@@ -89,7 +90,7 @@ export default function Nationalities() {
 
   const handleAddNewNationality = async () => {
     try {
-      if (newNationalityTitle !== "") {
+      if (newNationalityTitle.trim().length !== 0) {
         const data = {
           title: newNationalityTitle,
         };
@@ -219,6 +220,7 @@ export default function Nationalities() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getNationalities(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

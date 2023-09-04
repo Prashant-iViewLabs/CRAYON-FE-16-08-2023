@@ -26,7 +26,6 @@ import DOMPurify from "dompurify";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import JobDescripiton from "../../common/JobDescripiton";
 
-
 const label1 = "applicants";
 const label2 = "shortlisted";
 const label3 = "interviews";
@@ -242,7 +241,7 @@ export default function MyJobsCard({ index, job }) {
               letterSpacing: "0.25px",
             }}
           >
-            {job?.experiance} years Experience
+            {job?.experiance} years
           </Typography>
         </Box>
         <Box

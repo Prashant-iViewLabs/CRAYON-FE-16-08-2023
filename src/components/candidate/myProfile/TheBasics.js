@@ -12,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import MenuItem from "@mui/material/MenuItem";
-import { FormControl, InputLabel, alpha, useTheme } from "@mui/material";
+import { FormControl, InputLabel, Switch } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Tooltip from "@mui/material/Tooltip";
@@ -23,13 +23,16 @@ import dayjs from "dayjs";
 import {
   resetPassword,
   uploadProfilePic,
-  getTown,
-  getCountry,
-  getNationality,
-  getLanguage,
 } from "../../../redux/candidate/myProfileSlice";
+
+import { getCountry, getTown } from "../../../redux/employer/postJobSlice";
+import {
+  getLanguage,
+  getNationality,
+} from "../../../redux/candidate/myCvSlice";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
+import { useTheme } from "@emotion/react";
 import ToggleSwitch from "../../common/ToggleSwitch";
 import getCroppedImg from "../../../utils/cropImage";
 import AutoComplete from "../../common/AutoComplete";
@@ -47,10 +50,10 @@ import femaleBlack from "../../../assets/female_black.svg";
 import femaleWhite from "../../../assets/female_white.svg";
 import SelectMenu from "../../common/SelectMenu";
 import "dayjs/locale/en-gb";
-import Switch from "@mui/material/Switch";
-import { CheckCircle, CheckCircleOutline } from "@mui/icons-material";
+import { alpha } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { CheckCircle } from "@mui/icons-material";
 dayjs.locale("en-gb");
-
 
 const BlueSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -72,13 +75,22 @@ const BlueSwitch = styled(Switch)(({ theme }) => ({
   "& .css-jsexje-MuiSwitch-thumb": {
     borderRadius: "15% !important",
   },
+  "& .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase": {
+    borderRadius: "15% !important",
+  },
+  "& .MuiSwitch-thumb": {
+    borderRadius: "15% !important",
+  },
 }));
+
 export default function TheBasics({
   handleProfileData,
   profile,
   errors,
   setErrors,
 }) {
+  const { nationality, language } = useSelector((state) => state.myCv);
+  const { country, town } = useSelector((state) => state.postJobs);
   const i18n = locale.en;
   const theme = useTheme();
   const currentDate = new Date();
@@ -87,11 +99,11 @@ export default function TheBasics({
   const [showPassword, setShowPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [profileData, setProfileData] = useState(profile);
-  const [towns, setTowns] = useState([]);
+  // const [towns, setTowns] = useState([]);
   const [townsMain, setTownsMain] = useState([]);
-  const [countries, setCountries] = useState([]);
-  const [nationalities, setNationalities] = useState([]);
-  const [languages, setLanguages] = useState([]);
+  // const [countries, setCountries] = useState([]);
+  // const [nationalities, setNationalities] = useState([]);
+  // const [languages, setLanguages] = useState([]);
   const [characterCount, setCharacterCount] = useState(
     profileData.my_bio?.length || 0
   );
@@ -117,7 +129,7 @@ export default function TheBasics({
       [event.target.name]: event.target.value,
     };
     if (event.target.name == "country_id") {
-      let temp = towns.filter((val) => {
+      let temp = town.filter((val) => {
         return val.region_id == event.target.value;
       });
       setTownsMain(temp);
@@ -125,13 +137,11 @@ export default function TheBasics({
     const filteredErrors = errors?.filter(
       (item) => item.key != event.target.name
     );
-    console.log(filteredErrors);
     setProfileData(newProfileData);
     handleProfileData(newProfileData);
   };
 
   const handleSwitch = (event) => {
-    console.log(event.target.id);
     const newProfileData = {
       ...profileData,
       [event.target.id]: Number(event.target.checked),
@@ -141,7 +151,6 @@ export default function TheBasics({
   };
 
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     if (event.target.id == "contact_no") {
       const newProfileData = {
         ...profileData,
@@ -215,19 +224,12 @@ export default function TheBasics({
   const getAllData = async () => {
     try {
       dispatch(setLoading(true));
-      const [town, country, nationality, language] = await Promise.all([
+      await Promise.all([
         dispatch(getTown()),
         dispatch(getCountry()),
         dispatch(getNationality()),
         dispatch(getLanguage()),
       ]);
-
-      setTowns(addId(town.payload.data, "town_id", "name"));
-      setCountries(addId(country.payload.data, "region_id", "name"));
-      setNationalities(
-        addId(nationality.payload.data, "nationality_id", "nationality")
-      );
-      setLanguages(addId(language.payload.data, "language_id", "language"));
 
       dispatch(setLoading(false));
     } catch (error) {
@@ -246,7 +248,7 @@ export default function TheBasics({
       return [];
     }
     return profileData.nationality_ids?.map(
-      (nation) => nationalities?.find((nati) => nati.id == nation) || nation
+      (nation) => nationality?.find((nati) => nati.id == nation) || nation
     );
   };
   const getLangValue = () => {
@@ -254,7 +256,7 @@ export default function TheBasics({
       return [];
     }
     return profileData.language_ids?.map(
-      (lang) => languages?.find((language) => language.id == lang) || lang
+      (lang) => language?.find((language) => language.id == lang) || lang
     );
   };
 
@@ -263,9 +265,7 @@ export default function TheBasics({
       ...profileData,
       gender: gender,
     };
-    console.log(gender);
     const filteredErrors = errors?.filter((item) => item.key != "gender");
-    console.log(filteredErrors);
     setErrors(filteredErrors);
 
     setProfileData(newProfileData);
@@ -539,8 +539,9 @@ export default function TheBasics({
           {profileData.contact_no === "" &&
             errors?.find((error) => error.key == "contact_no") && (
               <Typography color={"red !important"}>
-                {`*${errors?.find((error) => error.key == "contact_no").message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key == "contact_no").message
+                }`}
               </Typography>
             )}
         </Box>
@@ -576,7 +577,7 @@ export default function TheBasics({
                       width: "100%",
                       borderRadius: "40px",
                     },
-                    '& .MuiIconButton-root': {
+                    "& .MuiIconButton-root": {
                       color: theme.palette.yellowColor, // Change this to the desired color
                     },
                   }}
@@ -617,15 +618,16 @@ export default function TheBasics({
             name="country_id"
             value={profileData.country_id}
             onHandleChange={handleChange}
-            options={countries}
+            options={country}
             sx={{ width: "95%" }}
             placeholder={i18n["postAJob.countryPlaceHolder"]}
           />
           {!profileData.country_id &&
             errors?.find((error) => error.key == "country_id") && (
               <Typography color={"red !important"}>
-                {`*${errors?.find((error) => error.key == "country_id").message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key == "country_id").message
+                }`}
               </Typography>
             )}
         </Box>
@@ -654,7 +656,7 @@ export default function TheBasics({
               name="town_id"
               disabled={!profileData.country_id}
               value={
-                towns.find((val) => val.town_id == profileData.town_id)?.name ||
+                town.find((val) => val.town_id == profileData.town_id)?.name ||
                 ""
               }
               onHandleChange={handleTownChange}
@@ -662,11 +664,12 @@ export default function TheBasics({
               sx={{ width: "95%" }}
               placeholder={i18n["myProfile.city"]}
             />
-            {!towns.find((val) => val.town_id == profileData.town_id)?.name &&
+            {!town.find((val) => val.town_id == profileData.town_id)?.name &&
               errors?.find((error) => error.key == "town_id") && (
                 <Typography color={"red !important"}>
-                  {`*${errors?.find((error) => error.key == "town_id").message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "town_id").message
+                  }`}
                 </Typography>
               )}
           </Box>
@@ -678,15 +681,11 @@ export default function TheBasics({
           >
             {i18n["myProfile.willingToRelocate"]}
           </Typography>
-          {/* <ToggleSwitch
-            id="relocate"
-            checked={!!Number(profileData.relocate)}
-            onChange={handleSwitch}
-          /> */}
           <BlueSwitch
             id="relocate"
             checked={!!Number(profileData.relocate)}
-            onChange={handleSwitch} />
+            onChange={handleSwitch}
+          />
           {!profileData.relocate &&
             errors?.find((error) => error.key == "relocate") && (
               <Typography color={"red !important"}>
@@ -723,15 +722,16 @@ export default function TheBasics({
             onChange={handleMultipleAutoComplete}
             sx={{ width: "95%", display: "inline-table" }}
             placeholder={i18n["myProfile.nationality"]}
-            data={nationalities}
+            data={nationality}
             disableCloseOnSelect={true}
           ></AutoComplete>
           {getNatiValue() == "" &&
             errors?.find((error) => error.key == "nationality_ids") && (
               <Typography color={"red !important"}>
-                {`*${errors?.find((error) => error.key == "nationality_ids")
-                  .message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key == "nationality_ids")
+                    .message
+                }`}
               </Typography>
             )}
         </Box>
@@ -755,14 +755,15 @@ export default function TheBasics({
             onChange={handleMultipleAutoComplete}
             sx={{ width: "95%", display: "inline-table" }}
             placeholder={i18n["myProfile.language"]}
-            data={languages}
+            data={language}
             disableCloseOnSelect={true}
           ></AutoComplete>
           {getLangValue() == "" &&
             errors?.find((error) => error.key == "language_ids") && (
               <Typography color={"red !important"}>
-                {`*${errors?.find((error) => error.key == "language_ids").message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key == "language_ids").message
+                }`}
               </Typography>
             )}
         </Box>
@@ -895,9 +896,10 @@ export default function TheBasics({
               !profileData.linkedin_profile_link.startsWith("http"))) &&
             errors?.find((error) => error.key === "linkedin_profile_link") && (
               <Typography color="red !important">
-                {`*${errors?.find((error) => error.key === "linkedin_profile_link")
-                  .message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key === "linkedin_profile_link")
+                    .message
+                }`}
               </Typography>
             )}
         </Box>
@@ -916,9 +918,7 @@ export default function TheBasics({
             >
               {i18n["empMyProfile.crayonSkinz"]}
             </Typography>
-           
           </Box>
-
           <Box
             sx={{
               display: "flex",
@@ -928,44 +928,53 @@ export default function TheBasics({
             }}
           >
             <Tooltip title="white" placement="top-start">
-              <Box sx={{
-                display: "flex",
-                cursor: "pointer"
-              }}
-                onClick={(event) => handleColor(event, 1)}>
+              <Box
+                sx={{
+                  display: "flex",
+                  cursor: "pointer",
+                }}
+                onClick={(event) => handleColor(event, 1)}
+              >
                 <Box
                   component="img"
                   alt="white color"
                   src={whiteColor}
                   // width={profileData.skinz == "white" ? "48px" : "36px"}
-
                   sx={{
                     zIndex: 0,
                     cursor: "pointer",
                   }}
                 />
-                <Box sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height: "100%",
-                  justifyContent: "end"
-                }}>
-                  {(profileData.skinz === 1) && <CheckCircle color="success" fontSize="string" />}
-                  <Typography sx={{
-                    height: "50%"
-                  }}>White</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    height: "100%",
+                    justifyContent: "end",
+                  }}
+                >
+                  {profileData.skinz === 1 && (
+                    <CheckCircle color="success" fontSize="string" />
+                  )}
+                  <Typography
+                    sx={{
+                      height: "50%",
+                    }}
+                  >
+                    White
+                  </Typography>
                 </Box>
               </Box>
-
             </Tooltip>
             <Tooltip title="Coloured" placement="top-start">
-             
-              <Box sx={{
-                display: "flex",
-                cursor: "pointer"
-              }}
-                onClick={(event) => handleColor(event, 2)}>
+              <Box
+                sx={{
+                  display: "flex",
+                  cursor: "pointer",
+                }}
+                onClick={(event) => handleColor(event, 2)}
+              >
                 <Box
                   component="img"
                   alt="Coloured color"
@@ -976,27 +985,36 @@ export default function TheBasics({
                     cursor: "pointer",
                   }}
                 />
-                <Box sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height: "100%",
-                  justifyContent: "end"
-                }}>
-                  {(profileData.skinz === 2) && <CheckCircle color="success" fontSize="string" />}
-                  <Typography sx={{
-                    height: "50%"
-                  }}>Coloured</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    height: "100%",
+                    justifyContent: "end",
+                  }}
+                >
+                  {profileData.skinz === 2 && (
+                    <CheckCircle color="success" fontSize="string" />
+                  )}
+                  <Typography
+                    sx={{
+                      height: "50%",
+                    }}
+                  >
+                    Coloured
+                  </Typography>
                 </Box>
               </Box>
             </Tooltip>
             <Tooltip title="Indian" placement="top-start">
-             
-              <Box sx={{
-                display: "flex",
-                cursor: "pointer"
-              }}
-                onClick={(event) => handleColor(event, 3)}>
+              <Box
+                sx={{
+                  display: "flex",
+                  cursor: "pointer",
+                }}
+                onClick={(event) => handleColor(event, 3)}
+              >
                 <Box
                   component="img"
                   alt="medium color"
@@ -1007,26 +1025,34 @@ export default function TheBasics({
                     cursor: "pointer",
                   }}
                 />
-                <Box sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height: "100%",
-                  justifyContent: "end"
-                }}>
-                  {(profileData.skinz === 3) && <CheckCircle color="success" fontSize="string" />}
-                  <Typography sx={{
-                    height: "50%"
-                  }}>Indian</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    height: "100%",
+                    justifyContent: "end",
+                  }}
+                >
+                  {profileData.skinz === 3 && (
+                    <CheckCircle color="success" fontSize="string" />
+                  )}
+                  <Typography
+                    sx={{
+                      height: "50%",
+                    }}
+                  >
+                    Indian
+                  </Typography>
                 </Box>
               </Box>
             </Tooltip>
             <Tooltip title="Black" placement="top-start">
-              
-              <Box sx={{
-                display: "flex",
-                cursor: "pointer"
-              }}
+              <Box
+                sx={{
+                  display: "flex",
+                  cursor: "pointer",
+                }}
                 onClick={(event) => handleColor(event, 4)}
               >
                 <Box
@@ -1039,17 +1065,25 @@ export default function TheBasics({
                     cursor: "pointer",
                   }}
                 />
-                <Box sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height: "100%",
-                  justifyContent: "end"
-                }}>
-                  {(profileData.skinz === 4) && <CheckCircle color="success" fontSize="string" />}
-                  <Typography sx={{
-                    height: "50%"
-                  }}>Black</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    height: "100%",
+                    justifyContent: "end",
+                  }}
+                >
+                  {profileData.skinz === 4 && (
+                    <CheckCircle color="success" fontSize="string" />
+                  )}
+                  <Typography
+                    sx={{
+                      height: "50%",
+                    }}
+                  >
+                    Black
+                  </Typography>
                 </Box>
               </Box>
             </Tooltip>
@@ -1128,28 +1162,9 @@ export default function TheBasics({
             </Button>
           </Paper>
         </Box>
-      </Box >
+      </Box>
 
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
-        {/* <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
-          <Typography
-            sx={{
-              mr: 1,
-              minWidth: "fit-content",
-            }}
-          >
-            {i18n["myProfile.seekingWork"]}
-          </Typography> */}
-          {/* <ToggleSwitch
-            id="seeking_job"
-            checked={!!profileData.seeking_job}
-            onChange={handleSwitch}
-          /> */}
-           {/* <BlueSwitch
-            id="seeking_job"
-            checked={!!Number(profileData.seeking_job)}
-            onChange={handleSwitch} />
-        </Box> */}
         <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
           <Typography
             sx={{
@@ -1159,15 +1174,11 @@ export default function TheBasics({
           >
             {i18n["myProfile.hide_profile"]}
           </Typography>
-          {/* <ToggleSwitch
+          <BlueSwitch
             id="hide_profile"
             checked={!!profileData.hide_profile}
             onChange={handleSwitch}
-          /> */}
-           <BlueSwitch
-            id="hide_profile"
-            checked={!!Number(profileData.hide_profile)}
-            onChange={handleSwitch} />
+          />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
           <Typography
@@ -1178,15 +1189,11 @@ export default function TheBasics({
           >
             {i18n["myProfile.hide_age"]}
           </Typography>
-          {/* <ToggleSwitch
+          <BlueSwitch
             id="hide_age"
             checked={!!profileData.hide_age}
             onChange={handleSwitch}
-          /> */}
-           <BlueSwitch
-            id="hide_age"
-            checked={!!Number(profileData.hide_age)}
-            onChange={handleSwitch} />
+          />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography
@@ -1197,17 +1204,13 @@ export default function TheBasics({
           >
             {i18n["myProfile.hide_video"]}
           </Typography>
-          {/* <ToggleSwitch
+          <BlueSwitch
             id="hide_video"
             checked={!!profileData.hide_video}
             onChange={handleSwitch}
-          /> */}
-           <BlueSwitch
-            id="hide_video"
-            checked={!!Number(profileData.hide_video)}
-            onChange={handleSwitch} />
+          />
         </Box>
       </Box>
-    </Box >
+    </Box>
   );
 }

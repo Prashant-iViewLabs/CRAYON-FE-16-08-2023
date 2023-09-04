@@ -73,6 +73,9 @@ import ExpandBottomButtons from "./DraggableCardComponents/ExpandBottomButtons";
 import CandidateFlipInfo from "./DraggableCardComponents/CandidateFlipInfo";
 import BasicInfo from "./DraggableCardComponents/BasicInfo";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Check, CheckCircle } from "@mui/icons-material";
+import CheckIcon from "@mui/icons-material/Check";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 5,
@@ -206,7 +209,10 @@ export default function DraggableCardNew({
   droppableId,
   onDragEnd,
   jobId,
+  talentStatus,
 }) {
+  const prevLocation = location.pathname;
+
   const theme = useTheme();
   const dispatch = useDispatch();
   const i18n = locale.en;
@@ -222,7 +228,9 @@ export default function DraggableCardNew({
   const [showDetailInfo, setShowDetailInfo] = useState(false);
   const [rejectCandidate, setRejectCandidate] = useState(false);
   const [showSummaryInfo, setShowSummaryInfo] = useState(true);
+  const [showQuickLink, setShowQuickLink] = useState(false);
   const [flip, setFlip] = useState(false);
+  const [changeViewColor, setChangeViewColor] = useState(false);
 
   const onHandleClose = () => {
     setOpenInfoDialog(false);
@@ -245,8 +253,6 @@ export default function DraggableCardNew({
         job_id: jobId,
         user_id: item?.user_id,
       };
-      console.log(rejectCandidate);
-      console.log(expand);
       setShowQuestion((prev) => !prev);
       setShowSummaryInfo((prev) => !prev);
 
@@ -255,14 +261,14 @@ export default function DraggableCardNew({
         setShowInfo(false);
         setShowDetailInfo(false);
       }
-      if (rejectCandidate) {
+      if (rejectCandidate || showQuickLink) {
         setShowSummaryInfo(false);
         setRejectCandidate(false);
+        setShowQuickLink(false);
       }
 
       const { payload } = await dispatch(getQandA(data));
       if (payload?.status === "success") {
-        console.log(payload?.data);
         setQuestionAnswer(payload?.data);
       } else {
         dispatch(
@@ -274,7 +280,6 @@ export default function DraggableCardNew({
         );
       }
     } catch (error) {
-      console.log(error);
       dispatch(
         setAlert({
           show: true,
@@ -301,16 +306,74 @@ export default function DraggableCardNew({
     onDragEnd(result);
   };
 
+  const handleMoveApplicant = (moveColumnID) => {
+    const result = {
+      destination: {
+        droppableId: moveColumnID,
+      },
+      draggableId: item.user_id,
+      source: {
+        droppableId: droppableId,
+      },
+    };
+
+    onDragEnd(result);
+  };
+
   const toggleAcordion = () => {
-    console.log(showQuestion);
-    if (showQuestion) {
+    if (showQuestion || showQuickLink) {
       setShowSummaryInfo(true);
       setShowQuestion(false);
+      setShowQuickLink(false);
     } else {
       setExpand((prev) => !prev);
       setShowQuestion(false);
       setShowDetailInfo(true);
       setShowInfo(false);
+    }
+  };
+
+  const handleFlip = () => {
+    setFlip((prev) => !prev);
+    if (showQuestion || showQuickLink) {
+      setShowInfo(true);
+      setShowSummaryInfo(true);
+      setExpand(true);
+      setShowQuestion(false);
+      setShowQuickLink(false);
+    } else {
+      setShowInfo((prev) => !prev);
+      setShowDetailInfo((prev) => !prev);
+    }
+  };
+
+  const handleRejectDialog = () => {
+    setRejectCandidate((prev) => !prev);
+    if (showQuestion || showQuickLink) {
+      setShowSummaryInfo(false);
+      setShowQuestion(false);
+      setShowQuickLink(false);
+    } else {
+      setShowDetailInfo(false);
+      setShowInfo(false);
+      setShowQuestion(false);
+      setShowSummaryInfo((prev) => !prev);
+      setExpand(false);
+    }
+  };
+
+  const handleQuickLink = () => {
+    setShowQuickLink((prev) => !prev);
+    setShowSummaryInfo((prev) => !prev);
+    if (expand) {
+      setExpand(false);
+      setShowInfo(false);
+      setShowDetailInfo(false);
+    }
+    if (rejectCandidate || showQuestion) {
+      setShowSummaryInfo(false);
+      setRejectCandidate(false);
+      setShowQuestion(false);
     }
   };
 
@@ -335,33 +398,6 @@ export default function DraggableCardNew({
 
     // Clean up by revoking the Blob URL after the download
     URL.revokeObjectURL(blobUrl);
-  };
-
-  const handleFlip = () => {
-    setFlip((prev) => !prev);
-    if (showQuestion) {
-      setShowInfo(true);
-      setShowSummaryInfo(true);
-      setExpand(true);
-      setShowQuestion(false);
-    } else {
-      setShowInfo((prev) => !prev);
-      setShowDetailInfo((prev) => !prev);
-    }
-  };
-
-  const handleRejectDialog = () => {
-    setRejectCandidate((prev) => !prev);
-    if (showQuestion) {
-      setShowSummaryInfo(false);
-      setShowQuestion(false);
-    } else {
-      setShowDetailInfo(false);
-      setShowInfo(false);
-      setShowQuestion(false);
-      setShowSummaryInfo((prev) => !prev);
-      setExpand(false);
-    }
   };
 
   return (
@@ -565,6 +601,95 @@ export default function DraggableCardNew({
                   </Box>
                 </Box>
               )}
+              {showQuickLink && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        marginLeft: "13px",
+                        mt: 1,
+                      }}
+                    >
+                      Quick-move this applicant to
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        marginLeft: "13px",
+                      }}
+                    >
+                      one of the stage:
+                    </Typography>
+                    <Box sx={{ width: "90%", margin: "auto" }}>
+                      {talentStatus.map((talent, index) => {
+                        return (
+                          <>
+                            <Typography
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                fontSize: "14px",
+                                fontWeight: 700,
+                                mr: 1,
+                                mt: 1,
+                              }}
+                              onClick={() => handleMoveApplicant(talent.id)}
+                            >
+                              {talent.status}
+                              {talent.id === droppableId && (
+                                <CheckCircle color="eyeview" />
+                              )}
+                            </Typography>
+                          </>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center !important",
+                    }}
+                  >
+                    <SmallButton
+                      color="redButton"
+                      startIcon={
+                        <Box
+                          component="img"
+                          sx={{
+                            height: 26,
+                            width: 26,
+                          }}
+                          alt="Down arrow"
+                          src={upArrow}
+                        />
+                      }
+                      onClick={toggleAcordion}
+                      startIconMargin="4px"
+                      marginTop="5px"
+                      height={19}
+                      width={142}
+                      fontWeight={700}
+                      borderRadius="7px 7px 0px 0px"
+                    />
+                  </Box>
+                </Box>
+              )}
               {showSummaryInfo && (
                 <>
                   <Box
@@ -638,19 +763,28 @@ export default function DraggableCardNew({
                           title={item?.first_name + " " + item?.last_name}
                           placement="top"
                         >
-                          <Typography
-                            sx={{
-                              fontWeight: 700,
-                              fontSize: "14px",
-                              width: "170px",
-                              minHeight: "21px",
-                              whiteSpace: "nowrap", // Prevents text from wrapping
-                              overflow: "hidden", // Hides any overflowing content
-                              textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                          <Link
+                            to={`/admin/admin-talent/all-talent/candidate-cv/${item?.user_id}`}
+                            target="_blank"
+                            style={{
+                              textDecoration: "none",
+                              color: theme.palette.black,
                             }}
                           >
-                            {item?.first_name + " " + item?.last_name}
-                          </Typography>
+                            <Typography
+                              sx={{
+                                fontWeight: 700,
+                                fontSize: "14px",
+                                width: "170px",
+                                minHeight: "21px",
+                                whiteSpace: "nowrap", // Prevents text from wrapping
+                                overflow: "hidden", // Hides any overflowing content
+                                textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                              }}
+                            >
+                              {item?.first_name + " " + item?.last_name}
+                            </Typography>
+                          </Link>
                         </Tooltip>
                       </Box>
                       <Box
@@ -726,7 +860,7 @@ export default function DraggableCardNew({
                             textOverflow: "ellipsis",
                           }}
                         >
-                          {"-"}
+                          {item?.candidate_profile?.employer_histories[0]?.name}
                         </Typography>
                       </Box>
                       <Box
@@ -758,7 +892,7 @@ export default function DraggableCardNew({
                             textOverflow: "ellipsis",
                           }}
                         >
-                          {item?.currencySymbol}
+                          {item?.Currency}
                           {formatCurrencyWithCommas(item?.Salary)} per month
                         </Typography>
                       </Box>
@@ -853,8 +987,7 @@ export default function DraggableCardNew({
                       src={QA}
                       sx={{
                         height: 30,
-                        width: 32,
-                        margin: "auto",
+                        width: 30,
                       }}
                     />
                   }
@@ -876,7 +1009,7 @@ export default function DraggableCardNew({
                       src={close}
                       sx={{
                         height: 32,
-                        width: 32,
+                        width: 30,
                       }}
                     />
                   }
@@ -898,7 +1031,7 @@ export default function DraggableCardNew({
                       src={quicklinks}
                       sx={{
                         height: 23,
-                        width: 34,
+                        width: 30,
                       }}
                     />
                   }
@@ -908,9 +1041,10 @@ export default function DraggableCardNew({
                   width={33}
                   fontWeight={700}
                   borderRadius="0"
+                  onClick={handleQuickLink}
                 />
                 <SmallButton
-                  color="eyeview100"
+                  color={changeViewColor ? "eyeview" : "eyeview100"}
                   startIcon={
                     <Box
                       component="img"
@@ -923,16 +1057,19 @@ export default function DraggableCardNew({
                       }}
                     />
                   }
+                  onClick={() => setChangeViewColor(true)}
                   padding={0}
                   startIconMargin="4px"
                   height={32}
                   width={33}
                   fontWeight={700}
                   borderRadius={
-                    expand || showQuestion ? "0" : "0px 0px 20px 0px"
+                    expand || showQuestion || showQuickLink
+                      ? "0"
+                      : "0px 0px 20px 0px"
                   }
                 />
-                {(expand || showQuestion) && (
+                {(expand || showQuestion || showQuickLink) && (
                   <SmallButton
                     color="redButton"
                     startIcon={
@@ -1020,13 +1157,22 @@ export default function DraggableCardNew({
                   primary={
                     item?.candidate_profile?.candidate_info?.primary?.name
                   }
+                  traits={item?.candidate_profile?.candidate_traits}
+                  skills={item?.candidate_profile?.tag_users}
+                  tools={item?.candidate_profile?.tool_users}
                   shadow={item?.candidate_profile?.candidate_info?.shadow?.name}
-                  gritScore={"50"}
+                  gritScore={
+                    item?.candidate_profile?.candidate_info?.grit_score
+                      ? item?.candidate_profile?.candidate_info?.grit_score
+                      : null
+                  }
                 />
               )}
 
               {expand && (
                 <ExpandBottomButtons
+                  cvLink={item?.cv_url}
+                  userID={item?.user_id}
                   phoneNo={item?.candidate_profile?.contact_no}
                   emailAddress={item?.email}
                   linkedinAddress={

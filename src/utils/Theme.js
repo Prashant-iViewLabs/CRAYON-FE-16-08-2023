@@ -6,6 +6,10 @@ const theme = createTheme({
     base: {
       main: "#FFFFFF",
     },
+    stepperColor: {
+      main: "#60CA58",
+      contrastText: "#FFFFFF",
+    },
     cvColor: {
       main: "#E0E0E080",
       contrastText: "#FFFFFF",
@@ -29,9 +33,9 @@ const theme = createTheme({
       contrastText: "#FFFFFF",
       light: "#ff9800",
     },
-    orangeButton100: {
-      main: "#F09248",
-      contrastText: "#FFFFFF"
+    buttonText: {
+      main: "#707070",
+      contrastText: "#FFFFFF",
     },
     blueButton100: {
       main: "#52CBDC",
@@ -64,8 +68,8 @@ const theme = createTheme({
       contrastText: "#FFFFFF",
     },
     blueButton800: {
-      main: "#228cce",
-      contrastText: "#FFFFFF"
+      main: "#228CCE",
+      contrastText: "#FFFFFF",
     },
     yellowButton100: {
       main: "#F8B318",
@@ -79,10 +83,6 @@ const theme = createTheme({
     yellowButton300: {
       main: "#F3AA18",
       contrastText: "#FFFFFF",
-    },
-    yellowButton400: {
-      main: "#C19C47",
-      contrastText: "#FFFFFF"
     },
     grayButton: {
       main: "#747474",
@@ -103,6 +103,10 @@ const theme = createTheme({
     },
     grayButton400: {
       main: "#BFBEBE",
+      contrastText: "#FFFFFF",
+    },
+    grayButton500: {
+      main: "#F5F5F5",
       contrastText: "#FFFFFF",
     },
     greenButton: {
@@ -173,6 +177,15 @@ const theme = createTheme({
       main: "#228CCE",
       contrastText: "#FFFFFF",
     },
+    orangeButton100: {
+      main: "#F09248",
+      contrastText: "#FFFFFF",
+    },
+    yellowButton400: {
+      main: "#C19C47",
+      contrastText: "#FFFFFF",
+    },
+    yellowColor: "#DC9B53",
     white: "#FFFFFF",
     black: "#000000",
     mainBackground: "#FAFAFA",
@@ -186,7 +199,6 @@ const theme = createTheme({
     placeholder: "#C6CACC",
     grayIcon: "#545974",
     picNameColor: "#069697",
-    yellowColor: "#DC9B53",
     chart: {
       red: "#EC5D60",
       green: "#B6C773",

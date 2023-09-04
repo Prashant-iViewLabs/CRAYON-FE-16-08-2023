@@ -61,7 +61,7 @@ export default function TalentPool() {
 
   const handleAddNewJob = async () => {
     try {
-      if (newJobTitle !== "") {
+      if (newJobTitle.trim().length !== 0) {
         const data = {
           title: newJobTitle,
         };
@@ -137,6 +137,7 @@ export default function TalentPool() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getTitles(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

@@ -12,6 +12,7 @@ const Slider = ({ items, theme, color }) => {
         display: "flex",
         flexWrap: "wrap",
         gap: 1,
+        minHeight: "25px",
       }}
     >
       {items

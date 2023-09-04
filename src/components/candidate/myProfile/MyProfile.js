@@ -75,7 +75,7 @@ export default function MyCV() {
             position: "relative",
           }}
         > */}
-          {/* <Typography
+      {/* <Typography
             sx={{
               width: "60%",
               fontSize: "36px",
@@ -86,12 +86,12 @@ export default function MyCV() {
           >
             {i18n["myProfile.title"]}
           </Typography> */}
-          
-        {/* </Grid> */}
 
-        {/* <ButtonPanel panelData={CANDIDATE_MY_CV_LEFT} side='left' /> */}
-        {/* <Grid xs={12} sm={6} md={8} lg={9} xl={10}> */}
-          {/* <Paper
+      {/* </Grid> */}
+
+      {/* <ButtonPanel panelData={CANDIDATE_MY_CV_LEFT} side='left' /> */}
+      {/* <Grid xs={12} sm={6} md={8} lg={9} xl={10}> */}
+      {/* <Paper
             sx={{
               boxShadow: 0,
               p: 3,
@@ -100,14 +100,14 @@ export default function MyCV() {
               justifyContent: "space-between",
             }}
           > */}
-          {/* <Box> */}
-            {/* <TheBasics handleProfileData={getProfileData} profile={profile} /> */}
-            <ProfileCard />
-          {/* </Box> */}
-          {/* </Paper> */}
-        {/* </Grid> */}
+      {/* <Box> */}
+      {/* <TheBasics handleProfileData={getProfileData} profile={profile} /> */}
+      <ProfileCard />
+      {/* </Box> */}
+      {/* </Paper> */}
+      {/* </Grid> */}
 
-        {/* <ButtonPanel panelData={CANDIDATE_MY_CV_RIGHT} side='right' /> */}
+      {/* <ButtonPanel panelData={CANDIDATE_MY_CV_RIGHT} side='right' /> */}
       {/* // </Grid> */}
     </>
   );

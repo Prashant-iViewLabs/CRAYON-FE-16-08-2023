@@ -10,6 +10,10 @@ export const dateConverterMonth = (value) => {
   return moment(value).format("DD MMM YYYY");
 };
 
+export const dateConverterFullMonth = (value) => {
+  return moment(value).format("DD MMMM YYYY");
+};
+
 export const monthYear = (value) => {
   return moment(value).format("MMM YYYY");
 };

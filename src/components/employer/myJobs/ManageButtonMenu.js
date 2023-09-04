@@ -520,7 +520,7 @@ const ManageButtonMenu = ({ job }) => {
             color="yellowButton100"
             startIcon={<RemoveRedEyeOutlined />}
           >
-            View Job
+            View job
           </Button>
         </Box>
       </StyledMenu>

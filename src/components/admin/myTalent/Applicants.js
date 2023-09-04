@@ -74,6 +74,7 @@ export default function Applicants() {
         style={{ overflow: "hidden" }}
         dataLength={allApplicants.length}
         next={() => getApplicantList(lastKey)}
+        scrollThreshold={"10px"}
         hasMore={true}
         endMessage={
           <p style={{ textAlign: "center" }}>

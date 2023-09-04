@@ -5,8 +5,11 @@ import salary from "../../../../assets/Blue_Salary.svg";
 import date from "../../../../assets/Green_Notice_Period.svg";
 import pending from "../../../../assets/Yellow_Pending.svg";
 import SmallButton from "../../../common/SmallButton";
+import { formatCurrencyWithCommas } from "../../../../utils/Currency";
+import { dateConverterFullMonth } from "../../../../utils/DateTime";
 
-export default function CardsTopBar() {
+export default function CardsTopBar({ jobDetail }) {
+  console.log(jobDetail);
   return (
     <>
       <Box
@@ -18,7 +21,7 @@ export default function CardsTopBar() {
           justifyContent: "space-between",
         }}
       >
-        <Tooltip arrow title={"Lead Developer Online"} placement="top">
+        <Tooltip arrow title={jobDetail?.title} placement="top">
           <Typography
             variant="h5"
             sx={{
@@ -29,10 +32,13 @@ export default function CardsTopBar() {
               WebkitLineClamp: 1,
             }}
           >
-            {"Lead Developer Online"}
+            {jobDetail?.title}
           </Typography>
         </Tooltip>
-        <SmallButton color="lightGreenButton300" label={"review"} />
+        <SmallButton
+          color="lightGreenButton300"
+          label={jobDetail?.stage?.name}
+        />
       </Box>
       <Box
         sx={{
@@ -66,8 +72,8 @@ export default function CardsTopBar() {
               letterSpacing: "0.25px",
             }}
           >
-            {"R"}
-            {"75,000"} per month
+            {jobDetail?.salary?.currency?.symbol}
+            {formatCurrencyWithCommas(jobDetail?.salary?.max)} per month
           </Typography>
         </Box>
         <Box
@@ -95,7 +101,8 @@ export default function CardsTopBar() {
               letterSpacing: "0.25px",
             }}
           >
-            {"3 to 5 year"}
+            {jobDetail?.experience?.year_start} to{" "}
+            {jobDetail?.experience?.year_end} years
           </Typography>
         </Box>
         <Box
@@ -123,7 +130,7 @@ export default function CardsTopBar() {
               letterSpacing: "0.25px",
             }}
           >
-            {"Cape Town"},{"South Africa"}
+            {jobDetail?.town?.name}, {jobDetail?.town?.region?.name}
           </Typography>
         </Box>
         <Box
@@ -151,7 +158,7 @@ export default function CardsTopBar() {
               letterSpacing: "0.25px",
             }}
           >
-            {"1 September 2023"}
+            {dateConverterFullMonth(jobDetail?.created_at)}
           </Typography>
         </Box>
       </Box>

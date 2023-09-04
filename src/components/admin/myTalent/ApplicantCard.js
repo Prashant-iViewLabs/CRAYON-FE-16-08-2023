@@ -317,6 +317,8 @@ export default function ApplicantCard({
     setAnchorElPersonality(null);
   };
 
+  console.log(talentContent);
+
   const getAllData = async () => {
     try {
       // dispatch(setLoading(true));
@@ -497,7 +499,8 @@ export default function ApplicantCard({
                   mr: 1,
                 }}
               >
-                {talentContent?.first_name}
+                {talentContent?.first_name || talentContent?.user?.first_name}
+                {talentContent?.user?.last_name}
               </Typography>
             </Link>
             <Typography
@@ -761,7 +764,7 @@ export default function ApplicantCard({
                 letterSpacing: "0.75px",
               }}
             >
-              {talentContent?.email}
+              {talentContent?.email || talentContent?.user?.email}
             </Typography>
             <StyledHR></StyledHR>
             <IconButton

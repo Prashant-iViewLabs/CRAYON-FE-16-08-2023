@@ -69,7 +69,11 @@ export default function AddNew({
               border: `1px solid ${theme.palette.grayBorder}`,
               boxShadow: "none !important",
             }}
-            placeholder="Select the regionw"
+            placeholder={
+              name === "qualification"
+                ? "Select qualification type"
+                : "Select the country"
+            }
           />
         ) : null}
       </Box>

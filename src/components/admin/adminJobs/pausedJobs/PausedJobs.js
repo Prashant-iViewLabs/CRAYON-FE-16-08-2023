@@ -188,6 +188,7 @@ export default function PausedJobs() {
           style={{ overflow: "hidden" }}
           dataLength={allJobs.length}
           next={() => getJobList(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

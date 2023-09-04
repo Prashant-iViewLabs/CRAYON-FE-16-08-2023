@@ -31,7 +31,9 @@ export default function Approve({
           textAlign={"center"}
           paragraph
         >
-          Please confirm that you want to approve the selected {dialogText}
+          Please confirm that you want to{" "}
+          {approveEvent?.target?.checked ? "approve" : "disapprove"} the
+          selected {dialogText}
         </Typography>
       </Box>
       <Box>

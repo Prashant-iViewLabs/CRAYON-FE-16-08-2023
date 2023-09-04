@@ -99,7 +99,10 @@ const marks = [
   },
 ];
 
-export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) {
+export default function CultureAdd({
+  changeStep,
+  handleOpenSaveAndExitDialog,
+}) {
   const i18n = locale.en;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -381,7 +384,7 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
                 fontSize: "14px",
                 fontWeight: 500,
                 display: "flex",
-                gap: 1
+                gap: 1,
               }}
             >
               {i18n["postAJob.primaryLabel"]}
@@ -414,9 +417,10 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
             {!cultureData?.jobDetails?.primary_personality &&
               errors?.find((error) => error.key == "primary_personality") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "primary_personality")
-                    .message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "primary_personality")
+                      .message
+                  }`}
                 </Typography>
               )}
           </Box>
@@ -430,7 +434,7 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
                 fontSize: "14px",
                 fontWeight: 500,
                 display: "flex",
-                gap: 1
+                gap: 1,
               }}
             >
               {i18n["postAJob.shadowLabel"]}
@@ -464,9 +468,10 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
             {!cultureData?.jobDetails?.shadow_personality &&
               errors?.find((error) => error.key == "shadow_personality") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "shadow_personality")
-                    .message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "shadow_personality")
+                      .message
+                  }`}
                 </Typography>
               )}
           </Box>
@@ -482,7 +487,7 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
                 fontSize: "14px",
                 fontWeight: 500,
                 display: "flex",
-                gap: 1
+                gap: 1,
               }}
             >
               {i18n["postAJob.traitsLabel"]}
@@ -535,7 +540,7 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
                 fontSize: "14px",
                 fontWeight: 500,
                 display: "flex",
-                gap: 1
+                gap: 1,
               }}
             >
               {i18n["postAJob.gritScoreLabel"]}
@@ -586,8 +591,9 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
             />
             {errors?.find((error) => error.key == "grit_score") && (
               <Typography color={"red"}>
-                {`*${errors?.find((error) => error.key == "grit_score").message
-                  }`}
+                {`*${
+                  errors?.find((error) => error.key == "grit_score").message
+                }`}
               </Typography>
             )}
           </Box>
@@ -614,8 +620,9 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
         </Typography>
         {errors?.find((error) => error.key === "screen_questions") && (
           <Typography color={"red"}>
-            {`*${errors?.find((error) => error.key == "screen_questions").message
-              }`}
+            {`*${
+              errors?.find((error) => error.key == "screen_questions").message
+            }`}
           </Typography>
         )}
         {cultureData?.screen_questions?.length > 0 &&
@@ -695,10 +702,12 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
           >
             {i18n["postAJob.videoLabel"]}
           </Typography>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center"
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "15px",
@@ -706,16 +715,17 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
               }}
             >
               {i18n["postAJob.videoParaLabel"]}
-              <span style={{
-                color: "#707070"
-              }}>
+              <span
+                style={{
+                  color: "#707070",
+                }}
+              >
                 {i18n["postAJob.VideoParaNote"]}
               </span>
             </Typography>
             <BlueSwitch />
           </Box>
         </Box>
-
       </Box>
       <Box
         sx={{
@@ -732,8 +742,8 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
             fontSize: "15px",
             borderRadius: "26px 0 0 0",
           }}
-        // onClick={handle }
-        onClick={handleOpenSaveAndExitDialog}
+          // onClick={handle }
+          onClick={handleOpenSaveAndExitDialog}
         >
           Save and Exit
         </Button>
@@ -741,7 +751,6 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
           variant="contained"
           color="redButton"
           sx={{
-
             width: "229px",
             height: "57px",
             fontSize: "15px",
@@ -780,6 +789,6 @@ export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) 
           {i18n["postAJob.save"]}
         </StyledButton>
       </Box> */}
-    </Box >
+    </Box>
   );
 }

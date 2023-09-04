@@ -58,9 +58,9 @@ export default function Associations() {
 
   const getAllData = async () => {
     try {
-      dispatch(setLoading(true));
+      // dispatch(setLoading(true));
       await dispatch(getAssociation());
-      dispatch(setLoading(false));
+      // dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));
       dispatch(
@@ -107,14 +107,16 @@ export default function Associations() {
             msg: "Association removed successfully",
           })
         );
+        setConfirmDelete(false);
         await getAssociations(0);
+        await getAllData();
       }
     } catch (error) {}
   };
 
   const handleAddNewAssociation = async () => {
     try {
-      if (newAssociationTitle !== "") {
+      if (newAssociationTitle.trim().length !== 0) {
         const data = {
           title: newAssociationTitle,
         };
@@ -131,6 +133,7 @@ export default function Associations() {
             })
           );
           await getAssociations(0);
+          await getAllData();
         } else {
           dispatch(
             setAlert({
@@ -171,6 +174,7 @@ export default function Associations() {
         );
         setOpenEdit(false);
         await getAssociations(0);
+        await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -246,6 +250,7 @@ export default function Associations() {
           );
         setOpenApprove(false);
         await getAssociations(0);
+        // await getAllData();
       } else {
         dispatch(
           setAlert({
@@ -309,6 +314,7 @@ export default function Associations() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getAssociations(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

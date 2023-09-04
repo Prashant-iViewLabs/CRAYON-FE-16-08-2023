@@ -89,7 +89,7 @@ const Actions = ({ userID, permission, setDeleted }) => {
   const handleDeleteMember = async () => {
     try {
       const data = {
-        userids: userID,
+        userids: [userID],
       };
       const { payload } = await dispatch(removeMember(data));
       if (payload.status === "success") {

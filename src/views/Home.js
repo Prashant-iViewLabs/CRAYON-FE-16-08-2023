@@ -33,7 +33,7 @@ import currencySearch from "../assets/Padding Included/Currency_Search.svg";
 import talentSearch from "../assets/Padding Included/Search_Talent.svg";
 import { Link } from "react-router-dom";
 
-import homePageGif from '../assets/Characters/Final-Gif_2.gif'
+import homePageGif from "../assets/Characters/Final-Gif_2.gif";
 import { BackHand } from "@mui/icons-material";
 import AdvanceSection from "./AdvanceSection";
 import theme from "../utils/Theme";
@@ -91,26 +91,33 @@ export default function Home() {
   };
 
   return (
-    <Grid container spacing={0} flexDirection={{ xs: "column", sm: "row", }} sx={{
-      background: "#E3F1F9",
-      background: "linear-gradient(to bottom, #E3F1F9 75%, #FFFFFF 100%)",
-      height: "88vh"
-    }}>
-      <Grid item xs={12} sx={{ mt: 2, }}>
+    <Grid
+      container
+      spacing={0}
+      flexDirection={{ xs: "column", sm: "row" }}
+      sx={{
+        background: "#E3F1F9",
+        background: "linear-gradient(to bottom, #E3F1F9 75%, #FFFFFF 100%)",
+        height: "88vh",
+      }}
+    >
+      <Grid item xs={12} sx={{ mt: 2 }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             position: "relative",
-            gap: 3
+            gap: 3,
           }}
         >
-          <Box sx={{
-            display: "flex",
-            alignItems: "end",
-            gap: 1
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "end",
+              gap: 1,
+            }}
+          >
             <Box
               component={"img"}
               src={homePageGif}
@@ -142,7 +149,7 @@ export default function Home() {
               width: "100%",
               height: "65px",
               maxWidth: { xs: "90%", sm: "70%" },
-              overflow: "hidden"
+              overflow: "hidden",
             }}
           >
             <IconButton
@@ -186,7 +193,7 @@ export default function Home() {
               sx={{
                 height: "65px",
                 color: theme.palette.redButton.main,
-                width: "65px"
+                width: "65px",
               }}
               onClick={showLocationInput}
             >
@@ -219,13 +226,12 @@ export default function Home() {
                 minWidth: 235.5,
               }}
             >
-              <Box sx={{
-                width: "50%"
-              }}>
-
-                <Link
-                  to={"jobs"}
-                >
+              <Box
+                sx={{
+                  width: "50%",
+                }}
+              >
+                <Link to={"jobs"}>
                   <Button
                     sx={{
                       borderRadius: 0,
@@ -253,12 +259,12 @@ export default function Home() {
                   </Button>
                 </Link>
               </Box>
-              <Box sx={{
-                width: "50%"
-              }}>
-                <Link
-                  to={"talent"}
-                >
+              <Box
+                sx={{
+                  width: "50%",
+                }}
+              >
+                <Link to={"talent"}>
                   <Button
                     sx={{
                       borderRadius: 0,

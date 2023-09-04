@@ -310,18 +310,18 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.experiance} years Experience
+                    {job?.experiance} years
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Box
+                  <Box
                     component="img"
                     sx={{
                       height: 16,
                       width: 16,
                       maxHeight: { xs: 15 },
                       maxWidth: { xs: 15 },
-                      padding: 0
+                      padding: 0,
                     }}
                     alt="calendar"
                     src={calendar}
@@ -428,13 +428,9 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
             sx={{
               width: "100%",
               borderRadius: "0 0 25px 25px",
-              height: 50,
+              height: 51,
             }}
           >
-            {/* <Box sx={{ width: "66%", paddingRight: "10px" }}> */}
-
-            {/* </Box> */}
-
             <Box sx={{ width: "33.33%" }}>
               <ManageButtonMenu job={job} />
             </Box>

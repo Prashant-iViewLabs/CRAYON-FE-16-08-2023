@@ -128,6 +128,7 @@ export default function Company() {
         );
         setOpenEdit(false);
         await getCompany(0);
+        await getAllData();
       }
     } catch (error) {}
   };
@@ -208,6 +209,7 @@ export default function Company() {
           style={{ overflow: "hidden" }}
           dataLength={tableData.length}
           next={() => getCompany(lastKey)}
+          scrollThreshold={"10px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

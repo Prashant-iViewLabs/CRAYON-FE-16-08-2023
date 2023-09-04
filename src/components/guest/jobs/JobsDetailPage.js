@@ -463,7 +463,7 @@ export default function JobsDetailPage() {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.experience?.year} years Experience
+                {job?.experience?.year} years
               </Typography>
             </Box>
             <Box
@@ -527,7 +527,7 @@ export default function JobsDetailPage() {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.experience?.year} years Experience
+                {job?.experience?.year} years
               </Typography>
             </Box>
             <Box

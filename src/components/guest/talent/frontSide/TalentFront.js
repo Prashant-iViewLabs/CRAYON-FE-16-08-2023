@@ -28,10 +28,13 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Slider2 from "../../../common/Slider2";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
+import locale from "../../../../i18n/locale";
+
 const label1 = "applications";
 const label2 = "shortlisting";
 const label3 = "interviews";
 export default function TalentCard({ index, job, setisFlipped }) {
+  const i18n = locale.en;
   const dispatch = useDispatch();
   const theme = useTheme();
   const [isHovered, setIsHovered] = useState(false);
@@ -234,7 +237,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
               marginBottom: "8px",
             }}
           >
-            posted {convertDatetimeAgo(job?.updated_at)}
+            joined {convertDatetimeAgo(job?.updated_at)}
           </Typography>
         </Box>
       </Grid>
@@ -370,7 +373,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   width: 16,
                   maxHeight: { xs: 15 },
                   maxWidth: { xs: 15 },
-                  padding: 0
+                  padding: 0,
                 }}
                 alt="calendar"
                 src={calendar}
@@ -577,10 +580,9 @@ export default function TalentCard({ index, job, setisFlipped }) {
         alignItems="center"
         overflow={"hidden"}
         sx={{
-          background: "green",
           width: "100%",
           borderRadius: "0 0 25px 25px",
-          height: 50,
+          height: 51,
         }}
       >
         <Button
@@ -616,9 +618,9 @@ export default function TalentCard({ index, job, setisFlipped }) {
             fontSize: "10px",
           }}
           color="redButton"
-        // onClick={handleClick}
+          // onClick={handleClick}
         >
-          apply
+          {i18n["talentCard.shortlist"]}
         </Button>
         {/* <Box
           sx={{
