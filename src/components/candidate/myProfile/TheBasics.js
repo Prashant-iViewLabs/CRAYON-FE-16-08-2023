@@ -48,6 +48,7 @@ import femaleWhite from "../../../assets/female_white.svg";
 import SelectMenu from "../../common/SelectMenu";
 import "dayjs/locale/en-gb";
 import Switch from "@mui/material/Switch";
+import { CheckCircle, CheckCircleOutline } from "@mui/icons-material";
 dayjs.locale("en-gb");
 
 
@@ -915,18 +916,7 @@ export default function TheBasics({
             >
               {i18n["empMyProfile.crayonSkinz"]}
             </Typography>
-            <Typography
-              sx={{
-                mr: 1,
-                minWidth: "fit-content",
-                color: `${theme.palette.redButton100.main} !important`,
-              }}
-            >
-              {profileData.skinz === 1 ? "White" : ""}
-              {profileData.skinz === 2 ? "Fair" : ""}
-              {profileData.skinz === 3 ? "Medium" : ""}{" "}
-              {profileData.skinz === 4 ? "Dark" : ""}
-            </Typography>
+           
           </Box>
 
           <Box
@@ -937,68 +927,131 @@ export default function TheBasics({
               position: "relative",
             }}
           >
-            <Box
-              component="img"
-              alt="white color"
-              src={lineColor}
-              sx={{
-                position: "absolute",
-                top: profileData.skinz ? "17px" : "17px",
-                zIndex: 0,
-                width: "100%",
-              }}
-            />
             <Tooltip title="white" placement="top-start">
-              <Box
-                component="img"
-                alt="white color"
-                src={whiteColor}
-                width={profileData.skinz == "white" ? "48px" : "36px"}
-                onClick={(event) => handleColor(event, 1)}
-                sx={{
-                  zIndex: 0,
-                  cursor: "pointer",
-                }}
-              />
+              <Box sx={{
+                display: "flex",
+                cursor: "pointer"
+              }}
+                onClick={(event) => handleColor(event, 1)}>
+                <Box
+                  component="img"
+                  alt="white color"
+                  src={whiteColor}
+                  // width={profileData.skinz == "white" ? "48px" : "36px"}
+
+                  sx={{
+                    zIndex: 0,
+                    cursor: "pointer",
+                  }}
+                />
+                <Box sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  height: "100%",
+                  justifyContent: "end"
+                }}>
+                  {(profileData.skinz === 1) && <CheckCircle color="success" fontSize="string" />}
+                  <Typography sx={{
+                    height: "50%"
+                  }}>White</Typography>
+                </Box>
+              </Box>
+
             </Tooltip>
-            <Tooltip title="fair" placement="top-start">
-              <Box
-                component="img"
-                alt="white color"
-                src={fairColor}
-                width={profileData.skinz == "fair" ? "48px" : "36px"}
-                onClick={(event) => handleColor(event, 2)}
-                sx={{
-                  zIndex: 0,
-                  cursor: "pointer",
-                }}
-              />
+            <Tooltip title="Coloured" placement="top-start">
+             
+              <Box sx={{
+                display: "flex",
+                cursor: "pointer"
+              }}
+                onClick={(event) => handleColor(event, 2)}>
+                <Box
+                  component="img"
+                  alt="Coloured color"
+                  src={fairColor}
+                  // width={profileData.skinz == "white" ? "48px" : "36px"}
+                  sx={{
+                    zIndex: 0,
+                    cursor: "pointer",
+                  }}
+                />
+                <Box sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  height: "100%",
+                  justifyContent: "end"
+                }}>
+                  {(profileData.skinz === 2) && <CheckCircle color="success" fontSize="string" />}
+                  <Typography sx={{
+                    height: "50%"
+                  }}>Coloured</Typography>
+                </Box>
+              </Box>
             </Tooltip>
-            <Tooltip title="medium" placement="top-start">
-              <Box
-                component="img"
-                alt="white color"
-                src={mediumColor}
-                width={profileData.skinz == "medium" ? "48px" : "36px"}
-                onClick={(event) => handleColor(event, 3)}
-                sx={{
-                  zIndex: 0,
-                  cursor: "pointer",
-                }}
-              />
+            <Tooltip title="Indian" placement="top-start">
+             
+              <Box sx={{
+                display: "flex",
+                cursor: "pointer"
+              }}
+                onClick={(event) => handleColor(event, 3)}>
+                <Box
+                  component="img"
+                  alt="medium color"
+                  src={mediumColor}
+                  // width={profileData.skinz == "white" ? "48px" : "36px"}
+                  sx={{
+                    zIndex: 0,
+                    cursor: "pointer",
+                  }}
+                />
+                <Box sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  height: "100%",
+                  justifyContent: "end"
+                }}>
+                  {(profileData.skinz === 3) && <CheckCircle color="success" fontSize="string" />}
+                  <Typography sx={{
+                    height: "50%"
+                  }}>Indian</Typography>
+                </Box>
+              </Box>
             </Tooltip>
-            <Tooltip title="dark" placement="top-start">
-              <Box
-                component="img"
-                alt="white color"
-                src={darkColor}
-                width={profileData.skinz == "dark" ? "48px" : "36px"}
+            <Tooltip title="Black" placement="top-start">
+              
+              <Box sx={{
+                display: "flex",
+                cursor: "pointer"
+              }}
                 onClick={(event) => handleColor(event, 4)}
-                sx={{
-                  zIndex: 0,
-                  cursor: "pointer",
-                }}
-              />
+              >
+                <Box
+                  component="img"
+                  alt="dark color"
+                  src={darkColor}
+                  // width={profileData.skinz == "white" ? "48px" : "36px"}
+                  sx={{
+                    zIndex: 0,
+                    cursor: "pointer",
+                  }}
+                />
+                <Box sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  height: "100%",
+                  justifyContent: "end"
+                }}>
+                  {(profileData.skinz === 4) && <CheckCircle color="success" fontSize="string" />}
+                  <Typography sx={{
+                    height: "50%"
+                  }}>Black</Typography>
+                </Box>
+              </Box>
             </Tooltip>
           </Box>
           {errors?.find((error) => error.key == "skinz") && (
@@ -1075,10 +1128,10 @@ export default function TheBasics({
             </Button>
           </Paper>
         </Box>
-      </Box>
+      </Box >
 
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
           <Typography
             sx={{
               mr: 1,
@@ -1086,13 +1139,17 @@ export default function TheBasics({
             }}
           >
             {i18n["myProfile.seekingWork"]}
-          </Typography>
-          <ToggleSwitch
+          </Typography> */}
+          {/* <ToggleSwitch
             id="seeking_job"
             checked={!!profileData.seeking_job}
             onChange={handleSwitch}
-          />
-        </Box>
+          /> */}
+           {/* <BlueSwitch
+            id="seeking_job"
+            checked={!!Number(profileData.seeking_job)}
+            onChange={handleSwitch} />
+        </Box> */}
         <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
           <Typography
             sx={{
@@ -1102,11 +1159,15 @@ export default function TheBasics({
           >
             {i18n["myProfile.hide_profile"]}
           </Typography>
-          <ToggleSwitch
+          {/* <ToggleSwitch
             id="hide_profile"
             checked={!!profileData.hide_profile}
             onChange={handleSwitch}
-          />
+          /> */}
+           <BlueSwitch
+            id="hide_profile"
+            checked={!!Number(profileData.hide_profile)}
+            onChange={handleSwitch} />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mr: 8 }}>
           <Typography
@@ -1117,11 +1178,15 @@ export default function TheBasics({
           >
             {i18n["myProfile.hide_age"]}
           </Typography>
-          <ToggleSwitch
+          {/* <ToggleSwitch
             id="hide_age"
             checked={!!profileData.hide_age}
             onChange={handleSwitch}
-          />
+          /> */}
+           <BlueSwitch
+            id="hide_age"
+            checked={!!Number(profileData.hide_age)}
+            onChange={handleSwitch} />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography
@@ -1132,13 +1197,17 @@ export default function TheBasics({
           >
             {i18n["myProfile.hide_video"]}
           </Typography>
-          <ToggleSwitch
+          {/* <ToggleSwitch
             id="hide_video"
             checked={!!profileData.hide_video}
             onChange={handleSwitch}
-          />
+          /> */}
+           <BlueSwitch
+            id="hide_video"
+            checked={!!Number(profileData.hide_video)}
+            onChange={handleSwitch} />
         </Box>
       </Box>
-    </Box>
+    </Box >
   );
 }

@@ -9,6 +9,7 @@ export default function SwipeableButton({
   selectedUser,
   onButtonToggle,
   setSignupTouched,
+  error
 }) {
   const i18n = locale.en;
   const slider = useRef();
@@ -54,7 +55,7 @@ export default function SwipeableButton({
         sx={{
           fontWeight: 300,
           fontSize: 14,
-          color: theme.palette.lightGray,
+          color: error ? 'red' : theme.palette.lightGray,
           cursor: "pointer",
           width: 100,
           textAlign: "center",
@@ -95,8 +96,8 @@ export default function SwipeableButton({
       ) : (
         <TypographyComponent
           user={USER_TYPES[1]}
-          // mr={selectedUser === USER_TYPES[0] ? 3 : 0}
-          // ml={selectedUser === USER_TYPES[2] ? 3 : 0}
+        // mr={selectedUser === USER_TYPES[0] ? 3 : 0}
+        // ml={selectedUser === USER_TYPES[2] ? 3 : 0}
         >
           {USER_TYPES[1]}
         </TypographyComponent>
@@ -106,8 +107,8 @@ export default function SwipeableButton({
       ) : (
         <TypographyComponent
           user={USER_TYPES[2]}
-          // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
-          // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
+        // mr={selectedUser === USER_TYPES[1] ? 3 : 0}
+        // ml={selectedUser === USER_TYPES[3] ? 3 : 0}
         >
           {USER_TYPES[2]}
         </TypographyComponent>

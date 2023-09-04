@@ -359,7 +359,6 @@ export default function TalentCard({ index, job, setisFlipped }) {
                 }}
               >
                 {job?.candidate_profile?.candidate_info?.experience?.year} years
-                Experience
               </Typography>
             </Box>
 

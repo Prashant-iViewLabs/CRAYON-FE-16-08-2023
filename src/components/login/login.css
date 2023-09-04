@@ -3,12 +3,13 @@
   border: 1px solid rgb(197, 197, 197) !important;
 }
 .error-div {
-  color: red !important;
-  font-size: 0.8rem;
+  color: red ;
+  font-size: 14px;
   /* display: flow; */
   width: -webkit-fill-available;
   /* background: orange; */
   /* text-align: end; */
+
   align-items: center;
   display: flex;
   gap: 5px;

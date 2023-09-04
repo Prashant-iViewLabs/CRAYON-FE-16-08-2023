@@ -177,6 +177,7 @@ const JobCardFront = ({
         overflow={"hidden"}
         sx={{
           borderRadius: "25px 25px 0 0",
+          flexWrap: "nowrap"
           //   gap: 2,
         }}
       >

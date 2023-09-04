@@ -99,7 +99,7 @@ const marks = [
   },
 ];
 
-export default function CultureAdd({ changeStep }) {
+export default function CultureAdd({ changeStep, handleOpenSaveAndExitDialog }) {
   const i18n = locale.en;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -380,9 +380,28 @@ export default function CultureAdd({ changeStep }) {
                 paddingBottom: "2px",
                 fontSize: "14px",
                 fontWeight: 500,
+                display: "flex",
+                gap: 1
               }}
             >
               {i18n["postAJob.primaryLabel"]}
+              <Typography
+                sx={{
+                  padding: "5px",
+                  height: "8px",
+                  width: "8px",
+                  borderRadius: "5px",
+                  fontSize: "15px",
+                  /* text-align: center; */
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 900,
+                  border: 1,
+                }}
+              >
+                i
+              </Typography>
             </InputLabel>
             <SelectMenu
               name="primary_personality"
@@ -395,10 +414,9 @@ export default function CultureAdd({ changeStep }) {
             {!cultureData?.jobDetails?.primary_personality &&
               errors?.find((error) => error.key == "primary_personality") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "primary_personality")
-                      .message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "primary_personality")
+                    .message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -411,9 +429,28 @@ export default function CultureAdd({ changeStep }) {
                 paddingBottom: "2px",
                 fontSize: "14px",
                 fontWeight: 500,
+                display: "flex",
+                gap: 1
               }}
             >
               {i18n["postAJob.shadowLabel"]}
+              <Typography
+                sx={{
+                  padding: "5px",
+                  height: "8px",
+                  width: "8px",
+                  borderRadius: "5px",
+                  fontSize: "15px",
+                  /* text-align: center; */
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 900,
+                  border: 1,
+                }}
+              >
+                i
+              </Typography>
             </InputLabel>
 
             <SelectMenu
@@ -427,10 +464,9 @@ export default function CultureAdd({ changeStep }) {
             {!cultureData?.jobDetails?.shadow_personality &&
               errors?.find((error) => error.key == "shadow_personality") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "shadow_personality")
-                      .message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "shadow_personality")
+                    .message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -445,9 +481,28 @@ export default function CultureAdd({ changeStep }) {
                 paddingBottom: "2px",
                 fontSize: "14px",
                 fontWeight: 500,
+                display: "flex",
+                gap: 1
               }}
             >
               {i18n["postAJob.traitsLabel"]}
+              <Typography
+                sx={{
+                  padding: "5px",
+                  height: "8px",
+                  width: "8px",
+                  borderRadius: "5px",
+                  fontSize: "15px",
+                  /* text-align: center; */
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 900,
+                  border: 1,
+                }}
+              >
+                i
+              </Typography>
             </InputLabel>
 
             <AutoComplete
@@ -479,9 +534,28 @@ export default function CultureAdd({ changeStep }) {
                 paddingBottom: "2px",
                 fontSize: "14px",
                 fontWeight: 500,
+                display: "flex",
+                gap: 1
               }}
             >
               {i18n["postAJob.gritScoreLabel"]}
+              <Typography
+                sx={{
+                  padding: "5px",
+                  height: "8px",
+                  width: "8px",
+                  borderRadius: "5px",
+                  fontSize: "15px",
+                  /* text-align: center; */
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 900,
+                  border: 1,
+                }}
+              >
+                i
+              </Typography>
             </InputLabel>
 
             <Slider
@@ -495,13 +569,25 @@ export default function CultureAdd({ changeStep }) {
               valueLabelDisplay="auto"
               valueLabelFormat={textValue}
               marks={marks}
-              sx={{ width: "88%", ml: 2 }}
+              sx={{
+                width: "88%",
+                ml: 2,
+                "& .MuiSlider-rail": {
+                  backgroundColor: theme.palette.eyeview100.main,
+                  height: "10px",
+                },
+                "& .MuiSlider-track": {
+                  height: "10px",
+                },
+                "& .MuiSlider-thumb": {
+                  borderRadius: "15%",
+                },
+              }}
             />
             {errors?.find((error) => error.key == "grit_score") && (
               <Typography color={"red"}>
-                {`*${
-                  errors?.find((error) => error.key == "grit_score").message
-                }`}
+                {`*${errors?.find((error) => error.key == "grit_score").message
+                  }`}
               </Typography>
             )}
           </Box>
@@ -518,7 +604,7 @@ export default function CultureAdd({ changeStep }) {
         </Typography>
         <Typography
           sx={{
-            fontSize: "17px",
+            fontSize: "15px",
             fontWeight: 300,
             ml: 1,
             mb: 2,
@@ -526,11 +612,10 @@ export default function CultureAdd({ changeStep }) {
         >
           {i18n["postAJob.screeningQuestionPara"]}
         </Typography>
-        {errors?.find((error) => error.key == "screen_questions") && (
+        {errors?.find((error) => error.key === "screen_questions") && (
           <Typography color={"red"}>
-            {`*${
-              errors?.find((error) => error.key == "screen_questions").message
-            }`}
+            {`*${errors?.find((error) => error.key == "screen_questions").message
+              }`}
           </Typography>
         )}
         {cultureData?.screen_questions?.length > 0 &&
@@ -599,40 +684,75 @@ export default function CultureAdd({ changeStep }) {
         >
           {i18n["postAJob.addButton"]}
         </Button>
-        <Box
-          sx={{
-            border: "1px solid gray",
-            borderRadius: "24px",
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Typography
+            sx={{
+              fontSize: "20px",
+              fontWeight: 700,
+              ml: 1,
+              mb: 2,
+            }}
+          >
+            {i18n["postAJob.videoLabel"]}
+          </Typography>
+          <Box sx={{
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px",
-            marginTop: "25px",
-          }}
-        >
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            alignItems: "center"
+          }}>
             <Typography
               sx={{
-                fontSize: "17px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.videoLabel"]}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "14px",
+                fontSize: "15px",
                 fontWeight: 300,
               }}
             >
               {i18n["postAJob.videoParaLabel"]}
+              <span style={{
+                color: "#707070"
+              }}>
+                {i18n["postAJob.VideoParaNote"]}
+              </span>
             </Typography>
+            <BlueSwitch />
           </Box>
-
-          <BlueSwitch />
         </Box>
+
       </Box>
       <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="grayButton200"
+          sx={{
+            width: "229px",
+            height: "57px",
+            fontSize: "15px",
+            borderRadius: "26px 0 0 0",
+          }}
+        // onClick={handle }
+        onClick={handleOpenSaveAndExitDialog}
+        >
+          Save and Exit
+        </Button>
+        <Button
+          variant="contained"
+          color="redButton"
+          sx={{
+
+            width: "229px",
+            height: "57px",
+            fontSize: "15px",
+            borderRadius: "0 26px 0 0 ",
+          }}
+          onClick={saveCulture}
+        >
+          {i18n["postAJob.save"]}
+        </Button>
+      </Box>
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -659,7 +779,7 @@ export default function CultureAdd({ changeStep }) {
         >
           {i18n["postAJob.save"]}
         </StyledButton>
-      </Box>
-    </Box>
+      </Box> */}
+    </Box >
   );
 }

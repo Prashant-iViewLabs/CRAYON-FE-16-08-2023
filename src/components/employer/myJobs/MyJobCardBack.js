@@ -110,7 +110,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                         label={job?.job_type?.slice(6)}
                         mr={1}
                       />
-                    ) : job?.job_type === "crayon lite" ? (
+                    ) : job?.job_type === "crayon Direct" ? (
                       <SmallButton
                         color="orangeButton"
                         label={job?.job_type?.slice(6)}

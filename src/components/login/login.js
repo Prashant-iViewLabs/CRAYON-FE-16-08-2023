@@ -109,6 +109,7 @@ export default function Login({
             : "",
       };
       await handleLogin(formBody);
+      setLoginTouched(false)
     },
   });
   const handleForgotPassword = () => {
@@ -118,13 +119,15 @@ export default function Login({
   const handleCloseForgotPassword = () => {
     setOpenForgotPassword(false);
   };
+  
   return (
     <>
       <Dialog
         open={openFunc}
         hideButton={false}
         onClose={closeFunc}
-        dialogWidth="xs"
+        dialogWidth="sm"
+        // fullWidth={true}
         showFooter={false}
         title={i18n["login.login"]}
         // isApplyJob
@@ -145,12 +148,21 @@ export default function Login({
               color: (theme) => theme.palette.grey[500],
             }}
           >
-            <CloseIcon />
+            <Box sx={{
+              width: "20px",
+              height: "20px",
+              color: "#000000",
+              border: 2,
+              fontSize: "18px",
+              borderRadius: "5px"
+            }}>
+              X
+            </Box>
           </IconButton>
         </DialogTitle>
         <Box
           sx={{
-            width: "350px",
+            width: "459px",
             padding: "30px 0 0",
             display: "flex",
             flexDirection: "column",
@@ -160,16 +172,16 @@ export default function Login({
           <Avatar src={smileFace} sx={{ width: 96, height: 96 }} />
           <Typography
             sx={{
-              fontSize: "20px",
+              fontSize: "25px",
               fontWeight: 700,
             }}
           >
-            Welcome back
+             guess who’s back, back again
           </Typography>
           <Typography
             sx={{
-              fontSize: "14px",
-              marginTop: 3,
+              fontSize: "18px",
+              marginTop: 2,
               fontWeight: 700,
             }}
           >
@@ -177,7 +189,7 @@ export default function Login({
             {/* {(formik.errors.username || formik.errors.password) &&
         <span className="error-div">oops! Something wasn't right</span>} */}
           </Typography>
-          {Object.keys(formik.errors).length !== 0 &&  Object.keys(formik.touched).some(field => formik.touched[field])  ? (
+          {Object.keys(formik.errors).length !== 0 &&  Object.keys(formik.touched).some(field => formik.touched[field]) && loginTouched  ? (
             <Typography
               sx={{
                 fontSize: '14px',
@@ -336,6 +348,7 @@ export default function Login({
                 formik.handleSubmit()
                 setLoginTouched(true)
               }}
+              type="submit"
             >
 
               {loginTouched ? "Sign in" : "let's go"}

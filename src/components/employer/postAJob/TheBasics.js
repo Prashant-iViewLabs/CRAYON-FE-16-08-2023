@@ -15,6 +15,12 @@ import {
   AccordionDetails,
   Radio,
   Typography,
+  useTheme,
+  Input,
+  InputBase,
+  Paper,
+  Switch,
+  alpha,
 } from "@mui/material";
 import { CV_STEPS } from "../../../utils/Constants";
 import Slider from "@mui/material/Slider";
@@ -42,6 +48,29 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ResetTvRounded } from "@mui/icons-material";
+import { getIndustries } from "../../../redux/candidate/myCvSlice";
+
+const BlueSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: theme.palette.blueButton700.main,
+    "&:hover": {
+      backgroundColor: alpha(
+        theme.palette.blueButton700.main,
+        theme.palette.action.hoverOpacity
+      ),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: theme.palette.blueButton700.main,
+  },
+  "& .MuiSwitch-track": {
+    margin: "auto",
+    height: "60% !important",
+  },
+  "& .css-jsexje-MuiSwitch-thumb": {
+    borderRadius: "15% !important",
+  },
+}));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   marginRight: "24px",
@@ -57,7 +86,9 @@ const BASIC = {
   job_id: null,
   job_title_id: "",
   job_role_type: "",
-  job_type: "crayon recruit",
+  job_type: "",
+  contract_duration: 0,
+  industry_id: [],
   currency_id: "",
   salary: [],
   hide_salary: 1,
@@ -67,9 +98,13 @@ const BASIC = {
   town_id: "",
   skills: [],
   tools: [],
+  own_transport: false,
+  own_equipment: false,
+  internet_access: false,
   experience_id: "",
   required_qualification_id: "",
   preferred_qualification_ids: [],
+
 };
 
 const SALARY_OBJ = {
@@ -84,24 +119,32 @@ const marks = [
   },
   {
     value: 20,
-    label: "2 yrs",
+    label: "2",
   },
   {
     value: 40,
-    label: "4 yrs",
+    label: "4",
   },
   {
     value: 60,
-    label: "6yrs",
+    label: "6",
   },
   {
     value: 80,
-    label: "8yrs",
+    label: "8",
   },
   {
     value: 100,
-    label: "10yrs",
+    label: "10",
   },
+  // {
+  //   value: 150,
+  //   label: "15",
+  // },
+  // {
+  //   value: 200,
+  //   label: "20+",
+  // },
 ];
 
 const rangeMarks = [
@@ -174,16 +217,23 @@ function rangeValueExperience(value) {
 }
 
 const i18n = locale.en;
-
-export default function TheBasics({ changeStep }) {
+const scrollToTop = () => {
+  // Scroll to the top of the page with smooth behavior
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+export default function TheBasics({ changeStep, handleComplete, handleJobType, selectedJobType, handleOpenSaveAndExitDialog }) {
   const dispatch = useDispatch();
+  const theme = useTheme()
   const [basicData, setBasicData] = useState(BASIC);
   const [selectedValue, setSelectedValue] = useState("crayon recruit");
   const [salary, setSalary] = useState([]);
   const [salaryObj, setSalaryObj] = useState(SALARY_OBJ);
   const [townsMain, setTownsMain] = useState([]);
   const [rangeValue, setRangeValue] = useState([0, 20]);
-  const [expRange, setExpRange] = useState([0, 1]);
+  const [expRange, setExpRange] = useState([0, 5]);
   const [errors, setErrors] = useState([]);
   const history = useNavigate();
   const {
@@ -199,15 +249,24 @@ export default function TheBasics({ changeStep }) {
     roleTypes,
     workSetup,
   } = useSelector((state) => state.postJobs);
+  const {
+    industries,
+  } = useSelector((state) => state.myCv);
 
   const { jobId, duplicate } = useParams();
 
+  console.log(basicData)
   const getAllTheBasics = async () => {
     try {
       dispatch(setLoading(true));
       const { payload } = await dispatch(getBasicData(jobId)); //basicData.job_id
       if (payload?.status == "success") {
         const basic = payload?.data;
+        console.clear()
+        console.log(payload?.data)
+        if (basic.job_type) {
+          handleJobType(basic.job_type)
+        }
         const salary = basic.salary.map((item) => {
           return basic.job_role_type != "freelance" ? item / 1000 : item / 5;
         });
@@ -251,6 +310,7 @@ export default function TheBasics({ changeStep }) {
       await Promise.all([
         dispatch(getTitles()),
         dispatch(getSkills()),
+        dispatch(getIndustries()),
         dispatch(getTools()),
         dispatch(getWorkExperience()),
         dispatch(getQualification()),
@@ -302,7 +362,13 @@ export default function TheBasics({ changeStep }) {
   };
   const saveBasic = async () => {
     try {
-      const { payload } = await dispatch(addBasicData(basicData));
+      const newBasicData = {
+        ...basicData,
+        // [name || id]: slider ? sliderValue : value,
+        job_type: selectedJobType,
+      };
+      console.log(newBasicData)
+      const { payload } = await dispatch(addBasicData(newBasicData));
       if (payload?.status == "success") {
         dispatch(
           setAlert({
@@ -312,10 +378,26 @@ export default function TheBasics({ changeStep }) {
           })
         );
         history(`/employer/post-a-job/${payload?.data?.job_id}`);
-        changeStep(2);
+        handleComplete(1)
+        changeStep(2)
         setErrors([]);
-      } else if (payload?.status == "error") {
-        setErrors(payload?.errors);
+      } else if (payload?.status === "error") {
+        console.log(payload?.errors)
+        console.log(errors?.find((error) => error.key === "job_type"))
+        if (payload?.errors?.find((error) => error.key === "job_type")) {
+          dispatch(
+            setAlert({
+              show: true,
+              type: ALERT_TYPE.ERROR,
+              msg: "Please Select Job Type First",
+            })
+          );
+        }
+        else {
+          setErrors(payload?.errors);
+        }
+        scrollToTop()
+
       } else {
         dispatch(
           setAlert({
@@ -336,16 +418,16 @@ export default function TheBasics({ changeStep }) {
     }
   };
 
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.target.value);
-    const newBasicData = {
-      ...basicData,
-      // [name || id]: slider ? sliderValue : value,
-      job_type: event.target.value,
-    };
+  // const handleRadioChange = (event) => {
+  //   setSelectedValue(event.target.value);
+  //   const newBasicData = {
+  //     ...basicData,
+  //     // [name || id]: slider ? sliderValue : value,
+  //     job_type: event.target.value,
+  //   };
 
-    setBasicData(newBasicData);
-  };
+  //   setBasicData(newBasicData);
+  // };
 
   const handleAutoComplete = (event, newValue, id) => {
     let newBasicData = {};
@@ -382,6 +464,14 @@ export default function TheBasics({ changeStep }) {
     };
     setBasicData(newBasicData);
   };
+
+  const handleContractDurationChange = (event) => {
+    const newBasicData = {
+      ...basicData,
+      contract_duration: event.target.value
+    }
+    setBasicData(newBasicData)
+  }
 
   const handleChange = (event) => {
     const {
@@ -507,6 +597,15 @@ export default function TheBasics({ changeStep }) {
       (id) => tools?.find((tool) => tool.id == id) || id
     );
   };
+  const getIndustriesValue = () => {
+
+    if (basicData.industry_id?.length === 0) {
+      // console.log(basicData.industries)
+      return []
+    }
+    // return [1, 4]
+    return basicData.industry_id.map(id => industries?.find(industry => industry.industry_id === id) || id)
+  }
 
   const handleRequiredQualificationLevel = (event) => {
     const {
@@ -522,7 +621,7 @@ export default function TheBasics({ changeStep }) {
   };
 
   const handleMultipleAutoComplete = (event, newValue, id) => {
-    // console.log(newValue, id);
+    console.log(newValue, id);
     let newBasicData = {
       ...basicData,
       [id]: newValue.map((val) => val?.inputValue || val?.id || val),
@@ -540,6 +639,8 @@ export default function TheBasics({ changeStep }) {
     setBasicData(newBasicData);
   };
   const handleSwitch = (event) => {
+    console.clear()
+    console.log(event.target.checked)
     const newBasicData = {
       ...basicData,
       [event.target.id]: Number(event.target.checked),
@@ -578,135 +679,7 @@ export default function TheBasics({ changeStep }) {
 
   return (
     <Box>
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "20px",
-            fontWeight: 700,
-            ml: 1,
-            mb: 2,
-          }}
-        >
-          {i18n["postAJob.jobTypeLabel"]}
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "98%",
-            justifyContent: "center",
-            mb: 3,
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Radio
-              checked={selectedValue === "crayon recruit"}
-              onChange={handleRadioChange}
-              value="crayon recruit"
-              name="radio-buttons"
-              inputProps={{ "aria-label": "CRAYON RECRUIT" }}
-            />
-            <Box
-              sx={{
-                border: "1px solid gray",
-                borderRadius: "20px",
-                backgroundColor:
-                  selectedValue == "crayon recruit" ? "#C19C47" : "",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-                p: 1,
-                pl: 2,
-              }}
-            >
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: 700,
-                  }}
-                >
-                  {i18n["postAJob.cryonRecruitLabel"]}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 300,
-                    color: selectedValue == "crayon recruit" ? "white" : "",
-                  }}
-                >
-                  {i18n["postAJob.recruitParaLabel"]}
-                </Typography>
-              </Box>
-              <Box>
-                <Accordion
-                  sx={{
-                    width: 200,
-                    backgroundColor: "#C19C47",
-                    boxShadow: "none",
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography sx={{ color: "white" }}>
-                      Show more details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography sx={{ color: "white" }}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", mt: 2, alignItems: "center" }}>
-            <Radio
-              checked={selectedValue === "crayon lite"}
-              onChange={handleRadioChange}
-              value="crayon lite"
-              name="radio-buttons"
-              inputProps={{ "aria-label": "CRAYON LITE" }}
-            />
-            <Box
-              sx={{
-                border: "1px solid gray",
-                borderRadius: "20px",
-                backgroundColor:
-                  selectedValue == "crayon lite" ? "#F8B318" : "",
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                p: 1,
-                pl: 2,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "15px",
-                  fontWeight: 700,
-                }}
-              >
-                {i18n["postAJob.cryonLiteLabel"]}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 300,
-                  color: selectedValue == "crayon lite" ? "white" : "",
-                }}
-              >
-                {i18n["postAJob.liteParaLabel"]}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+
       <Box>
         <Typography
           sx={{
@@ -718,7 +691,8 @@ export default function TheBasics({ changeStep }) {
         >
           {CV_STEPS[0]}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+        {/* Job Title, Role Type, Contract Duration */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
               htmlFor="job_title_id"
@@ -742,7 +716,6 @@ export default function TheBasics({ changeStep }) {
                 ) || basicData.job_title_id
               }
               onChange={handleAutoComplete}
-              sx={{ width: "95%" }}
               placeholder={i18n["postAJob.jobTitle"]}
               data={titles}
             ></AutoComplete>
@@ -750,15 +723,135 @@ export default function TheBasics({ changeStep }) {
               !basicData.job_title_id &&
               errors?.find((error) => error.key == "job_title_id") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "job_title_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "job_title_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
+          <Box sx={{ display: "flex", gap: 4, width: "50%" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+              <InputLabel
+                htmlFor="job_role_type"
+                sx={{
+                  color: "black",
+                  paddingLeft: "10px",
+                  paddingBottom: "2px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                {i18n["postAJob.roleTypeLabel"]}
+              </InputLabel>
+              <SelectMenu
+                name="job_role_type"
+                value={basicData.job_role_type}
+                onHandleChange={handleJobRoleChange}
+                options={roleTypes}
+                placeholder={i18n["postAJob.roleType"]}
+              />
+              {!basicData.job_role_type &&
+                errors?.find((error) => error.key == "job_role_type") && (
+                  <Typography color={"red"}>
+                    {`*${errors?.find((error) => error.key == "job_role_type")
+                      .message
+                      }`}
+                  </Typography>
+                )}
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+              <InputLabel
+                htmlFor="Contract_Duration"
+                sx={{
+                  color: "black",
+                  paddingLeft: "10px",
+                  paddingBottom: "2px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                {i18n["postAJob.contemplatorsact_DurationLabel"]}
+              </InputLabel>
+              <Paper
+                elevation={3}
+                sx={{
+                  display: "flex",
+                  borderRadius: "25px",
+                  height: "40px",
+                  boxShadow: "none",
+                  border: `1px solid ${theme.palette.grayBorder}`,
+                }}>
+
+                <InputBase
+                  sx={{ ml: 2, mr: 2, width: "100%" }}
+                  id="contract_duration"
+                  value={basicData.contract_duration}
+                  onChange={handleContractDurationChange}
+                  // onBlur={formik.handleBlur}
+                  // type={inputType}
+                  placeholder={"Proposed contract duration?"}
+                />
+              </Paper>
+
+              {/* <Input var></Input> */}
+              {/* <SelectMenu
+              name="job_role_type"
+              value={basicData.job_role_type}
+              onHandleChange={handleJobRoleChange}
+              options={roleTypes}
+              sx={{ width: "96%" }}
+              placeholder={"Proposed contract duration?"}
+            />
+            {!basicData.job_role_type &&
+              errors?.find((error) => error.key == "job_role_type") && (
+                <Typography color={"red"}>
+                  {`*${errors?.find((error) => error.key == "job_role_type")
+                    .message
+                    }`}
+                </Typography>
+              )} */}
+            </Box>
+          </Box>
+
+        </Box>
+        {/* Associated Industries */}
+        <Box
+          sx={{
+            display: "flex", flexDirection: "column", mb: 3
+          }}
+        >
+
+          <InputLabel
+            htmlFor="associated_industries"
+            sx={{
+              color: "black",
+              paddingLeft: "10px",
+              paddingBottom: "2px",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
+          >
+            {i18n["postAJob.associated_industriesLabel"]}
+
+          </InputLabel>
+          <AutoComplete
+            multiple={true}
+            // showAddOption={true}
+            // allowCustomInput={true}
+            id="industry_id"
+            disableCloseOnSelect={true}
+            value={getIndustriesValue()}
+            onChange={handleMultipleAutoComplete}
+
+            sx={{ display: "inline-table" }}
+            placeholder={"Enter any industry(ies) relevant to the role"}
+            data={industries}
+          ></AutoComplete>
+        </Box>
+        {/* Region, Town */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
-              htmlFor="job_role_type"
+              htmlFor="country_id"
               sx={{
                 color: "black",
                 paddingLeft: "10px",
@@ -767,35 +860,216 @@ export default function TheBasics({ changeStep }) {
                 fontWeight: 500,
               }}
             >
-              {i18n["postAJob.roleTypeLabel"]}
+              {/* {i18n["postAJob.countryIdLabel"]} */}
+              Region
             </InputLabel>
+
             <SelectMenu
-              name="job_role_type"
-              value={basicData.job_role_type}
-              onHandleChange={handleJobRoleChange}
-              options={roleTypes}
-              sx={{ width: "96%" }}
-              placeholder={i18n["postAJob.roleType"]}
+              name="country_id"
+              value={basicData.country_id}
+              onHandleChange={handleChange}
+              options={country}
+              placeholder={i18n["postAJob.countryPlaceHolder"]}
             />
-            {!basicData.job_role_type &&
+            {!basicData.country_id &&
               errors?.find((error) => error.key == "job_role_type") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "job_role_type")
-                      .message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "job_role_type")
+                    .message
+                    }`}
+                </Typography>
+              )}
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <InputLabel
+              htmlFor="town_id"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.townIdLabel"]}
+            </InputLabel>
+
+            <SelectMenu
+              name="town_id"
+              disabled={!basicData.country_id}
+              value={
+                town?.find((val) => val.town_id == basicData.town_id)?.name ||
+                ""
+              }
+              onHandleChange={handleChange}
+              options={townsMain}
+              placeholder={i18n["postAJob.townPlaceHolder"]}
+            />
+            {!town?.find((val) => val.town_id == basicData.town_id)?.name &&
+              errors?.find((error) => error.key == "town_id") && (
+                <Typography color={"red"}>
+                  {`*${errors?.find((error) => error.key == "town_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mb: 3,
-          }}
-        >
+        {/* Work setup,  language */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <InputLabel
+              htmlFor="work_setup"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.workSetupLable"]}
+            </InputLabel>
+            <SelectMenu
+              name="work_setup"
+              value={basicData.work_setup}
+              onHandleChange={handleWorkSetup}
+              options={workSetup}
+              placeholder={i18n["postAJob.workSetupPlaceholder"]}
+            />
+            {!basicData.work_setup &&
+              errors?.find((error) => error.key == "work_setup") && (
+                <Typography color={"red"}>
+                  {`*${errors?.find((error) => error.key == "work_setup").message
+                    }`}
+                </Typography>
+              )}
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <InputLabel
+              htmlFor="languages"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.languagesLabel"]}
+            </InputLabel>
+            {/* <SelectMenu
+              name="work_setup"
+              value={basicData.languages}
+              onHandleChange={handlelanguage}
+              options={languages}
+              placeholder={i18n["postAJob.languagesPlaceholder"]}
+            /> */}
+            {/* {!basicData.work_setup &&
+              errors?.find((error) => error.key === "languages") && (
+                <Typography color={"red"}>
+                  {`*${errors?.find((error) => error.key == "languages").message
+                    }`}
+                </Typography>
+              )} */}
+          </Box>
+        </Box>
+        {/* skills */}
+        <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
+          <InputLabel
+            htmlFor="skills"
+            sx={{
+              color: "black",
+              paddingLeft: "10px",
+              paddingBottom: "2px",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
+          >
+            {i18n["postAJob.skillsLabel"]}
+          </InputLabel>
+          <AutoComplete
+            multiple={true}
+            id="skills"
+            disableCloseOnSelect={true}
+            value={getSkillValue()}
+            onChange={handleMultipleAutoComplete}
+            sx={{ display: "inline-table" }}
+            placeholder={i18n["postAJob.skills"]}
+            data={skills}
+          ></AutoComplete>
+          {getSkillValue() == "" &&
+            errors?.find((error) => error.key == "skills") && (
+              <Typography color={"red"}>
+                {`*${errors?.find((error) => error.key == "skills").message}`}
+              </Typography>
+            )}
+        </Box>
+        {/* Tools */}
+        <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
+          <InputLabel
+            htmlFor="tools"
+            sx={{
+              color: "black",
+              paddingLeft: "10px",
+              paddingBottom: "2px",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
+          >
+            {i18n["postAJob.toolsLable"]}
+          </InputLabel>
+          <AutoComplete
+            disableCloseOnSelect={true}
+            limitTags={5}
+            multiple={true}
+            id="tools"
+            value={getToolValue()}
+            onChange={handleMultipleAutoComplete}
+            sx={{ display: "inline-table" }}
+            placeholder={i18n["postAJob.tools"]}
+            data={tools}
+          ></AutoComplete>
+          {getToolValue() == "" &&
+            errors?.find((error) => error.key == "tools") && (
+              <Typography color={"red"}>
+                {`*${errors?.find((error) => error.key == "tools").message}`}
+              </Typography>
+            )}
+        </Box>
+        {/* Required Qualification, currency */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, gap: 8 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <InputLabel
+              htmlFor="required_qualification_id"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.requiredQualificationLable"]}
+            </InputLabel>
+            <SelectMenu
+              name="required_qualification_id"
+              value={basicData.required_qualification_id}
+              onHandleChange={handleRequiredQualificationLevel}
+              options={requiredQua}
+              placeholder={i18n["postAJob.requiredQualificationLevel"]}
+            />
+            {!basicData.required_qualification_id &&
+              errors?.find(
+                (error) => error.key == "required_qualification_id"
+              ) && (
+                <Typography color={"red"}>
+                  {`*${errors?.find(
+                    (error) => error.key == "required_qualification_id"
+                  ).message
+                    }`}
+                </Typography>
+              )}
+          </Box>
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
               htmlFor="currency_id"
@@ -814,17 +1088,82 @@ export default function TheBasics({ changeStep }) {
               value={basicData.currency_id}
               onHandleChange={handleChange}
               options={currency}
-              sx={{ width: "97%" }}
               placeholder={i18n["postAJob.preferredCurrency"]}
             />
             {!basicData.currency_id &&
               errors?.find((error) => error.key == "currency_id") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "currency_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "currency_id").message
+                    }`}
                 </Typography>
               )}
+          </Box>
+
+
+        </Box>
+        {/* work experience , salary */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 3,
+            gap: 8
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "50%",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
+          >
+            <InputLabel
+              htmlFor="experience_id"
+              sx={{
+                color: "black",
+                paddingBottom: "2px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.yearsWorkExperienceLabel"]}
+            </InputLabel>
+            <Slider
+              disableSwap
+              sx={{
+                width: "80%",
+                "& .MuiSlider-rail": {
+                  backgroundColor: theme.palette.eyeview100.main,
+                  height: "10px",
+                },
+                "& .MuiSlider-track": {
+                  height: "10px",
+                },
+                "& .MuiSlider-thumb": {
+                  borderRadius: "15%",
+                },
+              }}
+              // disabled={salaryObj.step == 0}
+              name="experience"
+              getAriaLabel={() => "Temperature range"}
+              value={expRange}
+              // step={basicData.employment_type == "freelance" && 1}
+              onChange={expHandleChange}
+              color="redButton100"
+              valueLabelDisplay="auto"
+              valueLabelFormat={rangeValueExperience}
+              getAriaValueText={rangeValueExperience}
+              step={5}
+              marks={marks}
+            />
+            {errors?.find((error) => error.key === "experience") && (
+              <Typography color={"red"}>
+                {`*${errors?.find((error) => error.key === "experience").message
+                  }`}
+              </Typography>
+            )}
           </Box>
           <Box
             sx={{
@@ -852,7 +1191,7 @@ export default function TheBasics({ changeStep }) {
             {console.log(rangeValue)}
             <Slider
               disableSwap
-              sx={{ width: "92%", ml: 1 }}
+              // sx={{  }}
               disabled={!basicData.currency_id}
               name="salary"
               getAriaLabel={() => "Temperature range"}
@@ -880,7 +1219,21 @@ export default function TheBasics({ changeStep }) {
                   ? rangeMarks2
                   : rangeMarks
               }
+              sx={{
+                width: "80%", ml: 1,
+                "& .MuiSlider-rail": {
+                  backgroundColor: theme.palette.eyeview100.main,
+                  height: "10px",
+                },
+                "& .MuiSlider-track": {
+                  height: "10px",
+                },
+                "& .MuiSlider-thumb": {
+                  borderRadius: "15%",
+                },
+              }}
             />
+
             {errors?.find((error) => error.key == "salary") && (
               <Typography color={"red"}>
                 {`*${errors?.find((error) => error.key == "salary").message}`}
@@ -888,143 +1241,10 @@ export default function TheBasics({ changeStep }) {
             )}
           </Box>
         </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <InputLabel
-              htmlFor="country_id"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.countryIdLabel"]}
-            </InputLabel>
-
-            <SelectMenu
-              name="country_id"
-              value={basicData.country_id}
-              onHandleChange={handleChange}
-              options={country}
-              sx={{ width: "95%" }}
-              placeholder={i18n["postAJob.countryPlaceHolder"]}
-            />
-            {!basicData.country_id &&
-              errors?.find((error) => error.key == "job_role_type") && (
-                <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "job_role_type")
-                      .message
-                  }`}
-                </Typography>
-              )}
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <InputLabel
-              htmlFor="town_id"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.townIdLabel"]}
-            </InputLabel>
-
-            <SelectMenu
-              name="town_id"
-              disabled={!basicData.country_id}
-              value={
-                town?.find((val) => val.town_id == basicData.town_id)?.name ||
-                ""
-              }
-              onHandleChange={handleChange}
-              options={townsMain}
-              sx={{ width: "96%" }}
-              placeholder={i18n["postAJob.townPlaceHolder"]}
-            />
-            {!town?.find((val) => val.town_id == basicData.town_id)?.name &&
-              errors?.find((error) => error.key == "town_id") && (
-                <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "town_id").message
-                  }`}
-                </Typography>
-              )}
-          </Box>
-        </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <InputLabel
-              htmlFor="work_setup"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.workSetupLable"]}
-            </InputLabel>
-            <SelectMenu
-              name="work_setup"
-              value={basicData.work_setup}
-              onHandleChange={handleWorkSetup}
-              options={workSetup}
-              sx={{ width: "95%" }}
-              placeholder={i18n["postAJob.workSetupPlaceholder"]}
-            />
-            {!basicData.work_setup &&
-              errors?.find((error) => error.key == "work_setup") && (
-                <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "work_setup").message
-                  }`}
-                </Typography>
-              )}
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <InputLabel
-              htmlFor="tools"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.toolsLable"]}
-            </InputLabel>
-            <AutoComplete
-              disableCloseOnSelect={true}
-              limitTags={5}
-              multiple={true}
-              id="tools"
-              value={getToolValue()}
-              onChange={handleMultipleAutoComplete}
-              sx={{ width: "96%", display: "inline-table" }}
-              placeholder={i18n["postAJob.tools"]}
-              data={tools}
-            ></AutoComplete>
-            {getToolValue() == "" &&
-              errors?.find((error) => error.key == "tools") && (
-                <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "tools").message}`}
-                </Typography>
-              )}
-          </Box>
-        </Box>
+        {/* preferred Qualification */}
         <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
           <InputLabel
-            htmlFor="skills"
+            htmlFor="preferred_qualification_ids"
             sx={{
               color: "black",
               paddingLeft: "10px",
@@ -1033,133 +1253,61 @@ export default function TheBasics({ changeStep }) {
               fontWeight: 500,
             }}
           >
-            {i18n["postAJob.skillsLabel"]}
+            {i18n["postAJob.preferredQualificationLabel"]}
           </InputLabel>
           <AutoComplete
             multiple={true}
-            id="skills"
-            value={getSkillValue()}
+            id="preferred_qualification_ids"
+            value={getQuaValue()}
             onChange={handleMultipleAutoComplete}
-            sx={{ width: "98%", display: "inline-table" }}
-            placeholder={i18n["postAJob.skills"]}
-            data={skills}
+            placeholder={i18n["postAJob.preferredQualification"]}
+            data={qualifications}
+            height={"auto"}
           ></AutoComplete>
-          {getSkillValue() == "" &&
-            errors?.find((error) => error.key == "skills") && (
+          {errors?.find(
+            (error) => error.key == "preferred_qualification_ids"
+          ) && (
               <Typography color={"red"}>
-                {`*${errors?.find((error) => error.key == "skills").message}`}
-              </Typography>
-            )}
-        </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <InputLabel
-              htmlFor="required_qualification_id"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.requiredQualificationLable"]}
-            </InputLabel>
-            <SelectMenu
-              name="required_qualification_id"
-              value={basicData.required_qualification_id}
-              onHandleChange={handleRequiredQualificationLevel}
-              options={requiredQua}
-              sx={{ width: "95%" }}
-              placeholder={i18n["postAJob.requiredQualificationLevel"]}
-            />
-            {!basicData.required_qualification_id &&
-              errors?.find(
-                (error) => error.key == "required_qualification_id"
-              ) && (
-                <Typography color={"red"}>
-                  {`*${
-                    errors?.find(
-                      (error) => error.key == "required_qualification_id"
-                    ).message
+                {`*${errors?.find(
+                  (error) => error.key == "preferred_qualification_ids"
+                ).message
                   }`}
-                </Typography>
-              )}
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <InputLabel
-              htmlFor="preferred_qualification_ids"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.preferredQualificationLabel"]}
-            </InputLabel>
-            <AutoComplete
-              multiple={true}
-              id="preferred_qualification_ids"
-              value={getQuaValue()}
-              onChange={handleMultipleAutoComplete}
-              sx={{ width: "96%" }}
-              placeholder={i18n["postAJob.preferredQualification"]}
-              data={qualifications}
-              height={"auto"}
-            ></AutoComplete>
-            {errors?.find(
-              (error) => error.key == "preferred_qualification_ids"
-            ) && (
-              <Typography color={"red"}>
-                {`*${
-                  errors?.find(
-                    (error) => error.key == "preferred_qualification_ids"
-                  ).message
-                }`}
               </Typography>
             )}
-          </Box>
         </Box>
+        {/* Preferred Associations */}
         <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
-          <Box sx={{ mb: 3, ml: 1 }}>
-            <InputLabel
-              htmlFor="experience_id"
-              sx={{
-                color: "black",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {i18n["postAJob.yearsWorkExperienceLabel"]}
-            </InputLabel>
-            <Slider
-              disableSwap
-              sx={{ width: "46%" }}
-              // disabled={salaryObj.step == 0}
-              name="experience"
-              getAriaLabel={() => "Temperature range"}
-              value={expRange}
-              // step={basicData.employment_type == "freelance" && 1}
-              onChange={expHandleChange}
-              color="redButton100"
-              valueLabelDisplay="auto"
-              valueLabelFormat={rangeValueExperience}
-              getAriaValueText={rangeValueExperience}
-              step={5}
-              marks={marks}
-            />
-            {errors?.find((error) => error.key == "experience") && (
+          <InputLabel
+            htmlFor="preferred_associations"
+            sx={{
+              color: "black",
+              paddingLeft: "10px",
+              paddingBottom: "2px",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
+          >
+            {i18n["postAJob.preferredAssociationsLabel"]}
+          </InputLabel>
+          {/* <AutoComplete
+            multiple={true}
+            id="preferred_associatons_ids"
+            value={getQuaValue()}
+            onChange={handleMultipleAutoComplete}
+            placeholder={i18n["postAJob.preferredQualification"]}
+            data={qualifications}
+            height={"auto"}
+          ></AutoComplete> */}
+          {/* {errors?.find(
+            (error) => error.key === "preferred_assocaitions_ids"
+          ) && (
               <Typography color={"red"}>
-                {`*${
-                  errors?.find((error) => error.key == "experience").message
-                }`}
+                {`*${errors?.find(
+                  (error) => error.key === "preferred_associations_ids"
+                ).message
+                  }`}
               </Typography>
-            )}
-          </Box>
+            )} */}
         </Box>
       </Box>
       <Box
@@ -1167,28 +1315,53 @@ export default function TheBasics({ changeStep }) {
           display: "flex",
           justifyContent: "center",
           minWidth: "28%",
+          marginBottom: 3,
+          gap: 3,
+          flexWrap: "wrap"
         }}
       >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            mr: 1,
+            gap: 1
           }}
         >
           <Typography
             sx={{
-              mr: 1,
+
               minWidth: "fit-content",
             }}
           >
             {i18n["postAJob.displaySalary"]}
           </Typography>
-          <ToggleSwitch
+          <Typography
+                sx={{
+                  padding: "5px",
+                  height: "8px",
+                  width: "8px",
+                  borderRadius: "5px",
+                  fontSize: "15px",
+                  /* text-align: center; */
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 900,
+                  border: 1,
+                }}
+              >
+                i
+              </Typography>
+          {/* <ToggleSwitch
             id="hide_salary"
             checked={!!basicData.hide_salary}
             onChange={handleSwitch}
-          />
+          /> */}
+          <BlueSwitch
+            id="hide_salary"
+            checked={!!basicData.hide_salary}
+            onChange={handleSwitch}
+            />
         </Box>
         <Box
           sx={{
@@ -1198,20 +1371,139 @@ export default function TheBasics({ changeStep }) {
         >
           <Typography
             sx={{
-              mr: 1,
+
               minWidth: "fit-content",
             }}
           >
             {i18n["postAJob.salaryNegotiable"]}
           </Typography>
-          <ToggleSwitch
+          {/* <ToggleSwitch
             id="salary_negotiate"
             checked={!!basicData.salary_negotiate}
             onChange={handleSwitch}
-          />
+          /> */}
+          <BlueSwitch
+            id="salary_negotiate"
+            checked={!!basicData.salary_negotiate}
+            onChange={handleSwitch}
+            />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+
+          }}
+        >
+          <Typography
+            sx={{
+
+              minWidth: "fit-content",
+            }}
+          >
+            {/* {i18n["postAJob.salaryNegotiable"]} */}
+            Own Transport
+          </Typography>
+          {/* <ToggleSwitch
+            id="own_transport"
+            checked={!!basicData.own_transport}
+            onChange={handleSwitch}
+          /> */}
+          <BlueSwitch
+            id="own_transport"
+            checked={!!basicData.own_transport}
+            onChange={handleSwitch}
+            />
+
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+
+              minWidth: "fit-content",
+            }}
+          >
+            {/* {i18n["postAJob.salaryNegotiable"]} */}
+            Own Equipment
+          </Typography>
+          {/* <ToggleSwitch
+            id="own_equipment"
+            checked={!!basicData.own_equipment}
+            onChange={handleSwitch}
+          /> */}
+          <BlueSwitch
+            id="own_equipment"
+            checked={!!basicData.own_equipment}
+            onChange={handleSwitch}
+            />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+
+              minWidth: "fit-content",
+            }}
+          >
+            {/* {i18n["postAJob.salaryNegotiable"]} */}
+            Internet Access
+          </Typography>
+          {/* <ToggleSwitch
+            id="internet_access"
+            checked={!!basicData.internet_access}
+            onChange={handleSwitch}
+          /> */}
+          <BlueSwitch
+            id="internet_access"
+            checked={!!basicData.internet_access}
+            onChange={handleSwitch}
+            />
         </Box>
       </Box>
       <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="grayButton200"
+          sx={{
+            width: "229px",
+            height: "57px",
+            fontSize: "15px",
+            borderRadius: "26px 0 0 0",
+          }}
+          onClick={handleOpenSaveAndExitDialog}
+        >
+          Save and Exit
+        </Button>
+        <Button
+          variant="contained"
+          color="redButton"
+          sx={{
+
+            width: "229px",
+            height: "57px",
+            fontSize: "15px",
+            borderRadius: "0 26px 0 0 ",
+          }}
+          onClick={saveBasic}
+        >
+          the details
+        </Button>
+      </Box>
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -1225,7 +1517,8 @@ export default function TheBasics({ changeStep }) {
         >
           {i18n["postAJob.theDetails"]}
         </StyledButton>
-      </Box>
+      </Box> */}
+
     </Box>
   );
 }
