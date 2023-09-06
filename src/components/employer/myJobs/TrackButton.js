@@ -3,6 +3,17 @@ import { Box, Button, Typography } from "@mui/material";
 import SingleRadialChart from "../../common/SingleRadialChart";
 
 const TrackButton = ({ theme, closeFunc }) => {
+  const getColor = (value) => {
+    if (value < 5) {
+      return theme.palette.chart.red
+    }else 
+    if (value < 20) {
+      return theme.palette.chart.yellow
+    }
+    else{
+      return theme.palette.chart.green200
+    }
+  }
   return (
     <Box
       sx={{
@@ -47,9 +58,9 @@ const TrackButton = ({ theme, closeFunc }) => {
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <SingleRadialChart
               labelsData={"days left"}
-              series={[5]}
+              series={[6]}
               width={140}
-              color={theme.palette.chart.red}
+              color={getColor(6)}
               // index={index}
               isHovered={true}
             />

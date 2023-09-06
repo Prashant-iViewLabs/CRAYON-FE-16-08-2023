@@ -55,8 +55,9 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
   const [trackButton, setTrackButton] = useState(false);
 
   // const Tools = job?.job_tools.map(tool => tool.tool.name)
+  const Skills = job?.skills.map(skill => skill.skill_name)
+  const Tools = job?.tools.map((tool) => tool.tool_name)
   const Traits = job?.traits.map((trait) => trait.trait_name);
-
   const handleStar = () => {
     setIsStarSelected(!isStar);
   };
@@ -272,8 +273,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.currencySymbol}
-                    {formatCurrencyWithCommas(job?.salaryMax)} per month
+                    {job?.currencySymbol} {formatCurrencyWithCommas(job?.salaryMin)} to {formatCurrencyWithCommas(job?.salaryMax)} per month
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -308,7 +308,7 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.experiance} years
+                    {job?.experienceYearStart} to {job?.experienceYearEnd} years
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -343,18 +343,12 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                 }}
               >
                 <Slider2
-                  items={[
-                    "full time",
-                    "accounts",
-                    "sales",
-                    "Numbers",
-                    "Credit",
-                  ]}
+                  items={Skills}
                   color={"yellowButton200"}
                   hideTagsAfter={3}
                 />
                 <Slider2
-                  items={["xero", "excel", "SAP", "Pastal"]}
+                  items={Tools}
                   color={"yellowButton100"}
                   hideTagsAfter={4}
                 />

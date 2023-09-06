@@ -10,13 +10,8 @@ import {
   getBasicData,
 } from "../../../redux/employer/postJobSlice";
 import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Radio,
   Typography,
   useTheme,
-  Input,
   InputBase,
   Paper,
   Switch,
@@ -25,11 +20,9 @@ import {
 import { CV_STEPS } from "../../../utils/Constants";
 import Slider from "@mui/material/Slider";
 import SelectMenu from "../../common/SelectMenu";
-import ToggleSwitch from "../../common/ToggleSwitch";
 import AutoComplete from "../../common/AutoComplete";
 import { InputLabel } from "@mui/material";
 import { ALERT_TYPE, ERROR_MSG, ROLE_TYPE } from "../../../utils/Constants";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {
   getTitles,
@@ -47,8 +40,7 @@ import {
 } from "../../../redux/employer/postJobSlice";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { ResetTvRounded } from "@mui/icons-material";
-import { getIndustries } from "../../../redux/candidate/myCvSlice";
+import { getIndustries, getLanguage, getAssociation } from "../../../redux/candidate/myCvSlice";
 
 const BlueSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -94,6 +86,7 @@ const BASIC = {
   hide_salary: 1,
   salary_negotiate: true,
   work_setup: "",
+  language_ids: [],
   country_id: "",
   town_id: "",
   skills: [],
@@ -104,6 +97,7 @@ const BASIC = {
   experience_id: "",
   required_qualification_id: "",
   preferred_qualification_ids: [],
+  association_ids: [],
 };
 
 const SALARY_OBJ = {
@@ -153,23 +147,23 @@ const rangeMarks = [
   },
   {
     value: 20,
-    label: "20,000",
+    label: "20k",
   },
   {
     value: 40,
-    label: "40,000",
+    label: "40k",
   },
   {
     value: 60,
-    label: "60,000",
+    label: "60k",
   },
   {
     value: 80,
-    label: "80,000",
+    label: "80k",
   },
   {
     value: 100,
-    label: "100000+",
+    label: "100k+",
   },
 ];
 const rangeMarks2 = [
@@ -198,13 +192,22 @@ const rangeMarks2 = [
     label: "500+",
   },
 ];
+const formatNumber = (num) => {
+  if (num < 1000) {
+    return num.toString();
+  } else if (num < 1000000) {
+    return (num / 1000).toFixed(0) + 'k';
+  } else {
+    return (num / 1000000).toFixed(0) + 'M';
+  }
+}
 
 function rangeValueHandler2(value) {
-  return value * 5;
+  return formatNumber(value * 5);
 }
 
 function rangeValueHandler(value) {
-  return value * 1000;
+  return formatNumber(value * 1000);
 }
 
 function textValue(value) {
@@ -212,7 +215,7 @@ function textValue(value) {
 }
 
 function rangeValueExperience(value) {
-  return value / 10;
+  return `${value / 10} years`;
 }
 
 const i18n = locale.en;
@@ -254,7 +257,11 @@ export default function TheBasics({
     roleTypes,
     workSetup,
   } = useSelector((state) => state.postJobs);
-  const { industries } = useSelector((state) => state.myCv);
+  const {
+    industries,
+    language,
+    association,
+  } = useSelector((state) => state.myCv);
 
   const { jobId, duplicate } = useParams();
 
@@ -278,7 +285,7 @@ export default function TheBasics({
         });
         if (basic?.country_id != null) {
           let temp = town.filter((val) => {
-            return val.region_id == basic?.country_id;
+            return val.region_id === basic?.country_id;
           });
           setTownsMain(temp);
         }
@@ -319,10 +326,12 @@ export default function TheBasics({
         dispatch(getQualification()),
         dispatch(getRequiredQualification()),
         dispatch(getCurrency()),
+        dispatch(getLanguage()),
         dispatch(getCountry()),
         dispatch(getTown()),
         dispatch(getRoleTypes()),
         dispatch(getWorkSetup()),
+        dispatch(getAssociation()),
       ]);
       dispatch(setLoading(false));
     } catch (error) {
@@ -599,16 +608,37 @@ export default function TheBasics({
     );
   };
   const getIndustriesValue = () => {
-    if (basicData.industry_id?.length === 0) {
+    if (basicData?.industry_id?.length === 0) {
       // console.log(basicData.industries)
       return [];
     }
     // return [1, 4]
-    return basicData.industry_id.map(
-      (id) => industries?.find((industry) => industry.industry_id === id) || id
+    return basicData?.industry_id.map(
+      (id) => industries?.find((industry) => industry?.industry_id === id) || id
     );
   };
 
+  const getLangValue = () => {
+    console.log(basicData)
+    if (basicData?.language_ids?.length === 0) {
+      return [];
+    }
+    return basicData?.language_ids?.map(
+      (lang) => language?.find((language) => {
+        console.log("lang" + lang)
+        return language?.language_id == lang
+      }) || lang
+    );
+  };
+
+  const getAssociationValue = () => {
+    if (basicData?.association_ids?.length === 0) {
+      return [];
+    }
+    return basicData.association_ids.map(
+      val => association.find(association => association.association_id === val) || val
+    )
+  };
   const handleRequiredQualificationLevel = (event) => {
     const {
       target: { value },
@@ -731,13 +761,12 @@ export default function TheBasics({
               !basicData.job_title_id &&
               errors?.find((error) => error.key == "job_title_id") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "job_title_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "job_title_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
-          <Box sx={{ display: "flex", gap: 4, width: "50%" }}>
+          <Box sx={{ display: "flex", gap: 4, width: "50%"}}>
             <Box
               sx={{ display: "flex", flexDirection: "column", width: "50%" }}
             >
@@ -763,10 +792,9 @@ export default function TheBasics({
               {!basicData.job_role_type &&
                 errors?.find((error) => error.key == "job_role_type") && (
                   <Typography color={"red"}>
-                    {`*${
-                      errors?.find((error) => error.key == "job_role_type")
-                        .message
-                    }`}
+                    {`*${errors?.find((error) => error.key == "job_role_type")
+                      .message
+                      }`}
                   </Typography>
                 )}
             </Box>
@@ -893,10 +921,9 @@ export default function TheBasics({
             {!basicData.country_id &&
               errors?.find((error) => error.key == "job_role_type") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "job_role_type")
-                      .message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "job_role_type")
+                    .message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -928,9 +955,8 @@ export default function TheBasics({
             {!town?.find((val) => val.town_id == basicData.town_id)?.name &&
               errors?.find((error) => error.key == "town_id") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "town_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "town_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -967,15 +993,14 @@ export default function TheBasics({
             {!basicData.work_setup &&
               errors?.find((error) => error.key == "work_setup") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "work_setup").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "work_setup").message
+                    }`}
                 </Typography>
               )}
           </Box>
           <Box sx={{ display: "flex", flexDirection: "column", width: "50%" }}>
             <InputLabel
-              htmlFor="languages"
+              htmlFor="language_ids"
               sx={{
                 color: "black",
                 paddingLeft: "10px",
@@ -986,20 +1011,17 @@ export default function TheBasics({
             >
               {i18n["postAJob.languagesLabel"]}
             </InputLabel>
-            {/* <SelectMenu
-              name="work_setup"
-              value={basicData.languages}
-              onHandleChange={handlelanguage}
-              options={languages}
-              placeholder={i18n["postAJob.languagesPlaceholder"]}
-            /> */}
-            {/* {!basicData.work_setup &&
-              errors?.find((error) => error.key === "languages") && (
-                <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "languages").message
-                    }`}
-                </Typography>
-              )} */}
+            <AutoComplete
+              multiple={true}
+              id="language_ids"
+              value={getLangValue()}
+              onChange={handleMultipleAutoComplete}
+              sx={{ display: "inline-table" }}
+              placeholder={i18n["myProfile.language"]}
+              data={language}
+              disableCloseOnSelect={true}
+            ></AutoComplete>
+
           </Box>
         </Box>
         {/* skills */}
@@ -1099,11 +1121,10 @@ export default function TheBasics({
                 (error) => error.key == "required_qualification_id"
               ) && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find(
-                      (error) => error.key == "required_qualification_id"
-                    ).message
-                  }`}
+                  {`*${errors?.find(
+                    (error) => error.key == "required_qualification_id"
+                  ).message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -1130,9 +1151,8 @@ export default function TheBasics({
             {!basicData.currency_id &&
               errors?.find((error) => error.key == "currency_id") && (
                 <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "currency_id").message
-                  }`}
+                  {`*${errors?.find((error) => error.key == "currency_id").message
+                    }`}
                 </Typography>
               )}
           </Box>
@@ -1168,8 +1188,9 @@ export default function TheBasics({
             </InputLabel>
             <Slider
               disableSwap
+              valueLabelDisplay="on"
               sx={{
-                width: "80%",
+                marginTop: 4,
                 "& .MuiSlider-rail": {
                   backgroundColor: theme.palette.eyeview100.main,
                   height: "10px",
@@ -1179,6 +1200,22 @@ export default function TheBasics({
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
+                  background: "white"
+                },
+                '& .MuiSlider-valueLabel': {
+                  fontSize: 12,
+                  fontWeight: 'normal',
+                  top: -6,
+                  backgroundColor: theme.palette.grayBackground,
+                  borderRadius: 1,
+                  color: theme.palette.text.primary,
+                  '&:before': {
+                    display: 'none',
+                  },
+                  '& *': {
+                    background: 'transparent',
+                    color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                  },
                 },
               }}
               // disabled={salaryObj.step == 0}
@@ -1187,8 +1224,8 @@ export default function TheBasics({
               value={expRange}
               // step={basicData.employment_type == "freelance" && 1}
               onChange={expHandleChange}
-              color="redButton100"
-              valueLabelDisplay="auto"
+              color="blueButton800"
+              // valueLabelDisplay="auto"
               valueLabelFormat={rangeValueExperience}
               getAriaValueText={rangeValueExperience}
               step={5}
@@ -1196,9 +1233,8 @@ export default function TheBasics({
             />
             {errors?.find((error) => error.key === "experience") && (
               <Typography color={"red"}>
-                {`*${
-                  errors?.find((error) => error.key === "experience").message
-                }`}
+                {`*${errors?.find((error) => error.key === "experience").message
+                  }`}
               </Typography>
             )}
           </Box>
@@ -1225,10 +1261,9 @@ export default function TheBasics({
                 ? i18n["postAJob.salaryRangeLable2"]
                 : i18n["postAJob.salaryRangeLable"]}
             </InputLabel>
-            {console.log(rangeValue)}
             <Slider
               disableSwap
-              // sx={{  }}
+              valueLabelDisplay="on"
               disabled={!basicData.currency_id}
               name="salary"
               getAriaLabel={() => "Temperature range"}
@@ -1239,7 +1274,6 @@ export default function TheBasics({
                   : handleRangeSliderChange
               }
               color="redButton100"
-              valueLabelDisplay="auto"
               // step={basicData.job_role_type == "freelance" && 1}
               valueLabelFormat={
                 basicData.job_role_type == "freelance"
@@ -1257,7 +1291,8 @@ export default function TheBasics({
                   : rangeMarks
               }
               sx={{
-                width: "80%",
+                marginTop: 4,
+                width: "90%",
                 ml: 1,
                 "& .MuiSlider-rail": {
                   backgroundColor: theme.palette.eyeview100.main,
@@ -1268,6 +1303,22 @@ export default function TheBasics({
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
+                  background: "white"
+                },
+                '& .MuiSlider-valueLabel': {
+                  fontSize: 12,
+                  fontWeight: 'normal',
+                  top: -6,
+                  backgroundColor: theme.palette.grayBackground,
+                  borderRadius: 1,
+                  color: theme.palette.text.primary,
+                  '&:before': {
+                    display: 'none',
+                  },
+                  '& *': {
+                    background: 'transparent',
+                    color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                  },
                 },
               }}
             />
@@ -1305,19 +1356,18 @@ export default function TheBasics({
           {errors?.find(
             (error) => error.key == "preferred_qualification_ids"
           ) && (
-            <Typography color={"red"}>
-              {`*${
-                errors?.find(
+              <Typography color={"red"}>
+                {`*${errors?.find(
                   (error) => error.key == "preferred_qualification_ids"
                 ).message
-              }`}
-            </Typography>
-          )}
+                  }`}
+              </Typography>
+            )}
         </Box>
         {/* Preferred Associations */}
         <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
           <InputLabel
-            htmlFor="preferred_associations"
+            htmlFor="association_ids"
             sx={{
               color: "black",
               paddingLeft: "10px",
@@ -1328,25 +1378,17 @@ export default function TheBasics({
           >
             {i18n["postAJob.preferredAssociationsLabel"]}
           </InputLabel>
-          {/* <AutoComplete
+          <AutoComplete
             multiple={true}
-            id="preferred_associatons_ids"
-            value={getQuaValue()}
+            disableCloseOnSelect={true}
+            id="association_ids"
+            value={getAssociationValue()}
             onChange={handleMultipleAutoComplete}
-            placeholder={i18n["postAJob.preferredQualification"]}
-            data={qualifications}
+            sx={{ width: "100%" }}
+            placeholder={i18n["myCV.associationPlaceholder"]}
+            data={association}
             height={"auto"}
-          ></AutoComplete> */}
-          {/* {errors?.find(
-            (error) => error.key === "preferred_assocaitions_ids"
-          ) && (
-              <Typography color={"red"}>
-                {`*${errors?.find(
-                  (error) => error.key === "preferred_associations_ids"
-                ).message
-                  }`}
-              </Typography>
-            )} */}
+          ></AutoComplete>
         </Box>
       </Box>
       <Box

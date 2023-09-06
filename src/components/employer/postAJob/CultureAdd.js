@@ -30,6 +30,7 @@ import { cloneDeep, isEmpty } from "lodash";
 import {
   Checkbox,
   Chip,
+  Dialog,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -40,6 +41,7 @@ import { useSelector } from "react-redux";
 import StyledButton from "../../common/StyledButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "@emotion/react";
+import JobPostingDialog from "./dialog/JobPostingDialog";
 
 const BlueSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -115,6 +117,11 @@ export default function CultureAdd({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { personalities, traits } = useSelector((state) => state.postJobs);
+  const [openJobPostingDialog, setOpenApplyJobDialog] = useState(false)
+
+  const handleJobPostingDialog = () => {
+    setOpenApplyJobDialog(prevState => !prevState)
+  }
 
   const getAllCultureData = async () => {
     try {
@@ -162,7 +169,7 @@ export default function CultureAdd({
     }
   };
 
-  const saveCulture = async () => {
+  const saveCulture = async (navigateUrl) => {
     try {
       if (jobId !== undefined) {
         const culturePayload = {
@@ -184,7 +191,7 @@ export default function CultureAdd({
           );
           setErrors([]);
           setTimeout(() => {
-            navigate("/employer/my-jobs");
+            navigate(navigateUrl);
           }, [500]);
         } else if (payload?.status == "error") {
           setErrors(payload?.errors);
@@ -360,244 +367,8 @@ export default function CultureAdd({
   }, [jobId]);
 
   return (
-    <Box>
-      <Typography
-        sx={{
-          fontSize: "20px",
-          fontWeight: 700,
-          ml: 1,
-          mb: 2,
-        }}
-      >
-        {i18n["postAJob.cultureAdd"]}
-      </Typography>
-
+    <>
       <Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Box sx={{ width: "100%" }}>
-            <InputLabel
-              htmlFor="tags"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-                display: "flex",
-                gap: 1,
-              }}
-            >
-              {i18n["postAJob.primaryLabel"]}
-              <Typography
-                sx={{
-                  padding: "5px",
-                  height: "8px",
-                  width: "8px",
-                  borderRadius: "5px",
-                  fontSize: "15px",
-                  /* text-align: center; */
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                  border: 1,
-                }}
-              >
-                i
-              </Typography>
-            </InputLabel>
-            <SelectMenu
-              name="primary_personality"
-              value={cultureData?.jobDetails?.primary_personality}
-              onHandleChange={handleChange}
-              options={personalities}
-              sx={{ width: "95%" }}
-              placeholder={i18n["postAJob.preferredDominantPersonality"]}
-            />
-            {!cultureData?.jobDetails?.primary_personality &&
-              errors?.find((error) => error.key == "primary_personality") && (
-                <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "primary_personality")
-                      .message
-                  }`}
-                </Typography>
-              )}
-          </Box>
-          <Box sx={{ width: "100%" }}>
-            <InputLabel
-              htmlFor="tags"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-                display: "flex",
-                gap: 1,
-              }}
-            >
-              {i18n["postAJob.shadowLabel"]}
-              <Typography
-                sx={{
-                  padding: "5px",
-                  height: "8px",
-                  width: "8px",
-                  borderRadius: "5px",
-                  fontSize: "15px",
-                  /* text-align: center; */
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                  border: 1,
-                }}
-              >
-                i
-              </Typography>
-            </InputLabel>
-
-            <SelectMenu
-              name="shadow_personality"
-              value={cultureData?.jobDetails?.shadow_personality}
-              onHandleChange={handleChange}
-              options={personalities}
-              sx={{ width: "95%" }}
-              placeholder={i18n["postAJob.preferredShadowPersonality"]}
-            />
-            {!cultureData?.jobDetails?.shadow_personality &&
-              errors?.find((error) => error.key == "shadow_personality") && (
-                <Typography color={"red"}>
-                  {`*${
-                    errors?.find((error) => error.key == "shadow_personality")
-                      .message
-                  }`}
-                </Typography>
-              )}
-          </Box>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Box sx={{ width: "100%" }}>
-            <InputLabel
-              htmlFor="tags"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-                display: "flex",
-                gap: 1,
-              }}
-            >
-              {i18n["postAJob.traitsLabel"]}
-              <Typography
-                sx={{
-                  padding: "5px",
-                  height: "8px",
-                  width: "8px",
-                  borderRadius: "5px",
-                  fontSize: "15px",
-                  /* text-align: center; */
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                  border: 1,
-                }}
-              >
-                i
-              </Typography>
-            </InputLabel>
-
-            <AutoComplete
-              multiple={true}
-              id="traits"
-              name="traits"
-              value={getTraitsValue()}
-              onChange={handleMultipleAutoComplete}
-              sx={{ width: "95%", display: "inline-table" }}
-              placeholder={i18n["postAJob.preferredTraits"]}
-              data={traits}
-              limitTags={5}
-              disableCloseOnSelect={true}
-            ></AutoComplete>
-
-            {getTraitsValue() == "" &&
-              errors?.find((error) => error.key == "traits") && (
-                <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "traits").message}`}
-                </Typography>
-              )}
-          </Box>
-          <Box sx={{ width: "100%" }}>
-            <InputLabel
-              htmlFor="tags"
-              sx={{
-                color: "black",
-                paddingLeft: "10px",
-                paddingBottom: "2px",
-                fontSize: "14px",
-                fontWeight: 500,
-                display: "flex",
-                gap: 1,
-              }}
-            >
-              {i18n["postAJob.gritScoreLabel"]}
-              <Typography
-                sx={{
-                  padding: "5px",
-                  height: "8px",
-                  width: "8px",
-                  borderRadius: "5px",
-                  fontSize: "15px",
-                  /* text-align: center; */
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                  border: 1,
-                }}
-              >
-                i
-              </Typography>
-            </InputLabel>
-
-            <Slider
-              name="grit_score"
-              aria-label="Custom marks"
-              color="redButton100"
-              value={cultureData?.jobDetails?.grit_score}
-              getAriaValueText={textValue}
-              step={1}
-              onChange={(event) => rangeHandler(event)}
-              valueLabelDisplay="auto"
-              valueLabelFormat={textValue}
-              marks={marks}
-              sx={{
-                width: "88%",
-                ml: 2,
-                "& .MuiSlider-rail": {
-                  backgroundColor: theme.palette.eyeview100.main,
-                  height: "10px",
-                },
-                "& .MuiSlider-track": {
-                  height: "10px",
-                },
-                "& .MuiSlider-thumb": {
-                  borderRadius: "15%",
-                },
-              }}
-            />
-            {errors?.find((error) => error.key == "grit_score") && (
-              <Typography color={"red"}>
-                {`*${
-                  errors?.find((error) => error.key == "grit_score").message
-                }`}
-              </Typography>
-            )}
-          </Box>
-        </Box>
         <Typography
           sx={{
             fontSize: "20px",
@@ -606,92 +377,232 @@ export default function CultureAdd({
             mb: 2,
           }}
         >
-          {i18n["postAJob.screeningQuestions"]}
+          {i18n["postAJob.cultureAdd"]}
         </Typography>
-        <Typography
-          sx={{
-            fontSize: "15px",
-            fontWeight: 300,
-            ml: 1,
-            mb: 2,
-          }}
-        >
-          {i18n["postAJob.screeningQuestionPara"]}
-        </Typography>
-        {errors?.find((error) => error.key === "screen_questions") && (
-          <Typography color={"red"}>
-            {`*${
-              errors?.find((error) => error.key == "screen_questions").message
-            }`}
-          </Typography>
-        )}
-        {cultureData?.screen_questions?.length > 0 &&
-          cultureData?.screen_questions?.map((question, index) =>
-            index < 5 ? (
-              <Box key={index} sx={{ display: "flex" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    mb: 3,
-                    width: "90%",
-                  }}
-                >
-                  <InputBox
-                    id="question"
-                    sx={{ width: "97%" }}
-                    value={question.question}
-                    onChange={(event) => handleQuestionChange(event, index)}
-                    placeholder={i18n["postAJob.question"] + `0${index + 1}`}
-                  />
-                </Box>
 
-                <Box
+        <Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+            <Box sx={{ width: "100%" }}>
+              <InputLabel
+                htmlFor="tags"
+                sx={{
+                  color: "black",
+                  paddingLeft: "10px",
+                  paddingBottom: "2px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                {i18n["postAJob.primaryLabel"]}
+                <Typography
                   sx={{
+                    padding: "5px",
+                    height: "8px",
+                    width: "8px",
+                    borderRadius: "5px",
+                    fontSize: "15px",
+                    /* text-align: center; */
                     display: "flex",
-                    justifyContent: "space-between",
-                    mb: 3,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 900,
+                    border: 1,
                   }}
                 >
-                  <Box sx={{ mr: "53px" }}>
-                    {index >= 0 ? (
-                      <IconButton
-                        aria-label="edit"
-                        color="redButton"
-                        sx={{
-                          padding: "0 !important",
-                        }}
-                        onClick={(event) => removeQuestion(event, index + 1)}
-                      >
-                        <RemoveCircleIcon />
-                      </IconButton>
-                    ) : (
-                      ""
-                    )}
-                  </Box>
-                </Box>
-              </Box>
-            ) : (
-              ""
-            )
-          )}
-        <Button
-          variant="outlined"
-          component="label"
-          onClick={addQuestion}
-          color="redButton100"
-          sx={{
-            marginTop: "30px",
-            transform: "translateY(-50%)",
-            "@media (max-width: 600px)": {
-              fontSize: "12px",
-              padding: "6px 12px",
-            },
-          }}
-        >
-          {i18n["postAJob.addButton"]}
-        </Button>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  i
+                </Typography>
+              </InputLabel>
+              <SelectMenu
+                name="primary_personality"
+                value={cultureData?.jobDetails?.primary_personality}
+                onHandleChange={handleChange}
+                options={personalities}
+                sx={{ width: "95%" }}
+                placeholder={i18n["postAJob.preferredDominantPersonality"]}
+              />
+              {!cultureData?.jobDetails?.primary_personality &&
+                errors?.find((error) => error.key == "primary_personality") && (
+                  <Typography color={"red"}>
+                    {`*${errors?.find((error) => error.key == "primary_personality")
+                      .message
+                      }`}
+                  </Typography>
+                )}
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <InputLabel
+                htmlFor="tags"
+                sx={{
+                  color: "black",
+                  paddingLeft: "10px",
+                  paddingBottom: "2px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                {i18n["postAJob.shadowLabel"]}
+                <Typography
+                  sx={{
+                    padding: "5px",
+                    height: "8px",
+                    width: "8px",
+                    borderRadius: "5px",
+                    fontSize: "15px",
+                    /* text-align: center; */
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 900,
+                    border: 1,
+                  }}
+                >
+                  i
+                </Typography>
+              </InputLabel>
+
+              <SelectMenu
+                name="shadow_personality"
+                value={cultureData?.jobDetails?.shadow_personality}
+                onHandleChange={handleChange}
+                options={personalities}
+                sx={{ width: "95%" }}
+                placeholder={i18n["postAJob.preferredShadowPersonality"]}
+              />
+              {!cultureData?.jobDetails?.shadow_personality &&
+                errors?.find((error) => error.key == "shadow_personality") && (
+                  <Typography color={"red"}>
+                    {`*${errors?.find((error) => error.key == "shadow_personality")
+                      .message
+                      }`}
+                  </Typography>
+                )}
+            </Box>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+            <Box sx={{ width: "100%" }}>
+              <InputLabel
+                htmlFor="tags"
+                sx={{
+                  color: "black",
+                  paddingLeft: "10px",
+                  paddingBottom: "2px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                {i18n["postAJob.traitsLabel"]}
+                <Typography
+                  sx={{
+                    padding: "5px",
+                    height: "8px",
+                    width: "8px",
+                    borderRadius: "5px",
+                    fontSize: "15px",
+                    /* text-align: center; */
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 900,
+                    border: 1,
+                  }}
+                >
+                  i
+                </Typography>
+              </InputLabel>
+
+              <AutoComplete
+                multiple={true}
+                id="traits"
+                name="traits"
+                value={getTraitsValue()}
+                onChange={handleMultipleAutoComplete}
+                sx={{ width: "95%", display: "inline-table" }}
+                placeholder={i18n["postAJob.preferredTraits"]}
+                data={traits}
+                limitTags={5}
+                disableCloseOnSelect={true}
+              ></AutoComplete>
+
+              {getTraitsValue() == "" &&
+                errors?.find((error) => error.key == "traits") && (
+                  <Typography color={"red"}>
+                    {`*${errors?.find((error) => error.key == "traits").message}`}
+                  </Typography>
+                )}
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <InputLabel
+                htmlFor="tags"
+                sx={{
+                  color: "black",
+                  paddingLeft: "10px",
+                  paddingBottom: "2px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                {i18n["postAJob.gritScoreLabel"]}
+                <Typography
+                  sx={{
+                    padding: "5px",
+                    height: "8px",
+                    width: "8px",
+                    borderRadius: "5px",
+                    fontSize: "15px",
+                    /* text-align: center; */
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 900,
+                    border: 1,
+                  }}
+                >
+                  i
+                </Typography>
+              </InputLabel>
+
+              <Slider
+                name="grit_score"
+                aria-label="Custom marks"
+                color="redButton100"
+                value={cultureData?.jobDetails?.grit_score}
+                getAriaValueText={textValue}
+                step={1}
+                onChange={(event) => rangeHandler(event)}
+                valueLabelDisplay="auto"
+                valueLabelFormat={textValue}
+                marks={marks}
+                sx={{
+                  width: "88%",
+                  ml: 2,
+                  "& .MuiSlider-rail": {
+                    backgroundColor: theme.palette.eyeview100.main,
+                    height: "10px",
+                  },
+                  "& .MuiSlider-track": {
+                    height: "10px",
+                  },
+                  "& .MuiSlider-thumb": {
+                    borderRadius: "15%",
+                  },
+                }}
+              />
+              {errors?.find((error) => error.key == "grit_score") && (
+                <Typography color={"red"}>
+                  {`*${errors?.find((error) => error.key == "grit_score").message
+                    }`}
+                </Typography>
+              )}
+            </Box>
+          </Box>
           <Typography
             sx={{
               fontSize: "20px",
@@ -700,68 +611,161 @@ export default function CultureAdd({
               mb: 2,
             }}
           >
-            {i18n["postAJob.videoLabel"]}
+            {i18n["postAJob.screeningQuestions"]}
           </Typography>
-          <Box
+          <Typography
             sx={{
-              display: "flex",
-              alignItems: "center",
+              fontSize: "15px",
+              fontWeight: 300,
+              ml: 1,
+              mb: 2,
             }}
           >
+            {i18n["postAJob.screeningQuestionPara"]}
+          </Typography>
+          {errors?.find((error) => error.key === "screen_questions") && (
+            <Typography color={"red"}>
+              {`*${errors?.find((error) => error.key == "screen_questions").message
+                }`}
+            </Typography>
+          )}
+          {cultureData?.screen_questions?.length > 0 &&
+            cultureData?.screen_questions?.map((question, index) =>
+              index < 5 ? (
+                <Box key={index} sx={{ display: "flex" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 3,
+                      width: "90%",
+                    }}
+                  >
+                    <InputBox
+                      id="question"
+                      sx={{ width: "97%" }}
+                      value={question.question}
+                      onChange={(event) => handleQuestionChange(event, index)}
+                      placeholder={i18n["postAJob.question"] + `0${index + 1}`}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 3,
+                    }}
+                  >
+                    <Box sx={{ mr: "53px" }}>
+                      {index >= 0 ? (
+                        <IconButton
+                          aria-label="edit"
+                          color="redButton"
+                          sx={{
+                            padding: "0 !important",
+                          }}
+                          onClick={(event) => removeQuestion(event, index + 1)}
+                        >
+                          <RemoveCircleIcon />
+                        </IconButton>
+                      ) : (
+                        ""
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+              ) : (
+                ""
+              )
+            )}
+          <Button
+            variant="outlined"
+            component="label"
+            onClick={addQuestion}
+            color="redButton100"
+            sx={{
+              marginTop: "30px",
+              transform: "translateY(-50%)",
+              "@media (max-width: 600px)": {
+                fontSize: "12px",
+                padding: "6px 12px",
+              },
+            }}
+          >
+            {i18n["postAJob.addButton"]}
+          </Button>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography
               sx={{
-                fontSize: "15px",
-                fontWeight: 300,
+                fontSize: "20px",
+                fontWeight: 700,
+                ml: 1,
+                mb: 2,
               }}
             >
-              {i18n["postAJob.videoParaLabel"]}
-              <span
-                style={{
-                  color: "#707070",
+              {i18n["postAJob.videoLabel"]}
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: 300,
                 }}
               >
-                {i18n["postAJob.VideoParaNote"]}
-              </span>
-            </Typography>
-            <BlueSwitch />
+                {i18n["postAJob.videoParaLabel"]}
+                <span
+                  style={{
+                    color: "#707070",
+                  }}
+                >
+                  {i18n["postAJob.VideoParaNote"]}
+                </span>
+              </Typography>
+              <BlueSwitch />
+            </Box>
           </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          variant="contained"
-          color="grayButton200"
+        <Box
           sx={{
-            width: "229px",
-            height: "57px",
-            fontSize: "15px",
-            borderRadius: "26px 0 0 0",
+            display: "flex",
+            justifyContent: "center",
           }}
-          // onClick={handle }
-          onClick={handleOpenSaveAndExitDialog}
         >
-          Save and Exit
-        </Button>
-        <Button
-          variant="contained"
-          color="redButton"
-          sx={{
-            width: "229px",
-            height: "57px",
-            fontSize: "15px",
-            borderRadius: "0 26px 0 0 ",
-          }}
-          onClick={saveCulture}
-        >
-          {i18n["postAJob.save"]}
-        </Button>
-      </Box>
-      {/* <Box
+          <Button
+            variant="contained"
+            color="grayButton200"
+            sx={{
+              width: "229px",
+              height: "57px",
+              fontSize: "15px",
+              borderRadius: "26px 0 0 0",
+            }}
+            // onClick={handle }
+            onClick={handleOpenSaveAndExitDialog}
+          >
+            Save and Exit
+          </Button>
+          <Button
+            variant="contained"
+            color="redButton"
+            sx={{
+              width: "229px",
+              height: "57px",
+              fontSize: "15px",
+              borderRadius: "0 26px 0 0 ",
+            }}
+            onClick={handleJobPostingDialog}
+          >
+            {i18n["postAJob.save"]}
+          </Button>
+        </Box>
+        {/* <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -789,6 +793,8 @@ export default function CultureAdd({
           {i18n["postAJob.save"]}
         </StyledButton>
       </Box> */}
-    </Box>
+      </Box>
+      <JobPostingDialog show={openJobPostingDialog} saveFunc={saveCulture} handleOpen={handleJobPostingDialog} />
+    </>
   );
 }

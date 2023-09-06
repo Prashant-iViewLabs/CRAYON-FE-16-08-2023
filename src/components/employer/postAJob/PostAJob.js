@@ -12,6 +12,7 @@ import {
   StepLabel,
   Stepper,
   Typography,
+  useTheme,
 } from "@mui/material";
 import TheBasicsNew from "./TheBasics";
 import TheDetailsNew from "./TheDetails";
@@ -48,7 +49,6 @@ const StyledButtonLeft = styled(Button)(({ theme }) => ({
 }));
 
 export default function MyCV() {
-  const [step, setStep] = useState(1);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -58,27 +58,8 @@ export default function MyCV() {
 
   const [openSaveAndExitDialog, setOpenSaveAndExitDialog] = useState(false);
 
+  const theme = useTheme()
   console.log(jobId);
-
-  const handleRightButtonClick = (param) => {
-    setStep(param);
-  };
-
-  const handleChangeStep = (value) => {
-    setStep(value);
-  };
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
   const scrollToTop = () => {
     // Scroll to the top of the page with smooth behavior
     window.scrollTo({
@@ -95,7 +76,6 @@ export default function MyCV() {
     newCompleted[step || activeStep] = true;
     setCompleted(newCompleted);
     console.log(activeStep);
-    // handleNext();
     scrollToTop();
   };
   const handleOpenSaveAndExitDialog = () => {
@@ -215,58 +195,59 @@ export default function MyCV() {
             display: "flex",
             flexDirection: "column",
             height: "88vh",
-            // overflowY: "scroll",
-            // // direction: "rtl",
           }}
         >
-          {/* <StyledButtonLeft
-          onClick={() => handleRightButtonClick(1)}
-          variant={step === 1 ? "contained" : "outlined"}
-          color="redButton100"
-          sx={{ mb: 2 }}
-        >
-          Job Type */}
-          {/* {i18n["postAJob.theBasics"]} */}
-          {/* </StyledButtonLeft>
-        <StyledButtonLeft
-          onClick={() => handleRightButtonClick(2)}
-          variant={step === 2 ? "contained" : "outlined"}
-          color="redButton100"
-          sx={{ mb: 2 }}
-        >
-          {i18n["postAJob.theBasics"]}
-        </StyledButtonLeft>
-        <StyledButtonLeft
-          onClick={() => handleRightButtonClick(3)}
-          // disabled={!jobId}
-          variant={step === 3 ? "contained" : "outlined"}
-          color="redButton100"
-          sx={{ mb: 2 }}
-        >
-          {i18n["postAJob.theDetails"]}
-        </StyledButtonLeft>
-        <StyledButtonLeft
-          onClick={() => handleRightButtonClick(4)}
-          variant={step === 4 ? "contained" : "outlined"}
-          color="redButton100"
-        // disabled={!jobId}
-        >
-          {i18n["postAJob.theCulture"]}
-        </StyledButtonLeft> */}
           <Stepper nonLinear activeStep={activeStep} orientation="vertical">
             {steps.map((step, index) => (
-              <Step key={step.label} completed={completed[index]}>
+              <Step key={step.label} completed={completed[index]}
+                sx={{
+                  "& .MuiStep-root": {
+                    backgroundColor: theme.palette.eyeview.main,
+                  },
+                  "& .Mui-active": {
+                    color: activeStep === index ? "#FAFAFA !important" : "#D9D9D9",
+                  },
+                  "& .MuiStep-root.Mui-completed": {
+                    color:
+                      activeStep === index
+                        ? "#FAFAFA !important"
+                        : theme.palette.buttonText.main,
+                  },
+                  "& .MuiStepIcon-text": {
+                    fill:
+                      activeStep === index
+                        ? theme.palette.eyeview.main
+                        : theme.palette.buttonText.main,
+                    fontWeight: 900,
+                  },
+                  "& .MuiStepLabel-label": {
+                    fill:
+                      activeStep === index
+                        ? theme.palette.eyeview.main
+                        : theme.palette.buttonText.main,
+                    fontWeight: 900,
+                  },
+                  "& .MuiStepIcon-root.Mui-completed": {
+                    color:
+                      activeStep === index
+                        ? theme.palette.buttonText.main
+                        : theme.palette.eyeview.main,
+                  },
+                }}>
                 <StepLabel
                   color="inherit"
                   onClick={() => handleStep(index)}
                   style={{
-                    // Customize styles here
-                    backgroundColor: step.backgroundColor,
+                    paddingLeft:4,
                     color: "green",
                     border: `2px solid ${step.borderColor}`,
                     borderRadius: "8px",
                     cursor: "pointer",
                     paddingRight: 0,
+                    backgroundColor:
+                      activeStep === index
+                        ? theme.palette.eyeview.main
+                        : theme.palette.grayButton500.main,
                   }}
                 >
                   {step.label}
@@ -275,8 +256,6 @@ export default function MyCV() {
             ))}
           </Stepper>
         </Grid>
-
-        {/* <ButtonPanel panelData={CANDIDATE_MY_CV_RIGHT} side='right' /> */}
       </Grid>
       <SavaAndExit
         show={openSaveAndExitDialog}

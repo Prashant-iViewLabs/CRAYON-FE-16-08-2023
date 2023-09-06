@@ -330,8 +330,7 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.salary?.currency?.symbol}
-                {formatCurrencyWithCommas(job?.salary?.max)} per month
+                {job?.salary?.currency?.symbol} {formatCurrencyWithCommas(job?.salary?.min)} to {formatCurrencyWithCommas(job?.salary?.max)} per month
               </Typography>
             </Box>
             <Box

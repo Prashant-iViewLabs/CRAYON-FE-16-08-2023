@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import locale from "../../../i18n/locale";
-import { Box, InputLabel, TextField, useTheme } from "@mui/material";
+import { Box, Dialog, InputLabel, TextField, useTheme } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { setAlert, setLoading } from "../../../redux/configSlice";
@@ -57,6 +57,7 @@ export default function TheDetails({
   const [detailData, setDetailData] = useState({ ...DETAIL, job_id: jobId });
   const [errors, setErrors] = useState([]);
   const [specName, setspecName] = useState("No file chosen");
+ 
 
   const getAllTheDetails = async () => {
     // const { payload } = await dispatch();
@@ -186,19 +187,19 @@ export default function TheDetails({
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 3,
-      }}
-    >
       <Box
         sx={{
-          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
         }}
       >
-        {/* <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          {/* <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
           <input
             accept={fileAccept}
             ref={hiddenFileInput}
@@ -233,190 +234,186 @@ export default function TheDetails({
             {i18n["postAJob.scrapeSpec"]}
           </StyledButton>
         </Box> */}
-        <Typography
-          sx={{
-            fontSize: "20px",
-            fontWeight: 700,
-            ml: 1,
-            mb: 1,
-          }}
-        >
-          {POST_JOB_STEPS[1]}
-        </Typography>
-        <Box>
-          <InputLabel
-            htmlFor="roleSummary"
+          <Typography
             sx={{
-              color: "black",
-              paddingLeft: "10px",
-              paddingBottom: "2px",
-              fontSize: "15px",
-              fontWeight: 500,
+              fontSize: "20px",
+              fontWeight: 700,
+              ml: 1,
+              mb: 1,
             }}
           >
-            {i18n["postAJob.howTheyWillRole"]}
-          </InputLabel>
-          <TextEditor
-            value={detailData?.role_summary}
-            // title=
-            type="role_summary"
-            onInputCHange={handleInputChange}
-          />
-          {detailData?.role_summary == null &&
-            errors.find((error) => error.key == "role_summary") && (
-              <Typography color={"red"}>
-                {`*${
-                  errors.find((error) => error.key == "role_summary").message
-                }`}
-              </Typography>
-            )}
-        </Box>
-        <Box sx={{ mt: 3 }}>
-          <InputLabel
-            htmlFor="roleResponsibility"
-            sx={{
-              color: "black",
-              paddingLeft: "10px",
-              paddingBottom: "2px",
-              fontSize: "15px",
-              fontWeight: 500,
-            }}
-          >
-            {i18n["postAJob.whatTheyWillDo"]}
-          </InputLabel>
-          <TextEditor
-            value={detailData?.role_responsibilty}
-            // title=
-            type="role_responsibilty"
-            onInputCHange={handleInputChange}
-          />
-          {detailData?.role_responsibilty == null &&
-            errors.find((error) => error.key == "role_responsibilty") && (
-              <Typography color={"red"}>
-                {`*${
-                  errors.find((error) => error.key == "role_responsibilty")
-                    .message
-                }`}
-              </Typography>
-            )}
-        </Box>
-        <Box sx={{ mt: 3 }}>
-          <InputLabel
-            htmlFor="roleRequirement"
-            sx={{
-              color: "black",
-              paddingLeft: "10px",
-              paddingBottom: "2px",
-              fontSize: "15px",
-              fontWeight: 500,
-            }}
-          >
-            {i18n["postAJob.whatTheyWillNeed"]}
-          </InputLabel>
-          <TextEditor
-            value={detailData.role_requirements}
-            // title=
-            type="role_requirements"
-            onInputCHange={handleInputChange}
-          />
-          {detailData.role_requirements == null &&
-            errors.find((error) => error.key == "role_requirements") && (
-              <Typography color={"red"}>
-                {`*${
-                  errors.find((error) => error.key == "role_requirements")
-                    .message
-                }`}
-              </Typography>
-            )}
-        </Box>
-        <Box sx={{ width: "50%", mt: 3 }}>
-          <InputLabel
-            htmlFor="beginDate"
-            sx={{
-              color: "black",
-              paddingLeft: "10px",
-              paddingBottom: "2px",
-              fontSize: "15px",
-              fontWeight: 500,
-            }}
-          >
-            {i18n["postAJob.whenTheyWillBegin"]}
-          </InputLabel>
-          <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb">
-            <DatePicker
-              name="job_start_date"
-              // value={detailData.job_start_date}
-              onChange={handleDateChange}
-              minDate={currentDate}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  value={detailData.job_start_date}
-                  inputProps={{
-                    placeholder: "dd/mm/yyyy",
-                  }}
-                  sx={{
-                    width: "95%",
-                    "& .MuiInputBase-root": {
-                      height: "40px",
-                      width: "100%",
-                      borderRadius: "40px",
-                      // border: 1
-                    },
-                    "& .MuiIconButton-root": {
-                      color: theme.palette.yellowColor, // Change this to the desired color
-                    },
-                  }}
-                />
-              )}
+            {POST_JOB_STEPS[1]}
+          </Typography>
+          <Box>
+            <InputLabel
+              htmlFor="roleSummary"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.howTheyWillRole"]}
+            </InputLabel>
+            <TextEditor
+              value={detailData?.role_summary}
+              // title=
+              type="role_summary"
+              onInputCHange={handleInputChange}
             />
-          </LocalizationProvider>
+            {detailData?.role_summary == null &&
+              errors.find((error) => error.key == "role_summary") && (
+                <Typography color={"red"}>
+                  {`*${errors.find((error) => error.key == "role_summary").message
+                    }`}
+                </Typography>
+              )}
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            <InputLabel
+              htmlFor="roleResponsibility"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.whatTheyWillDo"]}
+            </InputLabel>
+            <TextEditor
+              value={detailData?.role_responsibilty}
+              // title=
+              type="role_responsibilty"
+              onInputCHange={handleInputChange}
+            />
+            {detailData?.role_responsibilty == null &&
+              errors.find((error) => error.key == "role_responsibilty") && (
+                <Typography color={"red"}>
+                  {`*${errors.find((error) => error.key == "role_responsibilty")
+                    .message
+                    }`}
+                </Typography>
+              )}
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            <InputLabel
+              htmlFor="roleRequirement"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.whatTheyWillNeed"]}
+            </InputLabel>
+            <TextEditor
+              value={detailData.role_requirements}
+              // title=
+              type="role_requirements"
+              onInputCHange={handleInputChange}
+            />
+            {detailData.role_requirements == null &&
+              errors.find((error) => error.key == "role_requirements") && (
+                <Typography color={"red"}>
+                  {`*${errors.find((error) => error.key == "role_requirements")
+                    .message
+                    }`}
+                </Typography>
+              )}
+          </Box>
+          <Box sx={{ width: "50%", mt: 3 }}>
+            <InputLabel
+              htmlFor="beginDate"
+              sx={{
+                color: "black",
+                paddingLeft: "10px",
+                paddingBottom: "2px",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              {i18n["postAJob.whenTheyWillBegin"]}
+            </InputLabel>
+            <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb">
+              <DatePicker
+                name="job_start_date"
+                // value={detailData.job_start_date}
+                onChange={handleDateChange}
+                minDate={currentDate}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    value={detailData.job_start_date}
+                    inputProps={{
+                      placeholder: "dd/mm/yyyy",
+                    }}
+                    sx={{
+                      width: "95%",
+                      "& .MuiInputBase-root": {
+                        height: "40px",
+                        width: "100%",
+                        borderRadius: "40px",
+                        // border: 1
+                      },
+                      "& .MuiIconButton-root": {
+                        color: theme.palette.yellowColor, // Change this to the desired color
+                      },
+                    }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
 
-          {errors?.find((error) => error.key == "job_start_date") && (
-            <Typography color={"red !important"}>
-              {`*${
-                errors?.find((error) => error.key == "job_start_date").message
-              }`}
-            </Typography>
-          )}
+            {errors?.find((error) => error.key == "job_start_date") && (
+              <Typography color={"red !important"}>
+                {`*${errors?.find((error) => error.key == "job_start_date").message
+                  }`}
+              </Typography>
+            )}
+          </Box>
         </Box>
-      </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          variant="contained"
-          color="grayButton200"
+        <Box
           sx={{
-            width: "229px",
-            height: "57px",
-            fontSize: "15px",
-            borderRadius: "26px 0 0 0",
+            display: "flex",
+            justifyContent: "center",
           }}
-          // onClick={handle }
-          onClick={handleOpenSaveAndExitDialog}
         >
-          Save and Exit
-        </Button>
-        <Button
-          variant="contained"
-          color="redButton"
-          sx={{
-            width: "229px",
-            height: "57px",
-            fontSize: "15px",
-            borderRadius: "0 26px 0 0 ",
-          }}
-          onClick={saveDetail}
-        >
-          {i18n["postAJob.theCulture"]}
-        </Button>
-      </Box>
-      {/* <Box
+          <Button
+            variant="contained"
+            color="grayButton200"
+            sx={{
+              width: "229px",
+              height: "57px",
+              fontSize: "15px",
+              borderRadius: "26px 0 0 0",
+            }}
+            // onClick={handle }
+            onClick={handleOpenSaveAndExitDialog}
+          >
+            Save and Exit
+          </Button>
+          <Button
+            variant="contained"
+            color="redButton"
+            sx={{
+              width: "229px",
+              height: "57px",
+              fontSize: "15px",
+              borderRadius: "0 26px 0 0 ",
+            }}
+            onClick={saveDetail}
+          >
+            {i18n["postAJob.theCulture"]}
+          </Button>
+        </Box>
+        {/* <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -443,6 +440,6 @@ export default function TheDetails({
           {i18n["postAJob.theCulture"]}
         </StyledButton>
       </Box> */}
-    </Box>
+      </Box>
   );
 }
