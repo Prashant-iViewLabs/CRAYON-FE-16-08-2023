@@ -11,7 +11,7 @@ const PublishVideo = () => {
             paddingBottom: 0,
             display: "flex",
             flexDirection: "column",
-            height: "35rem",
+            height: "30rem",
             gap: 3
         }}>
             <Box sx={{

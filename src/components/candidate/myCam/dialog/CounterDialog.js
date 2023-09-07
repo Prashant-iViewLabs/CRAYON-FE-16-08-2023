@@ -44,7 +44,7 @@ const CounterDialog = ({ nextStep }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            height: "35rem",
+            height: "30rem",
             gap:3
         }}>
             <Box sx={{
@@ -60,11 +60,11 @@ const CounterDialog = ({ nextStep }) => {
                 <Box
                     component={"img"}
                     src={greenDiamond}
-                    sx={{ width: 170, height: 150 }}
+                    sx={{ width: 150, height: 100 }}
                 />
                 <Typography
                     sx={{
-                        fontSize: 150,
+                        fontSize: 100,
                         fontWeight: "Bold",
                         lineHeight: 1
                     }}

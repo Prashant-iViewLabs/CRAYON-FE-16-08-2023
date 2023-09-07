@@ -174,7 +174,7 @@ export default function Talent() {
           scrollThreshold={"100px"}
           height="80vh"
           dataLength={candidateJobs.length}
-          //   next={getJobs}
+            // next={getJobs}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

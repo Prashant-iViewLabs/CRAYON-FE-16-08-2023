@@ -1,6 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { ALERT_TYPE, ERROR_MSG } from "../../utils/Constants";
 import { getApi, postApi } from "../../utils/Apis";
 import { setLoading } from "../configSlice";
 const initialState = {
@@ -18,6 +16,43 @@ export const getCandidateJobs = createAsyncThunk(
     return data;
   }
 );
+
+export const getVideoJobsList = createAsyncThunk(
+  "getVideoJobsList",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      `/candidate/jobvideos`,
+      true
+    )
+    dispatch(setLoading(false));
+    return data;
+  }
+)
+
+export const uploadMyCamVideo = createAsyncThunk(
+  "uploadMyCamVideo",
+  async (payload, { dispatch }) => {
+    console.log(payload)
+    dispatch(setLoading(true));
+    const { data } = await postApi("/upload/cam", payload, true, "multipart/form-data")
+    dispatch(setLoading(false));
+    return data
+  }
+)
+
+export const getMyCamVideo = createAsyncThunk(
+  "getMyCamVideo",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      `/candidate/camvideo`,
+      true
+    )
+    dispatch(setLoading(false));
+    return data;
+  }
+)
 
 export const getCandidateFilteredJob = createAsyncThunk(
   "getCandidateFilteredJob",
@@ -90,5 +125,5 @@ export const candidateJobs = createSlice({
   // }
 });
 // Action creators are generated for each case reducer function
-export const {} = candidateJobs.actions;
+export const { } = candidateJobs.actions;
 export default candidateJobs.reducer;

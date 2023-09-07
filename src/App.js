@@ -59,6 +59,7 @@ import Currencies from './components/admin/maintenance/Currencies';
 import TalentPoolInfo from './components/admin/adminTalent/TalentPoolInfo';
 import AdminJobsDetailPage from './components/admin/adminJobs/AdminJobsDetailPage';
 import TalentDetailPage from './components/admin/adminTalent/TalentDetailPage';
+import MyCam from './components/candidate/myCam/MyCam';
 
 
 
@@ -86,6 +87,7 @@ export default function App() {
         <Route exact path='candidate' element={<PrivateRoute><Candidate /></PrivateRoute>} >
           <Route path='my-jobs' element={<PrivateRoute><MyJobsCandidate /></PrivateRoute>} />
           <Route path='my-cv' element={<PrivateRoute><MyCV /></PrivateRoute>} />
+          <Route path='my_cam' element={<PrivateRoute><MyCam /></PrivateRoute>}/>
           <Route path='my-profile' element={<PrivateRoute><MyProfileCan /></PrivateRoute>} />
         </Route>
 

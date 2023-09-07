@@ -38,8 +38,8 @@ const MyCam = () => {
                         // color="grayButton500"
                         sx={{
                             mb: 1,
-                            borderRadius: "0 5px 5px 0",
-                            border:0
+                            borderRadius: "0 10px 10px 0",
+                            border: 0
                             // color: step !== 4 ? "" : theme.palette.buttonText?.main,
                         }}
                     >
@@ -51,7 +51,7 @@ const MyCam = () => {
                         color={activeStep === 2 ? "redButton100" : "white"}
                         sx={{
                             mb: 1,
-                            borderRadius: "0 5px 5px 0",
+                            borderRadius: "0 10px 10px 0",
                             border: 0
                             // color: step === 4 ? "" : theme.palette.buttonText?.main,
                         }}
@@ -71,15 +71,33 @@ const MyCam = () => {
                     px: 2,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minHeight: "80vh"
+                    // alignItems: "center",
+                    // minHeight: "80vh"
                 }}
                 gap={1}
                 flexGrow="1 !important"
             >
-                {activeStep === 1 && (<VideoAddSteps />)}
-                {activeStep === 2 && (<CamList />)}
+                <Paper sx={{
+                    width: "fit-content",
+                    paddingY: 1,
+                    paddingX: 2
+                }}>
+                    <Typography sx={{
+                        fontSize:"16px",
+                        fontWeight: 700
+                    }}>my videos</Typography>
+                    <Typography sx={{
+                        fontSize:"14px",
+                        fontWeight: 500
+                    }}>It's selfie time. Push record and let us get to know you!</Typography>
+                </Paper>
+                <Box sx={{
+                    margin: "auto",
+                    width: activeStep === 1 ? "40%" : "100%"
+                }}>
+                    {activeStep === 1 && (<VideoAddSteps />)}
+                    {activeStep === 2 && (<CamList />)}
+                </Box>
             </Grid>
         </Grid>
     )
