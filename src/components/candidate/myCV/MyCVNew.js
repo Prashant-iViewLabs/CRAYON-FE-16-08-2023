@@ -86,11 +86,13 @@ export default function MyCV() {
   const [displayD, setDisplayD] = useState("none");
   const [expanded, setExpanded] = useState(false);
   const [completed, setCompleted] = useState({});
+
   const [profileCompletion, setProfileCompletion] = useState({
     profileCompletion: 0,
     cvBasics: 0,
     workLife: 0,
     studyLife: 0,
+    references: 0,
   });
 
   const token = localStorage?.getItem("token");
@@ -177,6 +179,7 @@ export default function MyCV() {
         })
       );
     } else {
+      console.log(steps);
       setStep(steps);
     }
   };
@@ -319,7 +322,13 @@ export default function MyCV() {
                   variant="outlined"
                   color="grayButton"
                 >
-                  <ProfileProgressButtonLayout />
+                  <ProfileProgressButtonLayout
+                    profileCompletion={profileCompletion.profileCompletion}
+                    cvBasics={profileCompletion.cvBasics}
+                    workLife={profileCompletion.workLife}
+                    studyLife={profileCompletion.studyLife}
+                    references={profileCompletion.references}
+                  />
                   {!progressButton ? <ExpandMore /> : <ExpandLess />}
                 </Button>
               </Box>
@@ -329,7 +338,13 @@ export default function MyCV() {
                 }}
               >
                 <LinearProgressWithLabel
-                  value={profileCompletion.profileCompletion}
+                  value={
+                    profileCompletion.profileCompletion +
+                    profileCompletion.cvBasics +
+                    profileCompletion.workLife +
+                    profileCompletion.studyLife +
+                    profileCompletion.references
+                  }
                 />
                 {console.log(profileCompletion)}
               </Box>
@@ -517,7 +532,7 @@ export default function MyCV() {
                         <Button
                           variant="contained"
                           color={
-                            profileCompletion.refrences
+                            profileCompletion.references
                               ? "greenButton"
                               : "grayButton400"
                           }
@@ -687,6 +702,7 @@ export default function MyCV() {
                 <TheBasicsNew
                   changeStep={handleChangeStep}
                   handleComplete={handleComplete}
+                  setProfileCompletion={setProfileCompletion}
                 />
               )}
               {step === 1 && (
@@ -707,13 +723,13 @@ export default function MyCV() {
                   handleComplete={handleComplete}
                 />
               )}
-              {step === 4 &&
-                decodedToken?.data?.profile_percent_complete !== null && (
-                  <CandidateCVPage
-                    changeStep={handleChangeStep}
-                    handleComplete={handleComplete}
-                  />
-                )}
+              {console.log(decodedToken?.data, step)}
+              {step === 4 && (
+                <CandidateCVPage
+                  changeStep={handleChangeStep}
+                  handleComplete={handleComplete}
+                />
+              )}
             </Box>
           </Box>
         </Grid>
@@ -732,13 +748,42 @@ export default function MyCV() {
           }}
         >
           <Stepper nonLinear activeStep={step} orientation="vertical">
-            {steps.map((step, index) => (
+            {steps.map((steps, index) => (
               <Step
-                key={step.label}
+                key={steps.label}
                 completed={completed[index]}
                 sx={{
-                  "& MuiStep-root": {
-                    backgroundColor: theme.palette.stepperColor.main,
+                  "& .MuiStep-root": {
+                    backgroundColor: theme.palette.eyeview.main,
+                  },
+                  "& .Mui-active": {
+                    color: step === index ? "#FAFAFA !important" : "#D9D9D9",
+                  },
+                  "& .MuiStep-root.Mui-completed": {
+                    color:
+                      step === index
+                        ? "#FAFAFA !important"
+                        : theme.palette.buttonText.main,
+                  },
+                  "& .MuiStepIcon-text": {
+                    fill:
+                      step === index
+                        ? theme.palette.eyeview.main
+                        : theme.palette.buttonText.main,
+                    fontWeight: 900,
+                  },
+                  "& .MuiStepLabel-label": {
+                    fill:
+                      step === index
+                        ? theme.palette.eyeview.main
+                        : theme.palette.buttonText.main,
+                    fontWeight: 900,
+                  },
+                  "& .MuiStepIcon-root.Mui-completed": {
+                    color:
+                      step === index
+                        ? theme.palette.buttonText.main
+                        : theme.palette.eyeview.main,
                   },
                 }}
               >
@@ -747,20 +792,18 @@ export default function MyCV() {
                   onClick={() => handleStep(index)}
                   style={{
                     // Customize styles here
-                    backgroundColor: step.backgroundColor,
                     color: "green",
-                    border: `2px solid ${step.borderColor}`,
+                    border: `2px solid ${steps.borderColor}`,
                     borderRadius: "8px",
                     cursor: "pointer",
                     paddingRight: 0,
-                  }}
-                  sx={{
-                    "& .css-tum6ig-MuiButtonBase-root-MuiStepButton-root": {
-                      backgroundColor: "stepperColor",
-                    },
+                    backgroundColor:
+                      step === index
+                        ? theme.palette.eyeview.main
+                        : theme.palette.grayButton500.main,
                   }}
                 >
-                  {step.label}
+                  {steps.label}
                 </StepButton>
               </Step>
             ))}

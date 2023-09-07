@@ -83,9 +83,7 @@ const SavaAndExit = ({ show, handleOpen }) => {
               width: "50%",
               height: "57px",
             }}
-            // onClick={() => {
-            //   navigate("/employer/my-jobs")
-            // }}
+            // onClick={() => navigate("/employer/my-jobs")}
           >
             Save and exit
           </Button>
@@ -98,7 +96,7 @@ const SavaAndExit = ({ show, handleOpen }) => {
             }}
             color="redButton"
             onClick={handleOpen}
-          // onClick={() => navigate("/candidate/my-cv")}
+            // onClick={() => navigate("/candidate/my-cv")}
           >
             {/* {i18n["topBar.join"]} */}
             Carry on

@@ -5,15 +5,13 @@ import SingleRadialChart from "../../common/SingleRadialChart";
 const TrackButton = ({ theme, closeFunc }) => {
   const getColor = (value) => {
     if (value < 5) {
-      return theme.palette.chart.red
-    }else 
-    if (value < 20) {
-      return theme.palette.chart.yellow
+      return theme.palette.chart.red;
+    } else if (value < 20) {
+      return theme.palette.chart.yellow;
+    } else {
+      return theme.palette.chart.green200;
     }
-    else{
-      return theme.palette.chart.green200
-    }
-  }
+  };
   return (
     <Box
       sx={{
@@ -94,7 +92,7 @@ const TrackButton = ({ theme, closeFunc }) => {
             borderRadius: "0 0 0 20px",
             width: "33.33%",
             paddingY: "25px",
-            fontSize: "10px"
+            fontSize: "10px",
           }}
           onClick={() => closeFunc(false)}
         >
@@ -107,7 +105,7 @@ const TrackButton = ({ theme, closeFunc }) => {
             borderRadius: 0,
             width: "33.33%",
             paddingY: "25px",
-            fontSize: "10px"
+            fontSize: "10px",
           }}
           onClick={() => closeFunc(false)}
         >

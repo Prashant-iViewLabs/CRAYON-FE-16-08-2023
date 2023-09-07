@@ -117,11 +117,11 @@ export default function CultureAdd({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { personalities, traits } = useSelector((state) => state.postJobs);
-  const [openJobPostingDialog, setOpenApplyJobDialog] = useState(false)
+  const [openJobPostingDialog, setOpenApplyJobDialog] = useState(false);
 
   const handleJobPostingDialog = () => {
-    setOpenApplyJobDialog(prevState => !prevState)
-  }
+    setOpenApplyJobDialog((prevState) => !prevState);
+  };
 
   const getAllCultureData = async () => {
     try {
@@ -425,9 +425,11 @@ export default function CultureAdd({
               {!cultureData?.jobDetails?.primary_personality &&
                 errors?.find((error) => error.key == "primary_personality") && (
                   <Typography color={"red"}>
-                    {`*${errors?.find((error) => error.key == "primary_personality")
-                      .message
-                      }`}
+                    {`*${
+                      errors?.find(
+                        (error) => error.key == "primary_personality"
+                      ).message
+                    }`}
                   </Typography>
                 )}
             </Box>
@@ -475,9 +477,10 @@ export default function CultureAdd({
               {!cultureData?.jobDetails?.shadow_personality &&
                 errors?.find((error) => error.key == "shadow_personality") && (
                   <Typography color={"red"}>
-                    {`*${errors?.find((error) => error.key == "shadow_personality")
-                      .message
-                      }`}
+                    {`*${
+                      errors?.find((error) => error.key == "shadow_personality")
+                        .message
+                    }`}
                   </Typography>
                 )}
             </Box>
@@ -532,7 +535,9 @@ export default function CultureAdd({
               {getTraitsValue() == "" &&
                 errors?.find((error) => error.key == "traits") && (
                   <Typography color={"red"}>
-                    {`*${errors?.find((error) => error.key == "traits").message}`}
+                    {`*${
+                      errors?.find((error) => error.key == "traits").message
+                    }`}
                   </Typography>
                 )}
             </Box>
@@ -597,8 +602,9 @@ export default function CultureAdd({
               />
               {errors?.find((error) => error.key == "grit_score") && (
                 <Typography color={"red"}>
-                  {`*${errors?.find((error) => error.key == "grit_score").message
-                    }`}
+                  {`*${
+                    errors?.find((error) => error.key == "grit_score").message
+                  }`}
                 </Typography>
               )}
             </Box>
@@ -625,8 +631,9 @@ export default function CultureAdd({
           </Typography>
           {errors?.find((error) => error.key === "screen_questions") && (
             <Typography color={"red"}>
-              {`*${errors?.find((error) => error.key == "screen_questions").message
-                }`}
+              {`*${
+                errors?.find((error) => error.key == "screen_questions").message
+              }`}
             </Typography>
           )}
           {cultureData?.screen_questions?.length > 0 &&
@@ -794,7 +801,11 @@ export default function CultureAdd({
         </StyledButton>
       </Box> */}
       </Box>
-      <JobPostingDialog show={openJobPostingDialog} saveFunc={saveCulture} handleOpen={handleJobPostingDialog} />
+      <JobPostingDialog
+        show={openJobPostingDialog}
+        saveFunc={saveCulture}
+        handleOpen={handleJobPostingDialog}
+      />
     </>
   );
 }

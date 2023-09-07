@@ -1331,16 +1331,12 @@ export default function ProfileCard() {
                       )}
                       <Box sx={{ margin: "0 -22px 0 -22px" }}>
                         <SingleRadialChart
-                          hollow="55%"
-                          nameSize="9px"
-                          valueSize="14px"
-                          nameOffsetY="11"
-                          valueOffsetY="-17"
-                          labelsData={"applications"}
                           max={1000}
-                          width={120}
-                          color={theme.palette.lightGreenButton300.main}
+                          labelsData={"grit score"}
                           series={[profile.grit_score]}
+                          width={120}
+                          color={theme.palette.chart.red}
+                          isHovered={true}
                         />
                       </Box>
                     </>
@@ -1356,53 +1352,33 @@ export default function ProfileCard() {
                   {!expanded && (
                     <>
                       <Box sx={{ margin: "0 -22px 0 -22px" }}>
-                        {/* <SingleRadialChart
+                        <SingleRadialChart
                           max={10000}
                           labelsData={"applications"}
-                          series={[34]}
+                          series={[profile.totoalapplicant]}
                           width={120}
                           color={theme.palette.chart.green200}
                           isHovered={true}
-                        /> */}
-                        <SingleRadialChart
-                          hollow="55%"
-                          nameSize="9px"
-                          valueSize="14px"
-                          nameOffsetY="11"
-                          valueOffsetY="-17"
-                          labelsData={"applications"}
-                          max={1000}
-                          width={120}
-                          color={theme.palette.lightGreenButton300.main}
-                          series={[profile.totoalapplicant]}
                         />
                       </Box>
                       <Box sx={{ margin: "0 -22px 0 -22px" }}>
                         <SingleRadialChart
-                          hollow="55%"
-                          nameSize="9px"
-                          valueSize="14px"
-                          nameOffsetY="11"
-                          valueOffsetY="-17"
+                          max={1000}
                           labelsData={"shortlistings"}
-                          max={1000}
-                          width={120}
-                          color={theme.palette.lightGreenButton300.main}
                           series={[profile.totoalshortlisted]}
+                          width={120}
+                          color={theme.palette.chart.green200}
+                          isHovered={true}
                         />
                       </Box>
                       <Box sx={{ margin: "0 -22px 0 -22px" }}>
                         <SingleRadialChart
-                          hollow="55%"
-                          nameSize="9px"
-                          valueSize="14px"
-                          nameOffsetY="11"
-                          valueOffsetY="-17"
-                          labelsData={"interviews"}
                           max={1000}
-                          width={120}
-                          color={theme.palette.lightGreenButton300.main}
+                          labelsData={"interviews"}
                           series={[profile.totoalinterviewed]}
+                          width={120}
+                          color={theme.palette.chart.green200}
+                          isHovered={true}
                         />
                       </Box>
                     </>

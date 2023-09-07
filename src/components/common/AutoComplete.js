@@ -151,8 +151,10 @@ export default function AutoComplete({
         )}
         renderTags={(value, getTagProps) => {
           if (multiple && value[0] != "") {
+            console.log(value);
             return value.map((option, index) => (
               <>
+                {console.log(option)}
                 <Chip
                   variant="outlined"
                   label={option?.name || option}

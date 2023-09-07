@@ -173,9 +173,10 @@ const BASIC = {
   qualification_level: "",
   employment_type: "",
   salary: [],
+  tools: [],
   currency_id: "",
   portfolio_link: "",
-  work_setup: "",
+  work_setup: "in-office",
   experience: [],
 };
 
@@ -198,7 +199,11 @@ const StyledButtonLeft = styled(Button)(({ theme }) => ({
   borderRadius: "22px",
 }));
 
-export default function TheBasicsNew({ changeStep, handleComplete }) {
+export default function TheBasicsNew({
+  changeStep,
+  handleComplete,
+  setProfileCompletion,
+}) {
   const i18n = locale.en;
   const theme = useTheme();
 
@@ -245,6 +250,7 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
         // changeStep(2);
         handleComplete();
         setErrors([]);
+        handlesaveAndExitDialog();
       } else if (payload?.status == "error") {
         // console.log(payload?.data?.message);
         console.log("ERROR", payload);
@@ -349,10 +355,18 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
         return item * 10;
       });
 
+      const profileCompletionPercentage = {
+        profileCompletion: 25,
+        cvBasics: payload?.data?.cv_basic_completed ? 10 : 0,
+        workLife: payload?.data?.work_life_completed ? 5 : 0,
+        studyLife: payload?.data?.study_life_completed ? 5 : 0,
+        references: payload?.data?.user_reference_completed ? 5 : 0,
+      };
       setBasicData(basic);
       setExpRange(experience);
       setRangeValue(salary == "undefined" ? [] : salary);
       setCvName(basic.cv_link);
+      setProfileCompletion(profileCompletionPercentage);
     } else if (payload?.status == "error") {
       // dispatch(
       //   setAlert({
@@ -530,17 +544,49 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
       target: { name },
       target: { id },
     } = event;
+    let slider = false,
+      sliderValue = "";
 
-    const newBasicData = {
-      ...basicData,
-      [name || id]:
-        name == "salary"
-          ? salary?.find((sal) => sal?.max == value).salary_id
-          : value,
-    };
+    console.log(basicData.job_role_type === "freelance");
+
+    if (name === "currency_id") {
+      const currencySalary = currency.find(
+        (item) => item.currency_id === value
+      );
+      console.log(currencySalary.min_salary, currencySalary.max_salary);
+      if (basicData.job_role_type === "freelance") {
+        setRangeValue([
+          currencySalary.min_rate / 5,
+          currencySalary.max_rate / 5,
+        ]);
+      } else {
+        setRangeValue([
+          currencySalary.min_salary / 1000,
+          currencySalary.max_salary / 1000,
+        ]);
+      }
+    }
+    if (name == "salary_id") {
+      slider = true;
+      sliderValue = salary.find((sal) => sal.max == value).salary_id;
+    }
+    let newBasicData = {};
+    if (basicData.salary.length === 0) {
+      console.log(currency);
+      newBasicData = {
+        ...basicData,
+        [name || id]: slider ? sliderValue : value,
+        salary: [0, 20000],
+      };
+    } else {
+      newBasicData = {
+        ...basicData,
+        [name || id]: slider ? sliderValue : value,
+      };
+    }
+    console.log(newBasicData);
     setBasicData(newBasicData);
   };
-
   const handleAutoComplete = (event, newValue, id) => {
     let newBasicData = {};
 
@@ -595,7 +641,6 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
       (industry) => industries?.find((ind) => ind.id == industry) || industry
     );
   };
-
   const getToolValue = () => {
     if (basicData.tools?.length == 0) {
       return [];
@@ -610,7 +655,11 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
     if (basicData.tags?.length == 0) {
       return [];
     }
-    console.log(skills);
+    console.log(
+      basicData.tags?.map(
+        (skill) => skills?.find((sk) => sk.id == skill) || skill
+      )
+    );
     return basicData.tags?.map(
       (skill) => skills?.find((sk) => sk.id == skill) || skill
     );
@@ -948,7 +997,7 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
               getAriaValueText={textValue}
               step={10}
               onChange={expHandleChange}
-              valueLabelDisplay="auto"
+              valueLabelDisplay="on"
               valueLabelFormat={textValue}
               marks={marks}
               sx={{
@@ -963,6 +1012,12 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
+                },
+                "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
+                  backgroundColor: "#EBECF3",
+                },
+                "& .MuiSlider-valueLabel": {
+                  color: "#000",
                 },
               }}
             />
@@ -998,6 +1053,7 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
               color="yellowButton100"
               getAriaValueText={noticeValue}
               onChange={noticeHandleChange}
+              // valueLabelDisplay="on"
               step={20}
               sx={{
                 width: "88%",
@@ -1011,6 +1067,12 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
+                },
+                "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
+                  backgroundColor: "#EBECF3",
+                },
+                "& .MuiSlider-valueLabel": {
+                  color: "#000",
                 },
               }}
               marks={noticePeriodMarks}
@@ -1150,6 +1212,12 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
                 },
+                "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
+                  backgroundColor: "#EBECF3",
+                },
+                "& .MuiSlider-valueLabel": {
+                  color: "#000",
+                },
               }}
               disabled={salaryObj.step == 0}
               name="salary"
@@ -1162,7 +1230,7 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
                   : handleRangeSlider
               }
               color="redButton100"
-              valueLabelDisplay="auto"
+              valueLabelDisplay="on"
               valueLabelFormat={
                 basicData.employment_type == "freelance"
                   ? rangeValueHandler2
@@ -1197,7 +1265,7 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
         <Button
           onClick={() => {
             handleSaveButton();
-            handlesaveAndExitDialog();
+            // handlesaveAndExitDialog();
           }}
           sx={{
             boxShadow: 0,
@@ -1217,7 +1285,7 @@ export default function TheBasicsNew({ changeStep, handleComplete }) {
         <Button
           onClick={() => {
             handleSaveButton();
-            handlesaveAndExitDialog();
+            // handlesaveAndExitDialog();
           }}
           sx={{
             padding: "0px",

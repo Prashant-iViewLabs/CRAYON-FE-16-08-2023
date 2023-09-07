@@ -503,12 +503,12 @@ export default function ManageJob() {
         <style>
           {`.centerSection::-webkit-scrollbar {
                     height: 5px !important;
-                    background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    background-color: "base"; /* Set the background color of the scrollbar */
                   }
                   .centerSection::-webkit-scrollbar-thumb {
-                    background-color: white;
+                    background-color: "base";
                     height: 5px;
-                    box-shadow: 0px 3px 3px #00000029;
+                    // box-shadow: 0px 3px 3px #00000029;
                     border-radius: 3px;/* Set the color of the scrollbar thumb */
                   }`}
         </style>

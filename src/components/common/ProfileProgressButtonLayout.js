@@ -2,7 +2,13 @@ import { useTheme } from "@emotion/react";
 import { Box, Button } from "@mui/material";
 import React from "react";
 
-const ProfileProgressButtonLayout = ({ colorPattern }) => {
+const ProfileProgressButtonLayout = ({
+  profileCompletion,
+  cvBasics,
+  workLife,
+  studyLife,
+  references,
+}) => {
   const theme = useTheme();
   return (
     <Box
@@ -14,7 +20,9 @@ const ProfileProgressButtonLayout = ({ colorPattern }) => {
     >
       <Button
         variant="contained"
-        color={"lightGreenButton300"}
+        color={
+          profileCompletion === 25 ? "lightGreenButton300" : "grayButton400"
+        }
         sx={{
           height: "6px",
           minWidth: 10,
@@ -24,7 +32,11 @@ const ProfileProgressButtonLayout = ({ colorPattern }) => {
       ></Button>
       <Button
         variant="contained"
-        color={true ? "lightGreenButton300" : "grayButton400"}
+        color={
+          cvBasics + workLife + studyLife + references === 25
+            ? "lightGreenButton300"
+            : "grayButton400"
+        }
         sx={{
           height: "6px",
           minWidth: 10,

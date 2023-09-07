@@ -15,6 +15,9 @@ export default function SmallButton({
   value,
   justifyContent,
   disabled,
+  borderRadius,
+  fontWeight,
+  padding,
   ...props
 }) {
   const i18n = locale.en;
@@ -32,14 +35,14 @@ export default function SmallButton({
         sx={{
           justifyContent: justifyContent,
           fontSize: 10,
-          fontWeight: 300,
+          fontWeight: fontWeight ? fontWeight : 300,
           letterSpacing: "0.75px",
           height: height,
           boxShadow: 0,
-          borderRadius: "5px",
+          borderRadius: borderRadius ? borderRadius : "5px",
           color: textColor,
           minWidth: "fit-content",
-          padding: "0 8px",
+          padding: padding ? padding : "0 8px",
           ".MuiButton-startIcon": {
             marginRight: startIconMargin,
             marginLeft: 0,
@@ -47,6 +50,9 @@ export default function SmallButton({
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
+          "&:hover": {
+            boxShadow: "none", // Remove box shadow on hover
+          },
           ...props,
         }}
       >

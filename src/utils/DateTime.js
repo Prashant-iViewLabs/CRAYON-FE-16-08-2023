@@ -1,6 +1,9 @@
 import moment from "moment";
 export const convertDatetimeAgo = (value) => {
-  return moment.utc(value).local().startOf("seconds").fromNow();
+  return moment.utc(value).local().startOf("seconds").fromNow(true);
+};
+export const convertDatetimeWithoutAgo = (value) => {
+  return moment.utc(value).local().startOf("seconds").fromNow(true);
 };
 export const dateConverter = (value) => {
   return moment(value).format("YYYY-MM-DD");

@@ -965,41 +965,6 @@ export default function AllTalentCard({ talentContent, setPersonalityAdded }) {
               {talentContent?.candidate_profile?.my_bio}
             </Typography>
             <Box sx={{ mt: 1, mb: 2 }}>
-              {/*<SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="graphic design"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="Adobe Illustrator"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="animation"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="motion graphics"
-                mr="8px"
-              ></SmallButton>
-              <SmallButton
-                color="orangeButton"
-                letterSpacing="-0.02em"
-                borderRadius="5px"
-                label="sketching"
-                mr="8px"
-              ></SmallButton>*/}
               {talentContent?.candidate_profile?.tag_users.map((item) => {
                 return (
                   <SmallButton

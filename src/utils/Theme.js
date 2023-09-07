@@ -10,6 +10,10 @@ const theme = createTheme({
       main: "#60CA58",
       contrastText: "#FFFFFF",
     },
+    dateButton: {
+      main: "#FAFAFA",
+      contrastText: "#FFFFFF",
+    },
     cvColor: {
       main: "#E0E0E080",
       contrastText: "#FFFFFF",
@@ -30,6 +34,11 @@ const theme = createTheme({
     },
     orangeButton: {
       main: "#FF934A",
+      contrastText: "#FFFFFF",
+      light: "#ff9800",
+    },
+    userID: {
+      main: "#EDEDED",
       contrastText: "#FFFFFF",
       light: "#ff9800",
     },
@@ -206,6 +215,9 @@ const theme = createTheme({
       green200: "#18CA09",
     },
   },
+
+  talentCard: {},
+
   status: {
     pending: {
       main: "#F8B318",

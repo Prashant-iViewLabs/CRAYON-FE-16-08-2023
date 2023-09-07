@@ -33,6 +33,7 @@ import {
 } from "../../../redux/employer/postJobSlice";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
+import AllTalentNewCard from "./AllTalentNewCard";
 
 const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
   width: "100%",
@@ -109,7 +110,7 @@ export default function AllTalent() {
   }, [personalityAdded]);
 
   return (
-    <Box sx={{ ml: 6 }}>
+    <Box sx={{ ml: 0 }}>
       <Typography
         sx={{
           fontSize: "36px",
@@ -158,7 +159,7 @@ export default function AllTalent() {
         >
           {console.log("ALL JOBS", allJobs)}
           {allJobs?.map((job, index) => (
-            <AllTalentCard
+            <AllTalentNewCard
               key={index}
               talentContent={job}
               setPersonalityAdded={setPersonalityAdded}

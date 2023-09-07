@@ -54,10 +54,10 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
   const [buttonMenu, setButtonMenu] = useState(false);
   const [trackButton, setTrackButton] = useState(false);
 
-  // const Tools = job?.job_tools.map(tool => tool.tool.name)
-  const Skills = job?.skills.map(skill => skill.skill_name)
-  const Tools = job?.tools.map((tool) => tool.tool_name)
+  const Skills = job?.skills.map((skill) => skill.skill_name);
+  const Tools = job?.tools.map((tool) => tool.tool_name);
   const Traits = job?.traits.map((trait) => trait.trait_name);
+
   const handleStar = () => {
     setIsStarSelected(!isStar);
   };
@@ -273,7 +273,9 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.currencySymbol} {formatCurrencyWithCommas(job?.salaryMin)} to {formatCurrencyWithCommas(job?.salaryMax)} per month
+                    {job?.currencySymbol}{" "}
+                    {formatCurrencyWithCommas(job?.salaryMin)} to{" "}
+                    {formatCurrencyWithCommas(job?.salaryMax)} per month
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

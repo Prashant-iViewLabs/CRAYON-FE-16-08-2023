@@ -123,11 +123,11 @@ export const AUTHORIZED_TAB_ITEMS_CANDIDATE = [
   },
   {
     label: "my cam",
-    path: "candidate/my_cam",
+    path: "candidate/my-cam",
   },
   {
     label: "my alerts",
-    path: "candidate/my_alerts",
+    path: "candidate/my-alerts",
   },
   {
     label: "my profile",

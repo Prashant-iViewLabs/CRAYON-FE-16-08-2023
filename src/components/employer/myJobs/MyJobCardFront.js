@@ -274,7 +274,9 @@ export default function MyJobsCard({ index, job, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.currencySymbol} {formatCurrencyWithCommas(job?.salaryMin)} to {formatCurrencyWithCommas(job?.salaryMax)} per month
+                    {job?.currencySymbol}{" "}
+                    {formatCurrencyWithCommas(job?.salaryMin)} to{" "}
+                    {formatCurrencyWithCommas(job?.salaryMax)} per month
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

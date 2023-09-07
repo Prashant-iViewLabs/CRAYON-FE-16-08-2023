@@ -283,8 +283,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                 placement="top"
               >
                 <Link
-                  to={`/candidate/job-detail/${`${job?.town?.name + " " + job?.town?.region?.name
-                    }`}/${job?.job_id}`}
+                  to={`/candidate/job-detail/${`${
+                    job?.town?.name + " " + job?.town?.region?.name
+                  }`}/${job?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -327,7 +328,9 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.salary?.currency?.symbol} {formatCurrencyWithCommas(job?.salary?.min)} to {formatCurrencyWithCommas(job?.salary?.max)} per month
+                    {job?.salary?.currency?.symbol}{" "}
+                    {formatCurrencyWithCommas(job?.salary?.min)} to{" "}
+                    {formatCurrencyWithCommas(job?.salary?.max)} per month
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -363,7 +366,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
                       letterSpacing: "0.25px",
                     }}
                   >
-                    {job?.experience?.year_start} to {job?.experience?.year_end} years
+                    {job?.experience?.year_start} to {job?.experience?.year_end}{" "}
+                    years
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
