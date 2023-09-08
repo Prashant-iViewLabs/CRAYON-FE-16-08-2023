@@ -141,7 +141,7 @@ const AddVideo = ({ nextStep }) => {
             poster=""
             style={{
               width: "40%",
-              height: "auto",
+              height: "100px",
             }}
             controls
           >

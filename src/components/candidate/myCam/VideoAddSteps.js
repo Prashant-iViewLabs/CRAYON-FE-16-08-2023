@@ -7,12 +7,18 @@ import { Box } from '@mui/material'
 
 const VideoAddSteps = () => {
     const [step, setStep] = useState(1)
+    const [recordedVideoData, setRecordedVideoData] = useState(null);
+
+    // Callback function to receive recorded video data
+    const handleVideoData = (videoData) => {
+        setRecordedVideoData(videoData);
+    };
     return (
         <>
             {step === 1 && <AddVideo nextStep={setStep} />}
             {step === 2 && <CounterDialog nextStep={setStep} />}
-            {step === 3 && <RecordingInProgress nextStep={setStep} />}
-            {step === 4 && <PublishVideo />}
+            {step === 3 && <RecordingInProgress nextStep={setStep} onRecordingStop={handleVideoData}/>}
+            {step === 4 && <PublishVideo videoData={recordedVideoData}/>}
         </>
 
     )
