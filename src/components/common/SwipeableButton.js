@@ -16,17 +16,16 @@ export default function SwipeableButton({
   const slider = useRef();
   const container = useRef();
   const theme = useTheme();
-  console.log(selectedUser);
+
   const selectedColor = (selectedUser) => {
-    console.log(selectedUser);
     switch (selectedUser) {
-      case "Candidate":
+      case "candidate":
         return "blueButton600";
-      case "Employer":
+      case "employer":
         return "redButton";
-      case "Recruiter":
+      case "recruiter":
         return "yellowButton100";
-      case "Promoter":
+      case "promoter":
         return "lightGreenButton300";
       default:
         break;
@@ -90,7 +89,7 @@ export default function SwipeableButton({
       }}
     >
       {selectedUser === USER_TYPES[0] ? (
-        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[1]} />
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[0]} />
       ) : (
         <TypographyComponent
           user={USER_TYPES[0]}
@@ -100,7 +99,7 @@ export default function SwipeableButton({
         </TypographyComponent>
       )}
       {selectedUser === USER_TYPES[1] ? (
-        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[2]} />
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[1]} />
       ) : (
         <TypographyComponent
           user={USER_TYPES[1]}
@@ -112,7 +111,7 @@ export default function SwipeableButton({
         </TypographyComponent>
       )}
       {selectedUser === USER_TYPES[2] ? (
-        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[3]} />
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[2]} />
       ) : (
         <TypographyComponent
           user={USER_TYPES[2]}
@@ -124,7 +123,7 @@ export default function SwipeableButton({
         </TypographyComponent>
       )}
       {selectedUser === USER_TYPES[3] ? (
-        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[0]} />
+        <ButtonComponent selectedUser={selectedUser} nextUser={USER_TYPES[3]} />
       ) : (
         <TypographyComponent
           user={USER_TYPES[3]}

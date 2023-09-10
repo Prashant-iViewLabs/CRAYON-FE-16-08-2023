@@ -66,7 +66,7 @@ export default function AllTalent() {
   const [personalityAdded, setPersonalityAdded] = useState(false);
   const [tableData, setTableData] = useState([]);
 
-  const { personalities, traits } = useSelector((state) => state.postJobs);
+  const { traits } = useSelector((state) => state.postJobs);
 
   const onHandleManageTalent = (activeJobId) => {
     navigate(`${pathname}/${activeJobId}`);
@@ -98,10 +98,25 @@ export default function AllTalent() {
     setTotalJob(response.payload.count);
   };
 
+  const getAllData = async () => {
+    try {
+      // dispatch(setLoading(true));
+      await dispatch(getTraits());
+      // dispatch(setLoading(false));
+    } catch (error) {
+      // dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
+
   useEffect(() => {
-    // getAllData();
-    // getTalent();
-    // getTalentJobList("");
+    getAllData();
   }, []);
 
   useEffect(() => {
@@ -118,7 +133,7 @@ export default function AllTalent() {
           // ml: 6
         }}
       >
-        {i18n["allTalent.title"]}({})
+        {i18n["allTalent.title"]}({totalJob})
       </Typography>
       {/* <StyledTextField placeholder='quick search' id="search" size="small" /> */}
       <StyledTextField
@@ -157,12 +172,12 @@ export default function AllTalent() {
             mt: 2,
           }}
         >
-          {console.log("ALL JOBS", allJobs)}
           {allJobs?.map((job, index) => (
             <AllTalentNewCard
               key={index}
               talentContent={job}
               setPersonalityAdded={setPersonalityAdded}
+              traits={traits}
             />
           ))}
         </Box>

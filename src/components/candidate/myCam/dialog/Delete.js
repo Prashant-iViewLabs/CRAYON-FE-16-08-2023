@@ -3,7 +3,7 @@ import CustomDialog from "../../../common/CustomDialog";
 import { Box, Button, Switch, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { alpha } from "@material-ui/core";
-import RedTriangle from '../../../../assets/Characters/Red_Triangle_Blank.svg'
+import RedTriangle from "../../../../assets/Characters/Red_Triangle_Blank.svg";
 
 const BlueSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -75,8 +75,8 @@ export default function Delete({
         sx={{
           padding: 4,
           display: "flex",
-          flexDirection:"column",
-          alignItems: "center"
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Box

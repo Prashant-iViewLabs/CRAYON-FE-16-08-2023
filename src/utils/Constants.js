@@ -47,7 +47,7 @@ export const USER_ROLES = [
 
 export const ERROR_MSG = "Something went wrong! Please try again later!";
 
-export const USER_TYPES = ["Candidate", "Employer", "Recruiter", "Promoter"];
+export const USER_TYPES = ["candidate", "employer", "recruiter", "promoter"];
 
 export const LOGIN_TYPE = ["login", "signup"];
 

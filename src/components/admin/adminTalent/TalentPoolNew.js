@@ -232,7 +232,7 @@ export default function TalentPool() {
                                 borderTopLeftRadius: 25,
                             }}
                             onClick={handleAddNewJob}
-                            disabled={poolDetails.name.trim().length === 0}
+                            disabled={poolDetails?.name?.trim().length === 0}
                         >
                             Skip image
                         </Button>
@@ -246,7 +246,7 @@ export default function TalentPool() {
                                 borderTopRightRadius: 25,
                             }}
                             onClick={handleAddNewJob}
-                            disabled={poolDetails.name.trim().length === 0}
+                            disabled={poolDetails?.name?.trim().length === 0}
                         >
                             add a pool image
                         </Button>

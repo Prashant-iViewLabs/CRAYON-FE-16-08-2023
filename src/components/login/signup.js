@@ -138,7 +138,7 @@ export default function Signup({
         is_verified: 0,
         referrer_id: 1,
         terms: 1,
-        role_id: formik.values.roleId,
+        role_id: selectedUserId.role_id,
         fileName:
           decodedToken?.data?.role_id === undefined
             ? getLocalStorage("fileName")
@@ -197,12 +197,10 @@ export default function Signup({
   }, [pathname]);
 
   const onHandleButtonToggle = (event, type) => {
+
     setUserType(type);
-    setSelectedUserId(
-      USER_ROLES.filter(
-        (role) => role.name.toLowerCase() === type.toLowerCase()
-      )[0]
-    );
+    setSelectedUserId(USER_ROLES.filter((role) => role.name === type)[0]);
+    //ROLE_ID
   };
 
   const handleShowPassword = () => {
@@ -288,7 +286,6 @@ export default function Signup({
           >
             Join crayon
           </Typography>
-          {console.log(formik.errors)}
           {Object.keys(formik.errors).length !== 0 &&
           Object.keys(formik.touched).some((field) => formik.touched[field]) &&
           signupTouched ? (

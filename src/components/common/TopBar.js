@@ -166,10 +166,10 @@ export default function TopBar() {
   const handleTabClick = (event, newTab) => {
     setAnchorEl(quickLinksButtonRef.current);
   };
+  console.log(decodedToken?.data);
 
   const signUpHandle = () => {
     const role_id = decodedToken?.data?.role_id;
-    console.log(role_id, decodedToken?.data?.role_id);
     if (Boolean(getLocalStorage("token")) && localStorage.getItem("temp")) {
       let tabs;
       if (role_id == 4) {
@@ -250,7 +250,7 @@ export default function TopBar() {
           })
         );
       } else {
-        console.log(payload);
+
         dispatch(
           setAlert({
             show: true,

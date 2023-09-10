@@ -1,23 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import locale from "../../../i18n/locale";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import IconButton from "@mui/material/IconButton";
 import SmallButton from "../../common/SmallButton";
 import profile from "../../../assets/profile.png";
-import history from "../../../assets/history.svg";
-import match from "../../../assets/match.svg";
-import eye from "../../../assets/eye.svg";
-import send from "../../../assets/send.svg";
 import linkedin from "../../../assets/linkedin.svg";
-import chatComment from "../../../assets/Padding Excluded/Black_Chat_Green.svg";
+
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Popper from "@mui/material/Popper";
+import MenuList from "@mui/material/MenuList";
+import Stack from "@mui/material/Stack";
 
 import link from "../../../assets/Padding Excluded/Black_Documents.svg";
 import chatHistory from "../../../assets/Padding Excluded/Black_Chat History_1.svg";
@@ -25,67 +24,27 @@ import chat from "../../../assets/Padding Excluded/Black_Chat.svg";
 import CV from "../../../assets/Padding Excluded/Black_CV.svg";
 import talent from "../../../assets/Padding Excluded/Black_Talent.svg";
 
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
-import {
-  Checkbox,
-  FormControl,
-  Grid,
-  InputLabel,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Paper,
-  Popover,
-  Tooltip,
-} from "@mui/material";
-import RadialChart from "../../common/RadialChart";
-import {
-  ALERT_TYPE,
-  CARD_RIGHT_BUTTON_GROUP,
-  ERROR_MSG,
-} from "../../../utils/Constants";
-import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
-import ManIcon from "@mui/icons-material/Man";
-import Switch from "@mui/material/Switch";
-import Slider from "@mui/material/Slider";
-import PlaceIcon from "@mui/icons-material/Place";
-import EmailIcon from "@mui/icons-material/Email";
-import CallIcon from "@mui/icons-material/Call";
+import { Grid, MenuItem, Paper, Popover, Tooltip } from "@mui/material";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
 import SingleRadialChart from "../../common/SingleRadialChart";
-import TextField from "@mui/material/TextField";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
 import {
   convertDOB,
-  convertDatetimeAgo,
   convertDatetimeWithoutAgo,
-  dateConverter,
   dateConverterMonth,
   monthYear,
-  weekConvert,
 } from "../../../utils/DateTime";
-import SelectMenu from "../../common/SelectMenu";
 import { useSelector } from "react-redux";
 
 import { useDispatch } from "react-redux";
-import AutoComplete from "../../common/AutoComplete";
-import StyledButton from "../../common/StyledButton";
 import {
   addTalentPool,
   addTalentToJob,
   getAdminTalentJobList,
-  getAllJobs,
   getTalentPool,
-  talentPersonality,
 } from "../../../redux/admin/jobsSlice";
 import { setAlert, setLoading } from "../../../redux/configSlice";
 import { Link, useLocation } from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroll-component";
 import UP from "../../../assets/Padding Excluded/Black_Up_Close.svg";
 import DOWN from "../../../assets/Padding Excluded/Black_Down_Open.svg";
 import edit from "../../../assets/Padding Excluded/Black_Edit.svg";
@@ -105,7 +64,6 @@ import humanMale from "../../../assets/Padding Excluded/Black_Male.svg";
 import upClose from "../../../assets/Padding Included/Black_Up_Close.svg";
 import downClose from "../../../assets/Padding Included/Black_Down_Open.svg";
 import deleteIcon from "../../../assets/Padding Excluded/Black_Trash_Delete_1 - Copy.svg";
-import activeUpClose from "../../../assets/Black_Up_Close - Copy.svg";
 import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
@@ -122,19 +80,16 @@ import { Circle } from "@mui/icons-material";
 import SVGButton from "../../common/SVGButton";
 import TalentSVGButton from "../../common/TalentSVGButton";
 import PoolJob from "./DialogBox/PoolJob";
+import { truncate } from "lodash";
+import JobAlert from "./DialogBox/JobAlert";
+import CommentBox from "./DialogBox/CommentBox";
+import EditPersonality from "./DialogBox/EditPersonality";
+import Databases from "./DialogBox/Databases";
+import Refferals from "./DialogBox/Refferals";
+import VideoDialog from "./DialogBox/VideoDialog";
+import Document from "./DialogBox/Document";
+import CopyToClipboard from "react-copy-to-clipboard";
 
-const label = "grit score";
-const labelExp = "experience";
-const labelHon = "honours";
-const labelSal = "salary";
-const labelNoti = "notice";
-
-const StyledHR = styled(Box)(({ theme }) => ({
-  borderRight: "1px solid rgba(0, 0, 0, 0.3)",
-  width: "0px",
-  height: "10px",
-  marginRight: "8px",
-}));
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
   borderRadius: "20px 20px !important",
@@ -279,80 +234,10 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   },
 }));
 
-const BlueSwitch = styled(Switch)(({ theme }) => ({
-  "& .MuiSwitch-switchBase.Mui-checked": {
-    color: theme.palette.blueButton400.main,
-    "&:hover": {
-      backgroundColor: alpha(
-        theme.palette.blueButton400.main,
-        theme.palette.action.hoverOpacity
-      ),
-    },
-  },
-  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-    backgroundColor: theme.palette.blueButton400.main,
-  },
-  "& .MuiSwitch-track": {
-    marginTop: "-9px",
-  },
-}));
-const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
-  width: "100%",
-  margin: "8px 0",
-  paddingRight: "8px",
-  // paddingLeft: '16px',
-  // '& .MuiInputLabel-outlined': {
-  // marginLeft: '4px',
-  // color: theme.palette.placeholder
-  // opacity: 0.75
-  // },
-  "& .MuiOutlinedInput-notchedOutline": {
-    // background: theme.palette.white,
-    borderColor: theme.palette.grayBorder,
-    borderRadius: "10px",
-  },
-}));
-function valuetext(value) {
-  return `${value}°C`;
-}
-const labels = ["Salary", "Experience", "Q Level"];
-
-const PERSONALITY = {
-  primary_personality: "",
-  shadow_personality: "",
-  grit_score: "",
-  traits: [],
-};
-
-const marks = [
-  {
-    value: 0,
-    label: "00",
-  },
-  {
-    value: 25,
-    label: "25",
-  },
-  {
-    value: 50,
-    label: "50",
-  },
-  {
-    value: 75,
-    label: "75",
-  },
-  {
-    value: 100,
-    label: "100",
-  },
-];
-
-const textValue = (value) => {
-  return value;
-};
 export default function AllTalentNewCard({
   talentContent,
   setPersonalityAdded,
+  traits,
 }) {
   const i18n = locale.en;
   const theme = useTheme();
@@ -360,25 +245,39 @@ export default function AllTalentNewCard({
   const location = useLocation();
 
   const prevLocation = location.pathname;
-  const hasTalentPool = location.pathname.includes("talent-pool");
   const [flip, setFlip] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [jobClick, setJobClick] = useState(null);
   const [anchorElPersonality, setAnchorElPersonality] = useState(null);
-  const [value, setValue] = useState([20, 37]);
   const [tableData, setTableData] = useState([]);
   const [talentJobs, setTalentJobs] = useState([]);
   const [lastKey, setLastKey] = useState(0);
-  const [personalitiesData, setPersonalitiesData] = useState({
-    ...PERSONALITY,
-  });
-  const { personalities, traits } = useSelector((state) => state.postJobs);
 
-  // console.log(location);
-  console.log(hasTalentPool);
+  const [editPersonality, seteditPersonality] = useState(false);
+  const [anchorElReferral, setAnchorElReferral] = useState(null);
+  const [openVideo, setOpenVideo] = useState(null);
+  const [openDocument, setOpenDocument] = useState(null);
+  const [openActive, setOpenActive] = useState(false);
 
   const open = Boolean(anchorEl);
   const openPersonality = Boolean(anchorElPersonality);
+  const openReferral = Boolean(anchorElReferral);
+  const openDialog = Boolean(openVideo);
+  const openDocumentDialog = Boolean(openDocument);
+  const anchorRef = useRef(null);
+
+  function handleListKeyDown(event) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpenActive(false);
+    } else if (event.key === "Escape") {
+      setOpenActive(false);
+    }
+  }
+
+  const handleEdit = () => {
+    seteditPersonality((prev) => !prev);
+  };
 
   const handleClick = async (event) => {
     setAnchorEl(event.currentTarget);
@@ -486,23 +385,6 @@ export default function AllTalentNewCard({
     } catch (error) {}
   };
 
-  const getAllData = async () => {
-    try {
-      // dispatch(setLoading(true));
-      await Promise.all([dispatch(getPersonalities()), dispatch(getTraits())]);
-      // dispatch(setLoading(false));
-    } catch (error) {
-      // dispatch(setLoading(false));
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: ERROR_MSG,
-        })
-      );
-    }
-  };
-
   const handleClose = () => {
     setAnchorEl(null);
     setJobClick(null);
@@ -512,109 +394,32 @@ export default function AllTalentNewCard({
     setAnchorElPersonality(null);
   };
 
-  const handlePersonality = async (event, newTab) => {
-    !openPersonality && setAnchorElPersonality(event.target);
-    await getAllData();
+  const handlePopoverCloseVideo = () => {
+    setOpenVideo(null);
   };
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-      target: { name },
-    } = event;
-    if (
-      personalitiesData.primary_personality == value ||
-      personalitiesData.shadow_personality == value
-    ) {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Primary and Shadow Personality should not be similar",
-        })
-      );
+  const handlePopoverCloseReferral = () => {
+    setAnchorElReferral(null);
+  };
+
+  const handlePopoverCloseDocument = () => {
+    setOpenDocument(null);
+  };
+
+  const handleToggle = () => {
+    setOpenActive((prevOpen) => !prevOpen);
+  };
+
+  const handleCloseActive = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
 
-    const newPersonalitiesData = {
-      ...personalitiesData,
-      [name]: value,
-    };
-    console.log("NEW PERSONALITY", newPersonalitiesData);
-    setPersonalitiesData(newPersonalitiesData);
+    setOpenActive(false);
   };
 
-  const handleMultipleAutoComplete = (event, newValue, id) => {
-    if (newValue.length <= 5) {
-      let newPersonalitiesData = {
-        ...personalitiesData,
-        [id]: newValue.map((val) => val?.inputValue || val?.trait_id || val),
-      };
-      console.log(newPersonalitiesData);
-      setPersonalitiesData(newPersonalitiesData);
-    } else {
-      newValue.splice(5, 1);
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "You can't add more than 5 traits!!",
-        })
-      );
-    }
-  };
-
-  const getTraitsValue = () => {
-    if (personalitiesData.traits?.length == 0) {
-      return [];
-    }
-
-    return personalitiesData.traits?.map(
-      (id) => traits?.find((trait) => trait.id == id) || id
-    );
-  };
-
-  const rangeHandler = (event) => {
-    const {
-      target: { value },
-      target: { name },
-      target: { id },
-    } = event;
-
-    const newPersonalitiesData = {
-      ...personalitiesData,
-      [name]: value,
-    };
-    console.log(newPersonalitiesData);
-    setPersonalitiesData(newPersonalitiesData);
-  };
-
-  const addPersonality = async () => {
-    const data = {
-      ...personalitiesData,
-      user_id: talentContent.user_id,
-    };
-    console.log(data);
-    const { payload } = await dispatch(talentPersonality(data));
-    if (payload?.status == "success") {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.SUCCESS,
-          msg: "Personality Added Successfully",
-        })
-      );
-      setPersonalityAdded(true);
-      setAnchorElPersonality(null);
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
+  const removeWord = (value) => {
+    return value?.replace("calendar", "");
   };
 
   return (
@@ -624,8 +429,13 @@ export default function AllTalentNewCard({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Grid container spacing={2}>
-          <Grid item>
+        <Grid
+          container
+          spacing={2}
+          justifyContent={"space-between"}
+          flexWrap={"nowrap"}
+        >
+          <Grid item paddingLeft={16}>
             <SmallButton
               color="redButton"
               startIcon={
@@ -652,11 +462,12 @@ export default function AllTalentNewCard({
 
           <Grid
             item
-            xs={1}
+            // xs={1}
             sx={{
               display: "flex",
               flexDirection: "column",
               margin: "12px 0",
+              paddingLeft: "0px !important",
             }}
           >
             {talentContent?.profile_url != "No URL" ? (
@@ -699,13 +510,18 @@ export default function AllTalentNewCard({
             ></SmallButton>
           </Grid>
 
-          <Grid item xs={5.5} paddingLeft="0px !important">
-            <Box display={"flex"} alignItems={"baseline"}>
+          <Grid
+            item
+            //  xs={5.5}
+            paddingLeft="0px !important"
+          >
+            <Box display={"flex"} alignItems={"center"}>
               <TalentSVGButton
                 color={"white"}
                 source={humanMale}
                 height={24}
                 width={18}
+                padding={"0px !important"}
               />
               <Link
                 to={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
@@ -720,6 +536,7 @@ export default function AllTalentNewCard({
                     fontSize: "16px",
                     fontWeight: 700,
                     mr: 1,
+                    ml: "4px",
                   }}
                 >
                   {talentContent?.first_name}
@@ -728,127 +545,175 @@ export default function AllTalentNewCard({
             </Box>
             <Box display={"flex"} alignItems={"center"}>
               <TalentSVGButton
+                padding={"0px  !important"}
                 color={"white"}
                 source={experience}
-                height={20}
+                height={18}
                 width={18}
               />
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  mr: 1,
-                }}
-              >
-                {"Lead Engineer"}
-              </Typography>
-            </Box>
-            <Box display={"flex"} alignItems={"center"}>
-              <TalentSVGButton
-                color={"white"}
-                source={userProfile}
-                height={28}
-                width={24}
-              />
-              {talentContent?.candidate_profile?.dob != null ? (
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    // mb: "2px",
-                  }}
-                >
-                  {`${convertDOB(talentContent?.candidate_profile?.dob)} yrs`}
-                </Typography>
-              ) : (
-                "-"
-              )}
-              <TalentSVGButton
-                color={"white"}
-                source={locationIcon}
-                height={28}
-                width={24}
-              />
-              {talentContent?.candidate_profile?.town !== null ? (
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    // mb: "2px",
-                  }}
-                >
-                  {talentContent?.candidate_profile?.town?.name},{" "}
-                  {talentContent?.candidate_profile?.town?.region?.name}
-                </Typography>
-              ) : (
-                "-"
-              )}
-              <TalentSVGButton
-                color={"white"}
-                source={salary}
-                height={20}
-                width={18}
-              />
-              <Typography
-                sx={{
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  // mb: "2px",
-                }}
-              >
-                $
-                {formatCurrencyWithCommas(
-                  talentContent?.candidate_profile?.candidate_info?.salary?.max
-                )}
-                pm
-              </Typography>
-              <TalentSVGButton
-                color={"white"}
-                source={pending}
-                height={20}
-                width={18}
-              />
-              {talentContent?.candidate_profile?.candidate_info?.experience !==
+              {talentContent?.candidate_profile?.candidate_info?.job_title !==
               null ? (
                 <Typography
                   sx={{
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    // mb: "2px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    mr: 1,
+                    ml: "4px",
                   }}
                 >
                   {
-                    talentContent?.candidate_profile?.candidate_info?.experience
-                      ?.year
-                  }{" "}
-                  years
-                </Typography>
-              ) : (
-                "-"
-              )}
-              <TalentSVGButton
-                color={"white"}
-                source={notice}
-                height={20}
-                width={18}
-              />
-              {talentContent?.candidate_profile?.candidate_info
-                ?.notice_period !== null ? (
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    // mb: "2px",
-                  }}
-                >
-                  {
-                    talentContent?.candidate_profile?.candidate_info
-                      ?.notice_period?.description
+                    talentContent?.candidate_profile?.candidate_info?.job_title
+                      ?.title
                   }
                 </Typography>
               ) : (
                 "-"
               )}
+            </Box>
+            <Box display={"flex"} alignItems={"center"}>
+              <Box
+                sx={{ display: "flex", width: "80px", alignItems: "center" }}
+              >
+                <TalentSVGButton
+                  padding={"0px !important"}
+                  color={"white"}
+                  source={userProfile}
+                  height={28}
+                  width={24}
+                />
+                {talentContent?.candidate_profile?.dob != null ? (
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      // mb: "2px",
+                    }}
+                  >
+                    {`${convertDOB(
+                      talentContent?.candidate_profile?.dob
+                    )} years`}
+                  </Typography>
+                ) : (
+                  "-"
+                )}
+              </Box>
+              <Box
+                sx={{ display: "flex", width: "180px", alignItems: "center" }}
+              >
+                <TalentSVGButton
+                  padding={"0px !important"}
+                  color={"white"}
+                  source={locationIcon}
+                  height={28}
+                  width={23}
+                />
+                {talentContent?.candidate_profile?.town !== null ? (
+                  <Tooltip
+                    title={`${talentContent?.candidate_profile?.town?.name},{" "}
+                  ${talentContent?.candidate_profile?.town?.region?.name}`}
+                    placement="top-end"
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 600,
+                        // mb: "2px",
+                        width: "180px",
+                        whiteSpace: "nowrap", // Prevents text from wrapping
+                        overflow: "hidden", // Hides any overflowing content
+                        textOverflow: "ellipsis", // Adds dots at the end of overflowing text
+                      }}
+                    >
+                      {talentContent?.candidate_profile?.town?.name},{" "}
+                      {talentContent?.candidate_profile?.town?.region?.name}
+                    </Typography>
+                  </Tooltip>
+                ) : (
+                  "-"
+                )}
+              </Box>
+              <Box
+                sx={{ display: "flex", width: "100px", alignItems: "center" }}
+              >
+                <TalentSVGButton
+                  color={"white"}
+                  source={salary}
+                  height={20}
+                  width={18}
+                />
+                <Typography
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    // mb: "2px",
+                  }}
+                >
+                  {
+                    talentContent?.candidate_profile?.candidate_info?.salary
+                      ?.currency?.symbol
+                  }
+                  {formatCurrencyWithCommas(
+                    talentContent?.candidate_profile?.candidate_info?.salary
+                      ?.max
+                  )}
+                  pm
+                </Typography>
+              </Box>
+              <Box
+                sx={{ display: "flex", width: "75px", alignItems: "center" }}
+              >
+                <TalentSVGButton
+                  color={"white"}
+                  source={pending}
+                  height={20}
+                  width={18}
+                />
+                {talentContent?.candidate_profile?.candidate_info
+                  ?.experience !== null ? (
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      // mb: "2px",
+                    }}
+                  >
+                    {
+                      talentContent?.candidate_profile?.candidate_info
+                        ?.experience?.year
+                    }{" "}
+                    years
+                  </Typography>
+                ) : (
+                  "-"
+                )}
+              </Box>
+              <Box
+                sx={{ display: "flex", width: "100px", alignItems: "center" }}
+              >
+                <TalentSVGButton
+                  color={"white"}
+                  source={notice}
+                  height={20}
+                  width={18}
+                />
+                {talentContent?.candidate_profile?.candidate_info
+                  ?.notice_period !== null ? (
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      // mb: "2px",
+                    }}
+                  >
+                    {removeWord(
+                      talentContent?.candidate_profile?.candidate_info
+                        ?.notice_period?.description
+                    )}
+                  </Typography>
+                ) : (
+                  "-"
+                )}
+              </Box>
             </Box>
 
             {flip && (
@@ -859,6 +724,7 @@ export default function AllTalentNewCard({
                     source={email}
                     height={28}
                     width={18}
+                    padding={"0 8px 0 0 !important"}
                   />
                   {talentContent?.email !== null ? (
                     <Typography
@@ -932,26 +798,28 @@ export default function AllTalentNewCard({
                     source={referrals}
                     height={28}
                     width={18}
+                    padding={"0 8px 0 0 !important"}
                   />
-                  {talentContent?.email !== null ? (
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        // mb: "2px",
-                      }}
-                    >
-                      {`Referrals (231)`}{" "}
-                      <TalentSVGButton
-                        color={"white"}
-                        source={DOWN}
-                        height={7}
-                        width={18}
-                      />
-                    </Typography>
-                  ) : (
-                    "-"
-                  )}
+
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      width: "150px",
+                      // mb: "2px",
+                    }}
+                    onClick={(event) => {
+                      setAnchorElReferral(event.target);
+                    }}
+                  >
+                    {`Referrals (231)`}{" "}
+                    <TalentSVGButton
+                      color={"white"}
+                      source={DOWN}
+                      height={7}
+                      width={18}
+                    />
+                  </Typography>
 
                   <Typography
                     sx={{
@@ -968,6 +836,30 @@ export default function AllTalentNewCard({
                       fontSize="12px"
                     ></SmallButton>
                   </Typography>
+                  <Popover
+                    id="dropdown"
+                    open={openReferral}
+                    anchorEl={anchorElReferral}
+                    onClose={handlePopoverCloseReferral}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                    sx={{
+                      "& .MuiPaper-root-MuiPopover-paper": {
+                        // padding: "16px !important",
+                        minWidth: "18% !important",
+                        borderRadius: "20px !important",
+                        mt: 1,
+                      },
+                    }}
+                  >
+                    <Refferals />
+                  </Popover>
                 </Box>
               </>
             )}
@@ -975,13 +867,12 @@ export default function AllTalentNewCard({
 
           <Grid
             item
-            xs={2}
             paddingLeft="0px !important"
             sx={{
               display: "flex",
               alignItems: "flex-start",
               justifyContent: "space-between",
-              marginLeft: "-80px",
+              width: "185px",
             }}
           >
             <Box sx={{ margin: "0 -22px 0 -22px" }}>
@@ -1026,12 +917,7 @@ export default function AllTalentNewCard({
             </Box>
           </Grid>
 
-          <Grid
-            item
-            xs={3}
-            paddingLeft="0px !important"
-            sx={{ marginLeft: "50px" }}
-          >
+          <Grid item paddingLeft="0px !important">
             <Box
               sx={{
                 display: "flex",
@@ -1044,6 +930,7 @@ export default function AllTalentNewCard({
                 source={deleteIcon}
                 height={24}
                 width={18}
+                // padding={"0 0 0 16px !important"}
               />
               <Box sx={{ display: "flex", paddingLeft: "10px" }}>
                 <Button
@@ -1065,7 +952,7 @@ export default function AllTalentNewCard({
                   color="dateButton"
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 500,
+                    fontWeight: 700,
                     color: "#000",
                     padding: "8px 10px",
                     borderRadius: "0px !important",
@@ -1082,7 +969,7 @@ export default function AllTalentNewCard({
                   color="dateButton"
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 500,
+                    fontWeight: 700,
                     color: "#000",
                     padding: "8px 10px",
                     borderRadius: "0px !important",
@@ -1095,6 +982,12 @@ export default function AllTalentNewCard({
                   {convertDatetimeWithoutAgo(talentContent?.created_at)}
                 </Button>
                 <Button
+                  ref={anchorRef}
+                  id="composition-button"
+                  aria-controls={open ? "composition-menu" : undefined}
+                  aria-expanded={open ? "true" : undefined}
+                  aria-haspopup="true"
+                  onClick={handleToggle}
                   variant="contained"
                   color="base"
                   endIcon={
@@ -1106,12 +999,13 @@ export default function AllTalentNewCard({
                       sx={{
                         height: 25,
                         width: 25,
+                        mr: 1,
                       }}
                     />
                   }
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 500,
+                    fontWeight: 700,
                     color: "#000",
                     padding: "8px 10px",
                     borderRadius: "0px !important",
@@ -1127,25 +1021,104 @@ export default function AllTalentNewCard({
                     sx={{ marginLeft: "10px" }}
                   />
                 </Button>
+                <Stack direction="row" spacing={2} sx={{ zIndex: "1000" }}>
+                  <Box>
+                    <Popper
+                      open={openActive}
+                      anchorEl={anchorRef.current}
+                      role={undefined}
+                      placement="bottom-start"
+                      transition
+                      // disablePortal
+                    >
+                      {({ TransitionProps, placement }) => (
+                        <Grow
+                          {...TransitionProps}
+                          style={{
+                            transformOrigin:
+                              placement === "bottom-start"
+                                ? "left top"
+                                : "left bottom",
+                          }}
+                        >
+                          <Paper
+                            sx={{
+                              width: "105px !important",
+                              borderRadius: "0px !important",
+                            }}
+                          >
+                            <ClickAwayListener onClickAway={handleCloseActive}>
+                              <MenuList
+                                autoFocusItem={openActive}
+                                id="composition-menu"
+                                aria-labelledby="composition-button"
+                                onKeyDown={handleListKeyDown}
+                              >
+                                <MenuItem
+                                  onClick={handleCloseActive}
+                                  sx={{ fontSize: "12px", fontWeight: 700 }}
+                                >
+                                  Hide{" "}
+                                  <Circle
+                                    fontSize="string"
+                                    color={"yellowButton100"}
+                                    sx={{ marginLeft: "10px" }}
+                                  />
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={handleCloseActive}
+                                  sx={{ fontSize: "12px", fontWeight: 700 }}
+                                >
+                                  Suspend
+                                  <Circle
+                                    fontSize="string"
+                                    color={"redButton100"}
+                                    sx={{ marginLeft: "10px" }}
+                                  />
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={handleCloseActive}
+                                  sx={{ fontSize: "12px", fontWeight: 700 }}
+                                >
+                                  Blacklist
+                                  <Circle
+                                    fontSize="string"
+                                    color={"#000"}
+                                    sx={{ marginLeft: "10px" }}
+                                  />
+                                </MenuItem>
+                              </MenuList>
+                            </ClickAwayListener>
+                          </Paper>
+                        </Grow>
+                      )}
+                    </Popper>
+                  </Box>
+                </Stack>
               </Box>
             </Box>
 
             <Box
               sx={{
-                marginLeft: "-30px",
-                width: "370px",
+                // marginLeft: "-30px",
+                // width: "370px",
                 display: "flex",
                 alignItems: "flex-end",
-                justifyContent: "space-between",
+                justifyContent: "flex-end",
                 paddingTop: "12px",
               }}
             >
-              <Box sx={{ width: "143px" }}>
+              <Box sx={{}}>
                 {talentContent?.candidate_profile?.candidate_info
                   ?.employment_type != null ? (
                   <SmallButton
                     color="blueButton700"
-                    label={
+                    label={truncate(
+                      talentContent?.candidate_profile?.candidate_info
+                        ?.employment_type,
+                      { length: 12 }
+                    )}
+                    value={
                       talentContent?.candidate_profile?.candidate_info
                         ?.employment_type
                     }
@@ -1168,46 +1141,151 @@ export default function AllTalentNewCard({
                 ) : null}
               </Box>
 
-              <TalentSVGButton
-                color={"yellowButton100"}
-                source={link}
-                height={20}
-                width={18}
-              />
-              <TalentSVGButton
-                color={"redButton"}
-                source={chat}
-                height={16}
-                width={18}
-              />
-              <SmallButton
-                color={"eyeview"}
-                startIcon={<PlayArrowIcon />}
-                padding={0}
-                justifyContent={"center"}
-                borderRadius={50}
-                height={31}
-                width={33}
-                fontWeight={700}
-              />
-              <TalentSVGButton
-                color={"yellowButton100"}
-                source={chatHistory}
-                height={26}
-                width={18}
-              />
-              <TalentSVGButton
-                color={"redButton"}
-                source={CV}
-                height={18}
-                width={18}
-              />
-              <TalentSVGButton
-                color={"quicklinks"}
-                source={talent}
-                height={28}
-                width={18}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "240px",
+                  justifyContent: "space-between",
+                  marginRight: "8px",
+                }}
+              >
+                <CopyToClipboard
+                  text={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
+                  onCopy={() => {
+                    dispatch(
+                      setAlert({
+                        show: true,
+                        type: ALERT_TYPE.SUCCESS,
+                        msg: "Copied to clipboard",
+                      })
+                    );
+                  }}
+                >
+                  <TalentSVGButton
+                    color={"yellowButton100"}
+                    source={link}
+                    height={20}
+                    width={18}
+                  />
+                </CopyToClipboard>
+
+                <TalentSVGButton
+                  color={"quicklinks"}
+                  source={talent}
+                  height={28}
+                  width={18}
+                  onClick={(event) => {
+                    setAnchorElPersonality(event.target);
+                  }}
+                />
+                <Popover
+                  id="dropdown-menu"
+                  open={openPersonality}
+                  anchorEl={anchorElPersonality}
+                  onClose={handlePopoverClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                  sx={{
+                    "& .MuiPaper-root-MuiPopover-paper": {
+                      minWidth: "18% !important",
+                      borderRadius: "20px !important",
+                      mt: 1,
+                    },
+                  }}
+                >
+                  <Databases />
+                </Popover>
+                <SmallButton
+                  color={"eyeview"}
+                  startIcon={<PlayArrowIcon />}
+                  padding={0}
+                  justifyContent={"center"}
+                  borderRadius={50}
+                  height={31}
+                  width={33}
+                  fontWeight={700}
+                  onClick={(event) => setOpenVideo(event.target)}
+                />
+                <Popover
+                  id="dropdown-menu"
+                  open={openDialog}
+                  anchorEl={openVideo}
+                  onClose={handlePopoverCloseVideo}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                  sx={{
+                    "& .css-ll95b0-MuiPaper-root-MuiPopover-paper": {
+                      // padding: "16px !important",
+                      minWidth: "10% !important",
+                      borderRadius: "20px !important",
+                      mt: 1,
+                    },
+                  }}
+                >
+                  <VideoDialog handleOpen={handlePopoverCloseVideo} />
+                </Popover>
+                <TalentSVGButton
+                  color={"redButton"}
+                  source={CV}
+                  height={18}
+                  width={18}
+                  onClick={(event) => setOpenDocument(event.target)}
+                />
+                <Popover
+                  id="dropdown-menu"
+                  open={openDocumentDialog}
+                  anchorEl={openDocument}
+                  onClose={handlePopoverCloseDocument}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                  sx={{
+                    "& .css-ll95b0-MuiPaper-root-MuiPopover-paper": {
+                      // padding: "16px !important",
+                      minWidth: "12% !important",
+                      borderRadius: "20px !important",
+                      mt: 1,
+                    },
+                  }}
+                >
+                  <Document
+                    handleOpen={handlePopoverCloseDocument}
+                    cvLink={talentContent?.cv_url}
+                    userID={talentContent?.user_id}
+                  />
+                </Popover>
+
+                <TalentSVGButton
+                  color={"yellowButton100"}
+                  source={chatHistory}
+                  height={26}
+                  width={18}
+                />
+
+                <TalentSVGButton
+                  color={"redButton"}
+                  source={chat}
+                  height={16}
+                  width={18}
+                />
+              </Box>
             </Box>
           </Grid>
         </Grid>
@@ -1268,7 +1346,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1293,7 +1371,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1320,7 +1398,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1347,7 +1425,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1374,7 +1452,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1401,7 +1479,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1428,7 +1506,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1457,7 +1535,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1487,7 +1565,7 @@ export default function AllTalentNewCard({
                 <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     mr: 1,
                   }}
                 >
@@ -1513,6 +1591,7 @@ export default function AllTalentNewCard({
                   label="Edit"
                   mr="4px"
                   padding="10px !important"
+                  onClick={handleEdit}
                 ></SmallButton>
               </Box>
 
@@ -1690,7 +1769,7 @@ export default function AllTalentNewCard({
                     {"References"}
                   </Typography>
                 </Box>
-                {talentContent?.candidate_profile?.candidate_references.map(
+                {talentContent?.candidate_profile?.candidate_references?.map(
                   (item) => {
                     return (
                       <Box
@@ -1806,136 +1885,8 @@ export default function AllTalentNewCard({
                 addToJob={addToJob}
                 handleAddJobClick={handleAddJobClick}
               />
-
-              <Box sx={{ mt: 4 }}>
-                <TalentSVGButton
-                  color={"white"}
-                  source={chatComment}
-                  height={16}
-                  width={18}
-                />
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 700,
-                    mr: 1,
-                  }}
-                >
-                  {i18n["allTalent.comments"]} (2)
-                </Typography>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Box
-                    component="img"
-                    className="profileAvatar"
-                    alt="crayon logo"
-                    src={profile}
-                    sx={{
-                      mr: 1,
-                      width: 20,
-                      height: 20,
-                    }}
-                  />
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        mr: 1,
-                      }}
-                    >
-                      Name
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 400,
-                        mr: 1,
-                      }}
-                    >
-                      Currently on R25,000pm, looking to change industries in
-                      the fintech space.
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: 400,
-                        mr: 1,
-                        color: theme.palette.grayButton.main,
-                        textAlign: "end",
-                      }}
-                    >
-                      28 Nov 2022:
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 1 }}>
-                  <Box
-                    component="img"
-                    className="profileAvatar"
-                    alt="crayon logo"
-                    src={profile}
-                    sx={{
-                      mr: 1,
-                      width: 20,
-                      height: 20,
-                    }}
-                  />
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        mr: 1,
-                      }}
-                    >
-                      Name
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 400,
-                        mr: 1,
-                      }}
-                    >
-                      Currently on R25,000pm, looking to change industries in
-                      the fintech space.
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: 400,
-                        mr: 1,
-                        color: theme.palette.grayButton.main,
-                        textAlign: "end",
-                      }}
-                    >
-                      28 Nov 2022:
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ mt: 4 }}>
-                  <StyledTextField
-                    id="outlined-adornment-password"
-                    type="text"
-                    size="small"
-                    placeholder="type your comment here..."
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <Box
-                          component="img"
-                          className="profileAvatar"
-                          alt="crayon logo"
-                          src={send}
-                          sx={{
-                            width: "30px",
-                            // mr: 1
-                          }}
-                        />
-                      </InputAdornment>
-                    }
-                  />
-                </Box>
-              </Box>
+              <JobAlert talentContent={talentContent} />
+              <CommentBox />
             </Box>
           </Box>
           <Box
@@ -1969,6 +1920,14 @@ export default function AllTalentNewCard({
           </Box>
         </Grid>
       </AccordionDetails>
+      <EditPersonality
+        talentContent={talentContent}
+        show={editPersonality}
+        handleOpen={handleEdit}
+        seteditPersonality={seteditPersonality}
+        setPersonalityAdded={setPersonalityAdded}
+        traits={traits}
+      />
     </StyledAccordion>
   );
 }

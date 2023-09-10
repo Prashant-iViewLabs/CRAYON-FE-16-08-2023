@@ -8,7 +8,7 @@ import MyJobs from './components/employer/myJobs/MyJobs';
 import Search from './components/admin/search/Search';
 import AdminTalent from './components/admin/adminTalent/AdminTalent';
 import AdminJobs from './components/admin/adminJobs/AdminJobs';
-import BuildSearch from './components/admin/search/BuildSearch';
+import BuildSearch from './components/admin/search/BuildSearchNew';
 import JobTitles from './components/admin/maintenance/JobTitles';
 import ActiveJobs from './components/admin/adminJobs/activeJobs/ActiveJobs';
 import ActiveJobDetail from './components/admin/adminJobs/ActiveJobDetail';

@@ -5,6 +5,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Popover,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -15,6 +16,12 @@ import SmallButton from "../../../common/SmallButton";
 import locale from "../../../../i18n/locale";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AddToPhotosOutlined } from "@mui/icons-material";
+import DOWN from "../../../../assets/Padding Excluded/Black_Down_Open.svg";
+import UP from "../../../../assets/Padding Excluded/Black_Up_Close.svg";
+import upClose from "../../../../assets/Padding Included/Black_Up_Close.svg";
+import downClose from "../../../../assets/Padding Included/Black_Down_Open.svg";
+import AddToPool from "./AddToPool";
+import AddToJob from "./AddToJob";
 
 const label1 = "applied";
 const label2 = "shortlisted";
@@ -130,68 +137,45 @@ export default function PoolJob({
           }}
           color="grayButton200"
           onClick={handleClick}
+          endIcon={
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={anchorEl ? UP : DOWN}
+              sx={{
+                height: 12,
+                width: 12,
+              }}
+            />
+          }
         >
           add to pool
         </Button>
-        <Menu
-          id="broad-menu"
+
+        <Popover
+          id="dropdown-menu"
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "left",
+            horizontal: "center",
           }}
-          PaperProps={{
-            style: {
-              width: "160px",
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          sx={{
+            "& .MuiPaper-root-MuiPopover-paper": {
+              minWidth: "18% !important",
+              borderRadius: "20px !important",
+              mt: 2,
             },
           }}
         >
-          <Box id="talentList" sx={{ overflow: "hidden", height: "100px" }}>
-            <InfiniteScroll
-              style={{
-                height: "100%",
-                overflowX: "hidden",
-                scrollbarWidth: "thin",
-              }}
-              dataLength={tableData?.length}
-              // next={() => getJobList(lastKey)}
-              hasMore={true}
-              scrollableTarget="talentList"
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>Yay! You have seen it all</b>
-                </p>
-              }
-            >
-              {tableData.map((option, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={() =>
-                    addToPool(talentContent?.user_id, option?.pool_id)
-                  }
-                >
-                  <ListItemText primary={option.title} />
-                </MenuItem>
-              ))}
-              <style>
-                {`.infinite-scroll-component::-webkit-scrollbar {
-                          width: 7px !important;
-                          background-color: #F5F5F5; /* Set the background color of the scrollbar */
-                        }
-
-                        .infinite-scroll-component__outerdiv {
-                          height:100%
-                        }
-
-                        .infinite-scroll-component::-webkit-scrollbar-thumb {
-                          background-color: #888c; /* Set the color of the scrollbar thumb */
-                        }`}
-              </style>
-            </InfiniteScroll>
-          </Box>
-        </Menu>
+          <AddToPool talentData={tableData} addToPool={addToPool} />
+        </Popover>
         <Button
           id="broad"
           aria-controls={jobClick ? "broad-menu-job" : undefined}
@@ -199,6 +183,18 @@ export default function PoolJob({
           aria-expanded={jobClick ? "true" : undefined}
           onClick={handleAddJobClick}
           variant="contained"
+          endIcon={
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={jobClick ? upClose : downClose}
+              sx={{
+                height: 12,
+                width: 12,
+              }}
+            />
+          }
           sx={{
             borderRadius: 0,
             width: "33.33%",
@@ -209,73 +205,29 @@ export default function PoolJob({
         >
           add to job
         </Button>
-        <Menu
+        <Popover
           id="broad-menu-job"
           anchorEl={jobClick}
           open={Boolean(jobClick)}
           onClose={handleClose}
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "left",
+            horizontal: "right",
           }}
-          PaperProps={{
-            style: {
-              width: "150px",
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          sx={{
+            "& .MuiPaper-root-MuiPopover-paper": {
+              minWidth: "18% !important",
+              borderRadius: "20px !important",
+              mt: 2,
             },
           }}
         >
-          <Box id="talentList" sx={{ overflow: "hidden", height: "100px" }}>
-            <InfiniteScroll
-              style={{
-                height: "100%",
-                overflowX: "hidden",
-                scrollbarWidth: "thin",
-              }}
-              dataLength={talentJobs?.length}
-              // next={() => getJobList(lastKey)}
-              hasMore={true}
-              scrollableTarget="talentList"
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>Yay! You have seen it all</b>
-                </p>
-              }
-            >
-              {talentJobs.map((option, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={(event) => addToJob(event, talentContent?.user_id)}
-                >
-                  <Tooltip title={option?.title} placement="top-end">
-                    <ListItemText
-                      sx={{
-                        width: "120px",
-                        whiteSpace: "nowrap", // Prevents text from wrapping
-                        overflow: "hidden", // Hides any overflowing content
-                        textOverflow: "ellipsis",
-                      }}
-                      primary={option?.title}
-                    />
-                  </Tooltip>
-                </MenuItem>
-              ))}
-              <style>
-                {`.infinite-scroll-component::-webkit-scrollbar {
-                          width: 7px !important;
-                          background-color: #F5F5F5; /* Set the background color of the scrollbar */
-                        }
-
-                        .infinite-scroll-component__outerdiv {
-                          height:100%
-                        }
-
-                        .infinite-scroll-component::-webkit-scrollbar-thumb {
-                          background-color: #888c; /* Set the color of the scrollbar thumb */
-                        }`}
-              </style>
-            </InfiniteScroll>
-          </Box>
-        </Menu>
+          <AddToJob talentJob={talentJobs} addToJob={addToJob} talentContent={talentContent}/>
+        </Popover>
       </Grid>
     </Grid>
   );

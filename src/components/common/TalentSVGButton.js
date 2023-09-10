@@ -1,6 +1,7 @@
 import React from "react";
 import SmallButton from "./SmallButton";
 import { Box } from "@mui/material";
+import SmallButtonTalent from "./SmallButtonTalent";
 
 export default function TalentSVGButton({
   color,
@@ -9,9 +10,11 @@ export default function TalentSVGButton({
   height,
   width,
   padding,
+  margin,
+  startIconMargin,
 }) {
   return (
-    <SmallButton
+    <SmallButtonTalent
       onClick={onClick}
       color={color}
       startIcon={
@@ -32,8 +35,10 @@ export default function TalentSVGButton({
       //   startIconMargin="4px"
       // margin="auto"
       height={31}
-      width={33}
+      width={20}
       fontWeight={700}
+      margin={margin}
+      startIconMargin={startIconMargin}
     />
   );
 }

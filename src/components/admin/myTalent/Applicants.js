@@ -12,6 +12,8 @@ import {
   getPersonalities,
   getTraits,
 } from "../../../redux/employer/postJobSlice";
+import AllTalentNewCard from "../adminTalent/AllTalentNewCard";
+import { useSelector } from "react-redux";
 
 const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
   width: "100%",
@@ -39,6 +41,8 @@ export default function Applicants() {
 
   const [personalityAdded, setPersonalityAdded] = useState();
 
+  const { traits } = useSelector((state) => state.postJobs);
+
   const getApplicantList = async (lastkeyy) => {
     const { payload } = await dispatch(getApplicants(lastkeyy));
     if (payload?.status == "success") {
@@ -55,12 +59,33 @@ export default function Applicants() {
     }
   };
 
+  const getAllData = async () => {
+    try {
+      // dispatch(setLoading(true));
+      await dispatch(getTraits());
+      // dispatch(setLoading(false));
+    } catch (error) {
+      // dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    getAllData();
+  }, []);
+
   useEffect(() => {
     getApplicantList("");
   }, [personalityAdded]);
 
   return (
-    <Box sx={{ ml: 6 }}>
+    <Box sx={{ ml: 0 }}>
       <Typography
         sx={{
           fontSize: "36px",
@@ -87,11 +112,10 @@ export default function Applicants() {
             mt: 2,
           }}
         >
-          {console.log("ALL JOBS", allApplicants)}
           {allApplicants?.map((job, index) => (
-            <ApplicantCard
+            <AllTalentNewCard
               key={index}
-              index={job.user_id}
+              traits={traits}
               talentContent={job}
               setPersonalityAdded={setPersonalityAdded}
             />
