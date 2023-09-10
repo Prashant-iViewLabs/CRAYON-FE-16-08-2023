@@ -43,6 +43,22 @@ export const uploadMyCamVideo = createAsyncThunk(
   }
 );
 
+export const uploadJobCamVideo = createAsyncThunk(
+  "uploadJobCamVideo",
+  async (payload, { dispatch }) => {
+    console.log(payload)
+    dispatch(setLoading(true));
+    const { data } = await postApi(
+      "/upload/jobcam",
+      payload,
+      true,
+      "multipart/form-data"
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+)
+
 export const getMyCamVideo = createAsyncThunk(
   "getMyCamVideo",
   async (payload, { dispatch }) => {
@@ -52,6 +68,8 @@ export const getMyCamVideo = createAsyncThunk(
     return data;
   }
 );
+
+
 
 export const getCandidateFilteredJob = createAsyncThunk(
   "getCandidateFilteredJob",
@@ -124,5 +142,5 @@ export const candidateJobs = createSlice({
   // }
 });
 // Action creators are generated for each case reducer function
-export const {} = candidateJobs.actions;
+export const { } = candidateJobs.actions;
 export default candidateJobs.reducer;

@@ -19,7 +19,7 @@ const RecordingInProgress = ({ nextStep, onRecordingStop }) => {
   useEffect(() => {
     async function setupCamera() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true , audio: true});
         videoRef.current.srcObject = stream;
         setMediaStream(stream);
         setMediaStreamReady(true);
@@ -97,7 +97,7 @@ const RecordingInProgress = ({ nextStep, onRecordingStop }) => {
   };
   return (
     <Paper sx={{
-      width: "100%",
+      // width: "100%",
       padding: 3,
       paddingBottom: 0,
       display: "flex",
@@ -161,24 +161,6 @@ const RecordingInProgress = ({ nextStep, onRecordingStop }) => {
         >
           Click Stop to complete Recording
         </Typography>
-        {/* <Button onClick={{
-          handleStartRecording
-        }}>
-          Start
-        </Button>
-        <Button onClick={{
-          handleStopRecording
-        }}>
-          Stop
-        </Button> */}
-        <div className="controls">
-          {recording ? (
-            <button onClick={handleStopRecording}>Stop Recording</button>
-          ) : (
-            <button onClick={handleStartRecording}>Start Recording</button>
-          )}
-          <button onClick={handleCloseCamera}>Close Camera</button>
-        </div>
       </Box>
       <Box sx={{
         margin: "auto",

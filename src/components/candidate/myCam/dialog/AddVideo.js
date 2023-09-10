@@ -137,7 +137,6 @@ const AddVideo = ({ nextStep }) => {
           <video
             ref={VideoRef}
             autoPlay={false}
-            muted
             poster=""
             style={{
               width: "40%",

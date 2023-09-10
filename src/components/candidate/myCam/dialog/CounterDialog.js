@@ -39,7 +39,7 @@ const CounterDialog = ({ nextStep }) => {
   return (
     <Paper
       sx={{
-        width: "100%",
+        // width: "100%",
         padding: 3,
         paddingBottom: 0,
         display: "flex",

@@ -18,7 +18,7 @@ const VideoAddSteps = () => {
             {step === 1 && <AddVideo nextStep={setStep} />}
             {step === 2 && <CounterDialog nextStep={setStep} />}
             {step === 3 && <RecordingInProgress nextStep={setStep} onRecordingStop={handleVideoData}/>}
-            {step === 4 && <PublishVideo videoData={recordedVideoData}/>}
+            {step === 4 && <PublishVideo nextStep={setStep} videoData={recordedVideoData} />}
         </>
 
     )

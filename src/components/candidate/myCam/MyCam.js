@@ -13,6 +13,7 @@ import CounterDialog from "./dialog/CounterDialog";
 import RecordingInProgress from "./dialog/RecordingInProgress";
 import VideoAddSteps from "./VideoAddSteps";
 import CamList from "./CamList";
+import MyVideolist from "./MyVideolist";
 
 const StyledButtonLeft = styled(Button)(({ theme }) => ({
   marginRight: "24px",
@@ -50,12 +51,26 @@ const MyCam = () => {
               // color: step !== 4 ? "" : theme.palette.buttonText?.main,
             }}
           >
-            {"my cam"}
+            {"my videos"}
           </StyledButtonLeft>
           <StyledButtonLeft
             onClick={() => setActiveStep(2)}
             variant={"contained"}
             color={activeStep === 2 ? "redButton100" : "white"}
+            // color="grayButton500"
+            sx={{
+              mb: 1,
+              borderRadius: "0 10px 10px 0",
+              border: 0,
+              // color: step !== 4 ? "" : theme.palette.buttonText?.main,
+            }}
+          >
+            {"my cam"}
+          </StyledButtonLeft>
+          <StyledButtonLeft
+            onClick={() => setActiveStep(3)}
+            variant={"contained"}
+            color={activeStep === 3 ? "redButton100" : "white"}
             sx={{
               mb: 1,
               borderRadius: "0 10px 10px 0",
@@ -111,11 +126,12 @@ const MyCam = () => {
         <Box
           sx={{
             margin: "auto",
-            width: activeStep === 1 ? "40%" : "100%",
+            width: activeStep === 2 ? "40%" : "100%",
           }}
         >
-          {activeStep === 1 && <VideoAddSteps />}
-          {activeStep === 2 && <CamList />}
+          {activeStep === 1 && <MyVideolist />}
+          {activeStep === 2 && <VideoAddSteps />}
+          {activeStep === 3 && <CamList />}
         </Box>
       </Grid>
     </Grid>

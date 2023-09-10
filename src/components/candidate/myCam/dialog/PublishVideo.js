@@ -7,7 +7,7 @@ import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
 import { useDispatch } from "react-redux";
 
-const PublishVideo = ({ videoData }) => {
+const PublishVideo = ({ videoData, nextStep }) => {
   const theme = useTheme();
   const dispatch = useDispatch()
   const VideoRef = useRef(null)
@@ -16,7 +16,7 @@ const PublishVideo = ({ videoData }) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const [videoLink,setVideoLink] = useState("")
+  const [videoLink, setVideoLink] = useState("")
   useEffect(() => {
     if (videoData) {
       const link = URL.createObjectURL(videoData);
@@ -34,8 +34,7 @@ const PublishVideo = ({ videoData }) => {
   }
 
   const handleDeleteVideo = () => {
-    setVideoLink(null)
-    VideoRef.current.load()
+    nextStep(1)
     handleCancelDelete()
 
   }
@@ -44,8 +43,12 @@ const PublishVideo = ({ videoData }) => {
   }
 
   const uploadVideo = async () => {
+    const myFile = new File([videoData], 'videoFile.webm', {
+      type: videoData.type,
+    });
+    console.log(myFile)
     const formData = new FormData();
-    formData.append("cam", videoData);
+    formData.append("cam", myFile);
     console.log(formData);
     try {
       const { payload } = await dispatch(uploadMyCamVideo(formData));
@@ -57,6 +60,7 @@ const PublishVideo = ({ videoData }) => {
             msg: "Video uploaded Successfully!",
           })
         );
+        nextStep(1)
       } else {
         dispatch(
           setAlert({
@@ -99,13 +103,12 @@ const PublishVideo = ({ videoData }) => {
             <video
               ref={VideoRef}
               autoPlay={false}
-              muted
               poster=""
               style={{
                 width: "60%",
                 height: "auto",
               }}
-              src={videoLink} 
+              src={videoLink}
               type="video/mp4"
               controls
             >

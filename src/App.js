@@ -13,7 +13,7 @@ import JobTitles from './components/admin/maintenance/JobTitles';
 import ActiveJobs from './components/admin/adminJobs/activeJobs/ActiveJobs';
 import ActiveJobDetail from './components/admin/adminJobs/ActiveJobDetail';
 import AllTalent from './components/admin/adminTalent/AllTalent';
-import TalentPool from './components/admin/adminTalent/TalentPool';
+import TalentPool from './components/admin/adminTalent/TalentPoolNew';
 import Admin from './components/admin/index';
 import MyJobsCandidate from './components/candidate/myJobs/MyJobs';
 import MyCV from './components/candidate/myCV/MyCVNew';

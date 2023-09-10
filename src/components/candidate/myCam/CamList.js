@@ -38,6 +38,7 @@ const CamList = () => {
       }}
       width={"99.5%"}
     >
+      {(allJobsList?.length === 0) && (<div>No Videos</div>)}
       {allJobsList?.map((job) => (
         <Grid
           xl={3}
