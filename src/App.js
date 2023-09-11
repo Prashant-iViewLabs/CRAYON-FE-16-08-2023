@@ -56,7 +56,7 @@ import Languages from './components/admin/maintenance/Languages';
 import Industries from './components/admin/maintenance/Industries';
 import QualificationTypes from './components/admin/maintenance/QualificationTypes';
 import Currencies from './components/admin/maintenance/Currencies';
-import TalentPoolInfo from './components/admin/adminTalent/TalentPoolInfo';
+import TalentPoolInfo from './components/admin/adminTalent/TalentPoolInfoNew';
 import AdminJobsDetailPage from './components/admin/adminJobs/AdminJobsDetailPage';
 import TalentDetailPage from './components/admin/adminTalent/TalentDetailPage';
 

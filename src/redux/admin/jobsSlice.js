@@ -136,12 +136,34 @@ export const addTalentToJob = createAsyncThunk(
 export const createTalentPool = createAsyncThunk(
   "createTalentPool",
   async (payload, { dispatch }) => {
+    console.log(payload)
     dispatch(setLoading(true));
     const { data } = await postApi("/admin/createpool", payload, true);
     dispatch(setLoading(false));
     return data;
   }
 );
+
+export const updateTalentPool = createAsyncThunk(
+  "updateTalentPool",
+  async (payload, { dispatch }) => {
+    console.log(payload)
+    dispatch(setLoading(true));
+    const { data } = await postApi("/admin/editpool", payload, true)
+    dispatch(setLoading(false));
+    return data
+  }
+)
+
+export const deleteTalentPool = createAsyncThunk(
+  "deleteTalentPool", 
+  async (payload, { dispatch} ) => {
+    dispatch(setLoading(true))
+    const {data} = await postApi("/admin/deletepool", payload, true)
+    dispatch(setLoading(false))
+    return data
+  }
+)
 
 export const getPoolUsers = createAsyncThunk(
   "getPoolUsers",
@@ -209,5 +231,5 @@ export const jobsSlice = createSlice({
   // }
 });
 // Action creators are generated for each case reducer function
-export const {} = jobsSlice.actions;
+export const { } = jobsSlice.actions;
 export default jobsSlice.reducer;
