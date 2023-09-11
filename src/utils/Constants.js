@@ -382,6 +382,80 @@ export const JOBS_RIGHT_STAGES_BUTTON_GROUP = [
   },
 ];
 
+export const ADMIN_SEARCH_FILTER = [
+  {
+    id: 1,
+    name: "quick filters",
+    color: "blueButton700",
+    title: true,
+  },
+  {
+    id: 2,
+    name: "permanent",
+    color: "blueButton700",
+  },
+  {
+    id: 3,
+    name: "contract",
+    color: "blueButton700",
+  },
+  {
+    id: 4,
+    name: "freelance",
+    color: "blueButton700",
+  },
+  {
+    id: 5,
+    name: "in-office",
+    color: "blueButton700",
+  },
+  {
+    id: 6,
+    name: "hybrid",
+    color: "blueButton700",
+  },
+  {
+    id: 7,
+    name: "remote",
+    color: "blueButton700",
+  },
+  {
+    id: 8,
+    name: "gender",
+    color: "blueButton700",
+  },
+  {
+    id: 9,
+    name: "race",
+    color: "blueButton700",
+  },
+  {
+    id: 10,
+    name: "recent",
+    color: "blueButton700",
+  },
+  {
+    id: 11,
+    name: "active",
+    color: "blueButton700",
+  },
+  {
+    id: 12,
+    name: "in-demand",
+    color: "blueButton700",
+  },
+  {
+    id: 13,
+    name: "favourites",
+    color: "blueButton700",
+  },
+  {
+    id: 14,
+    name: "my talent",
+    color: "blueButton700",
+  },
+];
+
 export const TALENT_RIGHT_JOB_TYPES_BUTTON_GROUP = [
   {
     id: 1,
@@ -976,7 +1050,7 @@ export const ADMIN_LFET_PANEL = [
     color: "pinkButton",
     menuItems: [
       { id: 0, label: "Build a search", path: "build-search" },
-      { id: 1, label: "Job titles", path: "job-titles" },
+      { id: 1, label: "Job titles", path: "job-title-search" },
       { id: 2, label: "Tags" },
       { id: 3, label: "Skills" },
       { id: 4, label: "Tools" },

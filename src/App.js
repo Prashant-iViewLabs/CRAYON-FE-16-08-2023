@@ -61,6 +61,7 @@ import AdminJobsDetailPage from './components/admin/adminJobs/AdminJobsDetailPag
 import TalentDetailPage from './components/admin/adminTalent/TalentDetailPage';
 
 import MyCam from "./components/candidate/myCam/MyCam"
+import JobTitleSearch from './components/admin/search/JobTitleSearch';
 
 
 
@@ -125,6 +126,7 @@ export default function App() {
           </Route>
           <Route path='Search' element={<PrivateRoute><Search /></PrivateRoute>} >
             <Route path='build-search' element={<PrivateRoute><BuildSearch /></PrivateRoute>} />
+            <Route path='job-title-search' element={<PrivateRoute><JobTitleSearch /></PrivateRoute>} />
           </Route>
           <Route path='*' element={<PrivateRoute><ComingSoon /></PrivateRoute>} />
         </Route>

@@ -479,9 +479,6 @@ export default function TalentPool() {
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell>
-
-                                                    </TableCell>
-                                                    <TableCell>
                                                         <Typography variant="subtitle1" fontWeight="bold">
                                                             Name
                                                         </Typography>
@@ -519,17 +516,6 @@ export default function TalentPool() {
                                                             }}
 
                                                         >
-                                                            <TableCell width={2}>
-                                                                <Box
-                                                                    component={"img"}
-                                                                    src={row.logo}
-                                                                    sx={{
-                                                                        height:30,
-                                                                        width: 30,
-                                                                        borderRadius:2
-                                                                    }}
-                                                                />
-                                                            </TableCell>
                                                             <TableCell>
                                                                 <Link
                                                                     to={`/admin/admin-talent/talent-pool/${row?.pool_id}`}

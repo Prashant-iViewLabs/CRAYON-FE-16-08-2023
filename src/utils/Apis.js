@@ -6,6 +6,8 @@ import { getLocalStorage } from "./Common";
 
 const BASE_URL = process.env.REACT_APP_DEV_URL;
 
+console.log(BASE_URL);
+
 export const getApi = (url, isAuthToken = false) => {
   return axios({
     method: "get",

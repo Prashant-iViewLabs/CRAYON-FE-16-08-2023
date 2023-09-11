@@ -37,9 +37,6 @@ import { Button, Grid, InputBase, Paper } from "@mui/material";
 import IconSection from "./IconSection";
 import SmallButton from "../../common/SmallButton";
 
-
-import CompanyLogo from '../../../assets/nedbank.png'
-
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
   borderRadius: "5px",
@@ -207,7 +204,7 @@ export default function TalentPoolInfo() {
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
           <Box sx={{ width: 160 }}></Box>
           <Box mt={2} sx={{
-
+            
           }}>
             <IconSection />
             {linkJobButton && (
@@ -291,16 +288,6 @@ export default function TalentPoolInfo() {
             }}
           >
             <Box>
-              <Box
-                component="img"
-                className="profileAvatar"
-                alt="crayon logo"
-                src={CompanyLogo}
-                sx={{
-                  height: 80,
-                  width: 90,
-                }}
-              />
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <Typography
                   sx={{
