@@ -12,12 +12,10 @@ import {
   ALERT_TYPE,
   ERROR_MSG,
 } from "../../../utils/Constants";
-import { getTitles, getTraits } from "../../../redux/employer/postJobSlice";
+import { getTraits } from "../../../redux/employer/postJobSlice";
 import { setAlert, setLoading } from "../../../redux/configSlice";
 import { useDispatch } from "react-redux";
-import AutoComplete from "../../common/AutoComplete";
 import { useSelector } from "react-redux";
-import { getSearchResult } from "../../../redux/admin/jobsSlice";
 import TalentSVGButton from "../../common/TalentSVGButton";
 import InfoIcon from "../../common/InfoIcon";
 import link from "../../../assets/CircularIcon/Red/Circular Icons__Red_Title_Job_Experience.svg";
@@ -25,23 +23,10 @@ import diamond from "../../../assets/Characters/Red_Diamond.svg";
 import leftArrow from "../../../assets/Black_Left_Previous.svg";
 import rightArrow from "../../../assets/Black_Right_Next.svg";
 import * as React from "react";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import FilterDrawer from "./dialogBox/FilterDrawer";
-import Accordian from "./dialogBox/Accordian";
-import {
-  getJobTitleData,
-  getTitlesCandidateData,
-} from "../../../redux/admin/searchSlice";
-import SmallButton from "../../common/SmallButton";
+import { getLanguageData } from "../../../redux/admin/searchSlice";
 import SmallButtonTalent from "../../common/SmallButtonTalent";
+import LanguageAccordian from "./dialogBox/LanguageAccordian";
 
 const RedSwitch = styled(Switch)(({ theme }) => ({
   // padding: "0px !important",
@@ -125,8 +110,7 @@ const StyledBox = styled("img")(() => ({
   width: 60,
   textAlign: "center",
 }));
-
-export default function JobTitleSearch() {
+export default function LanguageSearch() {
   const i18n = locale.en;
   const theme = useTheme();
 
@@ -149,7 +133,7 @@ export default function JobTitleSearch() {
 
   const openReferral = Boolean(anchorElReferral);
 
-  const { titles, traits } = useSelector((state) => state.postJobs);
+  const { traits } = useSelector((state) => state.postJobs);
 
   const getAllData = async () => {
     try {
@@ -183,10 +167,10 @@ export default function JobTitleSearch() {
       keyword: title,
     };
     if (title !== "") {
-      const { payload } = await dispatch(getJobTitleData(newBasicData));
+      const { payload } = await dispatch(getLanguageData(newBasicData));
       if (payload?.status == "success") {
         setTitlesListKey(payload?.pageNumber + 1);
-        setTotalJobs(payload?.totalData);
+        setTotalJobs(payload?.totalData?.length);
         setTitlesList((prevState) => [...prevState, ...payload.data]);
         setOpenAccordian(true);
       } else {
@@ -225,7 +209,6 @@ export default function JobTitleSearch() {
   useEffect(() => {
     getAllData();
   }, []);
-
   return (
     <Box>
       <Typography
@@ -236,7 +219,7 @@ export default function JobTitleSearch() {
           textAlign: "center",
         }}
       >
-        {"Search by job title"}
+        {"Search by language"}
       </Typography>
 
       <Paper sx={{ p: 3, pt: 0, pr: 0, borderRadius: "20px", pb: 0 }}>
@@ -244,6 +227,7 @@ export default function JobTitleSearch() {
           <Box
             sx={{
               display: "flex",
+
               alignItems: "flex-start",
               justifyContent: "space-between",
             }}
@@ -285,7 +269,7 @@ export default function JobTitleSearch() {
                 </Box>
               ) : (
                 <Typography sx={{ fontSize: "12px", fontWeight: 900 }}>
-                  Search based on job title
+                  Search based on language
                 </Typography>
               )}
             </Box>
@@ -375,6 +359,7 @@ export default function JobTitleSearch() {
                 />
               </Popover>
             </Box>
+            {}
           </Box>
         </Box>
         {!openAccordian && (
@@ -404,7 +389,7 @@ export default function JobTitleSearch() {
               />
 
               <Typography sx={{ fontSize: "12px", fontWeight: 700 }}>
-                Job Title
+                Language
               </Typography>
             </Box>
 
@@ -423,7 +408,7 @@ export default function JobTitleSearch() {
                 value={title}
                 onChange={handleInputSearch}
                 placeholder={
-                  "Enter the job title you would like to search for..."
+                  "Enter the language you would like to search for..."
                 }
                 sx={{ ml: 2, mr: 2, width: "100%" }}
               />
@@ -508,15 +493,17 @@ export default function JobTitleSearch() {
           </Button>
         </Box>
       </Paper>
+      {console.log(basicData, titlesListKey)}
       {openAccordian && (
         <Paper sx={{ p: 3, mt: 4, borderRadius: "20px" }}>
-          <Accordian
+          <LanguageAccordian
             titlesList={titlesList}
             candidateList={candidateList}
             traits={traits}
             handleTitleScroll={handleSearch}
             basicData={basicData}
             titlesListKey={titlesListKey}
+            setTitlesList={setTitlesList}
           />
         </Paper>
       )}

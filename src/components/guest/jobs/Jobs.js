@@ -112,7 +112,7 @@ export default function Jobs() {
       };
       const { payload } = await dispatch(getAllJobs(data));
       if (payload?.status === "success") {
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
+        setLastKey(payload.pageNumber + 1);
         setAllJobs((prevState) => [...prevState, ...payload.data]);
       } else {
         dispatch(
@@ -138,7 +138,7 @@ export default function Jobs() {
       };
       const { payload } = await dispatch(getFilteredJobs(data));
       if (payload?.status === "success") {
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
+        setLastKey(payload.pageNumber + 1);
         setAllJobs((prevState) => [...prevState, ...payload.data]);
       } else {
         dispatch(

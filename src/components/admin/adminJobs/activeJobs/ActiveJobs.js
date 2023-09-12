@@ -10,7 +10,7 @@ import {
   getAllJobs,
   getJobCount,
 } from "../../../../redux/admin/jobsSlice";
-import JobCard from "../JobCard";
+import JobCard from "../JobCardNew";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
 import { Grid } from "@mui/material";

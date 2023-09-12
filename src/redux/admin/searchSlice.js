@@ -8,6 +8,237 @@ const initialState = {
   search: [],
 };
 
+export const getSkillsData = createAsyncThunk(
+  "getSkillsData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getTag?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+export const getSkillsCandidateData = createAsyncThunk(
+  "getSkillsCandidateData",
+  async ({ lastKey, tag_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getTagUserData?lastKey=" + lastKey + "&tag_id=" + tag_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+export const getQualificationsData = createAsyncThunk(
+  "getQualificationsData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getQualification?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+export const getQualCandidateData = createAsyncThunk(
+  "getQualCandidateData",
+  async ({ lastKey, qualification_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getQualificationUserData?lastKey=" + lastKey + "&qualification_id=" + qualification_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+
+export const getLanguageData = createAsyncThunk(
+  "getLanguageData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getLanguage?lastkey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getLanguageCandidateData = createAsyncThunk(
+  "getLanguageCandidateData",
+  async ({ lastKey, language_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getLanguageUserData?lastKey=" + lastKey + "&language_id=" + language_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getAssociationsData = createAsyncThunk(
+  "getAssociationsData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getAssociation?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getAssociationsCandidateData = createAsyncThunk(
+  "getAssociationsCandidateData",
+  async ({ lastKey, association_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getAssociationUserData?lastKey=" + lastKey + "&association_id=" + association_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+
+export const getSchoolData = createAsyncThunk(
+  "getSchoolData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getSchool?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getSchoolCandidateData = createAsyncThunk(
+  "getSchoolCandidateData",
+  async ({ lastKey, school_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getSchoolUserData?lastKey=" + lastKey + "&school_id=" + school_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getTownsData = createAsyncThunk(
+  "getTownsData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getTown?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getTownsCandidateData = createAsyncThunk(
+  "getTownsCandidateData",
+  async ({ lastKey, town_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getTownUserData?lastKey=" + lastKey + "&town_id=" + town_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getNationalityData = createAsyncThunk(
+  "getNationalityData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getNationality?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getNationalityCandidateData = createAsyncThunk(
+  "getNationalityCandidateData",
+  async ({ lastKey, nationality_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getNationalityUserData?lastKey=" + lastKey + "&nationality_id=" + nationality_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getInstitutionData = createAsyncThunk(
+  "getInstitutionData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getInstitute?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+export const getInstitutionCandidateData = createAsyncThunk(
+  "getInstitutionCandidateData",
+  async ({ lastKey, institution_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getInstitutionUserData?lastKey=" + lastKey + "&institution_id=" + institution_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getToolsData = createAsyncThunk(
+  "getToolsData",
+  async ({ lastKey, keyword }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getTool?lastKey=" + lastKey + "&keyword=" + keyword,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+export const getToolsCandidateData = createAsyncThunk(
+  "getToolsCandidateData",
+  async ({ lastKey, tool_id }, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/search/getToolUserData?lastKey=" + lastKey + "&tool_id=" + tool_id,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const getJobTitleData = createAsyncThunk(
   "getJobTitleData",
   async ({ lastKey, keyword }, { dispatch }) => {

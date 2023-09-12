@@ -19,6 +19,7 @@ export default function SmallButtonTalent({
   fontWeight,
   padding,
   margin,
+  alignItems,
   ...props
 }) {
   const i18n = locale.en;
@@ -55,6 +56,7 @@ export default function SmallButtonTalent({
           "&:hover": {
             boxShadow: "none", // Remove box shadow on hover
           },
+          alignItems: alignItems,
           ...props,
         }}
       >

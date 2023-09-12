@@ -19,7 +19,7 @@ import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
 import { Grid } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
-import JobCard from "../JobCard";
+import JobCard from "../JobCardNew";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
   width: "49%",

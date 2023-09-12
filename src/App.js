@@ -62,6 +62,15 @@ import TalentDetailPage from './components/admin/adminTalent/TalentDetailPage';
 
 import MyCam from "./components/candidate/myCam/MyCam"
 import JobTitleSearch from './components/admin/search/JobTitleSearch';
+import TagsSearch from './components/admin/search/TagsSearch';
+import ToolsSearch from './components/admin/search/ToolsSearch';
+import QualificationsSearch from './components/admin/search/QualificationsSearch';
+import InstitutionSearch from './components/admin/search/InstitutionSearch';
+import AssociationSearch from './components/admin/search/AssociationSearch';
+import SchoolSearch from './components/admin/search/SchoolSearch';
+import TownsSearch from './components/admin/search/TownsSearch';
+import NationalitySearch from './components/admin/search/NationalitySearch';
+import LanguageSearch from './components/admin/search/LanguageSearch';
 
 
 
@@ -127,6 +136,15 @@ export default function App() {
           <Route path='Search' element={<PrivateRoute><Search /></PrivateRoute>} >
             <Route path='build-search' element={<PrivateRoute><BuildSearch /></PrivateRoute>} />
             <Route path='job-title-search' element={<PrivateRoute><JobTitleSearch /></PrivateRoute>} />
+            <Route path='skills-search' element={<PrivateRoute><TagsSearch /></PrivateRoute>} />
+            <Route path='tools-search' element={<PrivateRoute><ToolsSearch /></PrivateRoute>} />
+            <Route path='qualifications-search' element={<PrivateRoute><QualificationsSearch /></PrivateRoute>} />
+            <Route path='institution-search' element={<PrivateRoute><InstitutionSearch /></PrivateRoute>} />
+            <Route path='associations-search' element={<PrivateRoute><AssociationSearch /></PrivateRoute>} />
+            <Route path='schools-search' element={<PrivateRoute><SchoolSearch /></PrivateRoute>} />
+            <Route path='towns-search' element={<PrivateRoute><TownsSearch /></PrivateRoute>} />
+            <Route path='nationalities-search' element={<PrivateRoute><NationalitySearch /></PrivateRoute>} />
+            <Route path='languages-search' element={<PrivateRoute><LanguageSearch /></PrivateRoute>} />
           </Route>
           <Route path='*' element={<PrivateRoute><ComingSoon /></PrivateRoute>} />
         </Route>
