@@ -39,7 +39,7 @@ const en = {
   },
   searchBar: {
     filters: "filters",
-    letsGo: "let's go!",
+    letsGo: "search",
     jobTitle: "job title(s)",
     location: "location(s)",
     skills: "skills",
@@ -50,11 +50,11 @@ const en = {
     or: "or",
   },
   jobs: {
-    searchPlaceholder: "find me this job...",
+    searchPlaceholder: "Begin your search for work here...",
     noData: "No Jobs Found.",
   },
   talent: {
-    searchPlaceholder: "find me this talent...",
+    searchPlaceholder: "Begin your search for talent here...",
     noData: "No Talent Data Found",
   },
   myJobs: {
@@ -180,7 +180,7 @@ const en = {
     uploadedspec: "Uploaded Spec",
     bookbriefing: "Book a briefing",
     managebtn: "manage talent",
-    jobquestions: "Job Questions",
+    jobquestions: "Questions & Answers",
     answer: "Answer",
     viewbriefing: "View Briefing",
     crayonVitae: "Crayon Vitae",

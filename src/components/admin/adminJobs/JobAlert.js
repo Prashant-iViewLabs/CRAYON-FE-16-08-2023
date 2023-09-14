@@ -121,8 +121,8 @@ function rangeValueHandler(value) {
 export default function JobAlert({ jobContent }) {
   const i18n = locale.en;
   const theme = useTheme();
-  const [rangeValue, setRangeValue] = useState([0, 20]);
-  const [expRange, setExpRange] = useState([0, 30]);
+  const [rangeValue, setRangeValue] = useState([jobContent?.salary_min/1000, jobContent?.salary_max/1000]);
+  const [expRange, setExpRange] = useState([jobContent?.experience_year_start*10, jobContent?.experience_year_end*10]);
 
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
@@ -247,7 +247,7 @@ export default function JobAlert({ jobContent }) {
               color="grayButton200"
               fontWeight="700"
               borderRadius="5px"
-              label={jobContent?.town?.region?.name}
+              label={jobContent?.region_name}
             ></SmallButton>
           </Box>
           <Box sx={{
@@ -271,7 +271,7 @@ export default function JobAlert({ jobContent }) {
               color="grayButton200"
               fontWeight="700"
               borderRadius="5px"
-              label="ZAR"
+              label={jobContent?.currency_symbol}
             ></SmallButton>
           </Box>
           <Box sx={{
@@ -288,7 +288,9 @@ export default function JobAlert({ jobContent }) {
               {i18n["allTalent.industry"]}:
             </Typography>
             <Box sx={{display:"flex", gap:1}}>
-              {jobContent?.employer_industries?.map((item) => {
+              
+            <Slider2 items={jobContent?.JobIndustries?.split(",")} color="blueButton600"  hideTagsAfter={3}/>
+              {/* {jobContent?.JobIndustries?.split(",").map((item) => {
                 return (
                   <SmallButton
                     minWidth="10px"
@@ -296,10 +298,10 @@ export default function JobAlert({ jobContent }) {
                     color="blueButton600"
                     borderRadius="5px"
                     value={item?.industry?.name}
-                    label={truncate(item?.industry?.name, {length:15})}
+                    label={truncate(item, {length:15})}
                   ></SmallButton>
                 );
-              })}
+              })} */}
             </Box>
           </Box>
           <Box sx={{
@@ -316,7 +318,7 @@ export default function JobAlert({ jobContent }) {
             >
               {"Highest Qualification"}:
             </Typography>
-            {jobContent?.HighestQual !== null && (
+            {jobContent?.HighestQual && (
               <SmallButton
                 minWidth="10px"
                 height={25}

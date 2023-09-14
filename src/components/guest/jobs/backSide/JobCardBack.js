@@ -4,6 +4,8 @@ import job_logo from "../../../../assets/job_logo.svg";
 import job_volume from "../../../../assets/job_volume.svg";
 import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
 import calendar from "../../../../assets/Padding Included/Yellow_Calendar.svg";
+import BlueCurrency from "../../../../assets/Blue_Salary.svg";
+import redLocation from "../../../../assets/Red_Location.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
@@ -17,7 +19,6 @@ import Tooltip from "@mui/material/Tooltip";
 import SingleRadialChart from "../../../common/SingleRadialChart";
 import SmallButton from "../../../common/SmallButton";
 import CustomCard from "../../../common/CustomCard";
-import PlaceIcon from "@mui/icons-material/Place";
 import {
   convertDatetimeAgo,
   dateConverterMonth,
@@ -36,8 +37,6 @@ import profile_challenger from "../../../../assets/Profile Icons_Challenger.svg"
 import profile_character from "../../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../../assets/Profile Icons_Collaborator.svg";
 import profile_contemplator from "../../../../assets/Profile Icons_Contemplator.svg";
-
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 import Slider2 from "../../../common/Slider2";
@@ -58,9 +57,10 @@ const JobCardFront = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isStar, setIsStarSelected] = useState(job?.favourite);
 
-  const jobTags = job?.job_tags.map((tag) => tag?.tag?.tag);
-  const jobTools = job?.job_tools.map((tool) => tool?.tool?.name);
-  const jobTraits = job?.job_traits.map((trait) => trait?.trait?.name);
+  const jobTags = job?.JobSkills?.split(",");
+
+  const jobTools = job?.JobTools?.split(",");
+  const jobTraits = job?.JobTraits?.split(",")
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -163,7 +163,7 @@ const JobCardFront = ({
             borderRadius: 4,
           }}
           alt="job_logo"
-          src={job?.profile_url !== "No URL" ? job?.profile_url : job_logo}
+          src={job?.profile_url ? job?.profile_url : job_logo}
         />
         <Box
           sx={{
@@ -179,22 +179,22 @@ const JobCardFront = ({
             {job?.job_type === "crayon recruit" ? (
               <SmallButton
                 color="yellowButton100"
-                label={job?.job_type?.slice(6)}
+                label={job?.job_type?.split(" ")[1]}
                 mr={1}
               />
-            ) : job?.job_type === "crayon lite" ? (
+            ) : job?.job_type === "crayon Lite" ? (
               <SmallButton
                 color="orangeButton"
-                label={job?.job_type?.slice(6)}
+                label={job?.job_type?.split(" ")[1]}
                 mr={1}
               />
             ) : null}
-            {job?.stage?.name && (
+            {job?.stage_name && (
               <SmallButton
                 color="lightGreenButton300"
                 mr={1}
-                value={job?.stage?.name}
-                label={truncate(job?.stage?.name, { length: 9 })}
+                value={job?.stage_name}
+                label={truncate(job?.stage_name, { length: 9 })}
               />
             )}
           </Box>
@@ -282,9 +282,8 @@ const JobCardFront = ({
         >
           <Tooltip arrow title={job?.title} placement="top">
             <Link
-              to={`/jobs/job-detail/${`${
-                job?.town?.name + " " + job?.town?.region?.name
-              }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${job?.town_name + " " + job?.region_name
+                }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -301,7 +300,7 @@ const JobCardFront = ({
                   WebkitLineClamp: 1,
                 }}
                 gutterBottom
-                // onClick={handleJobTitle}
+              // onClick={handleJobTitle}
               >
                 {job?.title}
               </Typography>
@@ -322,7 +321,17 @@ const JobCardFront = ({
                 gap: 1,
               }}
             >
-              <AccountBalanceWalletIcon fontSize="string" color="primary" />
+              <Box
+                component="img"
+                sx={{
+                  height: 18,
+                  width: 18,
+                  maxHeight: { xs: 18 },
+                  maxWidth: { xs: 18 },
+                }}
+                alt="currency"
+                src={BlueCurrency}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -330,9 +339,9 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.salary?.currency?.symbol}{" "}
-                {formatCurrencyWithCommas(job?.salary?.min)} to{" "}
-                {formatCurrencyWithCommas(job?.salary?.max)} per month
+                {job?.currency_symbol}{" "}
+                {formatCurrencyWithCommas(job?.salary_min)} to{" "}
+                {formatCurrencyWithCommas(job?.salary_max)} per month
               </Typography>
             </Box>
             <Box
@@ -343,7 +352,17 @@ const JobCardFront = ({
                 gap: 1,
               }}
             >
-              <PlaceIcon fontSize="string" color="error" />
+              <Box
+                component="img"
+                sx={{
+                  height: 18,
+                  width: 18,
+                  maxHeight: { xs: 18 },
+                  maxWidth: { xs: 18 },
+                }}
+                alt="location"
+                src={redLocation}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -351,7 +370,8 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.town?.name}, {job?.town?.region?.name}
+                {job?.town_name || "-"}
+                {job?.region_name && (`, ${job?.region_name} `)}
               </Typography>
             </Box>
             <Box
@@ -380,7 +400,7 @@ const JobCardFront = ({
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.experience?.year_start} to {job?.experience?.year_end}
+                {job?.experience_year_start} to {job?.experience_year_end}
                 years
               </Typography>
             </Box>
@@ -424,20 +444,20 @@ const JobCardFront = ({
           >
             {/* Tags section */}
             <Slider2
-              items={jobTags}
+              items={jobTags || []}
               color={"yellowButton200"}
               hideTagsAfter={2}
             />
             {/* Tags section */}
             {/* Tools Section */}
             <Slider2
-              items={jobTools}
+              items={jobTools || []}
               color={"yellowButton100"}
               hideTagsAfter={2}
             />
             {/* Tools Section */}
             {/* Trait Section */}
-            <Slider items={jobTraits} color={"grayButton200"} theme={theme} />
+            <Slider items={jobTraits || []} color={"grayButton200"} theme={theme} />
             {/* Trait Section */}
           </Box>
         </Grid>
@@ -493,30 +513,30 @@ const JobCardFront = ({
             isHovered={isHovered}
           />
         </Box>
-        {job?.primary?.name && (
+        {job?.primary_name && (
           <Box
             component="img"
             height={80}
             alt="Primary personality"
             src={
-              (job?.primary?.name === "collaborator" && profile_collaborator) ||
-              (job?.primary?.name === "challenger" && profile_challenger) ||
-              (job?.primary?.name === "character" && profile_character) ||
-              (job?.primary?.name === "contemplator" && profile_contemplator)
+              (job?.primary_name === "collaborator" && profile_collaborator) ||
+              (job?.primary_name === "challenger" && profile_challenger) ||
+              (job?.primary_name === "character" && profile_character) ||
+              (job?.primary_name === "contemplator" && profile_contemplator)
             }
           />
         )}
         {/* </Box> */}
-        {job?.shadow?.name && (
+        {job?.shadow_name && (
           <Box
             component="img"
             height={80}
             alt="Shadow personality"
             src={
-              (job?.shadow?.name === "collaborator" && profile_collaborator) ||
-              (job?.shadow?.name === "challenger" && profile_challenger) ||
-              (job?.shadow?.name === "character" && profile_character) ||
-              (job?.shadow?.name === "contemplator" && profile_contemplator)
+              (job?.shadow_name === "collaborator" && profile_collaborator) ||
+              (job?.shadow_name === "challenger" && profile_challenger) ||
+              (job?.shadow_name === "character" && profile_character) ||
+              (job?.shadow_name === "contemplator" && profile_contemplator)
             }
           />
         )}
@@ -547,9 +567,8 @@ const JobCardFront = ({
           Match me
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${
-            job?.town?.name + " " + job?.town?.region?.name
-          }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${job?.town_name + " " + job?.region_name
+            }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",

@@ -11,7 +11,7 @@ import {
   ALERT_TYPE,
 } from "../../../utils/Constants";
 import locale from "../../../i18n/locale";
-import { getAllJobs, getFilteredJobs } from "../../../redux/guest/jobsSlice";
+import { getFilteredJobs } from "../../../redux/guest/jobsSlice";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getAllIndustries } from "../../../redux/configSlice";
 import { setAlert } from "../../../redux/configSlice";
@@ -21,8 +21,8 @@ import { getAllTypes } from "../../../redux/allTypes";
 import jwt_decode from "jwt-decode";
 import CustomDialog from "../../common/CustomDialog";
 import ApplyJobs from "./ApplyJobs";
-import { Outlet, useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Jobs() {
   const i18n = locale.en;
@@ -46,9 +46,6 @@ export default function Jobs() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [expandedItemId, setExpandedItemId] = useState(null);
 
-  const handleExpand = (itemId) => {
-    setExpandedItemId(itemId === expandedItemId ? null : itemId);
-  };
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -73,98 +70,64 @@ export default function Jobs() {
   };
 
   const getTypes = async () => {
-    await dispatch(getAllTypes());
+    dispatch(getAllTypes());
   };
   const getIndustries = async () => {
-    await dispatch(getAllIndustries());
+    dispatch(getAllIndustries());
   };
   const getJobTypes = async () => {
-    await dispatch(getAllJobRoleType());
+    dispatch(getAllJobRoleType());
   };
   const getStages = async () => {
-    await dispatch(getAllStages());
+    dispatch(getAllStages());
   };
+
   const getJobList = async (
-    selectedFilters = filters,
-    jobtype = filtersJobType,
-    jobstage = filtersJobStage,
-    personalityType = filtersType,
+    selectedFilters = [],
+    jobtype = [],
+    jobstage = [],
+    personalityType = [],
     lastkeyy,
-    title = searchedJobs,
-    filteralltype
+    title = "",
+    filteralltype = {}
   ) => {
-    if (selectedFilters.length === 0) {
-      setAllJobs([]);
-    } else if (
-      selectedFilters.length === 1 &&
-      selectedFilters[0] === 1111 &&
-      jobtype.length === 1 &&
-      jobtype[0] === 1111 &&
-      jobstage.length === 1 &&
-      jobstage[0] === 1111 &&
-      personalityType.length === 1 &&
-      personalityType[0] === 1111 &&
-      title === ""
-    ) {
-      const data = {
-        lastKey: lastkeyy,
-        user_id: token ? decodedToken?.data?.user_id : "",
-      };
-      const { payload } = await dispatch(getAllJobs(data));
-      if (payload?.status === "success") {
-        setLastKey(payload.pageNumber + 1);
-        setAllJobs((prevState) => [...prevState, ...payload.data]);
-      } else {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.ERROR,
-            msg: "Something went wrong! please relaod the window",
-          })
-        );
-      }
+    let data = {
+      selectedFilters: selectedFilters[0] !== 1111? selectedFilters.toString(): "",
+      lastKey: lastkeyy?.toString(),
+      jobtype: jobtype[0] !== 1111? jobtype.toString(): "",
+      jobstage: jobstage[0] !== 1111?jobstage.toString(): "",
+      personalityType:personalityType[0] !== 1111? personalityType.toString(): "",
+      title: title,
+      user_id: token ? decodedToken?.data?.user_id : "",
+      favourites: filteralltype.favourite || "",
+      recentjob: filteralltype.recent || "",
+      appliedjob: filteralltype.appliedJobs || "",
+    };
+    const { payload } = await dispatch(getFilteredJobs(data));
+
+    if (payload?.status === "success") {
+      setLastKey(payload.pageNumber + 1);
+      setAllJobs((prevState) => [...prevState, ...payload.data]);
     } else {
-      const data = {
-        selectedFilters: selectedFilters.toString(),
-        lastKey: lastkeyy?.toString(),
-        jobtype: jobtype.toString(),
-        jobstage: jobstage.toString(),
-        personalityType: personalityType.toString(),
-        title: title,
-        user_id: token ? decodedToken?.data?.user_id : "",
-        favourites: filteralltype.favourite || "",
-        recentjob: filteralltype.recent || "",
-        appliedjob: filteralltype.appliedJobs || "",
-      };
-      const { payload } = await dispatch(getFilteredJobs(data));
-      if (payload?.status === "success") {
-        setLastKey(payload.pageNumber + 1);
-        setAllJobs((prevState) => [...prevState, ...payload.data]);
-      } else {
-        dispatch(
-          setAlert({
-            show: true,
-            type: ALERT_TYPE.ERROR,
-            msg: payload?.message,
-          })
-        );
-      }
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: payload?.message,
+        })
+      );
     }
+
   };
+
+
+
   useEffect(() => {
+    getJobList();
     getIndustries();
     getJobTypes();
     getStages();
     getTypes();
-    getJobList(
-      [allIndustries[0]?.id],
-      [allJobTypes[0]?.id],
-      [allStages[0]?.id],
-      [allTypes[0]?.id],
-      "",
-      searchedJobs,
-      ""
-    );
   }, []);
   // useEffect(() => {
   //   setAllJobs([]);
@@ -286,57 +249,6 @@ export default function Jobs() {
     );
   };
 
-  //   const getParams = () => {
-  //     let params = new URLSearchParams(window.location.search);
-  //     for (const [key, value] of params.entries()) {
-  //       // console.log(`${key}: ${value}`);
-  //       if (key === "filter") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allIndustries.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "jobType") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allJobTypes.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "stage") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allStages.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "Posts") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = JOBS_RIGHT_STAGES_BUTTON_GROUP.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //       if (key === "Type") {
-  //         let filters = value.split(",")?.map((value) => {
-  //           let selectedJobType = allTypes.find(
-  //             (jobtype) => jobtype.name === value
-  //           );
-  //           return selectedJobType?.id;
-  //         });
-  //         console.log(filters);
-  //       }
-  //     }
-  //   };
 
   return (
     <Grid
@@ -395,7 +307,7 @@ export default function Jobs() {
           display: "flex",
           flexDirection: "column",
         }}
-        gap={1}
+        gap={3}
         flexGrow="1 !important"
       >
         <SearchBar
@@ -420,7 +332,7 @@ export default function Jobs() {
             )
           }
           scrollThreshold={"100px"}
-          hasMore={true} //{allJobs.length <= allJobs[0]?.TotalJobs}
+          hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>
               <b>Yay! You have seen it all</b>
@@ -439,19 +351,11 @@ export default function Jobs() {
             {allJobs.length > 0
               ? allJobs?.map((job) => (
                   <Grid
-                    xl={expandedItemId === job.job_id ? 12 : 3}
-                    lg={expandedItemId === job.job_id ? 12 : 4}
-                    md={expandedItemId === job.job_id ? 12 : 6}
+                    xl={3}
+                    lg={4}
+                    md={6}
                     xs={12}
                     key={job.job_id}
-                    ref={(ref) => {
-                      if (expandedItemId === job.job_id && ref) {
-                        ref.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }
-                    }}
                   >
                     <JobCard
                       index={job.job_id}
@@ -459,22 +363,21 @@ export default function Jobs() {
                       setQuestions={setQuestions}
                       onHandleClose={onHandleClose}
                       setopenApplyJobDialog={setopenApplyJobDialog}
-                      setIsExpanded={handleExpand}
                     />
                   </Grid>
                 ))
               : (allJobs.length = 0 ? (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      textAlign: "center",
-                      mt: 4,
-                      color: theme.palette.placeholder,
-                    }}
-                  >
-                    {""}
-                  </Box>
-                ) : null)}
+                <Box
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                    mt: 4,
+                    color: theme.palette.placeholder,
+                  }}
+                >
+                  {""}
+                </Box>
+              ) : null)}
           </Grid>
           <style>
             {`.infinite-scroll-component::-webkit-scrollbar {
@@ -492,29 +395,6 @@ export default function Jobs() {
                     }`}
           </style>
         </InfiniteScroll>
-
-        {/*<Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
-          <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <JobCard index="11" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <JobCard index="12" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <JobCard index="13" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <JobCard index="14" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <JobCard index="15" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <JobCard index="16" />
-            </Grid>
-          </SwipeableViews>
-        </Grid>*/}
       </Grid>
       <Grid
         item
@@ -579,7 +459,6 @@ export default function Jobs() {
         dialogWidth="xs"
         padding={0}
         showFooter={false}
-        // title={isLoggedIn ? i18n["login.login"] : i18n["login.signUp"]}
         isApplyJob
       >
         <ApplyJobs

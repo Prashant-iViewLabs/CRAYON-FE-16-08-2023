@@ -73,7 +73,7 @@ export default function ButtonPanel({
       }}
     >
       {panelData?.map((btn) => (
-        <Tooltip title={btn.name} placement="top-end">
+        <Tooltip title={btn.name} key={btn.id} placement="top-end">
           <Button
             sx={{
               mb: 1,

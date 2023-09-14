@@ -100,7 +100,7 @@ export default function PendingJobs() {
   }, []);
 
   return (
-    <Box sx={{ ml: 6 }}>
+    <Box >
       <Typography
         sx={{
           fontSize: "36px",

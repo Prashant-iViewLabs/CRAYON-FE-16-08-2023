@@ -24,6 +24,13 @@ import chat from "../../../assets/Padding Excluded/Black_Chat.svg";
 import CV from "../../../assets/Padding Excluded/Black_CV.svg";
 import talent from "../../../assets/Padding Excluded/Black_Talent.svg";
 
+import linkIcon from "../../../assets/CircularIcon/Red/Circular Icons__Yellow_Move.svg"
+import BlueNetWork from "../../../assets/CircularIcon/Red/Circular Icons__Blue_Network.svg"
+import Play from "../../../assets/CircularIcon/Red/Circular Icons__Green_Play.svg"
+import RedCV from "../../../assets/CircularIcon/Red/Circular Icons__Red_CV.svg"
+import YellowChat from "../../../assets/CircularIcon/Red/Circular Icons__Yellow_Chat History_2.svg"
+import MessageIcon from "../../../assets/CircularIcon/Red/Circular Icons__Red_Chat History_3.svg"
+
 import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import { Grid, MenuItem, Paper, Popover, Tooltip } from "@mui/material";
 import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
@@ -301,7 +308,7 @@ export default function AllTalentNewCard({
           setTableData((prevState) => [...prevState, ...payload.data]);
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const getTalentJobList = async (lastkeyy) => {
@@ -352,7 +359,7 @@ export default function AllTalentNewCard({
           })
         );
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const addToJob = async (event, canId) => {
     try {
@@ -382,7 +389,7 @@ export default function AllTalentNewCard({
           })
         );
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleClose = () => {
@@ -429,45 +436,40 @@ export default function AllTalentNewCard({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Grid
-          container
-          spacing={2}
-          justifyContent={"space-between"}
-          flexWrap={"nowrap"}
+        <Box
+          sx={{
+            display: "flex",
+          }}
         >
-          <Grid item paddingLeft={16}>
-            <SmallButton
-              color="redButton"
-              startIcon={
-                <Box
-                  component="img"
-                  className="eye"
-                  alt="eye logo"
-                  src={flip ? upClose : downClose}
-                  sx={{
-                    height: 16,
-                    width: 16,
-                  }}
-                />
-              }
-              padding={0}
-              // startIconMargin="4px"
-              height={"97px"}
-              width={25}
-              fontWeight={700}
-              borderRadius={flip ? "20px 0px 20px 0px" : "20px 0px 0px 20px"}
-              onClick={() => setFlip((prev) => !prev)}
-            />
-          </Grid>
-
-          <Grid
-            item
-            // xs={1}
+          <SmallButton
+            color="redButton"
+            startIcon={
+              <Box
+                component="img"
+                className="eye"
+                alt="eye logo"
+                src={flip ? upClose : downClose}
+                sx={{
+                  height: 16,
+                  width: 15,
+                }}
+              />
+            }
+            padding={"0 0 0 3px"}
+            // startIconMargin="4px"
+            height={"90px"}
+            width={20}
+            fontWeight={700}
+            borderRadius={flip ? "20px 0px 20px 0px" : "20px 0px 0px 20px"}
+            onClick={() => setFlip((prev) => !prev)}
+          />
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              margin: "12px 0",
-              paddingLeft: "0px !important",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingX: 1,
             }}
           >
             {talentContent?.profile_url != "No URL" ? (
@@ -477,7 +479,6 @@ export default function AllTalentNewCard({
                 alt="crayon logo"
                 src={talentContent?.profile_url}
                 sx={{
-                  mr: 1,
                   height: "55px !important",
                   width: "55px !important",
                 }}
@@ -489,7 +490,6 @@ export default function AllTalentNewCard({
                 alt="crayon logo"
                 src={profile}
                 sx={{
-                  mr: 1,
                   height: "55px !important",
                   width: "55px !important",
                 }}
@@ -499,7 +499,6 @@ export default function AllTalentNewCard({
               color="userID"
               // borderRadius="5px"
               label={talentContent?.user_id}
-              mr={1}
               fontSize={10}
               fontWeight={700}
               alignItems="end"
@@ -508,20 +507,22 @@ export default function AllTalentNewCard({
               marginTop="-2px"
               width="fit-content"
             ></SmallButton>
-          </Grid>
-
-          <Grid
-            item
-            //  xs={5.5}
-            paddingLeft="0px !important"
-          >
-            <Box display={"flex"} alignItems={"center"}>
-              <TalentSVGButton
-                color={"white"}
-                source={humanMale}
-                height={24}
-                width={18}
-                padding={"0px !important"}
+          </Box>
+          <Box sx={{
+            width: "45%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1
+          }}>
+            <Box sx={{ display: "flex" }}>
+              <Box
+                component={"img"}
+                src={humanMale}
+                sx={{
+                  height: "20px",
+                  width: "15px",
+                }}
               />
               <Link
                 to={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
@@ -543,16 +544,17 @@ export default function AllTalentNewCard({
                 </Typography>
               </Link>
             </Box>
-            <Box display={"flex"} alignItems={"center"}>
-              <TalentSVGButton
-                padding={"0px  !important"}
-                color={"white"}
-                source={experience}
-                height={18}
-                width={18}
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+              <Box
+                component={"img"}
+                src={experience}
+                sx={{
+                  height: "20px",
+                  width: "15px",
+                }}
               />
               {talentContent?.candidate_profile?.candidate_info?.job_title !==
-              null ? (
+                null ? (
                 <Typography
                   sx={{
                     fontSize: "14px",
@@ -570,16 +572,15 @@ export default function AllTalentNewCard({
                 "-"
               )}
             </Box>
-            <Box display={"flex"} alignItems={"center"}>
-              <Box
-                sx={{ display: "flex", width: "80px", alignItems: "center" }}
-              >
-                <TalentSVGButton
-                  padding={"0px !important"}
-                  color={"white"}
-                  source={userProfile}
-                  height={28}
-                  width={24}
+            <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex", minWidth: "20%" }}>
+                <Box
+                  component={"img"}
+                  src={userProfile}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
                 />
                 {talentContent?.candidate_profile?.dob != null ? (
                   <Typography
@@ -597,15 +598,14 @@ export default function AllTalentNewCard({
                   "-"
                 )}
               </Box>
-              <Box
-                sx={{ display: "flex", width: "180px", alignItems: "center" }}
-              >
-                <TalentSVGButton
-                  padding={"0px !important"}
-                  color={"white"}
-                  source={locationIcon}
-                  height={28}
-                  width={23}
+              <Box sx={{ display: "flex", minWidth: "20%" }}>
+                <Box
+                  component={"img"}
+                  src={locationIcon}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
                 />
                 {talentContent?.candidate_profile?.town !== null ? (
                   <Tooltip
@@ -632,14 +632,14 @@ export default function AllTalentNewCard({
                   "-"
                 )}
               </Box>
-              <Box
-                sx={{ display: "flex", width: "100px", alignItems: "center" }}
-              >
-                <TalentSVGButton
-                  color={"white"}
-                  source={salary}
-                  height={20}
-                  width={18}
+              <Box sx={{ display: "flex", minWidth: "20%" }}>
+                <Box
+                  component={"img"}
+                  src={salary}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
                 />
                 <Typography
                   sx={{
@@ -659,14 +659,14 @@ export default function AllTalentNewCard({
                   pm
                 </Typography>
               </Box>
-              <Box
-                sx={{ display: "flex", width: "75px", alignItems: "center" }}
-              >
-                <TalentSVGButton
-                  color={"white"}
-                  source={pending}
-                  height={20}
-                  width={18}
+              <Box sx={{ display: "flex", minWidth: "20%" }}>
+                <Box
+                  component={"img"}
+                  src={pending}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
                 />
                 {talentContent?.candidate_profile?.candidate_info
                   ?.experience !== null ? (
@@ -687,14 +687,14 @@ export default function AllTalentNewCard({
                   "-"
                 )}
               </Box>
-              <Box
-                sx={{ display: "flex", width: "100px", alignItems: "center" }}
-              >
-                <TalentSVGButton
-                  color={"white"}
-                  source={notice}
-                  height={20}
-                  width={18}
+              <Box sx={{ display: "flex", minWidth: "20%" }}>
+                <Box
+                  component={"img"}
+                  src={notice}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
                 />
                 {talentContent?.candidate_profile?.candidate_info
                   ?.notice_period !== null ? (
@@ -715,166 +715,11 @@ export default function AllTalentNewCard({
                 )}
               </Box>
             </Box>
-
-            {flip && (
-              <>
-                <Box display={"flex"} alignItems={"center"}>
-                  <TalentSVGButton
-                    color={"white"}
-                    source={email}
-                    height={28}
-                    width={18}
-                    padding={"0 8px 0 0 !important"}
-                  />
-                  {talentContent?.email !== null ? (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: 500,
-                        // mb: "2px",
-                      }}
-                    >
-                      {talentContent?.email}
-                    </Typography>
-                  ) : (
-                    "-"
-                  )}
-
-                  <TalentSVGButton
-                    color={"white"}
-                    source={contact}
-                    height={16}
-                    width={18}
-                  />
-                  {talentContent?.candidate_profile?.contact_no !== null ? (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: 500,
-                        // mb: "2px",
-                      }}
-                    >
-                      {talentContent?.candidate_profile?.contact_no}
-                    </Typography>
-                  ) : (
-                    "-"
-                  )}
-
-                  <Box
-                    component="img"
-                    className="profileAvatar"
-                    alt="crayon logo"
-                    src={linkedin}
-                    sx={{
-                      mr: 1,
-                      ml: 1,
-                      width: "20px",
-                      height: "20px",
-                    }}
-                  />
-                  {talentContent?.candidate_profile?.linkedin_profile_link !==
-                  null ? (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: 500,
-                        // mb: "2px",
-                        width: "200px",
-                        whiteSpace: "nowrap", // Prevents text from wrapping
-                        overflow: "hidden", // Hides any overflowing content
-                        textOverflow: "ellipsis", // Adds dots at the end of overflowing text
-                      }}
-                    >
-                      {talentContent?.candidate_profile?.linkedin_profile_link}
-                    </Typography>
-                  ) : (
-                    "-"
-                  )}
-                </Box>
-
-                <Box display={"flex"} alignItems={"center"}>
-                  <TalentSVGButton
-                    color={"white"}
-                    source={referrals}
-                    height={28}
-                    width={18}
-                    padding={"0 8px 0 0 !important"}
-                  />
-
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      width: "150px",
-                      // mb: "2px",
-                    }}
-                    onClick={(event) => {
-                      setAnchorElReferral(event.target);
-                    }}
-                  >
-                    {`Referrals (231)`}{" "}
-                    <TalentSVGButton
-                      color={"white"}
-                      source={DOWN}
-                      height={7}
-                      width={18}
-                    />
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      // mb: "2px",
-                    }}
-                  >
-                    Referred by:{" "}
-                    <SmallButton
-                      color="blueButton700"
-                      label={"Daffy Duck"}
-                      mr="8px"
-                      fontSize="12px"
-                    ></SmallButton>
-                  </Typography>
-                  <Popover
-                    id="dropdown"
-                    open={openReferral}
-                    anchorEl={anchorElReferral}
-                    onClose={handlePopoverCloseReferral}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center",
-                    }}
-                    sx={{
-                      "& .MuiPaper-root-MuiPopover-paper": {
-                        // padding: "16px !important",
-                        minWidth: "18% !important",
-                        borderRadius: "20px !important",
-                        mt: 1,
-                      },
-                    }}
-                  >
-                    <Refferals />
-                  </Popover>
-                </Box>
-              </>
-            )}
-          </Grid>
-
-          <Grid
-            item
-            paddingLeft="0px !important"
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-              width: "185px",
-            }}
-          >
+          </Box>
+          <Box sx={{
+            display: "flex",
+            gap: 2,
+          }}>
             <Box sx={{ margin: "0 -22px 0 -22px" }}>
               <SingleRadialChart
                 hollow="55%"
@@ -915,380 +760,544 @@ export default function AllTalentNewCard({
                 color={theme.palette.lightGreenButton300.main}
               />
             </Box>
-          </Grid>
-
-          <Grid item paddingLeft="0px !important">
+          </Box>
+          <Box sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "end",
+            justifyContent: "space-between",
+            paddingBottom: 2
+          }}>
+            <Box sx={{ display: "flex" }}>
+              <Box
+                component={"img"}
+                src={deleteIcon}
+                sx={{
+                  height: "20px",
+                  width: "15px",
+                  mr: 1
+                }}
+              />
+              <Button
+                variant="contained"
+                color="lightGreenButton300"
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 500,
+                  color: "white",
+                  padding: "8px 10px",
+                  borderRadius: "0 0 0 10px",
+                  height: "30px !important",
+                }}
+              >
+                {"interview"}
+              </Button>
+              <Button
+                variant="contained"
+                color="dateButton"
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#000",
+                  padding: "8px 10px",
+                  borderRadius: "0px !important",
+                  borderRight: "1px solid #EBECF3",
+                  borderBottom: "1px solid #EBECF3",
+                  height: "30px !important",
+                  width: "110px !important",
+                }}
+              >
+                {dateConverterMonth(talentContent?.created_at)}
+              </Button>
+              <Button
+                variant="contained"
+                color="dateButton"
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#000",
+                  padding: "8px 10px",
+                  borderRadius: "0px !important",
+                  borderRight: "1px solid #EBECF3",
+                  borderBottom: "1px solid #EBECF3",
+                  height: "30px !important",
+                  width: "max-content",
+                }}
+              >
+                {convertDatetimeWithoutAgo(talentContent?.created_at)}
+              </Button>
+              <Button
+                ref={anchorRef}
+                id="composition-button"
+                aria-controls={open ? "composition-menu" : undefined}
+                aria-expanded={open ? "true" : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle}
+                variant="contained"
+                color="base"
+                endIcon={
+                  <Box
+                    component="img"
+                    className="eye"
+                    alt="eye logo"
+                    src={activeDownClose}
+                    sx={{
+                      height: 25,
+                      width: 25,
+                      mr: 1,
+                    }}
+                  />
+                }
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#000",
+                  padding: "8px 10px",
+                  borderRadius: "0px !important",
+                  borderRight: "1px solid #EBECF3",
+                  borderBottom: "1px solid #EBECF3",
+                  height: "30px !important",
+                }}
+              >
+                {"Active"}
+                <Circle
+                  fontSize="string"
+                  color={"lightGreenButton300"}
+                  sx={{ marginLeft: "5px" }}
+                />
+              </Button>
+              <Stack direction="row" spacing={2} sx={{ zIndex: "1000" }}>
+                <Box>
+                  <Popper
+                    open={openActive}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    placement="bottom-start"
+                    transition
+                  // disablePortal
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom-start"
+                              ? "left top"
+                              : "left bottom",
+                        }}
+                      >
+                        <Paper
+                          sx={{
+                            width: "105px !important",
+                            borderRadius: "0px !important",
+                          }}
+                        >
+                          <ClickAwayListener onClickAway={handleCloseActive}>
+                            <MenuList
+                              autoFocusItem={openActive}
+                              id="composition-menu"
+                              aria-labelledby="composition-button"
+                              onKeyDown={handleListKeyDown}
+                            >
+                              <MenuItem
+                                onClick={handleCloseActive}
+                                sx={{ fontSize: "12px", fontWeight: 700 }}
+                              >
+                                Hide{" "}
+                                <Circle
+                                  fontSize="string"
+                                  color={"yellowButton100"}
+                                  sx={{ marginLeft: "10px" }}
+                                />
+                              </MenuItem>
+                              <MenuItem
+                                onClick={handleCloseActive}
+                                sx={{ fontSize: "12px", fontWeight: 700 }}
+                              >
+                                Suspend
+                                <Circle
+                                  fontSize="string"
+                                  color={"redButton100"}
+                                  sx={{ marginLeft: "10px" }}
+                                />
+                              </MenuItem>
+                              <MenuItem
+                                onClick={handleCloseActive}
+                                sx={{ fontSize: "12px", fontWeight: 700 }}
+                              >
+                                Blacklist
+                                <Circle
+                                  fontSize="string"
+                                  color={"#000"}
+                                  sx={{ marginLeft: "10px" }}
+                                />
+                              </MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </Box>
+              </Stack>
+            </Box>
             <Box
               sx={{
                 display: "flex",
-                // alignItems: "flex-start",
-                justifyContent: "space-evenly",
+                gap: 0.5,
+                paddingX: 0.5,
+
               }}
             >
-              <TalentSVGButton
-                color={"white"}
-                source={deleteIcon}
-                height={24}
-                width={18}
-                // padding={"0 0 0 16px !important"}
+              {talentContent?.candidate_profile?.candidate_info
+                ?.employment_type != null ? (
+                <SmallButton
+                  color="blueButton700"
+                  label={truncate(
+                    talentContent?.candidate_profile?.candidate_info
+                      ?.employment_type,
+                    { length: 12 }
+                  )}
+                  value={
+                    talentContent?.candidate_profile?.candidate_info
+                      ?.employment_type
+                  }
+                  mr="4px"
+                  fontSize="12px"
+                ></SmallButton>
+              ) : null}
+              {talentContent?.candidate_profile?.candidate_info?.work_setup !=
+                null ? (
+                <SmallButton
+                  color="blueButton700"
+                  label={
+                    talentContent?.candidate_profile?.candidate_info
+                      ?.work_setup
+                  }
+                  mr="8px"
+                  fontSize="12px"
+                ></SmallButton>
+              ) : null}
+              <CopyToClipboard
+                text={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
+                onCopy={() => {
+                  dispatch(
+                    setAlert({
+                      show: true,
+                      type: ALERT_TYPE.SUCCESS,
+                      msg: "Copied to clipboard",
+                    })
+                  );
+                }}
+              >
+                <Box
+                  component={"img"}
+                  src={linkIcon}
+                  sx={{
+                    height: "30px",
+                    width: "30px",
+                  }}
+                />
+              </CopyToClipboard>
+              <Box
+                component={"img"}
+                src={BlueNetWork}
+                sx={{
+                  height: "30px",
+                  width: "30px",
+                }}
+                onClick={(event) => {
+                  setAnchorElPersonality(event.target);
+                }}
               />
-              <Box sx={{ display: "flex", paddingLeft: "10px" }}>
-                <Button
-                  variant="contained"
-                  color="lightGreenButton300"
+              <Popover
+                id="dropdown-menu"
+                open={openPersonality}
+                anchorEl={anchorElPersonality}
+                onClose={handlePopoverClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                sx={{
+                  "& .MuiPaper-root-MuiPopover-paper": {
+                    minWidth: "18% !important",
+                    borderRadius: "20px !important",
+                    mt: 1,
+                  },
+                }}
+              >
+                <Databases />
+              </Popover>
+              <Box
+                component={"img"}
+                src={Play}
+                sx={{
+                  height: "30px",
+                  width: "30px",
+                }}
+                onClick={(event) => setOpenVideo(event.target)}
+              />
+              <Popover
+                id="dropdown-menu"
+                open={openDialog}
+                anchorEl={openVideo}
+                onClose={handlePopoverCloseVideo}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                sx={{
+                  "& .css-ll95b0-MuiPaper-root-MuiPopover-paper": {
+                    // padding: "16px !important",
+                    minWidth: "10% !important",
+                    borderRadius: "20px !important",
+                    mt: 1,
+                  },
+                }}
+              >
+                <VideoDialog handleOpen={handlePopoverCloseVideo} />
+              </Popover>
+              <Box
+                component={"img"}
+                src={RedCV}
+                sx={{
+                  height: "30px",
+                  width: "30px",
+                }}
+                onClick={(event) => setOpenDocument(event.target)}
+              />
+              <Popover
+                id="dropdown-menu"
+                open={openDocumentDialog}
+                anchorEl={openDocument}
+                onClose={handlePopoverCloseDocument}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                sx={{
+                  "& .css-ll95b0-MuiPaper-root-MuiPopover-paper": {
+                    // padding: "16px !important",
+                    minWidth: "12% !important",
+                    borderRadius: "20px !important",
+                    mt: 1,
+                  },
+                }}
+              >
+                <Document
+                  handleOpen={handlePopoverCloseDocument}
+                  cvLink={talentContent?.cv_url}
+                  userID={talentContent?.user_id}
+                />
+              </Popover>
+              <Box
+                component={"img"}
+                src={YellowChat}
+                sx={{
+                  height: "30px",
+                  width: "30px",
+                }}
+              />
+              <Box
+                component={"img"}
+                src={MessageIcon}
+                sx={{
+                  height: "30px",
+                  width: "30px",
+                }}
+              />
+            </Box>
+          </Box>
+        </Box>
+        {flip && (
+          <Box
+            sx={{
+              marginLeft: 11.5,
+            }}
+          >
+            <Box display={"flex"} alignItems={"center"} gap={1}>
+              {/* <TalentSVGButton
+                color={"white"}
+                source={email}
+                height={28}
+                width={18}
+                padding={"0 8px 0 0 !important"}
+              /> */}
+              <Box
+                  component={"img"}
+                  src={email}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
+                />
+              {talentContent?.email !== null ? (
+                <Typography
                   sx={{
                     fontSize: "12px",
                     fontWeight: 500,
-                    color: "white",
-                    padding: "8px 10px",
-                    borderRadius: "0 0 0 10px",
-                    height: "30px !important",
+                    // mb: "2px",
                   }}
                 >
-                  {"interview"}
-                </Button>
-                <Button
-                  variant="contained"
-                  color="dateButton"
+                  {talentContent?.email}
+                </Typography>
+              ) : (
+                "-"
+              )}
+
+              {/* <TalentSVGButton
+                color={"white"}
+                source={contact}
+                height={20}
+                width={18}
+              /> */}
+              <Box
+                  component={"img"}
+                  src={contact}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
+                />
+              {talentContent?.candidate_profile?.contact_no !== null ? (
+                <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 700,
-                    color: "#000",
-                    padding: "8px 10px",
-                    borderRadius: "0px !important",
-                    borderRight: "1px solid #EBECF3",
-                    borderBottom: "1px solid #EBECF3",
-                    height: "30px !important",
-                    width: "110px !important",
+                    fontWeight: 500,
+                    // mb: "2px",
                   }}
                 >
-                  {dateConverterMonth(talentContent?.created_at)}
-                </Button>
-                <Button
-                  variant="contained"
-                  color="dateButton"
+                  {talentContent?.candidate_profile?.contact_no}
+                </Typography>
+              ) : (
+                "-"
+              )}
+{/* 
+              <Box
+                component="img"
+                className="profileAvatar"
+                alt="crayon logo"
+                src={linkedin}
+                sx={{
+                  mr: 1,
+                  ml: 1,
+                  width: "18px",
+                  height: "18px",
+                }}
+              /> */}
+              <Box
+                  component={"img"}
+                  src={linkedin}
+                  sx={{
+                    height: "20px",
+                    width: "15px",
+                  }}
+                />
+              {talentContent?.candidate_profile?.linkedin_profile_link !==
+                null ? (
+                <Typography
                   sx={{
                     fontSize: "12px",
-                    fontWeight: 700,
-                    color: "#000",
-                    padding: "8px 10px",
-                    borderRadius: "0px !important",
-                    borderRight: "1px solid #EBECF3",
-                    borderBottom: "1px solid #EBECF3",
-                    height: "30px !important",
-                    width: "max-content",
+                    fontWeight: 500,
+                    // mb: "2px",
+                    width: "200px",
+                    whiteSpace: "nowrap", // Prevents text from wrapping
+                    overflow: "hidden", // Hides any overflowing content
+                    textOverflow: "ellipsis", // Adds dots at the end of overflowing text
                   }}
                 >
-                  {convertDatetimeWithoutAgo(talentContent?.created_at)}
-                </Button>
-                <Button
-                  ref={anchorRef}
-                  id="composition-button"
-                  aria-controls={open ? "composition-menu" : undefined}
-                  aria-expanded={open ? "true" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleToggle}
-                  variant="contained"
-                  color="base"
-                  endIcon={
-                    <Box
-                      component="img"
-                      className="eye"
-                      alt="eye logo"
-                      src={activeDownClose}
-                      sx={{
-                        height: 25,
-                        width: 25,
-                        mr: 1,
-                      }}
-                    />
-                  }
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    color: "#000",
-                    padding: "8px 10px",
-                    borderRadius: "0px !important",
-                    borderRight: "1px solid #EBECF3",
-                    borderBottom: "1px solid #EBECF3",
-                    height: "30px !important",
-                  }}
-                >
-                  {"Active"}
-                  <Circle
-                    fontSize="string"
-                    color={"lightGreenButton300"}
-                    sx={{ marginLeft: "10px" }}
-                  />
-                </Button>
-                <Stack direction="row" spacing={2} sx={{ zIndex: "1000" }}>
-                  <Box>
-                    <Popper
-                      open={openActive}
-                      anchorEl={anchorRef.current}
-                      role={undefined}
-                      placement="bottom-start"
-                      transition
-                      // disablePortal
-                    >
-                      {({ TransitionProps, placement }) => (
-                        <Grow
-                          {...TransitionProps}
-                          style={{
-                            transformOrigin:
-                              placement === "bottom-start"
-                                ? "left top"
-                                : "left bottom",
-                          }}
-                        >
-                          <Paper
-                            sx={{
-                              width: "105px !important",
-                              borderRadius: "0px !important",
-                            }}
-                          >
-                            <ClickAwayListener onClickAway={handleCloseActive}>
-                              <MenuList
-                                autoFocusItem={openActive}
-                                id="composition-menu"
-                                aria-labelledby="composition-button"
-                                onKeyDown={handleListKeyDown}
-                              >
-                                <MenuItem
-                                  onClick={handleCloseActive}
-                                  sx={{ fontSize: "12px", fontWeight: 700 }}
-                                >
-                                  Hide{" "}
-                                  <Circle
-                                    fontSize="string"
-                                    color={"yellowButton100"}
-                                    sx={{ marginLeft: "10px" }}
-                                  />
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={handleCloseActive}
-                                  sx={{ fontSize: "12px", fontWeight: 700 }}
-                                >
-                                  Suspend
-                                  <Circle
-                                    fontSize="string"
-                                    color={"redButton100"}
-                                    sx={{ marginLeft: "10px" }}
-                                  />
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={handleCloseActive}
-                                  sx={{ fontSize: "12px", fontWeight: 700 }}
-                                >
-                                  Blacklist
-                                  <Circle
-                                    fontSize="string"
-                                    color={"#000"}
-                                    sx={{ marginLeft: "10px" }}
-                                  />
-                                </MenuItem>
-                              </MenuList>
-                            </ClickAwayListener>
-                          </Paper>
-                        </Grow>
-                      )}
-                    </Popper>
-                  </Box>
-                </Stack>
-              </Box>
+                  {talentContent?.candidate_profile?.linkedin_profile_link}
+                </Typography>
+              ) : (
+                "-"
+              )}
             </Box>
 
-            <Box
-              sx={{
-                // marginLeft: "-30px",
-                // width: "370px",
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "flex-end",
-                paddingTop: "12px",
-              }}
-            >
-              <Box sx={{}}>
-                {talentContent?.candidate_profile?.candidate_info
-                  ?.employment_type != null ? (
-                  <SmallButton
-                    color="blueButton700"
-                    label={truncate(
-                      talentContent?.candidate_profile?.candidate_info
-                        ?.employment_type,
-                      { length: 12 }
-                    )}
-                    value={
-                      talentContent?.candidate_profile?.candidate_info
-                        ?.employment_type
-                    }
-                    mr="4px"
-                    fontSize="12px"
-                  ></SmallButton>
-                ) : null}
+            <Box display={"flex"} alignItems={"center"}>
+              <TalentSVGButton
+                color={"white"}
+                source={referrals}
+                height={20}
+                width={15}
+                padding={"0 8px 0 0 !important"}
+              />
 
-                {talentContent?.candidate_profile?.candidate_info?.work_setup !=
-                null ? (
-                  <SmallButton
-                    color="blueButton700"
-                    label={
-                      talentContent?.candidate_profile?.candidate_info
-                        ?.work_setup
-                    }
-                    mr="8px"
-                    fontSize="12px"
-                  ></SmallButton>
-                ) : null}
-              </Box>
-
-              <Box
+              <Typography
                 sx={{
-                  display: "flex",
-                  width: "240px",
-                  justifyContent: "space-between",
-                  marginRight: "8px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  width: "150px",
+                  // mb: "2px",
+                }}
+                onClick={(event) => {
+                  setAnchorElReferral(event.target);
                 }}
               >
-                <CopyToClipboard
-                  text={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
-                  onCopy={() => {
-                    dispatch(
-                      setAlert({
-                        show: true,
-                        type: ALERT_TYPE.SUCCESS,
-                        msg: "Copied to clipboard",
-                      })
-                    );
-                  }}
-                >
-                  <TalentSVGButton
-                    color={"yellowButton100"}
-                    source={link}
-                    height={20}
-                    width={18}
-                  />
-                </CopyToClipboard>
-
+                {`Referrals (231)`}{" "}
                 <TalentSVGButton
-                  color={"quicklinks"}
-                  source={talent}
-                  height={28}
+                  color={"white"}
+                  source={DOWN}
+                  height={7}
                   width={18}
-                  onClick={(event) => {
-                    setAnchorElPersonality(event.target);
-                  }}
                 />
-                <Popover
-                  id="dropdown-menu"
-                  open={openPersonality}
-                  anchorEl={anchorElPersonality}
-                  onClose={handlePopoverClose}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                  }}
-                  sx={{
-                    "& .MuiPaper-root-MuiPopover-paper": {
-                      minWidth: "18% !important",
-                      borderRadius: "20px !important",
-                      mt: 1,
-                    },
-                  }}
-                >
-                  <Databases />
-                </Popover>
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  // mb: "2px",
+                }}
+              >
+                Referred by:{" "}
                 <SmallButton
-                  color={"eyeview"}
-                  startIcon={<PlayArrowIcon />}
-                  padding={0}
-                  justifyContent={"center"}
-                  borderRadius={50}
-                  height={31}
-                  width={33}
-                  fontWeight={700}
-                  onClick={(event) => setOpenVideo(event.target)}
-                />
-                <Popover
-                  id="dropdown-menu"
-                  open={openDialog}
-                  anchorEl={openVideo}
-                  onClose={handlePopoverCloseVideo}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                  }}
-                  sx={{
-                    "& .css-ll95b0-MuiPaper-root-MuiPopover-paper": {
-                      // padding: "16px !important",
-                      minWidth: "10% !important",
-                      borderRadius: "20px !important",
-                      mt: 1,
-                    },
-                  }}
-                >
-                  <VideoDialog handleOpen={handlePopoverCloseVideo} />
-                </Popover>
-                <TalentSVGButton
-                  color={"redButton"}
-                  source={CV}
-                  height={18}
-                  width={18}
-                  onClick={(event) => setOpenDocument(event.target)}
-                />
-                <Popover
-                  id="dropdown-menu"
-                  open={openDocumentDialog}
-                  anchorEl={openDocument}
-                  onClose={handlePopoverCloseDocument}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                  }}
-                  sx={{
-                    "& .css-ll95b0-MuiPaper-root-MuiPopover-paper": {
-                      // padding: "16px !important",
-                      minWidth: "12% !important",
-                      borderRadius: "20px !important",
-                      mt: 1,
-                    },
-                  }}
-                >
-                  <Document
-                    handleOpen={handlePopoverCloseDocument}
-                    cvLink={talentContent?.cv_url}
-                    userID={talentContent?.user_id}
-                  />
-                </Popover>
-
-                <TalentSVGButton
-                  color={"yellowButton100"}
-                  source={chatHistory}
-                  height={26}
-                  width={18}
-                />
-
-                <TalentSVGButton
-                  color={"redButton"}
-                  source={chat}
-                  height={16}
-                  width={18}
-                />
-              </Box>
+                  color="blueButton700"
+                  label={"Daffy Duck"}
+                  mr="8px"
+                  fontSize="12px"
+                ></SmallButton>
+              </Typography>
+              <Popover
+                id="dropdown"
+                open={openReferral}
+                anchorEl={anchorElReferral}
+                onClose={handlePopoverCloseReferral}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                sx={{
+                  "& .MuiPaper-root-MuiPopover-paper": {
+                    // padding: "16px !important",
+                    minWidth: "18% !important",
+                    borderRadius: "20px !important",
+                    mt: 1,
+                  },
+                }}
+              >
+                <Refferals />
+              </Popover>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        )}
       </AccordionSummary>
 
       <AccordionDetails
@@ -1612,49 +1621,49 @@ export default function AllTalentNewCard({
                 >
                   {talentContent?.candidate_profile?.candidate_info?.primary
                     ?.name && (
-                    <Box
-                      component="img"
-                      height={80}
-                      alt="Primary personality"
-                      src={
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.primary?.name === "collaborator" &&
-                          profile_collaborator) ||
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.primary?.name === "challenger" &&
-                          profile_challenger) ||
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.primary?.name === "character" &&
-                          profile_character) ||
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.primary?.name === "contemplator" &&
-                          profile_contemplator)
-                      }
-                    />
-                  )}
+                      <Box
+                        component="img"
+                        height={80}
+                        alt="Primary personality"
+                        src={
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.primary?.name === "collaborator" &&
+                            profile_collaborator) ||
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.primary?.name === "challenger" &&
+                            profile_challenger) ||
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.primary?.name === "character" &&
+                            profile_character) ||
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.primary?.name === "contemplator" &&
+                            profile_contemplator)
+                        }
+                      />
+                    )}
 
                   {talentContent?.candidate_profile?.candidate_info?.shadow
                     ?.name && (
-                    <Box
-                      component="img"
-                      height={80}
-                      alt="Shadow personality"
-                      src={
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.shadow?.name === "collaborator" &&
-                          profile_collaborator) ||
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.shadow?.name === "challenger" &&
-                          profile_challenger) ||
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.shadow?.name === "character" &&
-                          profile_character) ||
-                        (talentContent?.candidate_profile?.candidate_info
-                          ?.shadow?.name === "contemplator" &&
-                          profile_contemplator)
-                      }
-                    />
-                  )}
+                      <Box
+                        component="img"
+                        height={80}
+                        alt="Shadow personality"
+                        src={
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "collaborator" &&
+                            profile_collaborator) ||
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "challenger" &&
+                            profile_challenger) ||
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "character" &&
+                            profile_character) ||
+                          (talentContent?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "contemplator" &&
+                            profile_contemplator)
+                        }
+                      />
+                    )}
 
                   <Box sx={{ margin: "0 -22px 0 -22px" }}>
                     <SingleRadialChart
@@ -1851,6 +1860,7 @@ export default function AllTalentNewCard({
                                 fontSize: "12px",
                                 fontWeight: 500,
                                 // mb: "2px",
+                                background: "green"
                               }}
                             >
                               {item?.email}

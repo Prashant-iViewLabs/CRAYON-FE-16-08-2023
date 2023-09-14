@@ -40,23 +40,23 @@ export default function TalentCard({ index, job, setisFlipped }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isStar, setIsStarSelected] = useState(job?.favourite);
 
-  const [arrSlider, setArrSlider] = useState(
-    job?.candidate_profile?.industry_users
-  );
-  const jobIndustries = job?.candidate_profile?.industry_users.map(
-    (industry) => industry?.industry?.name
-  );
+  // const [arrSlider, setArrSlider] = useState(
+  //   job?.candidate_profile?.industry_users
+  // );
+  // const jobIndustries = job?.candidate_profile?.industry_users.map(
+  //   (industry) => industry?.industry?.name
+  // );
 
-  const [personalityArrSlider, setPersonalityArrSlider] = useState([
-    job?.candidate_profile?.candidate_info?.employment_type,
-    job?.candidate_profile?.candidate_info?.work_setup,
-  ]);
+  // const [personalityArrSlider, setPersonalityArrSlider] = useState([
+  //   job?.candidate_profile?.candidate_info?.employment_type,
+  //   job?.candidate_profile?.candidate_info?.work_setup,
+  // ]);
 
-  const [arrSlider2, setArrSlider2] = useState([
-    job?.candidate_profile?.candidate_info?.primary?.name,
-    job?.candidate_profile?.candidate_info?.shadow?.name,
-    ...(job?.candidate_profile?.candidate_traits || []),
-  ]);
+  // const [arrSlider2, setArrSlider2] = useState([
+  //   job?.candidate_profile?.candidate_info?.primary?.name,
+  //   job?.candidate_profile?.candidate_info?.shadow?.name,
+  //   ...(job?.candidate_profile?.candidate_traits || []),
+  // ]);
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -95,7 +95,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           // gap: 3,
         }}
       >
-        {job?.profile_url !== "No URL" ? (
+        {job?.profile_url !== "No URL"? (
           <Box
             component="img"
             sx={{
@@ -140,15 +140,19 @@ export default function TalentCard({ index, job, setisFlipped }) {
             }}
           >
             <Box>
-              <SmallButton
-                color="yellowButton100"
-                label={job?.firstactivity}
-                mr={1}
-              />
+
+              {job?.firstactivity && (
+                <SmallButton
+                  color="yellowButton100"
+                  label={job?.firstactivity}
+                  // job?.firstactivity
+                  mr={1}
+                />)}
               {job?.secondactivity && (
                 <SmallButton
                   color="lightGreenButton300"
                   label={job?.secondactivity}
+                // job?.secondactivity
                 />
               )}
             </Box>
@@ -237,7 +241,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
               marginBottom: "8px",
             }}
           >
-            joined {convertDatetimeAgo(job?.updated_at)}
+            joined {convertDatetimeAgo(job?.user_updated_at)}
+            {/* job?.user_updated_at */}
           </Typography>
         </Box>
       </Grid>
@@ -282,7 +287,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             }}
           >
             <TextWrapper line={1} weight={700} size={20} gutterBottom={false}>
-              {job?.first_name}
+              {job?.first_name || "-"}
             </TextWrapper>
           </Link>
           <TextWrapper
@@ -292,7 +297,9 @@ export default function TalentCard({ index, job, setisFlipped }) {
             gutterBottom={true}
             minHeight={"30px"}
           >
-            {job?.candidate_profile?.candidate_info?.job_title?.title}
+            {job?.jobTitle || "-"}
+            {/* {job?.candidate_profile?.candidate_info?.job_title?.title} */}
+            {/* job?.jobTitle */}
           </TextWrapper>
           <Box
             sx={{
@@ -321,10 +328,12 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.Currency}
+                {job?.currencySymbol}
+                {/* job?.currencySymbol */}
                 {formatCurrencyWithCommas(
-                  job?.candidate_profile?.candidate_info?.salary?.max
+                  job?.salaryMax
                 )}
+                {/* job?.salaryMax */}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -337,8 +346,9 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.candidate_profile?.town?.name},{" "}
-                {job?.candidate_profile?.town?.region?.name}
+
+                {job?.town_name || "-"}
+                {job?.region_name && (`, ${job?.region_name} `)}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -361,7 +371,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.candidate_profile?.candidate_info?.experience?.year} years
+                {job?.experienceYear || 0} years
+                {/* job?.experienceYear */}
               </Typography>
             </Box>
 
@@ -385,7 +396,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {dateConverterMonth(job?.candidate_profile?.created_at)}
+                {dateConverterMonth(job?.candidateProfile_created_at)}
+                {/* job?.candidateProfile_created_at */}
               </Typography>
             </Box>
           </Box>
@@ -451,15 +463,17 @@ export default function TalentCard({ index, job, setisFlipped }) {
             })} */}
 
             <Slider2
-              items={["full time", "remote"]}
+              items={[job.employment_type, job.work_setup]}
+              // job.employment_type, job.work_setup
               color={"blueButton700"}
               hideTagsAfter={2}
             />
-            <Slider2
+            {/* <Slider2
               items={jobIndustries}
+              // job?.UserIndustries
               color={"blueButton600"}
               hideTagsAfter={2}
-            />
+            /> */}
           </Box>
 
           {/* <Box
@@ -507,7 +521,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
             color={theme.palette.black100}
             letterSpacing="0.25px"
           >
-            {job?.candidate_profile?.my_bio}
+            {job?.my_bio}
+            {/* job?.my_bio */}
           </TextWrapper>
         </Grid>
         <Box sx={{ display: "flex", alignItems: "end", marginBottom: "12px" }}>
@@ -556,7 +571,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
           <SingleRadialChart
             labelsData={label2}
-            series={[job?.TotalUserShorlisted]}
+            series={[job?.totalusershorlisted]}
+            // job?.totalusershorlisted
             width={120}
             color={theme.palette.chart.green}
             index={index}
@@ -566,7 +582,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
           <SingleRadialChart
             labelsData={label3}
-            series={[job?.TotalUserInterviewed]}
+            series={[job?.totaluserinterviewed]}
+            // job?.totaluserinterviewed
             width={120}
             color={theme.palette.chart.yellow}
             index={index}
@@ -618,7 +635,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             fontSize: "10px",
           }}
           color="redButton"
-          // onClick={handleClick}
+        // onClick={handleClick}
         >
           {i18n["talentCard.shortlist"]}
         </Button>

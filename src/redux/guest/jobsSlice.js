@@ -27,12 +27,12 @@ export const getFilteredJobs = createAsyncThunk(
   "getFilteredJobs",
   async (
     {
-      selectedFilters,
-      lastKey,
-      jobtype,
-      jobstage,
-      personalityType,
-      title,
+      selectedFilters = "",
+      lastKey = "",
+      jobtype ="",
+      jobstage = "",
+      personalityType = "",
+      title ="",
       user_id,
       favourites,
       recentjob,
@@ -40,18 +40,11 @@ export const getFilteredJobs = createAsyncThunk(
     },
     { dispatch }
   ) => {
-    if (selectedFilters === "1111" || selectedFilters === "all industries") {
-      selectedFilters = "";
-    }
-    if (jobtype === "1111" || jobtype === "all job types") {
-      jobtype = "";
-    }
-    if (jobstage === "1111" || jobstage === "all stages") {
-      jobstage = "";
-    }
-    if (personalityType === "1111" || personalityType === "all types") {
-      personalityType = "";
-    }
+    console.log(selectedFilters)
+    console.log(jobtype)
+    console.log(jobstage)
+    console.log(personalityType)
+
     dispatch(setLoading(true));
     const { data } = await getApi(
       "/getjobslist/filter?industry_id=" +
@@ -76,7 +69,6 @@ export const getFilteredJobs = createAsyncThunk(
         recentjob
     );
     dispatch(setLoading(false));
-    console.log("PAYLOAD DATA", data);
     return data;
   }
 );

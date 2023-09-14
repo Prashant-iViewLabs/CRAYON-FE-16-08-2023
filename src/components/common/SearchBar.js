@@ -23,6 +23,11 @@ import { getApi } from "../../utils/Apis";
 import { useDispatch } from "react-redux";
 import { ALERT_TYPE } from "../../utils/Constants";
 import { useEffect } from "react";
+
+import GreenSearch from "../../assets/CircularIcon/Red/Circular Icons__Green_Search.svg"
+import { InputLabel } from "@mui/material";
+import AdvanceSection from "./AdvanceSection";
+
 const StyledBox = styled(Box)(({ theme }) => ({
   height: 40,
   border: `solid ${theme.palette.redButton.main} 1px`,
@@ -68,7 +73,7 @@ export default function SearchBar({
     setValue2(newValue);
   };
   const handleSearchFilter = () => {
-    setSearchFilter(!searchFilter);
+    setSearchFilter(prevState => !prevState);
   };
   const onMenuClick = (isOpen) => {
     setIsOpen(isOpen);
@@ -83,7 +88,7 @@ export default function SearchBar({
       dispatch(setLoading(true));
       const { data } = await getApi(
         "/getjobslist/filter?industry_id=&lastKey=&jobtype_id=&jobstage_id=&personalitytype_id=&title=" +
-          encodeURIComponent(jobSearch)
+        encodeURIComponent(jobSearch)
       );
       setSearchedJobs(jobSearch);
       dispatch(setLoading(false));
@@ -113,287 +118,136 @@ export default function SearchBar({
   //   }
   // }, [jobSearch]);
   return (
-    <>
+    <Box sx={{
+      position: "relative"
+    }}>
       <Paper
         elevation={0}
         sx={{
           display: { xs: "none", md: "flex" },
           m: { xs: 2, md: 0 },
-          paddingLeft: 1,
           alignItems: "center",
-          borderRadius: "25px",
           border: "1px solid rgba(224, 224, 224, 0.5)",
           position: "sticky",
-          // width: {
-          //   xl: isOpen ? "82.4%" : "83.4%",
-          //   lg: isOpen ? "74.2%" : "75.1%",
-          // },
+          borderRadius: {
+            xl: searchFilter ? "0" : "0 0 20px 20px",
+          },
           zIndex: "1111",
+          overflow: "hidden"
         }}
+        
       >
-        {/* <Button
-          sx={{
-            width: 140,
-            height: "auto",
-            boxShadow: 0,
-            borderBottomRightRadius: 0,
-            borderTopRightRadius: 0,
-            paddingLeft: "40px",
-            ".MuiSvgIcon-root": {
-              fontSize: "24px !important",
-            },
-          }}
-          onClick={handleSearchFilter}
-          variant="contained"
-          endIcon={
-            searchFilter ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />
-          }
+        <IconButton
           color="black100"
+          aria-label="search job"
+          component="button"
+          sx={{
+            borderRadius: 0,
+            background: theme.palette.lightGreenButton300.main,
+            color: "white"
+          }}
         >
-          {i18n["searchBar.filters"]}
-        </Button> */}
-        {searchFilter ? (
-          <Paper
-            elevation={0}
-            component="form"
-            sx={{ display: "flex", alignItems: "center", width: 1, my: 2 }}
-          >
-            <Grid
-              container
-              sx={{ width: 1, ml: 0 }}
-              spacing={2}
-              justifyContent="center"
-            >
-              <Grid xs={7}>
-                <StyledBox>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <ButtonMenu onMenuClick={onMenuClick} />
-                  </Box>
-                  <Paper
-                    elevation={0}
-                    component="form"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <InputBase
-                      sx={{
-                        ml: 1,
-                        width: 1,
-                        fontSize: "14px",
-                        fontWeight: 700,
-                      }}
-                      placeholder={i18n["searchBar.jobTitle"]}
-                    />
-                  </Paper>
-                  <RedSwitch defaultChecked />
-                </StyledBox>
-              </Grid>
-              <Grid xs={5}>
-                <StyledBox>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {/* <IconButton
-                      color="redButton"
-                      aria-label="search job"
-                      component="button"
-                    >
-                      <PlaceIcon />
-                    </IconButton> */}
-                  </Box>
-                  <Paper
-                    elevation={0}
-                    component="form"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <InputBase
-                      sx={{
-                        ml: 1,
-                        width: 1,
-                        fontSize: "14px",
-                        fontWeight: 700,
-                      }}
-                      placeholder={i18n["searchBar.location"]}
-                    />
-                  </Paper>
-                  <RedSwitch defaultChecked />
-                </StyledBox>
-              </Grid>
-              <Grid xs={7}>
-                <StyledBox>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <ButtonMenu onMenuClick={onMenuClick} />
-                  </Box>
-                  <Paper
-                    elevation={0}
-                    component="form"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <InputBase
-                      sx={{
-                        ml: 1,
-                        width: 1,
-                        fontSize: "14px",
-                        fontWeight: 700,
-                      }}
-                      placeholder={i18n["searchBar.skills"]}
-                    />
-                  </Paper>
-                  <RedSwitch defaultChecked />
-                </StyledBox>
-              </Grid>
-              <Grid xs={5}>
-                <StyledBox>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton
-                      color="redButton"
-                      aria-label="search job"
-                      component="button"
-                    >
-                      <LanguageIcon />
-                    </IconButton>
-                  </Box>
-                  <Paper
-                    elevation={0}
-                    component="form"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <InputBase
-                      sx={{
-                        ml: 1,
-                        width: 1,
-                        fontSize: "14px",
-                        fontWeight: 700,
-                      }}
-                      placeholder={i18n["searchBar.region"]}
-                    />
-                  </Paper>
-                  <RedSwitch defaultChecked />
-                </StyledBox>
-              </Grid>
-              <Grid xs={12}>
-                <StyledBox>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <ButtonMenu onMenuClick={onMenuClick} />
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        opacity: 0.4,
-                      }}
-                    >
-                      {i18n["searchBar.experience"]}
-                    </Typography>
-                  </Box>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    value={value1}
-                    onChange={handleChange1}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={valuetext}
-                    color="redButton"
-                    sx={{
-                      width: "60%",
-                      marginLeft: "-30px",
-                    }}
-                  />
-                  <RedSwitch defaultChecked />
-                </StyledBox>
-              </Grid>
-              <Grid xs={12}>
-                <StyledBox>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <ButtonMenu onMenuClick={onMenuClick} />
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        opacity: 0.4,
-                      }}
-                    >
-                      {i18n["searchBar.salary"]}
-                    </Typography>
-                  </Box>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    value={value2}
-                    onChange={handleChange2}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={valuetext}
-                    color="redButton"
-                    sx={{
-                      width: "60%",
-                    }}
-                  />
-                  <RedSwitch defaultChecked />
-                </StyledBox>
-              </Grid>
-            </Grid>
-          </Paper>
-        ) : (
-          <>
-            <IconButton
-              color="black100"
-              aria-label="search job"
-              component="button"
-            >
-              <SearchIcon />
-            </IconButton>
-            <Paper
-              elevation={0}
-              component="form"
-              sx={{ display: "flex", alignItems: "center", width: 1 }}
-            >
-              <InputBase
-                sx={{
-                  ml: 1,
-                  width: 1,
-                  fontSize: "14px",
-                  fontWeight: 700,
-                }}
-                placeholder={placeholder}
-                inputProps={{ "aria-label": "search google maps" }}
-                value={jobSearch}
-                onChange={handleSearch}
-              />
-            </Paper>
-            <IconButton
-              color="redButton"
-              aria-label="search job"
-              component="button"
-            >
-              <PlaceIcon />
-            </IconButton>
-          </>
-        )}
+          <SearchIcon color="white" />
+        </IconButton>
+        <Paper
+          elevation={0}
+          component="form"
+          sx={{ display: "flex", alignItems: "center", width: 1 }}
+        >
+          <InputBase
+            sx={{
+              ml: 1,
+              width: 1,
+              fontSize: "14px",
+              fontWeight: 700,
+            }}
+            placeholder={placeholder}
+            inputProps={{ "aria-label": "search google maps" }}
+            value={jobSearch}
+            onChange={handleSearch}
+          />
+        </Paper>
+        <IconButton
+          color="redButton"
+          aria-label="search job"
+          component="button"
+        >
+          <PlaceIcon />
+        </IconButton>
+        {/* )} */}
         <Button
           sx={{
             width: 140,
             boxShadow: 0,
-            borderBottomLeftRadius: 0,
-            borderTopLeftRadius: 0,
+            borderRadius: 0,
             height: "auto",
           }}
           variant="contained"
-          color="redButton100"
+          color="lightGreenButton300"
           onClick={handleJobSearch}
         >
           {i18n["searchBar.letsGo"]}
         </Button>
       </Paper>
+      <Box
+        sx={{
+          position: "absolute",
+          // left: 0,
+          // right: 0,
+          top: 45,
+          width: "100%",
+          margin: "0 auto",
+          zIndex: 10,
+        }}
+      >
+        <AdvanceSection />
+      </Box>
+    </Box>
+  );
+}
+
+{/* 
+      </Paper>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          background: theme.palette.mainBackground,
+          // border: 1,
+          borderRadius: "0 0 10px 10px",
+          width: "98%",
+          padding: 2,
+          paddingBottom: 0,
+          borderTop: 0,
+          boxShadow: 2
+        }}
+      >
+
+
+        {searchFilter && (
+          <>
+            
+          </>
+        )}
+        <Button
+          variant="contained"
+          color="lightGreenButton300"
+          sx={searchFilter ? {
+            borderRadius: "10px 10px 0 0"
+          } : {
+            borderRadius: "0 0 10px 10px"
+          }}
+          onClick={handleSearchFilter}
+        >
+
+           <Box
+            component={"img"}
+            // src={filterOptionsIcon}
+          /> 
+          {searchFilter ? "Close" : "open"}
+        </Button>
+      </Box>
       <Paper
         elevation={5}
         sx={{ display: { xs: "flex", md: "none" }, m: { xs: 2, md: 0 } }}
@@ -421,8 +275,4 @@ export default function SearchBar({
           component="button"
         >
           <SearchIcon />
-        </IconButton>
-      </Paper>
-    </>
-  );
-}
+        </IconButton> */}

@@ -171,6 +171,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
       display: "flex",
       paddingTop: 0,
       background: "white",
+      padding: "8px 42px 0px",
       // padding: 0,
       "& .MuiButtonBase-root": {
         // padding: '0 8px',
@@ -424,7 +425,7 @@ export default function JobCard({
               paddingX: 1,
             }}
           >
-            {jobContent?.profile_url != "No URL" ? (
+            {jobContent?.profile_url ? (
               <Box
                 component="img"
                 className="profileAvatar"
@@ -491,11 +492,10 @@ export default function JobCard({
               />
               <Tooltip title={jobContent?.title} placement="top-end">
                 <Link
-                  to={`${prevLocation}/job-detail/${`${
-                    jobContent?.town?.name +
+                  to={`${prevLocation}/job-detail/${`${jobContent?.town_name +
                     " " +
-                    jobContent?.town?.region?.name
-                  }`}/${jobContent?.job_id}`}
+                    jobContent?.region_name
+                    }`}/${jobContent?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -544,7 +544,7 @@ export default function JobCard({
                 }}
               />
               <Tooltip
-                title={jobContent?.employer_profile?.company_name}
+                title={jobContent?.employer_profile_company_name}
                 placement="top-end"
               >
                 <Typography
@@ -553,10 +553,10 @@ export default function JobCard({
                     fontWeight: 600,
                   }}
                 >
-                  {jobContent?.employer_profile?.company_name?.length >= 30
-                    ? jobContent?.employer_profile?.company_name?.slice(0, 30) +
-                      "..."
-                    : jobContent?.employer_profile?.company_name}
+                  {jobContent?.employer_profile_company_name?.length >= 30
+                    ? jobContent?.employer_profile_company_name?.slice(0, 30) +
+                    "..."
+                    : jobContent?.employer_profile_company_name}
                 </Typography>
               </Tooltip>
             </Box>
@@ -572,11 +572,15 @@ export default function JobCard({
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
+                    width: "75%",
+                    whiteSpace: "nowrap", // Prevents text from wrapping
+                    overflow: "hidden", // Hides any overflowing content
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  {jobContent?.town?.name +
-                    ", " +
-                    jobContent?.town?.region?.name}
+
+                  t{jobContent?.town_name || "-"}
+                  {jobContent?.region_name && (`, ${jobContent?.region_name} `)}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -585,11 +589,15 @@ export default function JobCard({
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
+                    width: "75%",
+                    whiteSpace: "nowrap", // Prevents text from wrapping
+                    overflow: "hidden", // Hides any overflowing content
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  {jobContent?.salary?.currency?.symbol}{" "}
-                  {formatCurrencyWithCommas(jobContent?.salary?.min)} to{" "}
-                  {formatCurrencyWithCommas(jobContent?.salary?.max)} per month
+                  {jobContent?.currency_symbol}{" "}
+                  {formatCurrencyWithCommas(jobContent?.salary_min)} to{" "}
+                  {formatCurrencyWithCommas(jobContent?.salary_max)} per month
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -609,11 +617,15 @@ export default function JobCard({
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
+                    width: "75%",
+                    whiteSpace: "nowrap", // Prevents text from wrapping
+                    overflow: "hidden", // Hides any overflowing content
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  {jobContent?.experience?.year_start
-                    ? `${jobContent?.experience?.year_start} to ${jobContent?.experience?.year_end} years`
-                    : `${jobContent?.experience?.year} years`}
+                  {jobContent?.experience_year_start
+                    ? `${jobContent?.experience_year_start} to ${jobContent?.experience_year_end} years`
+                    : `${jobContent?.experience_year} years`}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -633,6 +645,10 @@ export default function JobCard({
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
+                    width: "75%",
+                    whiteSpace: "nowrap", // Prevents text from wrapping
+                    overflow: "hidden", // Hides any overflowing content
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {dateConverterMonth(jobContent?.created_at)}
@@ -656,7 +672,7 @@ export default function JobCard({
                 valueOffsetY="-17"
                 labelsData={"applications"}
                 max={1000}
-                series={[34]}
+                series={[jobContent?.TotalUserCount]}
                 width={100}
                 color={theme.palette.lightGreenButton300.main}
               />
@@ -669,7 +685,7 @@ export default function JobCard({
                 nameOffsetY="11"
                 valueOffsetY="-17"
                 labelsData={"shortlisted"}
-                series={[10]}
+                series={[jobContent?.totalusershorlisted]}
                 width={100}
                 color={theme.palette.lightGreenButton300.main}
               />
@@ -682,7 +698,7 @@ export default function JobCard({
                 nameOffsetY="11"
                 valueOffsetY="-17"
                 labelsData={"interviews"}
-                series={[3]}
+                series={[jobContent?.totaluserinterviewed]}
                 width={100}
                 color={theme.palette.lightGreenButton300.main}
               />
@@ -724,7 +740,7 @@ export default function JobCard({
                     height: "30px !important",
                   }}
                 >
-                  {jobContent?.stage?.name ? jobContent?.stage?.name : "-"}
+                  {jobContent?.stage_name || "-"}
                 </Button>
                 <Button
                   variant="contained"
@@ -820,7 +836,7 @@ export default function JobCard({
                 width: "25%",
               }}
             >
-              <Button
+              {/* <Button
                 variant="contained"
                 color="base"
                 endIcon={
@@ -847,16 +863,23 @@ export default function JobCard({
                   height: "30% !important",
                 }}
               >
-                {jobContent?.job_status?.name}
+                {jobContent?.job_status_name}
                 <Circle
                   fontSize="string"
                   color={
-                    jobContent?.job_status?.job_status_id === 1
+                    jobContent?.job_status_name?.job_status_id === 1
                       ? "yellowButton200"
                       : "lightGreenButton300"
                   }
                 />
-              </Button>
+              </Button> */}
+              <ChangeStatusButton
+                loggedInUser={decodedToken?.data?.role_id}
+                jobId={index}
+                jobStatus={jobContent?.job_status_name}
+                employerIndustry={jobContent?.employer_industries}
+                getJobList={getJobList}
+              />
               <Button
                 variant="contained"
                 color="redButton"
@@ -903,7 +926,7 @@ export default function JobCard({
                     fontSize: 10,
                   }}
                 >
-                  {jobContent?.employer_profile?.user?.email}
+                  {jobContent?.email}
                 </Typography>
               </Box>
               <Box
@@ -918,7 +941,7 @@ export default function JobCard({
                     fontSize: 10,
                   }}
                 >
-                  {jobContent?.employer_profile?.contact_no}
+                  {jobContent?.employer_profile_contact_no}
                 </Typography>
               </Box>
               <Box>
@@ -978,7 +1001,8 @@ export default function JobCard({
           paddingBottom: 0,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {flip && (<>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box className="contentBoxLeft">
             <Typography
               sx={{
@@ -990,13 +1014,14 @@ export default function JobCard({
               Skills
             </Typography>
             <Box sx={{ mb: 2 }}>
-              {jobContent?.job_tags?.map((val) => {
+              {console.log(jobContent?.JobSkills?.split(','))}
+              {jobContent?.JobSkills?.split(',').map((val) => {
                 return (
                   <SmallButton
                     color="orangeButton"
                     letterSpacing="-0.02em"
                     borderRadius="5px"
-                    label={val?.tag?.tag}
+                    label={val}
                     mr="8px"
                   ></SmallButton>
                 );
@@ -1025,12 +1050,12 @@ export default function JobCard({
                 >
                   {i18n["pendingJobs.industries"]}
                 </Typography>
-                {jobContent?.employer_industries?.map((industry, index) => {
+                {jobContent?.JobIndustries?.split(",").map((industry, index) => {
                   return (
                     <SmallButton
                       color="blueButton600"
-                      value={industry?.industry?.name}
-                      label={industry?.industry?.name.split(" ")[0]}
+                      value={industry}
+                      label={truncate(industry, { length: 15 })}
                       mr="8px"
                       fontSize="10px"
                     ></SmallButton>
@@ -1048,20 +1073,20 @@ export default function JobCard({
                 >
                   {i18n["pendingJobs.tools"]}
                 </Typography>
-                {jobContent?.job_tools?.map((val) => {
+                {jobContent?.JobTools?.split(",").map((val) => {
                   return (
                     <SmallButton
                       minWidth="10px"
                       height={18}
                       color="yellowButton100"
                       borderRadius="5px"
-                      label={val?.tool?.name}
+                      label={val}
                       mr="4px"
                     ></SmallButton>
                   );
                 })}
               </Box>
-
+              {/* languages Remaining */}
               <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                 <Typography
                   sx={{
@@ -1097,6 +1122,7 @@ export default function JobCard({
                   label="Spanish"
                   mr="4px"
                 ></SmallButton>
+                {/* languages Remaining */}
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                 <Typography
@@ -1146,7 +1172,7 @@ export default function JobCard({
                   {i18n["pendingJobs.qualifications"]}
                 </Typography>
 
-                {jobContent?.job_qualifications?.map(
+                {jobContent?.JobQualifications?.split(",").map(
                   (qualifications, index) => {
                     return (
                       <SmallButton
@@ -1154,11 +1180,8 @@ export default function JobCard({
                         height={18}
                         color="grayButton100"
                         borderRadius="5px"
-                        label={
-                          qualifications?.qualification?.name?.length >= 15
-                            ? qualifications?.qualification?.name?.slice(0, 15)
-                            : qualifications?.qualification?.name
-                        }
+                        value={qualifications}
+                        label={truncate(qualifications, { length: 15 })}
                         mr="4px"
                       ></SmallButton>
                     );
@@ -1177,14 +1200,6 @@ export default function JobCard({
                 >
                   {i18n["pendingJobs.associations"]}
                 </Typography>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="SAICA"
-                  mr="4px"
-                ></SmallButton>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                 <Typography
@@ -1212,39 +1227,39 @@ export default function JobCard({
               </Typography>
               <Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  {jobContent?.primary?.name && (
+                  {jobContent?.primary_name && (
                     <Box
                       component="img"
                       height={60}
                       // sx={{ margin: "0 -22px 0 -22px" }}
                       alt="job_exp"
                       src={
-                        (jobContent?.primary?.name === "collaborator" &&
+                        (jobContent?.primary_name === "collaborator" &&
                           profile_collaborator) ||
-                        (jobContent?.primary?.name === "challenger" &&
+                        (jobContent?.primary_name === "challenger" &&
                           profile_challenger) ||
-                        (jobContent?.primary?.name === "character" &&
+                        (jobContent?.primary_name === "character" &&
                           profile_character) ||
-                        (jobContent?.primary?.name === "contemplator" &&
+                        (jobContent?.primary_name === "contemplator" &&
                           profile_contemplator)
                       }
                     />
                   )}
                   {/* </Box> */}
-                  {jobContent?.shadow?.name && (
+                  {jobContent?.shadow_name && (
                     <Box
                       component="img"
                       height={60}
                       // sx={{ margin: "0 -22px 0 -22px" }}
                       alt="job_exp"
                       src={
-                        (jobContent?.shadow?.name === "collaborator" &&
+                        (jobContent?.shadow_name === "collaborator" &&
                           profile_collaborator) ||
-                        (jobContent?.shadow?.name === "challenger" &&
+                        (jobContent?.shadow_name === "challenger" &&
                           profile_challenger) ||
-                        (jobContent?.shadow?.name === "character" &&
+                        (jobContent?.shadow_name === "character" &&
                           profile_character) ||
-                        (jobContent?.shadow?.name === "contemplator" &&
+                        (jobContent?.shadow_name === "contemplator" &&
                           profile_contemplator)
                       }
                     />
@@ -1270,7 +1285,7 @@ export default function JobCard({
                   </Box>
                 </Box>
                 <Box>
-                  {jobContent?.job_traits?.map((trait, index) => {
+                  {/* {jobContent?.JobTraits?.map((trait, index) => {
                     return (
                       <SmallButton
                         fontWeight={500}
@@ -1279,11 +1294,11 @@ export default function JobCard({
                         height={25}
                         color="grayButton200"
                         borderRadius="5px"
-                        label={trait?.trait?.name}
+                        label={trait}
                         mr="4px"
                       ></SmallButton>
                     );
-                  })}
+                  })} */}
                 </Box>
               </Box>
             </Box>
@@ -1311,7 +1326,7 @@ export default function JobCard({
               </Typography>
               <Box sx={{ display: "flex" }}>
                 <Box sx={{ width: "90%" }}>
-                  {jobContent?.job_questions.map((questions, index) => {
+                  {jobContent?.job_question?.question?.split(",").map((questions, index) => {
                     return (
                       <>
                         <Typography
@@ -1330,7 +1345,7 @@ export default function JobCard({
                             Question {index + 1}:
                           </span>{" "}
                           <br />
-                          {questions?.question}
+                          {questions}
                         </Typography>
                         <Paper
                           sx={{
@@ -1402,7 +1417,7 @@ export default function JobCard({
                   <Box sx={{ margin: "0" }}>
                     <SingleRadialChart
                       labelsData={label2}
-                      series={[jobContent?.TotalUserShorlisted]}
+                      series={[jobContent?.totalusershorlisted]}
                       width={140}
                       color={theme.palette.lightGreenButton300.main}
                       index={index}
@@ -1412,7 +1427,7 @@ export default function JobCard({
                   <Box sx={{ margin: "0" }}>
                     <SingleRadialChart
                       labelsData={label3}
-                      series={[jobContent?.TotalUserInterviewed]}
+                      series={[jobContent?.totaluserinterviewed]}
                       width={140}
                       color={theme.palette.lightGreenButton300.main}
                       index={index}
@@ -1485,7 +1500,7 @@ export default function JobCard({
                       }}
                       variant="contained"
                       color="redButton"
-                      // onClick={() => showManageJob()}
+                    // onClick={() => showManageJob()}
                     >
                       {i18n["pendingJobs.managebtn"]}
                     </Button>
@@ -1669,7 +1684,8 @@ export default function JobCard({
             />
           </Button>
         </Box>
+        </>)}
       </AccordionDetails>
-    </StyledAccordion>
+    </StyledAccordion >
   );
 }

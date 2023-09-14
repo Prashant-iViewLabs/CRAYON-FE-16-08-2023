@@ -34,6 +34,7 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 import AllTalentNewCard from "./AllTalentNewCard";
+import { Grid } from "@mui/material";
 
 const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
   width: "100%",
@@ -155,33 +156,45 @@ export default function AllTalent() {
           </InputAdornment>
         }
       />
-      <InfiniteScroll
-        style={{ overflow: "hidden" }}
-        dataLength={allJobs.length}
-        next={() => getJobList(lastKey)}
-        scrollThreshold={"10px"}
-        hasMore={true}
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+      <Grid
+        container
+        spacing={2}
+        flexDirection={"column"}
+        sx={{
+          display: { xs: "none", md: "flex" },
+          marginTop: "30px",
+        }}
       >
-        <Box
-          sx={{
-            mt: 2,
-          }}
+
+        <InfiniteScroll
+          style={{ overflow: "hidden" }}
+          dataLength={allJobs.length}
+          next={() => getJobList(lastKey)}
+          scrollThreshold={"10px"}
+          hasMore={true}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
         >
-          {allJobs?.map((job, index) => (
-            <AllTalentNewCard
-              key={index}
-              talentContent={job}
-              setPersonalityAdded={setPersonalityAdded}
-              traits={traits}
-            />
-          ))}
-        </Box>
-      </InfiniteScroll>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
+            {allJobs?.map((job, index) => (
+              <AllTalentNewCard
+                key={index}
+                talentContent={job}
+                setPersonalityAdded={setPersonalityAdded}
+                traits={traits}
+              />
+            ))}
+          </Box>
+        </InfiniteScroll>
+      </Grid>
+
     </Box>
   );
 }
