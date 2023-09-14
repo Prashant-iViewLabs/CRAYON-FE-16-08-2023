@@ -120,7 +120,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
           // gap: 3,
         }}
       >
-        {job?.profile_url !== "No URL" ? (
+        {job?.profile_url ? (
           <Box
             component="img"
             sx={{
@@ -308,7 +308,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             }}
           >
             <TextWrapper line={1} weight={700} size={20} gutterBottom={false}>
-              {job?.first_name || "-"}
+              {job?.first_name}
             </TextWrapper>
           </Link>
           <TextWrapper
@@ -318,7 +318,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             gutterBottom={true}
             minHeight={"30px"}
           >
-            {job?.jobTitle || "-"}
+            {job?.jobTitle}
           </TextWrapper>
           <Box
             sx={{
@@ -370,9 +370,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                
-                {job?.town_name || "-"}
-                {job?.region_name && (`, ${job?.region_name} `)}
+                {job?.town_name},{" "}
+                {job?.region_name}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -395,7 +394,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.experienceYear || 0} years
+                {job?.experienceYear} years
               </Typography>
             </Box>
 

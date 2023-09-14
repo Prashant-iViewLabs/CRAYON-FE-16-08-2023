@@ -5,22 +5,23 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Select from "@mui/material/Select";
-import locale from "../../../../i18n/locale";
-import activeDownClose from "../../../../assets/Black_Down_Open - Copy.svg";
+import locale from "../../../i18n/locale";
+import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
 import { useDispatch } from "react-redux";
 import {
   adminJobsFilter,
   getAllComments,
   getAllJobs,
   getJobCount,
-} from "../../../../redux/admin/jobsSlice";
-import { setAlert } from "../../../../redux/configSlice";
-import { ALERT_TYPE } from "../../../../utils/Constants";
+} from "../../../redux/admin/jobsSlice";
+import { setAlert } from "../../../redux/configSlice";
+import { ALERT_TYPE } from "../../../utils/Constants";
 import { Grid, InputBase, Paper } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
-import JobCard from "../JobCardNew";
-import SmallButtonTalent from "../../../common/SmallButtonTalent";
-import Filters from "../Filters";
+import JobCard from "./JobCardNew";
+import SmallButtonTalent from "../../common/SmallButtonTalent";
+import SelectMenu from "../../common/SelectMenu";
+import Filters from "./Filters";
 
 const BASIC = {
   lastKey: "",
@@ -30,7 +31,49 @@ const BASIC = {
   job_type: "",
 };
 
-export default function ClosedJobs() {
+const JOBPAGE = [
+  {
+    urlname: "pending-jobs",
+    status_id: 1,
+    filters: {
+      title: "Pending Jobs",
+      value: "pending",
+    },
+  },
+  {
+    urlname: "active-jobs",
+    status_id: 2,
+    filters: {
+      title: "Active Jobs",
+      value: "active",
+    },
+  },
+  {
+    urlname: "paused-jobs",
+    status_id: 3,
+    filters: {
+      title: "Paused Jobs",
+      value: "paused",
+    },
+  },
+  {
+    urlname: "closed-jobs",
+    status_id: 4,
+    filters: {
+      title: "Closed Jobs",
+      value: "closed",
+    },
+  },
+];
+
+// const JOBPAGE = {
+//   jobs: ["pending", "active", "paused", "closed"],
+//   status: [1, 2, 3, 4],
+//   filterTitle: ["Pending Jobs", "Active Jobs", "Paused Jobs", "Closed Jobs"],
+//   filterValue: ["pending", "active", "paused", "closed"],
+// };
+
+export default function AllJobs({ page }) {
   const i18n = locale.en;
   const theme = useTheme();
   const navigate = useNavigate();
@@ -40,8 +83,14 @@ export default function ClosedJobs() {
   const [lastKey, setLastKey] = useState("");
   const [totalJob, setTotalJob] = useState(0);
   const [comments, setComments] = useState([]);
-
   const [basicData, setBasicData] = useState(BASIC);
+
+  const temp = JOBPAGE.find((item) => item.filters.value === page);
+  console.log(temp);
+  //   console.log(pathname.includes("active-jobs"));
+  //   console.log(pathname.includes("pending-jobs"));
+  //   console.log(pathname.includes("closed-jobs"));
+  //   console.log(pathname.includes("paused-jobs"));
 
   const [stageArray, setStageArray] = useState([
     {
@@ -86,8 +135,8 @@ export default function ClosedJobs() {
   };
 
   const getJobList = async (lastkeyy) => {
-    const { payload } = await dispatch(getAllJobs(lastkeyy + "&status_id=4"));
-    if (payload?.status == "success") {
+    const { payload } = await dispatch(getAllJobs(lastkeyy + "&status_id=1"));
+    if (payload?.status === "success") {
       if (lastkeyy === "") {
         setAllJobs(payload.data);
         setLastKey(payload.data[payload.data.length - 1]?.job_id);
@@ -103,6 +152,11 @@ export default function ClosedJobs() {
         })
       );
     }
+  };
+
+  const JobCount = async () => {
+    const response = await dispatch(getJobCount(1));
+    setTotalJob(response.payload.count);
   };
 
   const getComments = async (jobid) => {
@@ -130,23 +184,15 @@ export default function ClosedJobs() {
     }
   };
 
-  const JobCount = async () => {
-    const response = await dispatch(getJobCount(4));
-    setTotalJob(response.payload.count);
-  };
-  useEffect(() => {
-    getJobList(lastKey);
-    JobCount();
-  }, []);
-
   const jobFIlters = async (lastkeyy, newBasicData) => {
     const data = {
       ...newBasicData,
       lastKey: lastkeyy,
-      status_id: 4,
+      status_id: 1,
     };
     const { payload } = await dispatch(adminJobsFilter(data));
     if (payload?.status === "success") {
+      console.log(payload.data);
       if (lastkeyy === "") {
         setAllJobs(payload.data);
         setLastKey(payload.data[payload.data.length - 1]?.job_id);
@@ -215,17 +261,41 @@ export default function ClosedJobs() {
     await jobFIlters("", newBasicData);
   };
 
+  const handleTeamMember = async (event) => {
+    const {
+      target: { value },
+      target: { name },
+      target: { id },
+    } = event;
+
+    console.log(value, name, id);
+    // let newBasicData = {
+    //   ...basicData,
+    //   job_title: event.target.value,
+    // };
+    // console.log(newBasicData);
+    // setBasicData(newBasicData);
+    // setAllJobs([]);
+    // await jobFIlters("", newBasicData);
+  };
+
+  useEffect(() => {
+    getJobList(lastKey);
+    JobCount();
+  }, []);
+
   return (
     <Box sx={{ ml: 0 }}>
       <Filters
-        title={"Close Jobs"}
+        title={"Pending Jobs"}
         total={totalJob}
         handleJobRoleChange={handleJobRoleChange}
-        value={"close"}
+        value={"pending"}
         handleJobType={handleJobType}
         stageArray={stageArray}
         jobTypeArray={jobTypeArray}
         handleInputSearch={handleInputSearch}
+        handleTeamMember={handleTeamMember}
       />
       <Grid
         container
@@ -259,10 +329,10 @@ export default function ClosedJobs() {
                 index={job.job_id}
                 jobContent={job}
                 onManageTalent={onHandleManageTalent}
+                getJobList={getJobList}
                 comments={comments}
                 setComments={setComments}
                 getComments={getComments}
-                getJobList={getJobList}
               />
             ))}
           </Box>

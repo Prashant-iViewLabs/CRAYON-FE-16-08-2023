@@ -3,10 +3,12 @@ import SmallButton from "../../common/SmallButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
+
 import { useDispatch } from "react-redux";
 import { statusChange } from "../../../redux/employer/myJobsSlice";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
+
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { approveJob } from "../../../redux/admin/jobsSlice";
 import { Circle } from "@mui/icons-material";
@@ -20,6 +22,7 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Popper from "@mui/material/Popper";
+
 const ChangeStatusButton = ({
   loggedInUser,
   jobId,
@@ -33,6 +36,7 @@ const ChangeStatusButton = ({
   const anchorRef = useRef(null);
   const [openActive, setOpenActive] = useState(false);
   const open = Boolean(anchorEl);
+
   function handleListKeyDown(event) {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -41,22 +45,29 @@ const ChangeStatusButton = ({
       setOpenActive(false);
     }
   }
+
   const dispatch = useDispatch();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleToggle = () => {
     setOpenActive((prevOpen) => !prevOpen);
   };
+
   const handleCloseActive = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
+
     setOpenActive(false);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const pauseJobData = {
     job_id: jobId,
     status: "paused",
@@ -65,10 +76,12 @@ const ChangeStatusButton = ({
     job_id: jobId,
     status: "closed",
   };
+
   const reactivateJobData = {
     job_id: jobId,
     status: "reactivate",
   };
+
   const pauseJob = async () => {
     try {
       const { payload } = await dispatch(statusChange(pauseJobData));
@@ -95,6 +108,7 @@ const ChangeStatusButton = ({
       dispatch(setAlert({ show: true }));
     }
   };
+
   const closeJob = async () => {
     try {
       const { payload } = await dispatch(statusChange(closeJobData));
@@ -121,6 +135,7 @@ const ChangeStatusButton = ({
       dispatch(setAlert({ show: true }));
     }
   };
+
   const reactivateJob = async () => {
     try {
       const { payload } = await dispatch(statusChange(reactivateJobData));
@@ -147,6 +162,7 @@ const ChangeStatusButton = ({
       dispatch(setAlert({ show: true }));
     }
   };
+
   const handleApprove = async () => {
     let industry = employerIndustry?.map((val) => val?.industry_id);
     let approvedJob = {
@@ -194,6 +210,7 @@ const ChangeStatusButton = ({
       );
     }
   };
+
   const isDisabled = loggedInUser === 4 && status === "pending";
   const handleStatusChange = (status) => {
     if (status === "paused") {
@@ -245,7 +262,15 @@ const ChangeStatusButton = ({
         {status}
         <Circle
           fontSize="string"
-          color={"lightGreenButton300"}
+          color={
+            status === "pending"
+              ? "orangeButton"
+              : status === "active"
+              ? "lightGreenButton300"
+              : status === "reactive"
+              ? "lightGreenButton300"
+              : "redButton100"
+          }
           sx={{ marginLeft: "10px" }}
         />
       </Button>
@@ -289,7 +314,7 @@ const ChangeStatusButton = ({
                           Active{" "}
                           <Circle
                             fontSize="string"
-                            color={"yellowButton100"}
+                            color={"lightGreenButton300"}
                             sx={{ marginLeft: "10px" }}
                           />
                         </MenuItem>,
@@ -304,7 +329,7 @@ const ChangeStatusButton = ({
                             Pause{" "}
                             <Circle
                               fontSize="string"
-                              color={"yellowButton100"}
+                              color={"redButton100"}
                               sx={{ marginLeft: "10px" }}
                             />
                           </MenuItem>
@@ -330,7 +355,7 @@ const ChangeStatusButton = ({
                           Reactive
                           <Circle
                             fontSize="string"
-                            color={"#000"}
+                            color={"lightGreenButton300"}
                             sx={{ marginLeft: "10px" }}
                           />
                         </MenuItem>
@@ -346,4 +371,5 @@ const ChangeStatusButton = ({
     </>
   );
 };
+
 export default ChangeStatusButton;

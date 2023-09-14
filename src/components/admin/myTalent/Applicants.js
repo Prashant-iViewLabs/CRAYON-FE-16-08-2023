@@ -1,4 +1,11 @@
-import { Box, InputAdornment, OutlinedInput, Typography } from "@mui/material";
+import {
+  Box,
+  InputAdornment,
+  InputBase,
+  OutlinedInput,
+  Paper,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getApplicants } from "../../../redux/admin/jobsSlice";
@@ -14,28 +21,13 @@ import {
 } from "../../../redux/employer/postJobSlice";
 import AllTalentNewCard from "../adminTalent/AllTalentNewCard";
 import { useSelector } from "react-redux";
-
-const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
-  width: "100%",
-  margin: "8px 0",
-  background: theme.palette.white,
-  borderRadius: "20px",
-  paddingRight: "6px",
-  // paddingLeft: '16px',
-  // '& .MuiInputLabel-outlined': {
-  //     marginLeft: '4px',
-  //     color: theme.palette.placeholder
-  // },
-  "& .MuiOutlinedInput-notchedOutline": {
-    // background: theme.palette.white,
-    borderColor: theme.palette.grayBorder,
-    borderRadius: "20px",
-  },
-}));
+import SmallButtonTalent from "../../common/SmallButtonTalent";
+import { useTheme } from "@emotion/react";
+import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
 
 export default function Applicants() {
   const dispatch = useDispatch();
-
+  const theme = useTheme();
   const [allApplicants, setAllApplicants] = useState([]);
   const [lastKey, setLastKey] = useState("");
 
@@ -86,15 +78,220 @@ export default function Applicants() {
 
   return (
     <Box sx={{ ml: 0 }}>
-      <Typography
-        sx={{
-          fontSize: "36px",
-          fontWeight: 700,
-          // ml: 6
-        }}
-      >
-        Applicants ({})
-      </Typography>
+      <Paper sx={{ p: 3, borderRadius: "20px", mt: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "19%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "24px",
+              fontWeight: 700,
+              // ml: 6
+            }}
+          >
+            Applicants
+          </Typography>
+          <SmallButtonTalent
+            fontWeight={900}
+            textColor={"#000"}
+            color="grayButton200"
+            label={""}
+            mr={1}
+            alignItems={"flex-end"}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex" }} gap={3} mt={2}>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Enter quick search term..."}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+          </Paper>
+
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="job_stage"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Job stage"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+        </Box>
+        <Box sx={{ display: "flex" }} gap={3} mt={2}>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Job type"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="job_stage"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Posted by"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+        </Box>
+        <Box sx={{ display: "flex" }} gap={3} mt={2}>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Job status"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+              opacity: 0,
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Job status"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+              disabled
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+        </Box>
+      </Paper>
       <InfiniteScroll
         style={{ overflow: "hidden" }}
         dataLength={allApplicants.length}

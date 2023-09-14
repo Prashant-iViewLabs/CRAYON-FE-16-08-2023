@@ -8,25 +8,61 @@ const initialState = {
   jobs: [],
 };
 
+export const adminJobsFilter = createAsyncThunk(
+  "adminJobsFilter",
+  async (
+    { lastKey, status_id, job_stage, job_title, job_type },
+    { dispatch }
+  ) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/job?lastKey=" +
+        lastKey +
+        "&status_id=" +
+        status_id +
+        "&job_title=" +
+        job_title +
+        "&job_stage=" +
+        job_stage +
+        "&job_type=" +
+        job_type,
+      true
+    );
+
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getTeamMembers = createAsyncThunk(
+  "getTeamMembers",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi("/admin/teammember?lastKey=" + payload, true);
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 export const updateTalentPool = createAsyncThunk(
   "updateTalentPool",
   async (payload, { dispatch }) => {
-    console.log(payload)
+    console.log(payload);
     dispatch(setLoading(true));
-    const { data } = await postApi("/admin/editpool", payload, true)
+    const { data } = await postApi("/admin/editpool", payload, true);
     dispatch(setLoading(false));
-    return data
+    return data;
   }
-)
+);
 export const deleteTalentPool = createAsyncThunk(
   "deleteTalentPool",
-  async (payload, { dispatch} ) => {
-    dispatch(setLoading(true))
-    const {data} = await postApi("/admin/deletepool", payload, true)
-    dispatch(setLoading(false))
-    return data
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await postApi("/admin/deletepool", payload, true);
+    dispatch(setLoading(false));
+    return data;
   }
-)
+);
 
 export const getSearchResult = createAsyncThunk(
   "getSearchResult",

@@ -1,14 +1,21 @@
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Box, Button, InputBase, InputLabel, Paper, Slider } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputBase,
+  InputLabel,
+  Paper,
+  Slider,
+} from "@mui/material";
 import React, { useState } from "react";
 import theme from "../../utils/Theme";
-import GreenEducation from "../../assets/Padding Included/GreenEducation.svg"
-import BlueFlag from "../../assets/Padding Included/Blue_Flag.svg"
-import BlueSkills from "../../assets/Padding Included/Blue_Filter_Stats.svg"
-import RedLocation from "../../assets/Padding Included/Red_Location.svg"
-import YellowTool from "../../assets/Padding Included/Yellow_Own_Equipment.svg"
-import GreenCountry from "../../assets/Padding Included/Green_Country.svg"
-import GreenTitle from "../../assets/Padding Included/Green_Experience_Title_Job.svg"
+import GreenEducation from "../../assets/Padding Included/GreenEducation.svg";
+import BlueFlag from "../../assets/Padding Included/Blue_Flag.svg";
+import BlueSkills from "../../assets/Padding Included/Blue_Filter_Stats.svg";
+import RedLocation from "../../assets/Padding Included/Red_Location.svg";
+import YellowTool from "../../assets/Padding Included/Yellow_Own_Equipment.svg";
+import GreenCountry from "../../assets/Padding Included/Green_Country.svg";
+import GreenTitle from "../../assets/Padding Included/Green_Experience_Title_Job.svg";
 
 const rangeMarks = [
   {
@@ -84,32 +91,39 @@ const AdvanceSection = () => {
             width: "95%",
             background: "#f4f5f7",
             padding: 4,
-            paddingY:2,
+            paddingY: 2,
             gap: 1,
             display: "flex",
-            boxShadow:1,
+            boxShadow: 1,
             flexDirection: "column",
             borderRadius: "0 0 10px 10px",
           }}
         >
-          <Box sx={{
-            display: "flex",
-            gap: 4,
-            width: "100%"
-          }}>
-            <Box sx={{ width: "50%" }} >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 4,
+              width: "100%",
+            }}
+          >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={GreenTitle}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Job Titles</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Job Titles
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -119,7 +133,7 @@ const AdvanceSection = () => {
                   alignItems: "center",
                   width: "100%",
                   borderRadius: 5,
-                  background: "white"
+                  background: "white",
                 }}
               >
                 <InputBase
@@ -133,19 +147,24 @@ const AdvanceSection = () => {
                 />
               </Paper>
             </Box>
-            <Box sx={{ width: "50%" }} >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={BlueFlag}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Regions</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Regions
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -154,7 +173,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -169,24 +188,31 @@ const AdvanceSection = () => {
               </Paper>
             </Box>
           </Box>
-          <Box sx={{
-            display: "flex",
-            gap: 4,
-            width: "100%"
-          }}>
-            <Box sx={{ width: "50%" }} >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 4,
+              width: "100%",
+            }}
+          >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={BlueSkills}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Skills</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Skills
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -195,7 +221,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -209,19 +235,24 @@ const AdvanceSection = () => {
                 />
               </Paper>
             </Box>
-            <Box sx={{ width: "50%" }} >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={RedLocation}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Location</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Location
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -230,7 +261,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -245,24 +276,31 @@ const AdvanceSection = () => {
               </Paper>
             </Box>
           </Box>
-          <Box sx={{
-            display: "flex",
-            gap: 4,
-            width: "100%"
-          }}>
-            <Box sx={{ width: "50%" }} >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 4,
+              width: "100%",
+            }}
+          >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={YellowTool}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Tools</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Tools
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -271,7 +309,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -285,19 +323,24 @@ const AdvanceSection = () => {
                 />
               </Paper>
             </Box>
-            <Box sx={{ width: "50%" }} >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={GreenEducation}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Companies</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Companies
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -306,7 +349,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -321,24 +364,31 @@ const AdvanceSection = () => {
               </Paper>
             </Box>
           </Box>
-          <Box sx={{
-            display: "flex",
-            gap: 4,
-            width: "100%"
-          }}>
-            <Box sx={{ width: "50%" }} >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 4,
+              width: "100%",
+            }}
+          >
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={GreenCountry}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>Currency</InputLabel>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Currency
+                </InputLabel>
               </Box>
               <Paper
                 elevation={0}
@@ -347,7 +397,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -361,20 +411,22 @@ const AdvanceSection = () => {
                 />
               </Paper>
             </Box>
-            <Box sx={{ width: "50%" }} >
-
+            <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
                   src={GreenEducation}
                   sx={{
                     height: 30,
-                    width: 30
-                  }} />
-                <InputLabel sx={{
-                  fontSize: "14px",
-                  fontWeight: 700
-                }}>
+                    width: 30,
+                  }}
+                />
+                <InputLabel
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                  }}
+                >
                   Highest Qualification
                 </InputLabel>
               </Box>
@@ -385,7 +437,7 @@ const AdvanceSection = () => {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  borderRadius: 5
+                  borderRadius: 5,
                 }}
               >
                 <InputBase
@@ -397,16 +449,23 @@ const AdvanceSection = () => {
                   }}
                   placeholder="Select your highest qualification"
                 />
-              </Paper></Box>
+              </Paper>
+            </Box>
           </Box>
-          <Box sx={{
-            width: "50%"
-          }}>
-            <InputLabel sx={{
-              fontSize: "14px",
-              fontWeight: 700,
-              mb: 4
-            }}>Salary</InputLabel>
+          <Box
+            sx={{
+              width: "50%",
+            }}
+          >
+            <InputLabel
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                mb: 4,
+              }}
+            >
+              Salary
+            </InputLabel>
             <Slider
               disableSwap
               sx={{
@@ -418,11 +477,11 @@ const AdvanceSection = () => {
                 },
                 "& .MuiSlider-track": {
                   height: "10px",
-                  background:theme.palette.redButton.main
+                  background: theme.palette.redButton.main,
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
-                  background:"white"
+                  background: "white",
                 },
                 "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
                   backgroundColor: "#EBECF3",
@@ -457,11 +516,15 @@ const AdvanceSection = () => {
             />
           </Box>
           <Box sx={{ width: "50%" }}>
-            <InputLabel sx={{
-              fontSize: "14px",
-              fontWeight: 700,
-              mb: 4
-            }}>Experience</InputLabel>
+            <InputLabel
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                mb: 4,
+              }}
+            >
+              Experience
+            </InputLabel>
             <Slider
               disableSwap
               sx={{
@@ -473,11 +536,11 @@ const AdvanceSection = () => {
                 },
                 "& .MuiSlider-track": {
                   height: "10px",
-                  background:theme.palette.blueButton700.main
+                  background: theme.palette.blueButton700.main,
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
-                  background:"white"
+                  background: "white",
                 },
                 "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
                   backgroundColor: "#EBECF3",

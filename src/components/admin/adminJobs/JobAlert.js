@@ -121,8 +121,14 @@ function rangeValueHandler(value) {
 export default function JobAlert({ jobContent }) {
   const i18n = locale.en;
   const theme = useTheme();
-  const [rangeValue, setRangeValue] = useState([jobContent?.salary_min/1000, jobContent?.salary_max/1000]);
-  const [expRange, setExpRange] = useState([jobContent?.experience_year_start*10, jobContent?.experience_year_end*10]);
+  const [rangeValue, setRangeValue] = useState([
+    jobContent?.salary_min / 1000,
+    jobContent?.salary_max / 1000,
+  ]);
+  const [expRange, setExpRange] = useState([
+    jobContent?.experience_year_start * 10,
+    jobContent?.experience_year_end * 10,
+  ]);
 
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
@@ -196,21 +202,21 @@ export default function JobAlert({ jobContent }) {
             alignItems: "flex-start",
             flexDirection: "column",
             justifyContent: "space-between",
-            gap:1
+            gap: 1,
           }}
         >
-          <Box sx={{
-            display: "flex",
-            alignItems: "center"
-          }}>
-
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "12px",
                 fontWeight: 700,
                 mr: 1,
-                width:"100px"
-
+                width: "100px",
               }}
             >
               {i18n["allTalent.type"]}:
@@ -220,23 +226,21 @@ export default function JobAlert({ jobContent }) {
               height={25}
               color="blueButton600"
               borderRadius="5px"
-              label={
-                jobContent?.type
-              }
+              label={jobContent?.type}
             ></SmallButton>
           </Box>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center"
-          }}>
-
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "12px",
                 fontWeight: 700,
                 mr: 1,
-                width:"100px"
-
+                width: "100px",
               }}
             >
               {i18n["allTalent.region"]}:
@@ -250,17 +254,18 @@ export default function JobAlert({ jobContent }) {
               label={jobContent?.region_name}
             ></SmallButton>
           </Box>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center"
-          }}>
-
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "12px",
                 fontWeight: 700,
                 mr: 1,
-                width:"100px"
+                width: "100px",
               }}
             >
               {i18n["allTalent.currency"]}:
@@ -274,22 +279,31 @@ export default function JobAlert({ jobContent }) {
               label={jobContent?.currency_symbol}
             ></SmallButton>
           </Box>
-          <Box sx={{
-            display: "flex",
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "12px",
                 fontWeight: 700,
                 mr: 1,
-                width:"100px"
+                width: "100px",
               }}
             >
               {i18n["allTalent.industry"]}:
             </Typography>
-            <Box sx={{display:"flex", gap:1}}>
-              
-            <Slider2 items={jobContent?.JobIndustries?.split(",")} color="blueButton600"  hideTagsAfter={3}/>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Slider2
+                items={
+                  jobContent?.JobIndustries !== null
+                    ? jobContent?.JobIndustries?.split(",")
+                    : []
+                }
+                color="blueButton600"
+                hideTagsAfter={3}
+              />
               {/* {jobContent?.JobIndustries?.split(",").map((item) => {
                 return (
                   <SmallButton
@@ -304,10 +318,12 @@ export default function JobAlert({ jobContent }) {
               })} */}
             </Box>
           </Box>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center"
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "12px",

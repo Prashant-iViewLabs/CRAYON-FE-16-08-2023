@@ -20,6 +20,7 @@ export default function SmallButtonTalent({
   padding,
   margin,
   alignItems,
+  minWidth,
   ...props
 }) {
   const i18n = locale.en;
@@ -44,7 +45,7 @@ export default function SmallButtonTalent({
           boxShadow: 0,
           borderRadius: borderRadius ? borderRadius : "5px",
           color: textColor,
-          minWidth: "fit-content",
+          minWidth: minWidth ? minWidth :"fit-content",
           padding: padding ? padding : "0 8px",
           ".MuiButton-startIcon": {
             marginRight: startIconMargin,

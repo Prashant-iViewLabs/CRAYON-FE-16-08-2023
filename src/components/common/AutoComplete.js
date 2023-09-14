@@ -30,6 +30,7 @@ export default function AutoComplete({
   index,
   showAddOption = false,
   disableCloseOnSelect,
+  onFocus,
 }) {
   const theme = useTheme();
   const optionData = data;
@@ -64,6 +65,7 @@ export default function AutoComplete({
         placeholder={placeholder}
         value={value}
         defaultValue={defaultValue}
+        onFocus={onFocus}
         onChange={(event, newValue) => onChange(event, newValue, id, index)}
         // filterOptions={filterFunction}
         filterOptions={(options, params) => {
@@ -151,10 +153,8 @@ export default function AutoComplete({
         )}
         renderTags={(value, getTagProps) => {
           if (multiple && value[0] != "") {
-            console.log(value);
             return value.map((option, index) => (
               <>
-                {console.log(option)}
                 <Chip
                   variant="outlined"
                   label={option?.name || option}

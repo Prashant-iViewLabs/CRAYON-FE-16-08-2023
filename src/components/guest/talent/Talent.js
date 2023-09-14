@@ -33,6 +33,7 @@ import jwt_decode from "jwt-decode";
 import { getAllTypes } from "../../../redux/allTypes";
 import { getAllTalentType } from "../../../redux/guest/talentTypes";
 import { Paper } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function Talent() {
   const i18n = locale.en;
@@ -231,7 +232,7 @@ export default function Talent() {
           display: "flex",
           flexDirection: "column",
         }}
-        gap={1}
+        gap={3}
         flexGrow="1 !important"
       >
         <SearchBar placeholder={i18n["jobs.searchPlaceholder"]} />
@@ -259,11 +260,13 @@ export default function Talent() {
             width={"99.5%"}
           >
             {all_talent.length > 0 ? (
-              all_talent?.map((talent) => (
-                <Grid xl={3} lg={4} md={6} xs={12} key={talent}>
-                  <TalentCard index={talent} job={talent} />
-                </Grid>
-              ))
+              all_talent?.map((talent) => {
+                return (
+                  <Grid xl={3} lg={4} md={6} xs={12} key={talent}>
+                    <TalentCard index={nanoid()} job={talent} />
+                  </Grid>
+                );
+              })
             ) : (
               <Box
                 sx={{

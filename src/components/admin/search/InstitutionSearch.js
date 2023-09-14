@@ -228,7 +228,6 @@ export default function InstitutionSearch() {
           <Box
             sx={{
               display: "flex",
-
               alignItems: "flex-start",
               justifyContent: "space-between",
             }}
@@ -360,7 +359,6 @@ export default function InstitutionSearch() {
                 />
               </Popover>
             </Box>
-            {}
           </Box>
         </Box>
         {!openAccordian && (

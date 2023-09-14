@@ -132,7 +132,7 @@ export default function LeftDrawer() {
   };
 
   useEffect(() => {
-    getCount();
+    // getCount();
     const parts = pathname.split("/");
     const openIndex = ADMIN_LFET_PANEL.find((item) => item.path === parts[2]);
     const subIndex = openIndex.menuItems.find((item) => item.path === parts[3]);

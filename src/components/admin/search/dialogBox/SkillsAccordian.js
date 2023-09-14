@@ -12,7 +12,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import redTalent from "../../../../assets/Padding Excluded/Black_Talent_Red.svg";
 import TalentSVGButton from "../../../common/TalentSVGButton";
 import InfoIcon from "../../../common/InfoIcon";
-import { getTitlesCandidateData } from "../../../../redux/admin/searchSlice";
+import {
+  getSkillsCandidateData,
+  getTitlesCandidateData,
+} from "../../../../redux/admin/searchSlice";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
@@ -55,11 +58,10 @@ export default function SkillsAccordian({
   const getCandidateData = async (data, lastkey) => {
     const candidateData = {
       lastKey: lastkey,
-      keyword: data?.tag,
-      job_title_id: data?.tag_id,
+      tag_id: data?.tag_id,
     };
     console.log(candidateList);
-    const { payload } = await dispatch(getTitlesCandidateData(candidateData));
+    const { payload } = await dispatch(getSkillsCandidateData(candidateData));
     if (payload?.status == "success") {
       setLastKeyy(payload?.pageNumber + 1);
       setTotalData(payload?.totalData);
@@ -145,7 +147,7 @@ export default function SkillsAccordian({
           </p>
         }
       >
-        {console.log(titlesList.titlesList)}
+        {console.log(titlesList.length)}
         {titlesList.map((item, index) => {
           return (
             <StyledAccordion
@@ -197,9 +199,10 @@ export default function SkillsAccordian({
                 </Box>
               </AccordionSummary>
               <AccordionDetails key={index}>
+                {console.log("DATA", totalData)}
                 <Box
                   id={"candidate_list"}
-                  sx={{ overflow: "hidden", height: "100%", mt: 1 }}
+                  sx={{ overflow: "hidden", height: "50vh", mt: 1 }}
                 >
                   <InfiniteScroll
                     style={{
@@ -208,9 +211,9 @@ export default function SkillsAccordian({
                       scrollbarWidth: "thin",
                     }}
                     scrollableTarget={"candidate_list"}
-                    dataLength={candidateList?.length}
+                    dataLength={totalData}
                     next={() => getCandidateData(item, lastKeyy)}
-                    // scrollThreshold={"10px"}
+                    scrollThreshold={"100px"}
                     hasMore={true}
                     endMessage={
                       <p style={{ textAlign: "center" }}>

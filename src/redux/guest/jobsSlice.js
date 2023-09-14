@@ -40,10 +40,7 @@ export const getFilteredJobs = createAsyncThunk(
     },
     { dispatch }
   ) => {
-    console.log(selectedFilters)
-    console.log(jobtype)
-    console.log(jobstage)
-    console.log(personalityType)
+
 
     dispatch(setLoading(true));
     const { data } = await getApi(

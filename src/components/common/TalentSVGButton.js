@@ -12,6 +12,7 @@ export default function TalentSVGButton({
   padding,
   margin,
   startIconMargin,
+  minWidth,
 }) {
   return (
     <SmallButtonTalent
@@ -29,6 +30,7 @@ export default function TalentSVGButton({
           }}
         />
       }
+      minWidth={minWidth}
       padding={padding}
       justifyContent={"center"}
       borderRadius={50}

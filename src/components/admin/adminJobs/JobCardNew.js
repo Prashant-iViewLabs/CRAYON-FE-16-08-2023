@@ -8,22 +8,12 @@ import locale from "../../../i18n/locale";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import IconButton from "@mui/material/IconButton";
 import SmallButton from "../../common/SmallButton";
 import profile from "../../../assets/profile.png";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import LanguageIcon from "@mui/icons-material/Language";
-import { Grid, InputBase, Paper } from "@mui/material";
+import { InputBase, Paper, Popover } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import eye from "../../../assets/eye.svg";
-import send from "../../../assets/send.svg";
-import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
+
 import PlaceIcon from "@mui/icons-material/Place";
-import EmailIcon from "@mui/icons-material/Email";
-import CallIcon from "@mui/icons-material/Call";
 import SingleRadialChart from "../../common/SingleRadialChart";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import JobDescripiton from "../../common/JobDescripiton";
@@ -31,7 +21,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import DOMPurify from "dompurify";
 import upClose from "../../../assets/Padding Included/Black_Up_Close.svg";
 import downClose from "../../../assets/Padding Included/Black_Down_Open.svg";
-import blackDownClose from "../../../assets/Black_Down_Open - Copy.svg";
 import JobExp from "../../../assets/Padding Excluded/Black_Experience_Title_Job.svg";
 import calendar from "../../../assets/Padding Excluded/Black_Notice_Period.svg";
 
@@ -41,25 +30,16 @@ import BlueFolder from "../../../assets/CircularIcon/Red/Circular Icons__Blue_Ti
 import GreenPlay from "../../../assets/CircularIcon/Red/Circular Icons__Green_Play.svg";
 import YellowChatHistory from "../../../assets/CircularIcon/Red/Circular Icons__Yellow_Chat History_2.svg";
 import talentIcon from "../../../assets/CircularIcon/Red/Circular Icons__Red_Direxct.svg";
-import chatHistory from "../../../assets/Padding Excluded/Black_Chat History_1.svg";
-import chat from "../../../assets/Padding Excluded/Black_Chat.svg";
-import CV from "../../../assets/Padding Excluded/Black_CV.svg";
-import talent from "../../../assets/Padding Excluded/Black_Talent.svg";
 
 import deleteIcon from "../../../assets/Padding Excluded/Black_Trash_Delete_1 - Copy.svg";
 import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
-import yellowReferalsIcon from "../../../assets/Padding Excluded/yellowReferals.svg";
 
 import profile_challenger from "../../../assets/Profile Icons_Challenger.svg";
 import profile_character from "../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../assets/Profile Icons_Collaborator.svg";
 import profile_contemplator from "../../../assets/Profile Icons_Contemplator.svg";
 
-import {
-  addJobComment,
-  approveJob,
-  getAllComments,
-} from "../../../redux/admin/jobsSlice";
+import { addJobComment } from "../../../redux/admin/jobsSlice";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
@@ -81,6 +61,16 @@ import job_exp from "../../../assets/Padding Included/Green_Duration.svg";
 import TalentSVGButton from "../../common/TalentSVGButton";
 import { truncate } from "lodash";
 import JobAlert from "./JobAlert";
+import Refferals from "../adminTalent/DialogBox/Refferals";
+import DOWN from "../../../assets/Padding Excluded/Black_Down_Open.svg";
+import contact from "../../../assets/Padding Excluded/Black_Contact_Yellow.svg";
+import email from "../../../assets/Padding Excluded/Black_Email_Red.svg";
+import referrals from "../../../assets/Padding Excluded/Black_Referals_Yellow.svg";
+import linkedin from "../../../assets/linkedin.svg";
+import locationIcon from "../../../assets/Padding Excluded/Black_Location.svg";
+import pending from "../../../assets/Padding Excluded/Black_Pending.svg";
+import salary from "../../../assets/Padding Excluded/Black_Salary.svg";
+import notice from "../../../assets/Padding Excluded/Black_Notice_Period.svg";
 
 const label = "grit score";
 const label1 = "applied";
@@ -267,6 +257,9 @@ export default function JobCard({
   const prevLocation = location.pathname;
   const include = location.pathname.includes("pending-jobs");
 
+  const [anchorElReferral, setAnchorElReferral] = useState(null);
+  const openReferral = Boolean(anchorElReferral);
+
   const token = localStorage?.getItem("token");
   let decodedToken;
   if (token) {
@@ -370,6 +363,10 @@ export default function JobCard({
     } catch (error) {
       dispatch(setAlert({ show: true }));
     }
+  };
+
+  const handlePopoverCloseReferral = () => {
+    setAnchorElReferral(null);
   };
 
   return (
@@ -492,10 +489,9 @@ export default function JobCard({
               />
               <Tooltip title={jobContent?.title} placement="top-end">
                 <Link
-                  to={`${prevLocation}/job-detail/${`${jobContent?.town_name +
-                    " " +
-                    jobContent?.region_name
-                    }`}/${jobContent?.job_id}`}
+                  to={`${prevLocation}/job-detail/${`${
+                    jobContent?.town_name + " " + jobContent?.region_name
+                  }`}/${jobContent?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -555,7 +551,7 @@ export default function JobCard({
                 >
                   {jobContent?.employer_profile_company_name?.length >= 30
                     ? jobContent?.employer_profile_company_name?.slice(0, 30) +
-                    "..."
+                      "..."
                     : jobContent?.employer_profile_company_name}
                 </Typography>
               </Tooltip>
@@ -564,32 +560,45 @@ export default function JobCard({
               sx={{
                 display: "flex",
                 gap: 0.8,
+                justifyContent: "space-between",
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <PlaceIcon fontSize="string" color="error" />
+                <TalentSVGButton
+                  padding={"0px !important"}
+                  color={"white"}
+                  source={locationIcon}
+                  height={28}
+                  width={23}
+                  minWidth={"25px"}
+                />
                 <Typography
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
-                    width: "75%",
+                    width: "100%",
                     whiteSpace: "nowrap", // Prevents text from wrapping
                     overflow: "hidden", // Hides any overflowing content
                     textOverflow: "ellipsis",
                   }}
                 >
-
                   t{jobContent?.town_name || "-"}
-                  {jobContent?.region_name && (`, ${jobContent?.region_name} `)}
+                  {jobContent?.region_name && `, ${jobContent?.region_name} `}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <AccountBalanceWallet fontSize="string" color="primary" />
+                <TalentSVGButton
+                  padding={"0px !important"}
+                  color={"white"}
+                  source={salary}
+                  height={20}
+                  width={18}
+                />
                 <Typography
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
-                    width: "75%",
+                    width: "100%",
                     whiteSpace: "nowrap", // Prevents text from wrapping
                     overflow: "hidden", // Hides any overflowing content
                     textOverflow: "ellipsis",
@@ -601,23 +610,19 @@ export default function JobCard({
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Box
-                  component="img"
-                  sx={{
-                    height: 16,
-                    width: 16,
-                    maxHeight: { xs: 15 },
-                    maxWidth: { xs: 15 },
-                  }}
-                  alt="job_exp"
-                  src={job_exp}
+                <TalentSVGButton
+                  padding={"0px !important"}
+                  color={"white"}
+                  source={pending}
+                  height={20}
+                  width={18}
                 />
 
                 <Typography
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
-                    width: "75%",
+                    width: "100%",
                     whiteSpace: "nowrap", // Prevents text from wrapping
                     overflow: "hidden", // Hides any overflowing content
                     textOverflow: "ellipsis",
@@ -629,23 +634,18 @@ export default function JobCard({
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Box
-                  component="img"
-                  sx={{
-                    height: 16,
-                    width: 16,
-                    maxHeight: { xs: 15 },
-                    maxWidth: { xs: 15 },
-                    padding: 0,
-                  }}
-                  alt="calendar"
-                  src={calendar}
+                <TalentSVGButton
+                  padding={"0px !important"}
+                  color={"white"}
+                  source={notice}
+                  height={20}
+                  width={18}
                 />
                 <Typography
                   sx={{
                     fontWeight: 700,
                     fontSize: 10,
-                    width: "75%",
+                    width: "100%",
                     whiteSpace: "nowrap", // Prevents text from wrapping
                     overflow: "hidden", // Hides any overflowing content
                     textOverflow: "ellipsis",
@@ -836,43 +836,6 @@ export default function JobCard({
                 width: "25%",
               }}
             >
-              {/* <Button
-                variant="contained"
-                color="base"
-                endIcon={
-                  <Box
-                    component="img"
-                    className="eye"
-                    alt="eye logo"
-                    src={activeDownClose}
-                    sx={{
-                      height: 25,
-                      width: 25,
-                    }}
-                  />
-                }
-                sx={{
-                  width: "100%",
-                  fontSize: "10px",
-                  fontWeight: 500,
-                  color: "#000",
-                  padding: "8px 10px",
-                  borderRadius: "0px 5px 0 0",
-                  borderLeft: "1px solid #EBECF3",
-                  borderBottom: "1px solid #EBECF3",
-                  height: "30% !important",
-                }}
-              >
-                {jobContent?.job_status_name}
-                <Circle
-                  fontSize="string"
-                  color={
-                    jobContent?.job_status_name?.job_status_id === 1
-                      ? "yellowButton200"
-                      : "lightGreenButton300"
-                  }
-                />
-              </Button> */}
               <ChangeStatusButton
                 loggedInUser={decodedToken?.data?.role_id}
                 jobId={index}
@@ -910,16 +873,23 @@ export default function JobCard({
               sx={{
                 display: "flex",
                 gap: 1,
-                marginLeft: 12.5,
+                marginLeft: "83px",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
                   gap: 0.3,
+                  alignItems: "center",
                 }}
               >
-                <EmailIcon color="error" fontSize="string" />
+                <TalentSVGButton
+                  color={"white"}
+                  source={email}
+                  height={28}
+                  width={18}
+                  padding={"0px !important"}
+                />
                 <Typography
                   sx={{
                     fontWeight: 700,
@@ -932,9 +902,16 @@ export default function JobCard({
               <Box
                 sx={{
                   display: "flex",
+                  alignItems: "center",
                 }}
               >
-                <CallIcon color="warning" fontSize="string" />
+                <TalentSVGButton
+                  color={"white"}
+                  source={contact}
+                  height={16}
+                  width={18}
+                  padding={"0px !important"}
+                />
                 <Typography
                   sx={{
                     fontWeight: 700,
@@ -944,7 +921,19 @@ export default function JobCard({
                   {jobContent?.employer_profile_contact_no}
                 </Typography>
               </Box>
-              <Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  component="img"
+                  // className="profileAvatar"
+                  alt="crayon logo"
+                  src={linkedin}
+                  sx={{
+                    mr: 1,
+                    ml: 1,
+                    width: "20px !important",
+                    height: "20px !important",
+                  }}
+                />
                 <Typography
                   sx={{
                     fontWeight: 700,
@@ -959,36 +948,60 @@ export default function JobCard({
               sx={{
                 display: "flex",
                 gap: 1,
-                marginLeft: 12.5,
+                marginLeft: "83px",
               }}
             >
-              <Button
-                startIcon={
-                  <Box
-                    component={"img"}
-                    src={yellowReferalsIcon}
-                    height={20}
-                    width={20}
-                  />
-                }
-                endIcon={
-                  <Box
-                    component={"img"}
-                    src={blackDownClose}
-                    height={20}
-                    width={20}
-                  />
-                }
+              <TalentSVGButton
+                color={"white"}
+                source={referrals}
+                height={28}
+                width={18}
+                padding={"0px !important"}
+              />
+
+              <Typography
                 sx={{
-                  fontSize: "10px",
-                  padding: 0,
-                  gap: 0,
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  width: "150px",
+                  // mb: "2px",
                 }}
-                variant="secondary"
-                color={theme.palette.grayButton100.contrastText}
+                onClick={(event) => {
+                  setAnchorElReferral(event.target);
+                }}
               >
-                Referrals (231)
-              </Button>
+                {`Referrals (231)`}{" "}
+                <TalentSVGButton
+                  color={"white"}
+                  source={DOWN}
+                  height={7}
+                  width={18}
+                />
+              </Typography>
+              <Popover
+                id="dropdown"
+                open={openReferral}
+                anchorEl={anchorElReferral}
+                onClose={handlePopoverCloseReferral}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                sx={{
+                  "& .MuiPaper-root-MuiPopover-paper": {
+                    // padding: "16px !important",
+                    minWidth: "18% !important",
+                    borderRadius: "20px !important",
+                    mt: 1,
+                  },
+                }}
+              >
+                <Refferals />
+              </Popover>
             </Box>
           </>
         )}
@@ -1001,8 +1014,7 @@ export default function JobCard({
           paddingBottom: 0,
         }}
       >
-        {flip && (<>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box className="contentBoxLeft">
             <Typography
               sx={{
@@ -1014,8 +1026,8 @@ export default function JobCard({
               Skills
             </Typography>
             <Box sx={{ mb: 2 }}>
-              {console.log(jobContent?.JobSkills?.split(','))}
-              {jobContent?.JobSkills?.split(',').map((val) => {
+              {console.log(jobContent?.JobSkills?.split(","))}
+              {jobContent?.JobSkills?.split(",").map((val) => {
                 return (
                   <SmallButton
                     color="orangeButton"
@@ -1050,17 +1062,19 @@ export default function JobCard({
                 >
                   {i18n["pendingJobs.industries"]}
                 </Typography>
-                {jobContent?.JobIndustries?.split(",").map((industry, index) => {
-                  return (
-                    <SmallButton
-                      color="blueButton600"
-                      value={industry}
-                      label={truncate(industry, { length: 15 })}
-                      mr="8px"
-                      fontSize="10px"
-                    ></SmallButton>
-                  );
-                })}
+                {jobContent?.JobIndustries?.split(",").map(
+                  (industry, index) => {
+                    return (
+                      <SmallButton
+                        color="blueButton600"
+                        value={industry}
+                        label={truncate(industry, { length: 15 })}
+                        mr="8px"
+                        fontSize="10px"
+                      ></SmallButton>
+                    );
+                  }
+                )}
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                 <Typography
@@ -1326,59 +1340,61 @@ export default function JobCard({
               </Typography>
               <Box sx={{ display: "flex" }}>
                 <Box sx={{ width: "90%" }}>
-                  {jobContent?.job_question?.question?.split(",").map((questions, index) => {
-                    return (
-                      <>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            mr: 1,
-                            mt: 1,
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontWeight: 700,
-                            }}
-                          >
-                            Question {index + 1}:
-                          </span>{" "}
-                          <br />
-                          {questions}
-                        </Typography>
-                        <Paper
-                          sx={{
-                            display: "flex",
-                            height: "40px",
-                            borderRadius: "25px",
-                            boxShadow: "none",
-                            alignItems: "center",
-                            paddingX: 0.8,
-                            justifyContent: "space-between",
-                            border: `1px solid ${theme.palette.grayBorder}`,
-                          }}
-                        >
-                          <InputBase
-                            sx={{ ml: 2, mr: 2 }}
-                            id="password"
-                            value={questions?.answer}
-                            type="text"
-                            placeholder={i18n["pendingJobs.answer"]}
-                          />
-                          <Button
-                            variant="contained"
-                            color="lightGreenButton300"
+                  {jobContent?.job_question?.question
+                    ?.split(",")
+                    .map((questions, index) => {
+                      return (
+                        <>
+                          <Typography
                             sx={{
-                              height: 30,
+                              fontSize: "14px",
+                              fontWeight: 400,
+                              mr: 1,
+                              mt: 1,
                             }}
                           >
-                            Save
-                          </Button>
-                        </Paper>
-                      </>
-                    );
-                  })}
+                            <span
+                              style={{
+                                fontWeight: 700,
+                              }}
+                            >
+                              Question {index + 1}:
+                            </span>{" "}
+                            <br />
+                            {questions}
+                          </Typography>
+                          <Paper
+                            sx={{
+                              display: "flex",
+                              height: "40px",
+                              borderRadius: "25px",
+                              boxShadow: "none",
+                              alignItems: "center",
+                              paddingX: 0.8,
+                              justifyContent: "space-between",
+                              border: `1px solid ${theme.palette.grayBorder}`,
+                            }}
+                          >
+                            <InputBase
+                              sx={{ ml: 2, mr: 2 }}
+                              id="password"
+                              value={questions?.answer}
+                              type="text"
+                              placeholder={i18n["pendingJobs.answer"]}
+                            />
+                            <Button
+                              variant="contained"
+                              color="lightGreenButton300"
+                              sx={{
+                                height: 30,
+                              }}
+                            >
+                              Save
+                            </Button>
+                          </Paper>
+                        </>
+                      );
+                    })}
                 </Box>
               </Box>
             </Box>
@@ -1456,57 +1472,56 @@ export default function JobCard({
                 >
                   Link to pool
                 </Button>
-                <Button
-                  sx={{
-                    width: "50%",
-                    borderRadius: 0,
-                  }}
-                  color="redButton100"
-                  variant="contained"
-                  startIcon={
-                    <Box
-                      component={"img"}
-                      src={talentIcon}
-                      height={25}
-                      width={25}
-                    />
-                  }
-                >
-                  Talent
-                </Button>
-              </Box>
-
-              {!include && (
-                <Link
-                  to={`/employer/manage-talent/${jobContent?.job_id}`}
-                  target="_blank"
-                  style={{
-                    textDecoration: "none",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      mt: 2,
-                      display: "flex",
-                      justifyContent: "center",
+                {!include ? (
+                  <Link
+                    to={`/employer/manage-talent/${jobContent?.job_id}`}
+                    target="_blank"
+                    style={{
+                      textDecoration: "none",
                     }}
                   >
                     <Button
                       sx={{
-                        boxShadow: 0,
-                        fontSize: "12px",
-                        width: "90%",
-                        height: "43px",
+                        width: "50%",
+                        borderRadius: 0,
                       }}
+                      color="redButton100"
                       variant="contained"
-                      color="redButton"
-                    // onClick={() => showManageJob()}
+                      startIcon={
+                        <Box
+                          component={"img"}
+                          src={talentIcon}
+                          height={25}
+                          width={25}
+                        />
+                      }
                     >
-                      {i18n["pendingJobs.managebtn"]}
+                      Talent
                     </Button>
-                  </Box>
-                </Link>
-              )}
+                  </Link>
+                ) : (
+                  <>
+                    <Button
+                      sx={{
+                        width: "50%",
+                        borderRadius: 0,
+                      }}
+                      color="redButton100"
+                      variant="contained"
+                      startIcon={
+                        <Box
+                          component={"img"}
+                          src={talentIcon}
+                          height={25}
+                          width={25}
+                        />
+                      }
+                    >
+                      Talent
+                    </Button>
+                  </>
+                )}
+              </Box>
             </Box>
             <Box sx={{ mt: 4, width: "-webkit-fill-available" }}>
               <Typography
@@ -1684,8 +1699,7 @@ export default function JobCard({
             />
           </Button>
         </Box>
-        </>)}
       </AccordionDetails>
-    </StyledAccordion >
+    </StyledAccordion>
   );
 }

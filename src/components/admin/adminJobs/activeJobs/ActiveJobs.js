@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
-import Select from "@mui/material/Select";
 import locale from "../../../../i18n/locale";
 import { useDispatch } from "react-redux";
+import activeDownClose from "../../../../assets/Black_Down_Open - Copy.svg";
 import {
+  adminJobsFilter,
   getAllComments,
   getAllJobs,
   getJobCount,
@@ -13,16 +13,67 @@ import {
 import JobCard from "../JobCardNew";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
-import { Grid } from "@mui/material";
+import { Grid, InputBase, Paper } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useTheme } from "@emotion/react";
+import SmallButtonTalent from "../../../common/SmallButtonTalent";
+import Filters from "../Filters";
+
+const BASIC = {
+  lastKey: "",
+  status_id: "",
+  job_stage: "",
+  job_title: "",
+  job_type: "",
+};
 
 export default function ActiveJobs() {
   const i18n = locale.en;
+  const theme = useTheme();
   const [allJobs, setAllJobs] = useState([]);
   const dispatch = useDispatch();
   const [lastKey, setLastKey] = useState("");
   const [totalJob, setTotalJob] = useState(0);
   const [comments, setComments] = useState([]);
+  const [basicData, setBasicData] = useState(BASIC);
+
+  const [stageArray, setStageArray] = useState([
+    {
+      id: 1,
+      name: "review",
+    },
+    {
+      id: 2,
+      name: "shortlist",
+    },
+    {
+      id: 3,
+      name: "interview",
+    },
+    {
+      id: 4,
+      name: "assessment",
+    },
+    {
+      id: 5,
+      name: "offer",
+    },
+  ]);
+
+  const [jobTypeArray, setJobTypeArray] = useState([
+    {
+      id: 1,
+      name: "permanent",
+    },
+    {
+      id: 2,
+      name: "contract",
+    },
+    {
+      id: 3,
+      name: "freelance",
+    },
+  ]);
 
   const getJobList = async (lastkeyy) => {
     console.log("LAST KEY", lastkeyy);
@@ -80,82 +131,94 @@ export default function ActiveJobs() {
     JobCount();
   }, []);
 
+  const jobFIlters = async (lastkeyy, newBasicData) => {
+    const data = {
+      ...newBasicData,
+      lastKey: lastkeyy,
+      status_id: 2,
+    };
+    const { payload } = await dispatch(adminJobsFilter(data));
+    if (payload?.status === "success") {
+      if (lastkeyy === "") {
+        setAllJobs(payload.data);
+        setLastKey(payload.data[payload.data.length - 1]?.job_id);
+      } else {
+        setAllJobs((prevState) => [...prevState, ...payload.data]);
+      }
+    } else {
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: "Something went wrong! please relaod the window",
+        })
+      );
+    }
+  };
+
+  const handleJobRoleChange = async (event) => {
+    const {
+      target: { value },
+      target: { name },
+      target: { id },
+    } = event;
+
+    const temp = stageArray.find((item) => item.id === value);
+    console.log(value, name, id);
+    console.log(temp.name);
+    let newBasicData = {
+      ...basicData,
+      job_stage: temp.name,
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
+    setAllJobs([]);
+    await jobFIlters("", newBasicData);
+  };
+
+  const handleJobType = async (event) => {
+    const {
+      target: { value },
+      target: { name },
+      target: { id },
+    } = event;
+
+    const temp = jobTypeArray.find((item) => item.id === value);
+    console.log(value, name, id);
+    console.log(temp.name);
+    let newBasicData = {
+      ...basicData,
+      job_type: temp.name,
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
+    setAllJobs([]);
+    await jobFIlters("", newBasicData);
+  };
+
+  const handleInputSearch = async (event) => {
+    let newBasicData = {
+      ...basicData,
+      job_title: event.target.value,
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
+    setAllJobs([]);
+    await jobFIlters("", newBasicData);
+  };
+
   return (
-    <Box sx={{ ml: 6 }}>
-      <Typography
-        sx={{
-          fontSize: "36px",
-          fontWeight: 700,
-          // ml: 6
-        }}
-      >
-        {i18n["activeJobs.title"]} ({totalJob})
-      </Typography>
-      {/* <Box sx={{
-                mt: 1,
-            }}>
-                <StyledSelect
-                    sx={{ mr: 1 }}
-                    value={10}
-                    // onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'stack' }}
-                    size="small">
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Quick search</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </StyledSelect>
-                <StyledSelect
-                    sx={{ ml: 1 }}
-                    value={10}
-                    // onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'filter' }}
-                    size="small">
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Select manager</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </StyledSelect>
-            </Box>
-            <Box sx={{
-                mt: 1,
-            }}>
-                <StyledSelect
-                    sx={{ mr: 1 }}
-                    value={10}
-                    // onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'stack' }}
-                    size="small">
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Select stage</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </StyledSelect>
-                <StyledSelect
-                    sx={{ ml: 1 }}
-                    value={10}
-                    // onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'filter' }}
-                    size="small">
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Select type</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </StyledSelect>
-            </Box>
-            <Button variant="contained" color="redButton" sx={{ width: '30%', mt: 2 }}>{i18n['activeJobs.update']}</Button> */}
+    <Box sx={{ ml: 0 }}>
+      <Filters
+        title={"Active Jobs"}
+        total={totalJob}
+        handleJobRoleChange={handleJobRoleChange}
+        value={"active"}
+        handleJobType={handleJobType}
+        stageArray={stageArray}
+        jobTypeArray={jobTypeArray}
+        handleInputSearch={handleInputSearch}
+      />
       <Grid
         container
         spacing={2}

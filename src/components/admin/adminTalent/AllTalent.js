@@ -2,57 +2,19 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
 import locale from "../../../i18n/locale";
-import Accordion from "@mui/material/Accordion";
-import TextField from "@mui/material/TextField";
-import AllTalentCard from "../adminTalent/AllTalentCard";
-import {
-  ADMIN_TALENT_JOBS,
-  ALERT_TYPE,
-  ERROR_MSG,
-} from "../../../utils/Constants";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import search from "../../../assets/search.svg";
+import { ALERT_TYPE, ERROR_MSG } from "../../../utils/Constants";
+import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  getAllJobs,
-  getAllPendingJobs,
-  getAllTalentJobs,
-  getJobCount,
-  getTalentPool,
-} from "../../../redux/admin/jobsSlice";
-import { setAlert, setLoading } from "../../../redux/configSlice";
-import {
-  getPersonalities,
-  getTraits,
-} from "../../../redux/employer/postJobSlice";
+import { getAllTalentJobs, getJobCount } from "../../../redux/admin/jobsSlice";
+import { setAlert } from "../../../redux/configSlice";
+import { getTraits } from "../../../redux/employer/postJobSlice";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 import AllTalentNewCard from "./AllTalentNewCard";
-import { Grid } from "@mui/material";
-
-const StyledTextField = styled(OutlinedInput)(({ theme }) => ({
-  width: "100%",
-  margin: "8px 0",
-  background: theme.palette.white,
-  borderRadius: "20px",
-  paddingRight: "6px",
-  // paddingLeft: '16px',
-  // '& .MuiInputLabel-outlined': {
-  //     marginLeft: '4px',
-  //     color: theme.palette.placeholder
-  // },
-  "& .MuiOutlinedInput-notchedOutline": {
-    // background: theme.palette.white,
-    borderColor: theme.palette.grayBorder,
-    borderRadius: "20px",
-  },
-}));
+import { InputBase, Paper } from "@mui/material";
+import SmallButtonTalent from "../../common/SmallButtonTalent";
 
 export default function AllTalent() {
   const i18n = locale.en;
@@ -79,6 +41,7 @@ export default function AllTalent() {
       if (lastkeyy === 0) {
         setAllJobs(payload.data);
         setLastKey(payload.offset + 1);
+        setTotalJob(payload?.totalData);
       } else {
         setLastKey(payload.offset + 1);
         setAllJobs((prevState) => [...prevState, ...payload.data]);
@@ -95,8 +58,7 @@ export default function AllTalent() {
   };
 
   const pendingJobCount = async () => {
-    const response = await dispatch(getJobCount(1));
-    setTotalJob(response.payload.count);
+    // const response = await dispatch(getJobCount(1));
   };
 
   const getAllData = async () => {
@@ -117,84 +79,257 @@ export default function AllTalent() {
   };
 
   useEffect(() => {
-    getAllData();
+    // getAllData();
   }, []);
 
   useEffect(() => {
     getJobList(0);
-    pendingJobCount();
+    // pendingJobCount();
   }, [personalityAdded]);
 
   return (
     <Box sx={{ ml: 0 }}>
-      <Typography
-        sx={{
-          fontSize: "36px",
-          fontWeight: 700,
-          // ml: 6
-        }}
-      >
-        {i18n["allTalent.title"]}({totalJob})
-      </Typography>
-      {/* <StyledTextField placeholder='quick search' id="search" size="small" /> */}
-      <StyledTextField
-        id="outlined-adornment-search"
-        type="text"
-        size="small"
-        placeholder="quick search"
-        endAdornment={
-          <InputAdornment position="end">
-            <Box
-              component="img"
-              className="profileAvatar"
-              alt="crayon logo"
-              src={search}
-              sx={{
-                width: "30px",
-              }}
-            />
-          </InputAdornment>
-        }
-      />
-      <Grid
-        container
-        spacing={2}
-        flexDirection={"column"}
-        sx={{
-          display: { xs: "none", md: "flex" },
-          marginTop: "30px",
-        }}
-      >
-
-        <InfiniteScroll
-          style={{ overflow: "hidden" }}
-          dataLength={allJobs.length}
-          next={() => getJobList(lastKey)}
-          scrollThreshold={"10px"}
-          hasMore={true}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
+      <Paper sx={{ p: 3, borderRadius: "20px", mt: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "19%",
+            justifyContent: "space-between",
+          }}
         >
-          <Box
+          <Typography
             sx={{
-              mt: 2,
+              fontSize: "24px",
+              fontWeight: 700,
+              // ml: 6
             }}
           >
-            {allJobs?.map((job, index) => (
-              <AllTalentNewCard
-                key={index}
-                talentContent={job}
-                setPersonalityAdded={setPersonalityAdded}
-                traits={traits}
-              />
-            ))}
-          </Box>
-        </InfiniteScroll>
-      </Grid>
+            {i18n["allTalent.title"]}
+          </Typography>
+          <SmallButtonTalent
+            fontWeight={900}
+            textColor={"#000"}
+            color="grayButton200"
+            label={totalJob}
+            mr={1}
+            alignItems={"flex-end"}
+          />
+        </Box>
 
+        <Box sx={{ display: "flex" }} gap={3} mt={2}>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Enter quick search term..."}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+          </Paper>
+
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="job_stage"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Stage"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+        </Box>
+        <Box sx={{ display: "flex" }} gap={3} mt={2}>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Status"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="job_stage"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Associated jobs"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+        </Box>
+        <Box sx={{ display: "flex" }} gap={3} mt={2}>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Talent Pools"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+          <Paper
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40px",
+              borderRadius: "25px",
+              boxShadow: "none",
+              border: `1px solid ${theme.palette.grayBorder}`,
+              width: "50%",
+              opacity: 0,
+            }}
+          >
+            <InputBase
+              id="keyword"
+              // value={title}
+              // onChange={handleInputSearch}
+              placeholder={"Job status"}
+              sx={{ ml: 2, mr: 2, width: "100%" }}
+              disabled
+            />
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={activeDownClose}
+              sx={{
+                height: 25,
+                width: 25,
+                mr: 1,
+              }}
+            />
+          </Paper>
+        </Box>
+      </Paper>
+      <InfiniteScroll
+        style={{ overflow: "hidden" }}
+        dataLength={allJobs.length}
+        next={() => getJobList(lastKey)}
+        scrollThreshold={"100px"}
+        hasMore={true}
+        endMessage={
+          <p style={{ textAlign: "center" }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+      >
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
+          {allJobs?.map((job, index) => (
+            <AllTalentNewCard
+              key={index}
+              talentContent={job}
+              setPersonalityAdded={setPersonalityAdded}
+              traits={traits}
+            />
+          ))}
+        </Box>
+      </InfiniteScroll>
     </Box>
   );
 }

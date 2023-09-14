@@ -163,7 +163,7 @@ const en = {
     qualifications: "Qualifications",
     institutions: "Institutions",
     associations: "Associations",
-    jobQuestions: "Job Questions",
+    jobQuestions: "Questions & Answers",
     question1: "Question:",
     question2: "Question 2:",
     question3: "Question 3:",
