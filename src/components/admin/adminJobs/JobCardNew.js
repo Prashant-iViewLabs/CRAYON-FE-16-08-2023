@@ -39,7 +39,11 @@ import profile_character from "../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../assets/Profile Icons_Collaborator.svg";
 import profile_contemplator from "../../../assets/Profile Icons_Contemplator.svg";
 
-import { addJobComment } from "../../../redux/admin/jobsSlice";
+import {
+  addJobComment,
+  addTalentPool,
+  getTalentPool,
+} from "../../../redux/admin/jobsSlice";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
@@ -71,6 +75,8 @@ import locationIcon from "../../../assets/Padding Excluded/Black_Location.svg";
 import pending from "../../../assets/Padding Excluded/Black_Pending.svg";
 import salary from "../../../assets/Padding Excluded/Black_Salary.svg";
 import notice from "../../../assets/Padding Excluded/Black_Notice_Period.svg";
+import AddToPool from "../adminTalent/DialogBox/AddToPool";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 const label = "grit score";
 const label1 = "applied";
@@ -252,6 +258,9 @@ export default function JobCard({
   const [isHovered, setIsHovered] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [expand, setExpand] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [lastKey, setLastKey] = useState(0);
+  const [tableData, setTableData] = useState([]);
 
   const location = useLocation();
   const prevLocation = location.pathname;
@@ -367,6 +376,58 @@ export default function JobCard({
 
   const handlePopoverCloseReferral = () => {
     setAnchorElReferral(null);
+  };
+
+  const getTalent = async (lastkeyy) => {
+    try {
+      const { payload } = await dispatch(getTalentPool({ lastKey: lastkeyy }));
+      if (payload.status === "success") {
+        if (lastkeyy === 0) {
+          setTableData(payload.data);
+          setLastKey(payload.pageNumber + 1);
+        } else {
+          setLastKey(payload.pageNumber + 1);
+          setTableData((prevState) => [...prevState, ...payload.data]);
+        }
+      }
+    } catch (error) {}
+  };
+
+  const handleClick = async (event) => {
+    setAnchorEl(event.currentTarget);
+    await getTalent("");
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const addToPool = async (canID, poolID) => {
+    try {
+      const data = {
+        candidate_id: canID,
+        pool_id: poolID,
+      };
+      const { payload } = await dispatch(addTalentPool(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Talent added to pool successfully",
+          })
+        );
+        setAnchorEl(null);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message?.message,
+          })
+        );
+      }
+    } catch (error) {}
   };
 
   return (
@@ -582,7 +643,7 @@ export default function JobCard({
                     textOverflow: "ellipsis",
                   }}
                 >
-                  t{jobContent?.town_name || "-"}
+                  {jobContent?.town_name || "-"}
                   {jobContent?.region_name && `, ${jobContent?.region_name} `}
                 </Typography>
               </Box>
@@ -789,14 +850,29 @@ export default function JobCard({
               >
                 <SmallButton label={jobContent?.type} />
                 <SmallButton label={jobContent?.work_setup} />
-                <Box
-                  component={"img"}
-                  src={YellowLink}
-                  sx={{
-                    height: 30,
-                    width: 30,
+                <CopyToClipboard
+                  text={`${prevLocation}/job-detail/${`${
+                    jobContent?.town_name + " " + jobContent?.region_name
+                  }`}/${jobContent?.job_id}`}
+                  onCopy={() => {
+                    dispatch(
+                      setAlert({
+                        show: true,
+                        type: ALERT_TYPE.SUCCESS,
+                        msg: "Copied to clipboard",
+                      })
+                    );
                   }}
-                />
+                >
+                  <Box
+                    component={"img"}
+                    src={YellowLink}
+                    sx={{
+                      height: 30,
+                      width: 30,
+                    }}
+                  />
+                </CopyToClipboard>
                 <Box
                   component={"img"}
                   src={RedView}
@@ -843,27 +919,59 @@ export default function JobCard({
                 employerIndustry={jobContent?.employer_industries}
                 getJobList={getJobList}
               />
-              <Button
-                variant="contained"
-                color="redButton"
-                sx={{
-                  width: "100%",
-                  borderRadius: "0 0 20px 0",
-                  padding: 0,
-                  height: "70%",
-                  maxHeight: 65,
-                }}
-                startIcon={
-                  <Box
-                    component={"img"}
-                    src={talentIcon}
-                    height={30}
-                    width={30}
-                  />
-                }
-              >
-                talent
-              </Button>
+              {!include ? (
+                <Link
+                  to={`/employer/manage-talent/${jobContent?.job_id}`}
+                  target="_blank"
+                  style={{
+                    textDecoration: "none",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="redButton"
+                    sx={{
+                      width: "100%",
+                      borderRadius: "0 0 20px 0",
+                      padding: 0,
+                      height: "70%",
+                      maxHeight: 65,
+                    }}
+                    startIcon={
+                      <Box
+                        component={"img"}
+                        src={talentIcon}
+                        height={30}
+                        width={30}
+                      />
+                    }
+                  >
+                    talent
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="redButton"
+                  sx={{
+                    width: "100%",
+                    borderRadius: "0 0 20px 0",
+                    padding: 0,
+                    height: "70%",
+                    maxHeight: 65,
+                  }}
+                  startIcon={
+                    <Box
+                      component={"img"}
+                      src={talentIcon}
+                      height={30}
+                      width={30}
+                    />
+                  }
+                >
+                  talent
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>
@@ -1014,292 +1122,294 @@ export default function JobCard({
           paddingBottom: 0,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Box className="contentBoxLeft">
-            <Typography
-              sx={{
-                fontWeight: 700,
-                fontSize: 14,
-                overflow: "hidden",
-              }}
-            >
-              Skills
-            </Typography>
-            <Box sx={{ mb: 2 }}>
-              {console.log(jobContent?.JobSkills?.split(","))}
-              {jobContent?.JobSkills?.split(",").map((val) => {
-                return (
-                  <SmallButton
-                    color="orangeButton"
-                    letterSpacing="-0.02em"
-                    borderRadius="5px"
-                    label={val}
-                    mr="8px"
-                  ></SmallButton>
-                );
-              })}
-            </Box>
-
-            <Typography
-              sx={{
-                fontWeight: 700,
-                fontSize: 14,
-              }}
-            >
-              Job description
-            </Typography>
-            <JobDescripiton description={jobContent?.description} />
-
-            <Box sx={{ mt: 1 }}>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+        {flip && (
+          <>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box className="contentBoxLeft">
                 <Typography
                   sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
+                    fontWeight: 700,
+                    fontSize: 14,
+                    overflow: "hidden",
                   }}
                 >
-                  {i18n["pendingJobs.industries"]}
+                  Skills
                 </Typography>
-                {jobContent?.JobIndustries?.split(",").map(
-                  (industry, index) => {
+                <Box sx={{ mb: 2 }}>
+                  {console.log(jobContent?.JobSkills?.split(","))}
+                  {jobContent?.JobSkills?.split(",").map((val) => {
                     return (
                       <SmallButton
-                        color="blueButton600"
-                        value={industry}
-                        label={truncate(industry, { length: 15 })}
+                        color="orangeButton"
+                        letterSpacing="-0.02em"
+                        borderRadius="5px"
+                        label={val}
                         mr="8px"
-                        fontSize="10px"
                       ></SmallButton>
                     );
-                  }
-                )}
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                  })}
+                </Box>
+
                 <Typography
                   sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
+                    fontWeight: 700,
+                    fontSize: 14,
                   }}
                 >
-                  {i18n["pendingJobs.tools"]}
+                  Job description
                 </Typography>
-                {jobContent?.JobTools?.split(",").map((val) => {
-                  return (
+                <JobDescripiton description={jobContent?.description} />
+
+                <Box sx={{ mt: 1 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.industries"]}
+                    </Typography>
+                    {jobContent?.JobIndustries?.split(",").map(
+                      (industry, index) => {
+                        return (
+                          <SmallButton
+                            color="blueButton600"
+                            value={industry}
+                            label={truncate(industry, { length: 15 })}
+                            mr="8px"
+                            fontSize="10px"
+                          ></SmallButton>
+                        );
+                      }
+                    )}
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.tools"]}
+                    </Typography>
+                    {jobContent?.JobTools?.split(",").map((val) => {
+                      return (
+                        <SmallButton
+                          minWidth="10px"
+                          height={18}
+                          color="yellowButton100"
+                          borderRadius="5px"
+                          label={val}
+                          mr="4px"
+                        ></SmallButton>
+                      );
+                    })}
+                  </Box>
+                  {/* languages Remaining */}
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.languages"]}
+                    </Typography>
                     <SmallButton
                       minWidth="10px"
                       height={18}
-                      color="yellowButton100"
+                      color="grayButton100"
                       borderRadius="5px"
-                      label={val}
+                      label="English"
                       mr="4px"
                     ></SmallButton>
-                  );
-                })}
-              </Box>
-              {/* languages Remaining */}
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
-                  }}
-                >
-                  {i18n["pendingJobs.languages"]}
-                </Typography>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="English"
-                  mr="4px"
-                ></SmallButton>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="Afrikaans"
-                  mr="4px"
-                ></SmallButton>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="Spanish"
-                  mr="4px"
-                ></SmallButton>
-                {/* languages Remaining */}
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
-                  }}
-                >
-                  {i18n["pendingJobs.institutions"]}
-                </Typography>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="English"
-                  mr="4px"
-                ></SmallButton>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="Afrikaans"
-                  mr="4px"
-                ></SmallButton>
-                <SmallButton
-                  minWidth="10px"
-                  height={18}
-                  color="grayButton100"
-                  borderRadius="5px"
-                  label="Spanish"
-                  mr="4px"
-                ></SmallButton>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
-                  }}
-                >
-                  {i18n["pendingJobs.qualifications"]}
-                </Typography>
+                    <SmallButton
+                      minWidth="10px"
+                      height={18}
+                      color="grayButton100"
+                      borderRadius="5px"
+                      label="Afrikaans"
+                      mr="4px"
+                    ></SmallButton>
+                    <SmallButton
+                      minWidth="10px"
+                      height={18}
+                      color="grayButton100"
+                      borderRadius="5px"
+                      label="Spanish"
+                      mr="4px"
+                    ></SmallButton>
+                    {/* languages Remaining */}
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.institutions"]}
+                    </Typography>
+                    <SmallButton
+                      minWidth="10px"
+                      height={18}
+                      color="grayButton100"
+                      borderRadius="5px"
+                      label="English"
+                      mr="4px"
+                    ></SmallButton>
+                    <SmallButton
+                      minWidth="10px"
+                      height={18}
+                      color="grayButton100"
+                      borderRadius="5px"
+                      label="Afrikaans"
+                      mr="4px"
+                    ></SmallButton>
+                    <SmallButton
+                      minWidth="10px"
+                      height={18}
+                      color="grayButton100"
+                      borderRadius="5px"
+                      label="Spanish"
+                      mr="4px"
+                    ></SmallButton>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.qualifications"]}
+                    </Typography>
 
-                {jobContent?.JobQualifications?.split(",").map(
-                  (qualifications, index) => {
-                    return (
-                      <SmallButton
-                        minWidth="10px"
-                        height={18}
-                        color="grayButton100"
-                        borderRadius="5px"
-                        value={qualifications}
-                        label={truncate(qualifications, { length: 15 })}
-                        mr="4px"
-                      ></SmallButton>
-                    );
-                  }
-                )}
-              </Box>
+                    {jobContent?.JobQualifications?.split(",").map(
+                      (qualifications, index) => {
+                        return (
+                          <SmallButton
+                            minWidth="10px"
+                            height={18}
+                            color="grayButton100"
+                            borderRadius="5px"
+                            value={qualifications}
+                            label={truncate(qualifications, { length: 15 })}
+                            mr="4px"
+                          ></SmallButton>
+                        );
+                      }
+                    )}
+                  </Box>
 
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
-                  }}
-                >
-                  {i18n["pendingJobs.associations"]}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    mr: 1,
-                    width: 100,
-                  }}
-                >
-                  {i18n["pendingJobs.school"]}
-                </Typography>
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "start", mt: 1 }}>
-              <Typography
-                sx={{
-                  fontSize: "12px",
-                  fontWeight: 400,
-                  mr: 1,
-                  width: 100,
-                }}
-              >
-                {i18n["pendingJobs.personality"]}
-              </Typography>
-              <Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  {jobContent?.primary_name && (
-                    <Box
-                      component="img"
-                      height={60}
-                      // sx={{ margin: "0 -22px 0 -22px" }}
-                      alt="job_exp"
-                      src={
-                        (jobContent?.primary_name === "collaborator" &&
-                          profile_collaborator) ||
-                        (jobContent?.primary_name === "challenger" &&
-                          profile_challenger) ||
-                        (jobContent?.primary_name === "character" &&
-                          profile_character) ||
-                        (jobContent?.primary_name === "contemplator" &&
-                          profile_contemplator)
-                      }
-                    />
-                  )}
-                  {/* </Box> */}
-                  {jobContent?.shadow_name && (
-                    <Box
-                      component="img"
-                      height={60}
-                      // sx={{ margin: "0 -22px 0 -22px" }}
-                      alt="job_exp"
-                      src={
-                        (jobContent?.shadow_name === "collaborator" &&
-                          profile_collaborator) ||
-                        (jobContent?.shadow_name === "challenger" &&
-                          profile_challenger) ||
-                        (jobContent?.shadow_name === "character" &&
-                          profile_character) ||
-                        (jobContent?.shadow_name === "contemplator" &&
-                          profile_contemplator)
-                      }
-                    />
-                  )}
-                  <Box sx={{ marginLeft: "-16px" }}>
-                    <SingleRadialChart
-                      hollow="55%"
-                      labelsData={label}
-                      series={
-                        jobContent?.grit_score == null
-                          ? [0]
-                          : [jobContent?.grit_score]
-                      }
-                      width={90}
-                      nameSize="9px"
-                      valueSize="14px"
-                      nameOffsetY="11"
-                      valueOffsetY="-17"
-                      color={theme.palette.lightGreenButton300.main}
-                      index={1}
-                      isHovered={isHovered}
-                    />
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.associations"]}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        mr: 1,
+                        width: 100,
+                      }}
+                    >
+                      {i18n["pendingJobs.school"]}
+                    </Typography>
                   </Box>
                 </Box>
-                <Box>
-                  {/* {jobContent?.JobTraits?.map((trait, index) => {
+                <Box sx={{ display: "flex", alignItems: "start", mt: 1 }}>
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      fontWeight: 400,
+                      mr: 1,
+                      width: 100,
+                    }}
+                  >
+                    {i18n["pendingJobs.personality"]}
+                  </Typography>
+                  <Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      {jobContent?.primary_name && (
+                        <Box
+                          component="img"
+                          height={60}
+                          // sx={{ margin: "0 -22px 0 -22px" }}
+                          alt="job_exp"
+                          src={
+                            (jobContent?.primary_name === "collaborator" &&
+                              profile_collaborator) ||
+                            (jobContent?.primary_name === "challenger" &&
+                              profile_challenger) ||
+                            (jobContent?.primary_name === "character" &&
+                              profile_character) ||
+                            (jobContent?.primary_name === "contemplator" &&
+                              profile_contemplator)
+                          }
+                        />
+                      )}
+                      {/* </Box> */}
+                      {jobContent?.shadow_name && (
+                        <Box
+                          component="img"
+                          height={60}
+                          // sx={{ margin: "0 -22px 0 -22px" }}
+                          alt="job_exp"
+                          src={
+                            (jobContent?.shadow_name === "collaborator" &&
+                              profile_collaborator) ||
+                            (jobContent?.shadow_name === "challenger" &&
+                              profile_challenger) ||
+                            (jobContent?.shadow_name === "character" &&
+                              profile_character) ||
+                            (jobContent?.shadow_name === "contemplator" &&
+                              profile_contemplator)
+                          }
+                        />
+                      )}
+                      <Box sx={{ marginLeft: "-16px" }}>
+                        <SingleRadialChart
+                          hollow="55%"
+                          labelsData={label}
+                          series={
+                            jobContent?.grit_score == null
+                              ? [0]
+                              : [jobContent?.grit_score]
+                          }
+                          width={90}
+                          nameSize="9px"
+                          valueSize="14px"
+                          nameOffsetY="11"
+                          valueOffsetY="-17"
+                          color={theme.palette.lightGreenButton300.main}
+                          index={1}
+                          isHovered={isHovered}
+                        />
+                      </Box>
+                    </Box>
+                    <Box>
+                      {/* {jobContent?.JobTraits?.map((trait, index) => {
                     return (
                       <SmallButton
                         fontWeight={500}
@@ -1313,310 +1423,337 @@ export default function JobCard({
                       ></SmallButton>
                     );
                   })} */}
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
-            </Box>
 
-            <Box sx={{ mt: 1 }}>
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  mr: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                <Box
-                  component={"img"}
-                  src={JobExp}
-                  sx={{
-                    height: "20px",
-                    width: "20px",
-                  }}
-                />
-                {i18n["pendingJobs.jobquestions"]}
-              </Typography>
-              <Box sx={{ display: "flex" }}>
-                <Box sx={{ width: "90%" }}>
-                  {jobContent?.job_question?.question
-                    ?.split(",")
-                    .map((questions, index) => {
-                      return (
-                        <>
-                          <Typography
-                            sx={{
-                              fontSize: "14px",
-                              fontWeight: 400,
-                              mr: 1,
-                              mt: 1,
-                            }}
-                          >
-                            <span
-                              style={{
-                                fontWeight: 700,
-                              }}
-                            >
-                              Question {index + 1}:
-                            </span>{" "}
-                            <br />
-                            {questions}
-                          </Typography>
-                          <Paper
-                            sx={{
-                              display: "flex",
-                              height: "40px",
-                              borderRadius: "25px",
-                              boxShadow: "none",
-                              alignItems: "center",
-                              paddingX: 0.8,
-                              justifyContent: "space-between",
-                              border: `1px solid ${theme.palette.grayBorder}`,
-                            }}
-                          >
-                            <InputBase
-                              sx={{ ml: 2, mr: 2 }}
-                              id="password"
-                              value={questions?.answer}
-                              type="text"
-                              placeholder={i18n["pendingJobs.answer"]}
-                            />
-                            <Button
-                              variant="contained"
-                              color="lightGreenButton300"
-                              sx={{
-                                height: 30,
-                              }}
-                            >
-                              Save
-                            </Button>
-                          </Paper>
-                        </>
-                      );
-                    })}
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-          <Box className="contentBoxRight">
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                mt: 6,
-              }}
-            >
-              {/* <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} > */}
-              <Box
-                sx={{
-                  border: 1,
-                  borderRadius: 5,
-                  borderColor: theme.palette.grayBorder,
-                  overflow: "hidden",
-                  paddingTop: 2,
-                }}
-              >
-                <Box sx={{ display: "flex" }}>
-                  <Box sx={{ margin: "0" }}>
-                    <SingleRadialChart
-                      max={1000}
-                      labelsData={label1}
-                      series={[jobContent?.TotalUserCount]}
-                      width={140}
-                      color={theme.palette.lightGreenButton300.main}
-                      index={index}
-                      isHovered={isHovered}
-                    />
-                  </Box>
-                  <Box sx={{ margin: "0" }}>
-                    <SingleRadialChart
-                      labelsData={label2}
-                      series={[jobContent?.totalusershorlisted]}
-                      width={140}
-                      color={theme.palette.lightGreenButton300.main}
-                      index={index}
-                      isHovered={isHovered}
-                    />
-                  </Box>
-                  <Box sx={{ margin: "0" }}>
-                    <SingleRadialChart
-                      labelsData={label3}
-                      series={[jobContent?.totaluserinterviewed]}
-                      width={140}
-                      color={theme.palette.lightGreenButton300.main}
-                      index={index}
-                      isHovered={isHovered}
-                    />
-                  </Box>
-                </Box>
-                <Button
-                  sx={{
-                    width: "50%",
-                    borderRadius: 0,
-                  }}
-                  color="grayButton200"
-                  variant="contained"
-                  endIcon={
-                    // {flip ? upClose : downClose}
-                    <Box
-                      component={"img"}
-                      sx={{
-                        height: 30,
-                        width: 30,
-                      }}
-                      src={activeDownClose}
-                    />
-                  }
-                >
-                  Link to pool
-                </Button>
-                {!include ? (
-                  <Link
-                    to={`/employer/manage-talent/${jobContent?.job_id}`}
-                    target="_blank"
-                    style={{
-                      textDecoration: "none",
+                <Box sx={{ mt: 1 }}>
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      mr: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
                     }}
                   >
-                    <Button
-                      sx={{
-                        width: "50%",
-                        borderRadius: 0,
-                      }}
-                      color="redButton100"
-                      variant="contained"
-                      startIcon={
-                        <Box
-                          component={"img"}
-                          src={talentIcon}
-                          height={25}
-                          width={25}
-                        />
-                      }
-                    >
-                      Talent
-                    </Button>
-                  </Link>
-                ) : (
-                  <>
-                    <Button
-                      sx={{
-                        width: "50%",
-                        borderRadius: 0,
-                      }}
-                      color="redButton100"
-                      variant="contained"
-                      startIcon={
-                        <Box
-                          component={"img"}
-                          src={talentIcon}
-                          height={25}
-                          width={25}
-                        />
-                      }
-                    >
-                      Talent
-                    </Button>
-                  </>
-                )}
-              </Box>
-            </Box>
-            <Box sx={{ mt: 4, width: "-webkit-fill-available" }}>
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  mr: 1,
-                }}
-              >
-                {i18n["pendingJobs.comments"]}
-              </Typography>
-              <Box id="talentList" sx={{ overflow: "hidden", height: "160px" }}>
-                <InfiniteScroll
-                  style={{
-                    height: "100%",
-                    overflowX: "hidden",
-                    scrollbarWidth: "thin",
-                  }}
-                  dataLength={comments !== undefined && comments?.length}
-                  // next={() => getJobList(lastKey)}
-                  hasMore={true}
-                  scrollableTarget="talentList"
-                  endMessage={
-                    <p style={{ textAlign: "center" }}>
-                      <b>Yay! You have seen it all</b>
-                    </p>
-                  }
-                >
-                  {comments.length > 0 ? (
-                    comments?.map((comment) => {
-                      return (
-                        <Box sx={{ display: "flex", mt: 2 }}>
-                          <Box
-                            component="img"
-                            className="profileAvatar"
-                            alt="crayon logo"
-                            src={profile}
-                            sx={{
-                              mr: 1,
-                              width: 20,
-                              height: 20,
-                            }}
-                          />
-                          <Box
-                            sx={{
-                              flexGrow: 1,
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontWeight: 600,
-                                mr: 1,
-                              }}
-                            >
-                              {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
-                            </Typography>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontWeight: 400,
-                                mr: 1,
-                              }}
-                            >
-                              {comment.comment}
-                            </Typography>
-                            <Typography
-                              sx={{
-                                fontSize: "12px",
-                                fontWeight: 400,
-                                mr: 1,
-                                color: theme.palette.grayButton.main,
-                                textAlign: "end",
-                              }}
-                            >
-                              {dateConverterMonth(comment.created_at)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      );
-                    })
-                  ) : (
                     <Box
+                      component={"img"}
+                      src={JobExp}
                       sx={{
-                        width: "100%",
-                        textAlign: "center",
-                        mt: 4,
-                        color: theme.palette.placeholder,
+                        height: "20px",
+                        width: "20px",
+                      }}
+                    />
+                    {i18n["pendingJobs.jobquestions"]}
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ width: "90%" }}>
+                      {jobContent?.job_question?.question
+                        ?.split(",")
+                        .map((questions, index) => {
+                          return (
+                            <>
+                              <Typography
+                                sx={{
+                                  fontSize: "14px",
+                                  fontWeight: 400,
+                                  mr: 1,
+                                  mt: 1,
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontWeight: 700,
+                                  }}
+                                >
+                                  Question {index + 1}:
+                                </span>{" "}
+                                <br />
+                                {questions}
+                              </Typography>
+                              <Paper
+                                sx={{
+                                  display: "flex",
+                                  height: "40px",
+                                  borderRadius: "25px",
+                                  boxShadow: "none",
+                                  alignItems: "center",
+                                  paddingX: 0.8,
+                                  justifyContent: "space-between",
+                                  border: `1px solid ${theme.palette.grayBorder}`,
+                                }}
+                              >
+                                <InputBase
+                                  sx={{ ml: 2, mr: 2 }}
+                                  id="password"
+                                  value={questions?.answer}
+                                  type="text"
+                                  placeholder={i18n["pendingJobs.answer"]}
+                                />
+                                <Button
+                                  variant="contained"
+                                  color="lightGreenButton300"
+                                  sx={{
+                                    height: 30,
+                                  }}
+                                >
+                                  Save
+                                </Button>
+                              </Paper>
+                            </>
+                          );
+                        })}
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+              <Box className="contentBoxRight">
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    mt: 6,
+                  }}
+                >
+                  {/* <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} > */}
+                  <Box
+                    sx={{
+                      border: 1,
+                      borderRadius: 5,
+                      borderColor: theme.palette.grayBorder,
+                      overflow: "hidden",
+                      paddingTop: 2,
+                    }}
+                  >
+                    <Box sx={{ display: "flex" }}>
+                      <Box sx={{ margin: "0" }}>
+                        <SingleRadialChart
+                          max={1000}
+                          labelsData={label1}
+                          series={[jobContent?.TotalUserCount]}
+                          width={140}
+                          color={theme.palette.lightGreenButton300.main}
+                          index={index}
+                          isHovered={isHovered}
+                        />
+                      </Box>
+                      <Box sx={{ margin: "0" }}>
+                        <SingleRadialChart
+                          labelsData={label2}
+                          series={[jobContent?.totalusershorlisted]}
+                          width={140}
+                          color={theme.palette.lightGreenButton300.main}
+                          index={index}
+                          isHovered={isHovered}
+                        />
+                      </Box>
+                      <Box sx={{ margin: "0" }}>
+                        <SingleRadialChart
+                          labelsData={label3}
+                          series={[jobContent?.totaluserinterviewed]}
+                          width={140}
+                          color={theme.palette.lightGreenButton300.main}
+                          index={index}
+                          isHovered={isHovered}
+                        />
+                      </Box>
+                    </Box>
+                    <Button
+                      sx={{
+                        width: "50%",
+                        borderRadius: 0,
+                      }}
+                      onClick={handleClick}
+                      color="grayButton200"
+                      variant="contained"
+                      endIcon={
+                        // {flip ? upClose : downClose}
+                        <Box
+                          component={"img"}
+                          sx={{
+                            height: 30,
+                            width: 30,
+                          }}
+                          src={activeDownClose}
+                        />
+                      }
+                    >
+                      Link to pool
+                    </Button>
+                    <Popover
+                      id="dropdown-menu"
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                      }}
+                      sx={{
+                        "& .MuiPaper-root-MuiPopover-paper": {
+                          minWidth: "18% !important",
+                          borderRadius: "20px !important",
+                          mt: 2,
+                        },
                       }}
                     >
-                      {i18n["pendingJobs.noData"]}
-                    </Box>
-                  )}
-                  <style>
-                    {`.infinite-scroll-component::-webkit-scrollbar {
+                      <AddToPool talentData={tableData} addToPool={addToPool} />
+                    </Popover>
+                    {!include ? (
+                      <Link
+                        to={`/employer/manage-talent/${jobContent?.job_id}`}
+                        target="_blank"
+                        style={{
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Button
+                          sx={{
+                            width: "50%",
+                            borderRadius: 0,
+                          }}
+                          color="redButton100"
+                          variant="contained"
+                          startIcon={
+                            <Box
+                              component={"img"}
+                              src={talentIcon}
+                              height={25}
+                              width={25}
+                            />
+                          }
+                        >
+                          Talent
+                        </Button>
+                      </Link>
+                    ) : (
+                      <>
+                        <Button
+                          sx={{
+                            width: "50%",
+                            borderRadius: 0,
+                          }}
+                          color="redButton100"
+                          variant="contained"
+                          startIcon={
+                            <Box
+                              component={"img"}
+                              src={talentIcon}
+                              height={25}
+                              width={25}
+                            />
+                          }
+                        >
+                          Talent
+                        </Button>
+                      </>
+                    )}
+                  </Box>
+                </Box>
+                <Box sx={{ mt: 4, width: "-webkit-fill-available" }}>
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      mr: 1,
+                    }}
+                  >
+                    {i18n["pendingJobs.comments"]}
+                  </Typography>
+                  <Box
+                    id="talentList"
+                    sx={{ overflow: "hidden", height: "160px" }}
+                  >
+                    <InfiniteScroll
+                      style={{
+                        height: "100%",
+                        overflowX: "hidden",
+                        scrollbarWidth: "thin",
+                      }}
+                      dataLength={comments !== undefined && comments?.length}
+                      // next={() => getJobList(lastKey)}
+                      hasMore={true}
+                      scrollableTarget="talentList"
+                      endMessage={
+                        <p style={{ textAlign: "center" }}>
+                          <b>Yay! You have seen it all</b>
+                        </p>
+                      }
+                    >
+                      {comments.length > 0 ? (
+                        comments?.map((comment) => {
+                          return (
+                            <Box sx={{ display: "flex", mt: 2 }}>
+                              <Box
+                                component="img"
+                                className="profileAvatar"
+                                alt="crayon logo"
+                                src={profile}
+                                sx={{
+                                  mr: 1,
+                                  width: 20,
+                                  height: 20,
+                                }}
+                              />
+                              <Box
+                                sx={{
+                                  flexGrow: 1,
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontSize: "14px",
+                                    fontWeight: 600,
+                                    mr: 1,
+                                  }}
+                                >
+                                  {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    fontSize: "14px",
+                                    fontWeight: 400,
+                                    mr: 1,
+                                  }}
+                                >
+                                  {comment.comment}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    fontSize: "12px",
+                                    fontWeight: 400,
+                                    mr: 1,
+                                    color: theme.palette.grayButton.main,
+                                    textAlign: "end",
+                                  }}
+                                >
+                                  {dateConverterMonth(comment.created_at)}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          );
+                        })
+                      ) : (
+                        <Box
+                          sx={{
+                            width: "100%",
+                            textAlign: "center",
+                            mt: 4,
+                            color: theme.palette.placeholder,
+                          }}
+                        >
+                          {i18n["pendingJobs.noData"]}
+                        </Box>
+                      )}
+                      <style>
+                        {`.infinite-scroll-component::-webkit-scrollbar {
                       width: 7px !important;
                       background-color: #F5F5F5; /* Set the background color of the scrollbar */
                     }
@@ -1628,21 +1765,21 @@ export default function JobCard({
                     .infinite-scroll-component::-webkit-scrollbar-thumb {
                       background-color: #888c; /* Set the color of the scrollbar thumb */
                     }`}
-                  </style>
-                </InfiniteScroll>
-              </Box>
-              <Box sx={{ mt: 4 }}>
-                {/* <StyledTextField placeholder="type your comment here..." id="comment" size="small" /> */}
-                <StyledTextField
-                  id="outlined-adornment-password"
-                  type="text"
-                  size="small"
-                  placeholder="type your comment here..."
-                  value={inputValue} // Set the value to the state variable
-                  onChange={(e) => setInputValue(e.target.value)} // Update the state with the new input value
-                  endAdornment={
-                    <InputAdornment position="end">
-                      {/* <Box
+                      </style>
+                    </InfiniteScroll>
+                  </Box>
+                  <Box sx={{ mt: 4 }}>
+                    {/* <StyledTextField placeholder="type your comment here..." id="comment" size="small" /> */}
+                    <StyledTextField
+                      id="outlined-adornment-password"
+                      type="text"
+                      size="small"
+                      placeholder="type your comment here..."
+                      value={inputValue} // Set the value to the state variable
+                      onChange={(e) => setInputValue(e.target.value)} // Update the state with the new input value
+                      endAdornment={
+                        <InputAdornment position="end">
+                          {/* <Box
                         component="img"
                         className="profileAvatar"
                         alt="crayon logo"
@@ -1654,51 +1791,53 @@ export default function JobCard({
                         }}
                         onClick={sendComment}
                       /> */}
-                      <Button
-                        variant="contained"
-                        color="lightGreenButton300"
-                        sx={{
-                          height: 30,
-                        }}
-                        onClick={sendComment}
-                      >
-                        Post
-                      </Button>
-                    </InputAdornment>
-                  }
-                />
+                          <Button
+                            variant="contained"
+                            color="lightGreenButton300"
+                            sx={{
+                              height: 30,
+                            }}
+                            onClick={sendComment}
+                          >
+                            Post
+                          </Button>
+                        </InputAdornment>
+                      }
+                    />
+                  </Box>
+                  <JobAlert jobContent={jobContent} />
+                </Box>
               </Box>
-              <JobAlert jobContent={jobContent} />
             </Box>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="redButton"
-            sx={{
-              borderRadius: "5px 5px 0 0 ",
-              width: 100,
-              height: 20,
-            }}
-            onClick={() => setFlip((prev) => !prev)}
-          >
             <Box
-              component={"img"}
-              src={upClose}
               sx={{
-                height: 10,
-                width: 10,
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
               }}
-            />
-          </Button>
-        </Box>
+            >
+              <Button
+                variant="contained"
+                color="redButton"
+                sx={{
+                  borderRadius: "5px 5px 0 0 ",
+                  width: 100,
+                  height: 20,
+                }}
+                onClick={() => setFlip((prev) => !prev)}
+              >
+                <Box
+                  component={"img"}
+                  src={upClose}
+                  sx={{
+                    height: 10,
+                    width: 10,
+                  }}
+                />
+              </Button>
+            </Box>
+          </>
+        )}
       </AccordionDetails>
     </StyledAccordion>
   );

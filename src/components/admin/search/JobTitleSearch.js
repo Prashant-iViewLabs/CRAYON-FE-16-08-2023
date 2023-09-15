@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -12,35 +13,19 @@ import {
   ALERT_TYPE,
   ERROR_MSG,
 } from "../../../utils/Constants";
-import { getTitles, getTraits } from "../../../redux/employer/postJobSlice";
+import { getTraits } from "../../../redux/employer/postJobSlice";
 import { setAlert, setLoading } from "../../../redux/configSlice";
 import { useDispatch } from "react-redux";
-import AutoComplete from "../../common/AutoComplete";
 import { useSelector } from "react-redux";
-import { getSearchResult } from "../../../redux/admin/jobsSlice";
 import TalentSVGButton from "../../common/TalentSVGButton";
 import InfoIcon from "../../common/InfoIcon";
 import link from "../../../assets/CircularIcon/Red/Circular Icons__Red_Title_Job_Experience.svg";
 import diamond from "../../../assets/Characters/Red_Diamond.svg";
 import leftArrow from "../../../assets/Black_Left_Previous.svg";
 import rightArrow from "../../../assets/Black_Right_Next.svg";
-import * as React from "react";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import FilterDrawer from "./dialogBox/FilterDrawer";
 import Accordian from "./dialogBox/Accordian";
-import {
-  getJobTitleData,
-  getTitlesCandidateData,
-} from "../../../redux/admin/searchSlice";
-import SmallButton from "../../common/SmallButton";
+import { getJobTitleData } from "../../../redux/admin/searchSlice";
 import SmallButtonTalent from "../../common/SmallButtonTalent";
 
 const RedSwitch = styled(Switch)(({ theme }) => ({
@@ -219,6 +204,12 @@ export default function JobTitleSearch() {
   const resetSearch = () => {
     setOpenAccordian(false);
     setTitle("");
+    setBasicData(BASIC);
+  };
+
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
     setBasicData(BASIC);
   };
 
@@ -503,6 +494,7 @@ export default function JobTitleSearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

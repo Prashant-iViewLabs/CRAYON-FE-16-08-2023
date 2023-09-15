@@ -71,6 +71,7 @@ import SchoolSearch from './components/admin/search/SchoolSearch';
 import TownsSearch from './components/admin/search/TownsSearch';
 import NationalitySearch from './components/admin/search/NationalitySearch';
 import LanguageSearch from './components/admin/search/LanguageSearch';
+import AllJobs from './components/admin/adminJobs/AllJobs';
 
 
 
@@ -127,6 +128,7 @@ export default function App() {
             <Route path='currencies' element={<PrivateRoute><Currencies /></PrivateRoute>} />
           </Route>
           <Route path='adminJobs' element={<PrivateRoute><AdminJobs /></PrivateRoute>} >
+            <Route path='all-jobs' element={<PrivateRoute><AllJobs /></PrivateRoute>} />
             <Route path='active-jobs' element={<PrivateRoute><ActiveJobs /></PrivateRoute>} />
             <Route path='active-jobs/:id' element={<PrivateRoute><ActiveJobDetail /></PrivateRoute>} />
             <Route path='pending-jobs' element={<PrivateRoute><PendingJobs /></PrivateRoute>} />

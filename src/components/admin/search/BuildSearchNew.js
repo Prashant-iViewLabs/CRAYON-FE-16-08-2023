@@ -295,59 +295,48 @@ export default function BuildSearchNew() {
   const resetSearch = () => {
     setOpenSearch(false);
     setBasicData(BASIC);
+    setRangeValue([0, 20]);
+    setExpRange(30);
   };
 
   const getAllData = async (para) => {
     try {
-      dispatch(setLoading(true));
       switch (para) {
         case "title":
           await dispatch(getTitles());
-          dispatch(setLoading(false));
           return;
         case "industry":
           await dispatch(getIndustries());
-          dispatch(setLoading(false));
           return;
         case "company":
           await dispatch(getCompanies());
-          dispatch(setLoading(false));
           return;
         case "skills":
           await dispatch(getSkills());
-          dispatch(setLoading(false));
           return;
         case "tools":
           await dispatch(getTools());
-          dispatch(setLoading(false));
           return;
         case "qualification":
           await dispatch(getQualification());
-          dispatch(setLoading(false));
           return;
         case "institution":
           await dispatch(getInstitute());
-          dispatch(setLoading(false));
           return;
         case "association":
           await dispatch(getAssociation());
-          dispatch(setLoading(false));
           return;
         case "school":
           await dispatch(getSchool());
-          dispatch(setLoading(false));
           return;
         case "towns":
           await dispatch(getTown());
-          dispatch(setLoading(false));
           return;
         case "nationality":
           await dispatch(getNationality());
-          dispatch(setLoading(false));
           return;
         case "language":
           await dispatch(getLanguage());
-          dispatch(setLoading(false));
           return;
         default:
           return;
@@ -368,7 +357,7 @@ export default function BuildSearchNew() {
   const handleRangeSliderChange = (event, newValue) => {
     let newBasicData = {
       ...basicData,
-      salary: [newValue[0] * 1000, newValue[1] * 1000],
+      salary: [0, newValue[0] * 1000, newValue[1] * 1000],
     };
     console.log(newBasicData);
     setBasicData(newBasicData);
@@ -386,7 +375,7 @@ export default function BuildSearchNew() {
   const expHandleChange = (event, newValue) => {
     let newBasicData = {
       ...basicData,
-      experience: [0, newValue / 10],
+      experience: [0, 0, newValue / 10],
     };
     setBasicData(newBasicData);
     setExpRange(newValue);
@@ -404,20 +393,21 @@ export default function BuildSearchNew() {
       }),
     };
     console.log(newBasicData);
-    setSwitchArray(newBasicData);
+    setBasicData(newBasicData);
   };
 
   const handleGreenSwitch = (event, value) => {
-    // if (event.target.checked) {
-    //   // Clear the autocomplete field by resetting its input value
-    //   autocompleteInputRef.current.value = "";
-    // }
-    // let newBasicData = {
-    //   ...basicData,
-    //   [value]: [],
-    // };
-    // console.log(newBasicData);
-    // setSwitchArray(newBasicData);
+    console.log(event.target.checked);
+    if (event.target.checked) {
+      // Clear the Autocomplete field using the ref
+      autocompleteInputRef.current.querySelector("input").value = "";
+    }
+    let newBasicData = {
+      ...basicData,
+      [value]: [0],
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
   };
 
   const handleMultipleAutoComplete = (event, newValue, id) => {
@@ -782,7 +772,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Search or add job title"}
                 data={titles}
-                onFocus={() => getAllData("title")}
+                onFocus={() => {
+                  if (titles.length === 0) {
+                    getAllData("title");
+                  }
+                }}
                 autoCompleteRef={autocompleteInputRef}
               ></AutoComplete>
 
@@ -880,7 +874,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Enter any industry(ies) relevant to the role"}
                 data={industries}
-                onFocus={() => getAllData("industry")}
+                onFocus={() => {
+                  if (industries.length === 0) {
+                    getAllData("industry");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -975,7 +973,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={i18n["empMyProfile.companyNamePlace"]}
                 data={companies}
-                onFocus={() => getAllData("company")}
+                onFocus={() => {
+                  if (companies.length === 0) {
+                    getAllData("company");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1069,7 +1071,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={i18n["postAJob.skills"]}
                 data={skills}
-                onFocus={() => getAllData("skills")}
+                onFocus={() => {
+                  if (skills.length === 0) {
+                    getAllData("skills");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1162,7 +1168,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Select or add the required tools"}
                 data={tools}
-                onFocus={() => getAllData("tools")}
+                onFocus={() => {
+                  if (tools.length === 0) {
+                    getAllData("tools");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1253,7 +1263,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Select or add the required qualification"}
                 data={qualification}
-                onFocus={() => getAllData("qualification")}
+                onFocus={() => {
+                  if (qualification.length === 0) {
+                    getAllData("qualification");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1349,7 +1363,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Select or add the required institutions"}
                 data={institution}
-                onFocus={() => getAllData("institution")}
+                onFocus={() => {
+                  if (institution.length === 0) {
+                    getAllData("institution");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1442,7 +1460,11 @@ export default function BuildSearchNew() {
                 placeholder={"Select or add the required associations"}
                 // value={getAssociationValue()}
                 data={association}
-                onFocus={() => getAllData("association")}
+                onFocus={() => {
+                  if (association.length === 0) {
+                    getAllData("association");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1534,7 +1556,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Select or add the required school"}
                 data={school}
-                onFocus={() => getAllData("school")}
+                onFocus={() => {
+                  if (school.length === 0) {
+                    getAllData("school");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1624,7 +1650,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Select or add the required towns"}
                 data={town}
-                onFocus={() => getAllData("towns")}
+                onFocus={() => {
+                  if (town.length === 0) {
+                    getAllData("towns");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1714,7 +1744,11 @@ export default function BuildSearchNew() {
                 sx={{ width: "50%", display: "inline-table" }}
                 placeholder={"Select or add the required nationalities"}
                 data={nationality}
-                onFocus={() => getAllData("nationality")}
+                onFocus={() => {
+                  if (nationality.length === 0) {
+                    getAllData("nationality");
+                  }
+                }}
               ></AutoComplete>
 
               <Box
@@ -1808,7 +1842,11 @@ export default function BuildSearchNew() {
                 // value={getLangValue()}
                 data={language}
                 disableCloseOnSelect={true}
-                onFocus={() => getAllData("language")}
+                onFocus={() => {
+                  if (language.length === 0) {
+                    getAllData("language");
+                  }
+                }}
               ></AutoComplete>
 
               <Box

@@ -120,10 +120,18 @@ function rangeValueHandler(value) {
 export default function JobAlert({ talentContent }) {
   const i18n = locale.en;
   const theme = useTheme();
-  const [rangeValue, setRangeValue] = useState([talentContent?.salaryMin/1000,talentContent?.salaryMax/1000]);
-  const [expRange, setExpRange] = useState([talentContent?.experienceYearStart*10, talentContent?.experienceYearEnd*10]);
-  const industryUsers = talentContent?.candidate_profile?.industry_users.map((item) => item?.industry?.name)
-  console.log(industryUsers)
+  const [rangeValue, setRangeValue] = useState([
+    talentContent?.salaryMin / 1000,
+    talentContent?.salaryMax / 1000,
+  ]);
+  const [expRange, setExpRange] = useState([
+    talentContent?.experienceYearStart * 10,
+    talentContent?.experienceYearEnd * 10,
+  ]);
+  const industryUsers = talentContent?.candidate_profile?.industry_users.map(
+    (item) => item?.industry?.name
+  );
+  console.log(industryUsers);
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
   };
@@ -298,7 +306,11 @@ export default function JobAlert({ talentContent }) {
                 ></SmallButton>
               );
             })} */}
-            <Slider2 color={"blueButton600"} items={industryUsers} hideTagsAfter={2}/>
+            <Slider2
+              color={"blueButton600"}
+              items={industryUsers}
+              hideTagsAfter={2}
+            />
           </Box>
           {talentContent?.HighestQual !== null && (
             <SmallButton

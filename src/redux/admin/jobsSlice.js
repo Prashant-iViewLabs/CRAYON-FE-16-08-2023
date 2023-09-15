@@ -17,15 +17,15 @@ export const adminJobsFilter = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await getApi(
       "/admin/job?lastKey=" +
-      lastKey +
-      "&status_id=" +
-      status_id +
-      "&job_title=" +
-      job_title +
-      "&job_stage=" +
-      job_stage +
-      "&job_type=" +
-      job_type,
+        lastKey +
+        "&status_id=" +
+        status_id +
+        "&job_title=" +
+        job_title +
+        "&job_stage=" +
+        job_stage +
+        "&job_type=" +
+        job_type,
       true
     );
 
@@ -38,7 +38,7 @@ export const getTeamMembers = createAsyncThunk(
   "getTeamMembers",
   async (payload, { dispatch }) => {
     dispatch(setLoading(true));
-    const { data } = await getApi("/admin/teammember?lastKey=" + payload, true);
+    const { data } = await getApi("/admin/teammember?lastKey=", true);
     dispatch(setLoading(false));
     return data;
   }
@@ -80,9 +80,25 @@ export const getSearchResult = createAsyncThunk(
 
 export const getAllJobs = createAsyncThunk(
   "getAllJobs",
-  async (payload, { dispatch }) => {
+  async (
+    { lastKey, status_id, job_stage, job_title, job_type },
+    { dispatch }
+  ) => {
     dispatch(setLoading(true));
-    const { data } = await getApi("/admin/job?lastKey=" + payload, true);
+    const { data } = await getApi(
+      "/admin/job?lastKey=" +
+        lastKey +
+        "&status_id=" +
+        status_id +
+        "&job_title=" +
+        job_title +
+        "&job_stage=" +
+        job_stage +
+        "&job_type=" +
+        job_type,
+      true
+    );
+
     dispatch(setLoading(false));
     return data;
   }
@@ -151,9 +167,23 @@ export const getAllComments = createAsyncThunk(
 
 export const getAllTalentJobs = createAsyncThunk(
   "getAllTalentJobs",
-  async ({ lastKey, title, followerpool = "false", applicantpool = "false" }, { dispatch }) => {
+  async (
+    { lastKey, title, followerpool = "false", applicantpool = "false" },
+    { dispatch }
+  ) => {
     dispatch(setLoading(true));
-    const { data } = await getApi("/admin/talent?lastKey=" + lastKey + "&title=" + title + "&applicantpool=" + applicantpool + "&followerpull=" + followerpool + "&pool_id=", true);
+    const { data } = await getApi(
+      "/admin/talent?lastKey=" +
+        lastKey +
+        "&title=" +
+        title +
+        "&applicantpool=" +
+        applicantpool +
+        "&followerpull=" +
+        followerpool +
+        "&pool_id=",
+      true
+    );
     dispatch(setLoading(false));
     return data;
   }
@@ -161,7 +191,7 @@ export const getAllTalentJobs = createAsyncThunk(
 export const getTalentFullDetails = createAsyncThunk(
   "getTalentFullDetails",
   async (payload, { dispatch }) => {
-    console.log(payload)
+    console.log(payload);
     dispatch(setLoading(true));
     const { data } = await getApi(
       `/admin/getFullTalentData?talent_user_id=${payload}`,
@@ -171,7 +201,6 @@ export const getTalentFullDetails = createAsyncThunk(
     return data;
   }
 );
-
 
 export const getTalentPool = createAsyncThunk(
   "getTalentPool",
@@ -226,6 +255,31 @@ export const getPoolUsers = createAsyncThunk(
   }
 );
 
+export const getApplicants = createAsyncThunk(
+  "getApplicants",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/getapplicantpool?lastKey=" + payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
+export const getFollowers = createAsyncThunk(
+  "getFollowers",
+  async (payload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      "/admin/getfollowerpool?lastKey=" + payload,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
 
 export const jobsSlice = createSlice({
   name: "config",
@@ -254,5 +308,5 @@ export const jobsSlice = createSlice({
   // }
 });
 // Action creators are generated for each case reducer function
-export const { } = jobsSlice.actions;
+export const {} = jobsSlice.actions;
 export default jobsSlice.reducer;

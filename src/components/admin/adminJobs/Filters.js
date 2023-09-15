@@ -11,6 +11,7 @@ import { getTeamMembers } from "../../../redux/admin/jobsSlice";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
+import jwt_decode from "jwt-decode";
 
 export default function Filters({
   total,
@@ -23,21 +24,37 @@ export default function Filters({
   jobTypeArray,
   handleInputSearch,
   handleTeamMember,
+  jobStatus,
+  handleCompany,
+  companylist,
+  handleRecruiter,
+  recruiter,
 }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [teammember, setTeammember] = useState([]);
   const open = Boolean(anchorEl);
+  const initialOptionsCount = 12; // Initial number of options to display
+  const optionsToLoadOnScroll = 12;
+
+  const token = localStorage?.getItem("token");
+  let decodedToken;
+  if (token) {
+    decodedToken = jwt_decode(token);
+  }
+
+  console.log(decodedToken.data);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const getTeamMembers = async (lastkeyy) => {
+  const getTeamMember = async (lastkeyy) => {
     try {
-      const { payload } = await dispatch(getTeamMembers(lastkeyy));
+      const { payload } = await dispatch(getTeamMembers(""));
       if (payload?.status == "success") {
         setTeammember(payload?.data);
       } else {
@@ -60,22 +77,19 @@ export default function Filters({
     }
   };
 
-  const handleInput = () => {};
-
-  //   const [jobStatusArray, setJobStatusArray] = ([
-  //     {
-  //         id:1,
-  //         name:"pending"
-  //     },
-  //     {
-  //         id:2,
-  //         name:"contract",
-  //     },
-  //     {
-  //         id:3,
-  //         name:"freelance",
-  //     }
-  //   ])
+  const handleScroll = (event) => {
+    const target = event.target;
+    console.log(target);
+    if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      console.log("hihihi");
+      // User has scrolled to the bottom, load more options
+      const remainingOptions = teammember.slice(
+        teammember.length,
+        teammember.length + optionsToLoadOnScroll
+      );
+      setTeammember([...teammember, ...remainingOptions]);
+    }
+  };
 
   return (
     <Paper sx={{ p: 3, borderRadius: "20px", mt: 3 }}>
@@ -149,59 +163,50 @@ export default function Filters({
           />
         </Box>
         <Box sx={{ width: "50%" }}>
-          <SelectMenu
-            name="team_member"
-            //   value={value}
-            onHandleChange={handleTeamMember}
-            options={teammember}
-            placeholder={"Team members"}
-          />
+          {decodedToken.data.role_id === 1 ? (
+            <SelectMenu
+              name="company"
+              //   value={value}
+              onHandleChange={handleCompany}
+              // options={companylist.length > 0 && companylist}
+              placeholder={"Company"}
+              // onOpen={() => getTeamMember("")}
+            />
+          ) : (
+            <SelectMenu
+              name="team_member"
+              //   value={value}
+              onHandleChange={handleTeamMember}
+              options={teammember.length > 0 && teammember}
+              placeholder={"Team members"}
+              onOpen={() => getTeamMember("")}
+              handleScroll={(event) => handleScroll(event)}
+            />
+          )}
         </Box>
       </Box>
       <Box sx={{ display: "flex" }} gap={3} mt={2}>
         <Box sx={{ width: "50%" }}>
           <SelectMenu
             name="job_status"
-            value={value}
+            defaultValue={value}
             onHandleChange={handleJobStatus}
-            // options={stageArray}
+            options={jobStatus}
             placeholder={"Job status"}
-            disabled
+            disabled={value === "" ? false : true}
           />
         </Box>
-        <Paper
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "40px",
-            borderRadius: "25px",
-            boxShadow: "none",
-            border: `1px solid ${theme.palette.grayBorder}`,
-            width: "50%",
-            opacity: 0,
-          }}
-        >
-          <InputBase
-            id="keyword"
-            // value={title}
-            // onChange={handleInputSearch}
-            placeholder={"Job status"}
-            sx={{ ml: 2, mr: 2, width: "100%" }}
-            disabled
-          />
-          <Box
-            component="img"
-            className="eye"
-            alt="eye logo"
-            src={activeDownClose}
-            sx={{
-              height: 25,
-              width: 25,
-              mr: 1,
-            }}
-          />
-        </Paper>
+        <Box sx={{ width: "50%" }}>
+          {decodedToken.data.role_id === 1 && (
+            <SelectMenu
+              name="recruiter"
+              onHandleChange={handleRecruiter}
+              // options={recruiter.length > 0 && recruiter}
+              placeholder={"Recruiter"}
+              // onOpen={()=>getTeamMember("")}
+            />
+          )}
+        </Box>
       </Box>
     </Paper>
   );

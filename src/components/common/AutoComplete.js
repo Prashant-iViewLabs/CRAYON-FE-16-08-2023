@@ -5,6 +5,9 @@ import Chip from "@mui/material/Chip";
 import { useTheme } from "@emotion/react";
 import { styled } from "@mui/system";
 import { useMemo, useState } from "react";
+import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/material";
 
 const StyledAutocomplete = styled(Autocomplete)`
   .MuiAutocomplete-popupIndicator {
@@ -31,9 +34,13 @@ export default function AutoComplete({
   showAddOption = false,
   disableCloseOnSelect,
   onFocus,
+  autoCompleteRef,
 }) {
   const theme = useTheme();
   const optionData = data;
+  const [open, setOpen] = useState(false);
+  const loading = open && data.length === 0;
+
   return (
     <Paper
       elevation={3}
@@ -47,6 +54,28 @@ export default function AutoComplete({
       }}
     >
       <StyledAutocomplete
+        ref={autoCompleteRef}
+        loading={loading}
+        loadingText={
+          loading ? (
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress color="inherit" size={20} />
+            </Box>
+          ) : null
+        }
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
         showAddOption={showAddOption}
         multiple={multiple}
         limitTags={limitTags}

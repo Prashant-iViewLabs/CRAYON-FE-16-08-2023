@@ -22,6 +22,7 @@ import JobCard from "./JobCardNew";
 import SmallButtonTalent from "../../common/SmallButtonTalent";
 import SelectMenu from "../../common/SelectMenu";
 import Filters from "./Filters";
+import { data } from "../../employer/myJobs/ManageJob";
 
 const BASIC = {
   lastKey: "",
@@ -29,6 +30,7 @@ const BASIC = {
   job_stage: "",
   job_title: "",
   job_type: "",
+  team_member_user_id: "",
 };
 
 const JOBPAGE = [
@@ -86,11 +88,6 @@ export default function AllJobs({ page }) {
   const [basicData, setBasicData] = useState(BASIC);
 
   const temp = JOBPAGE.find((item) => item.filters.value === page);
-  console.log(temp);
-  //   console.log(pathname.includes("active-jobs"));
-  //   console.log(pathname.includes("pending-jobs"));
-  //   console.log(pathname.includes("closed-jobs"));
-  //   console.log(pathname.includes("paused-jobs"));
 
   const [stageArray, setStageArray] = useState([
     {
@@ -118,15 +115,30 @@ export default function AllJobs({ page }) {
   const [jobTypeArray, setJobTypeArray] = useState([
     {
       id: 1,
-      name: "permanent",
+      name: "crayon recruit",
     },
     {
       id: 2,
-      name: "contract",
+      name: "crayon lite",
+    },
+  ]);
+
+  const [jobStatus, setJobStatus] = useState([
+    {
+      id: 1,
+      name: "pending",
+    },
+    {
+      id: 2,
+      name: "active",
     },
     {
       id: 3,
-      name: "freelance",
+      name: "paused",
+    },
+    {
+      id: 4,
+      name: "closed",
     },
   ]);
 
@@ -134,28 +146,35 @@ export default function AllJobs({ page }) {
     navigate(`${pathname}/${activeJobId}`);
   };
 
-  const getJobList = async (lastkeyy) => {
-    const { payload } = await dispatch(getAllJobs(lastkeyy + "&status_id=1"));
-    if (payload?.status === "success") {
-      if (lastkeyy === "") {
-        setAllJobs(payload.data);
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
-      } else {
-        setAllJobs((prevState) => [...prevState, ...payload.data]);
-      }
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
-  };
+  //   const getJobList = async (lastkeyy) => {
+  //     const data = {
+  //         ...newBasicData,
+  //         lastKey: lastkeyy,
+  //         status_id: 1,
+  //       };
+  //     const { payload } = await dispatch(getAllJobs(data));
+  //     if (payload?.status === "success") {
+  //       if (lastkeyy === "") {
+  //         setAllJobs(payload.data);
+  //         setLastKey(payload.data[payload.data.length - 1]?.job_id);
+  //       } else {
+  //         setAllJobs((prevState) => [...prevState, ...payload.data]);
+  //       }
+  //     } else {
+  //       dispatch(
+  //         setAlert({
+  //           show: true,
+  //           type: ALERT_TYPE.ERROR,
+  //           msg: "Something went wrong! please relaod the window",
+  //         })
+  //       );
+  //     }
+  //   };
 
   const JobCount = async () => {
-    const response = await dispatch(getJobCount(1));
+    const response = await dispatch(
+      getJobCount(temp !== undefined ? temp.status_id : "")
+    );
     setTotalJob(response.payload.count);
   };
 
@@ -184,19 +203,21 @@ export default function AllJobs({ page }) {
     }
   };
 
-  const jobFIlters = async (lastkeyy, newBasicData) => {
+  const getJobList = async (lastkeyy, newBasicData) => {
+    console.log(newBasicData.status_id);
     const data = {
       ...newBasicData,
       lastKey: lastkeyy,
-      status_id: 1,
+      status_id: temp !== undefined ? temp.status_id : newBasicData?.status_id,
     };
     const { payload } = await dispatch(adminJobsFilter(data));
     if (payload?.status === "success") {
       console.log(payload.data);
       if (lastkeyy === "") {
+        setLastKey(payload.pageNumber + 1);
         setAllJobs(payload.data);
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
       } else {
+        setLastKey(payload.pageNumber + 1);
         setAllJobs((prevState) => [...prevState, ...payload.data]);
       }
     } else {
@@ -227,7 +248,7 @@ export default function AllJobs({ page }) {
     console.log(newBasicData);
     setBasicData(newBasicData);
     setAllJobs([]);
-    await jobFIlters("", newBasicData);
+    await getJobList("", newBasicData);
   };
 
   const handleJobType = async (event) => {
@@ -247,7 +268,7 @@ export default function AllJobs({ page }) {
     console.log(newBasicData);
     setBasicData(newBasicData);
     setAllJobs([]);
-    await jobFIlters("", newBasicData);
+    await getJobList("", newBasicData);
   };
 
   const handleInputSearch = async (event) => {
@@ -258,7 +279,7 @@ export default function AllJobs({ page }) {
     console.log(newBasicData);
     setBasicData(newBasicData);
     setAllJobs([]);
-    await jobFIlters("", newBasicData);
+    await getJobList("", newBasicData);
   };
 
   const handleTeamMember = async (event) => {
@@ -269,33 +290,46 @@ export default function AllJobs({ page }) {
     } = event;
 
     console.log(value, name, id);
-    // let newBasicData = {
-    //   ...basicData,
-    //   job_title: event.target.value,
-    // };
-    // console.log(newBasicData);
-    // setBasicData(newBasicData);
-    // setAllJobs([]);
-    // await jobFIlters("", newBasicData);
+    let newBasicData = {
+      ...basicData,
+      team_member_user_id: event.target.value,
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
+    setAllJobs([]);
+    await getJobList("", newBasicData);
+  };
+
+  const handleJobStatus = async (event) => {
+    let newBasicData = {
+      ...basicData,
+      status_id: event.target.value,
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
+    setAllJobs([]);
+    await getJobList("", newBasicData);
   };
 
   useEffect(() => {
-    getJobList(lastKey);
+    getJobList(lastKey, basicData);
     JobCount();
   }, []);
 
   return (
     <Box sx={{ ml: 0 }}>
       <Filters
-        title={"Pending Jobs"}
+        title={temp !== undefined ? temp?.filters?.title : "All Jobs"}
         total={totalJob}
         handleJobRoleChange={handleJobRoleChange}
-        value={"pending"}
+        value={temp !== undefined ? temp?.filters?.value : ""}
         handleJobType={handleJobType}
         stageArray={stageArray}
         jobTypeArray={jobTypeArray}
         handleInputSearch={handleInputSearch}
         handleTeamMember={handleTeamMember}
+        jobStatus={jobStatus}
+        handleJobStatus={handleJobStatus}
       />
       <Grid
         container
@@ -309,7 +343,7 @@ export default function AllJobs({ page }) {
         <InfiniteScroll
           style={{ overflow: "hidden" }}
           dataLength={allJobs.length}
-          next={() => getJobList(lastKey)}
+          next={() => getJobList(lastKey, basicData)}
           scrollThreshold={"10px"}
           hasMore={true}
           endMessage={

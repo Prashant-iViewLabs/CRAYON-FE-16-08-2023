@@ -39,6 +39,8 @@ export default function SelectMenu({
   id,
   input,
   multiple,
+  onOpen,
+  handleScroll,
 }) {
   const theme = useTheme();
   return (
@@ -64,7 +66,9 @@ export default function SelectMenu({
         value={value}
         defaultValue={defaultValue}
         onChange={onHandleChange}
+        onOpen={onOpen}
         MenuProps={MenuProps}
+        onScroll={handleScroll}
         sx={{
           width: "100%",
           "& .MuiOutlinedInput-notchedOutline": {
@@ -93,9 +97,14 @@ export default function SelectMenu({
               </Box>
             );
           } else {
+            let data = options.find((item) =>
+              item.id ? item.id == selected : item.user_id == selected
+            );
             return typeof selected === "string"
               ? selected
-              : options.find((item) => item.id == selected)?.name;
+              : data?.name
+              ? data?.name
+              : data?.user?.first_name + " " + data?.user?.last_name;
           }
         }}
       >
@@ -105,11 +114,13 @@ export default function SelectMenu({
         {options?.length > 0 &&
           options?.map((option) => (
             <MenuItem
-              key={option.id}
-              value={option.id}
+              key={option.id ? option.id : option.user_id}
+              value={option.id ? option.id : option.user_id}
               // style={getStyles(option, value, theme)}
             >
-              {option.name}
+              {option.id
+                ? option?.name
+                : option?.user?.first_name + " " + option?.user?.last_name}
             </MenuItem>
           ))}
       </Select>

@@ -31,7 +31,6 @@ const ChangeStatusButton = ({
   getJobList,
 }) => {
   const [status, setStatus] = useState(jobStatus);
-  console.log(jobId);
   const [anchorEl, setAnchorEl] = useState(null);
   const anchorRef = useRef(null);
   const [openActive, setOpenActive] = useState(false);

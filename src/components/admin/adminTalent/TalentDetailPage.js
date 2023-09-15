@@ -332,9 +332,13 @@ export default function TalentDetailPage() {
 
   const handleCandidateCV = async () => {
     try {
-      const { payload } = await dispatch(getCandidateCV({ user_id: id }));
+      const user = {
+        user_id: id,
+      };
+      const { payload } = await dispatch(getCandidateCV(user));
 
       if (payload?.status == "success") {
+        console.log(payload.data);
         setTalentContent(payload.data);
       }
     } catch (error) {
@@ -611,24 +615,17 @@ export default function TalentDetailPage() {
                   }}
                 />
               )}
-              <Link
-                to={`${prevLocation}/candidate-cv/${talentContent?.user_id}`}
-                target="_blank"
-                style={{
-                  textDecoration: "none",
-                  color: theme.palette.black,
+
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  mr: 1,
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    fontWeight: 700,
-                    mr: 1,
-                  }}
-                >
-                  {talentContent?.first_name}
-                </Typography>
-              </Link>
+                {talentContent?.first_name}
+              </Typography>
+
               <Typography
                 sx={{
                   fontSize: "20px",
@@ -2453,6 +2450,7 @@ export default function TalentDetailPage() {
 //   "& .MuiAccordionSummary-root": {
 //     // alignItems: 'start'
 //     flexDirection: "row-reverse",
+//     padding: "0px !important",
 //     // marginBottom: '4px'
 //   },
 //   "& .MuiAccordionSummary-content.Mui-expanded": {
@@ -2678,7 +2676,7 @@ export default function TalentDetailPage() {
 //   const [personalitiesData, setPersonalitiesData] = useState({
 //     ...PERSONALITY,
 //   });
-//   const [flip, setFlip] = useState(false);
+//   const [flip, setFlip] = useState(true);
 
 //   const { personalities, traits } = useSelector((state) => state.postJobs);
 
