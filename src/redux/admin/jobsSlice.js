@@ -17,15 +17,15 @@ export const adminJobsFilter = createAsyncThunk(
     dispatch(setLoading(true));
     const { data } = await getApi(
       "/admin/job?lastKey=" +
-        lastKey +
-        "&status_id=" +
-        status_id +
-        "&job_title=" +
-        job_title +
-        "&job_stage=" +
-        job_stage +
-        "&job_type=" +
-        job_type,
+      lastKey +
+      "&status_id=" +
+      status_id +
+      "&job_title=" +
+      job_title +
+      "&job_stage=" +
+      job_stage +
+      "&job_type=" +
+      job_type,
       true
     );
 
@@ -151,13 +151,27 @@ export const getAllComments = createAsyncThunk(
 
 export const getAllTalentJobs = createAsyncThunk(
   "getAllTalentJobs",
-  async (payload, { dispatch }) => {
+  async ({ lastKey, title, followerpool = "false", applicantpool = "false" }, { dispatch }) => {
     dispatch(setLoading(true));
-    const { data } = await getApi("/admin/talent?lastKey=" + payload, true);
+    const { data } = await getApi("/admin/talent?lastKey=" + lastKey + "&title=" + title + "&applicantpool=" + applicantpool + "&followerpull=" + followerpool + "&pool_id=", true);
     dispatch(setLoading(false));
     return data;
   }
 );
+export const getTalentFullDetails = createAsyncThunk(
+  "getTalentFullDetails",
+  async (payload, { dispatch }) => {
+    console.log(payload)
+    dispatch(setLoading(true));
+    const { data } = await getApi(
+      `/admin/getFullTalentData?talent_user_id=${payload}`,
+      true
+    );
+    dispatch(setLoading(false));
+    return data;
+  }
+);
+
 
 export const getTalentPool = createAsyncThunk(
   "getTalentPool",
@@ -212,31 +226,6 @@ export const getPoolUsers = createAsyncThunk(
   }
 );
 
-export const getApplicants = createAsyncThunk(
-  "getApplicants",
-  async (payload, { dispatch }) => {
-    dispatch(setLoading(true));
-    const { data } = await getApi(
-      "/admin/getapplicantpool?lastKey=" + payload,
-      true
-    );
-    dispatch(setLoading(false));
-    return data;
-  }
-);
-
-export const getFollowers = createAsyncThunk(
-  "getFollowers",
-  async (payload, { dispatch }) => {
-    dispatch(setLoading(true));
-    const { data } = await getApi(
-      "/admin/getfollowerpool?lastKey=" + payload,
-      true
-    );
-    dispatch(setLoading(false));
-    return data;
-  }
-);
 
 export const jobsSlice = createSlice({
   name: "config",
@@ -265,5 +254,5 @@ export const jobsSlice = createSlice({
   // }
 });
 // Action creators are generated for each case reducer function
-export const {} = jobsSlice.actions;
+export const { } = jobsSlice.actions;
 export default jobsSlice.reducer;

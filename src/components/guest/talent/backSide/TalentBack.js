@@ -7,6 +7,9 @@ import job_star from "../../../../assets/job_star.svg";
 import job_star_selected from "../../../../assets/job_star_selected.svg";
 
 import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
+
+import BlueCurrency from "../../../../assets/Blue_Salary.svg";
+import redLocation from "../../../../assets/Red_Location.svg";
 import calendar from "../../../../assets/Padding Included/Yellow_Calendar.svg";
 
 import job_apply from "../../../../assets/job_apply.svg";
@@ -334,10 +337,16 @@ export default function TalentCard({ index, job, setisFlipped }) {
               aria-label="search job"
               component="button"
             > */}
-              <AccountBalanceWalletIcon
-                fontSize="string"
-                color="primary"
-                sx={{}}
+              <Box
+                component="img"
+                sx={{
+                  height: 18,
+                  width: 18,
+                  maxHeight: { xs: 18 },
+                  maxWidth: { xs: 18 },
+                }}
+                alt="currency"
+                src={BlueCurrency}
               />
               {/* </IconButton> */}
               <Typography
@@ -360,7 +369,18 @@ export default function TalentCard({ index, job, setisFlipped }) {
               aria-label="search job"
               component="button"
             > */}
-              <PlaceIcon fontSize="string" color="error" />
+
+              <Box
+                component="img"
+                sx={{
+                  height: 18,
+                  width: 18,
+                  maxHeight: { xs: 18 },
+                  maxWidth: { xs: 18 },
+                }}
+                alt="location"
+                src={redLocation}
+              />
               {/* </IconButton> */}
 
               <Typography
@@ -714,28 +734,28 @@ export default function TalentCard({ index, job, setisFlipped }) {
           />
         </Box>
         {job?.primaryName && (
-            <Box
-              component="img"
-              height={80}
-              // sx={{ margin: "0 -22px 0 -22px" }}
-              alt="Personality"
-              src={
-                (job?.primaryName===
-                  "collaborator" &&
-                  profile_collaborator) ||
-                (job?.primaryName===
-                  "challenger" &&
-                  profile_challenger) ||
-                (job?.primaryName===
-                  "character" &&
-                  profile_character) ||
-                (job?.primaryName===
-                  "contemplator" &&
-                  profile_contemplator)
-              }
-            />
-          )}
-        {job?.shadowName  && (
+          <Box
+            component="img"
+            height={80}
+            // sx={{ margin: "0 -22px 0 -22px" }}
+            alt="Personality"
+            src={
+              (job?.primaryName ===
+                "collaborator" &&
+                profile_collaborator) ||
+              (job?.primaryName ===
+                "challenger" &&
+                profile_challenger) ||
+              (job?.primaryName ===
+                "character" &&
+                profile_character) ||
+              (job?.primaryName ===
+                "contemplator" &&
+                profile_contemplator)
+            }
+          />
+        )}
+        {job?.shadowName && (
           // job?.shadowName
           <Box
             component="img"

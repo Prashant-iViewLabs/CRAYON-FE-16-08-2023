@@ -66,7 +66,7 @@ export default function PoolJob({
             // nameOffsetY="11"
             // valueOffsetY="-17"
             labelsData={"shortlisted"}
-            series={[10]}
+            series={[talentContent?.totalusershorlisted]}
             width={130}
             color={theme.palette.lightGreenButton300.main}
           />
@@ -80,7 +80,7 @@ export default function PoolJob({
             // valueOffsetY="-17"
             labelsData={"applied"}
             max={1000}
-            series={[34]}
+            series={[talentContent?.TotalUserCount]}
             width={130}
             color={theme.palette.lightGreenButton300.main}
           />
@@ -94,7 +94,7 @@ export default function PoolJob({
             // nameOffsetY="11"
             // valueOffsetY="-17"
             labelsData={"interviewed"}
-            series={[3]}
+            series={[talentContent?.totaluserinterviewed]}
             width={130}
             color={theme.palette.lightGreenButton300.main}
           />

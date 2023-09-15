@@ -120,9 +120,10 @@ function rangeValueHandler(value) {
 export default function JobAlert({ talentContent }) {
   const i18n = locale.en;
   const theme = useTheme();
-  const [rangeValue, setRangeValue] = useState([0, 20]);
-  const [expRange, setExpRange] = useState([0, 30]);
-
+  const [rangeValue, setRangeValue] = useState([talentContent?.salaryMin/1000,talentContent?.salaryMax/1000]);
+  const [expRange, setExpRange] = useState([talentContent?.experienceYearStart*10, talentContent?.experienceYearEnd*10]);
+  const industryUsers = talentContent?.candidate_profile?.industry_users.map((item) => item?.industry?.name)
+  console.log(industryUsers)
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
   };
@@ -270,7 +271,7 @@ export default function JobAlert({ talentContent }) {
             color="grayButton200"
             fontWeight="700"
             borderRadius="5px"
-            label={talentContent?.candidate_profile?.town?.region?.name}
+            label={talentContent?.region_name}
             mr="8px"
             mb="5px"
           ></SmallButton>
@@ -280,12 +281,12 @@ export default function JobAlert({ talentContent }) {
             color="grayButton200"
             fontWeight="700"
             borderRadius="5px"
-            label="ZAR"
+            label={talentContent.currencyname}
             mr="8px"
             mb="5px"
           ></SmallButton>
           <Box mb={"16px"}>
-            {talentContent?.candidate_profile?.industry_users.map((item) => {
+            {/* {talentContent?.candidate_profile?.industry_users.map((item) => {
               return (
                 <SmallButton
                   minWidth="10px"
@@ -296,7 +297,8 @@ export default function JobAlert({ talentContent }) {
                   mr="4px"
                 ></SmallButton>
               );
-            })}
+            })} */}
+            <Slider2 color={"blueButton600"} items={industryUsers} hideTagsAfter={2}/>
           </Box>
           {talentContent?.HighestQual !== null && (
             <SmallButton

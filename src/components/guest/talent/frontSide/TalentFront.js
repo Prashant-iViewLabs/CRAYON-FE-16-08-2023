@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import profile from "../../../../assets/profile.png";
 import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
+import BlueCurrency from "../../../../assets/Blue_Salary.svg";
+import redLocation from "../../../../assets/Red_Location.svg";
 import calendar from "../../../../assets/Padding Included/Yellow_Calendar.svg";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -10,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import SingleRadialChart from "../../../common/SingleRadialChart";
 import SmallButton from "../../../common/SmallButton";
 import CustomCard from "../../../common/CustomCard";
-import PlaceIcon from "@mui/icons-material/Place";
 import TextWrapper from "../../../common/TextWrapper";
 import {
   convertDatetimeAgo,
@@ -24,7 +25,6 @@ import { formatCurrencyWithCommas } from "../../../../utils/Currency";
 
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Slider2 from "../../../common/Slider2";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
@@ -43,9 +43,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
   // const [arrSlider, setArrSlider] = useState(
   //   job?.candidate_profile?.industry_users
   // );
-  // const jobIndustries = job?.candidate_profile?.industry_users.map(
-  //   (industry) => industry?.industry?.name
-  // );
+  const jobIndustries = job?.UserIndustries?.split(",")
 
   // const [personalityArrSlider, setPersonalityArrSlider] = useState([
   //   job?.candidate_profile?.candidate_info?.employment_type,
@@ -248,22 +246,6 @@ export default function TalentCard({ index, job, setisFlipped }) {
         </Box>
       </Grid>
 
-      {/* <Grid container padding={0} justifyContent="space-between" alignItems="center">
-                <Box sx={{ margin: '-20px 0 -14px -16px', }}>
-                    <RadialChart labelsData={labels} series={chartData} width={250} index={index} isHovered={isHovered} />
-                </Box>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginRight: '8px'
-                }} onMouseEnter={handleHoverEnter}
-                    onMouseLeave={handleHoverLeave}>
-                    {CARD_RIGHT_BUTTON_GROUP.map((btn, index) => (
-                        <SmallButton color={btn[colorKey]} key={index} label={btn.label} borderTopRightRadius={0}
-                            borderBottomRightRadius={0} mb='4px' width={100} p={0} />
-                    ))}
-                </Box>
-            </Grid> */}
       <Box
         sx={{
           display: "flex",
@@ -316,10 +298,17 @@ export default function TalentCard({ index, job, setisFlipped }) {
               aria-label="search job"
               component="button"
             > */}
-              <AccountBalanceWalletIcon
-                fontSize="string"
-                color="primary"
-                sx={{}}
+
+              <Box
+                component="img"
+                sx={{
+                  height: 18,
+                  width: 18,
+                  maxHeight: { xs: 18 },
+                  maxWidth: { xs: 18 },
+                }}
+                alt="currency"
+                src={BlueCurrency}
               />
               {/* </IconButton> */}
               <Typography
@@ -338,8 +327,17 @@ export default function TalentCard({ index, job, setisFlipped }) {
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <PlaceIcon fontSize="string" color="error" />
-
+              <Box
+                component="img"
+                sx={{
+                  height: 18,
+                  width: 18,
+                  maxHeight: { xs: 18 },
+                  maxWidth: { xs: 18 },
+                }}
+                alt="location"
+                src={redLocation}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -398,7 +396,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {dateConverterMonth(job?.candidateProfile_created_at )}
+                {dateConverterMonth(job?.candidateProfile_created_at)}
                 {/* job?.candidateProfile_created_at */}
               </Typography>
             </Box>
@@ -470,12 +468,12 @@ export default function TalentCard({ index, job, setisFlipped }) {
               color={"blueButton700"}
               hideTagsAfter={2}
             />
-            {/* <Slider2
-              items={jobIndustries}
+            <Slider2
+              items={jobIndustries || []}
               // job?.UserIndustries
               color={"blueButton600"}
               hideTagsAfter={2}
-            /> */}
+            />
           </Box>
 
           {/* <Box

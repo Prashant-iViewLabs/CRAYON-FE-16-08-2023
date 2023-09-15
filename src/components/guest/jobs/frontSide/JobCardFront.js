@@ -185,7 +185,7 @@ const JobCardFront = ({
               <SmallButton
                 color="lightGreenButton300"
                 mr={1}
-                value={job?.sstage_name}
+                value={job?.stage_name}
                 label={truncate(job?.stage_name, { length: 9 })}
               />
             )}

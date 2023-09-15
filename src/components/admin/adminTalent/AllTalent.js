@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import AllTalentNewCard from "./AllTalentNewCard";
 import { InputBase, Paper } from "@mui/material";
 import SmallButtonTalent from "../../common/SmallButtonTalent";
+import TalentsCommonComponent from "./CommonComponent/TalentsCommonComponent";
 
 export default function AllTalent() {
   const i18n = locale.en;
@@ -33,28 +34,6 @@ export default function AllTalent() {
 
   const onHandleManageTalent = (activeJobId) => {
     navigate(`${pathname}/${activeJobId}`);
-  };
-
-  const getJobList = async (lastkeyy) => {
-    const { payload } = await dispatch(getAllTalentJobs(lastkeyy));
-    if (payload.status === "success") {
-      if (lastkeyy === 0) {
-        setAllJobs(payload.data);
-        setLastKey(payload.offset + 1);
-        setTotalJob(payload?.totalData);
-      } else {
-        setLastKey(payload.offset + 1);
-        setAllJobs((prevState) => [...prevState, ...payload.data]);
-      }
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
   };
 
   const pendingJobCount = async () => {
@@ -82,254 +61,251 @@ export default function AllTalent() {
     // getAllData();
   }, []);
 
-  useEffect(() => {
-    getJobList(0);
-    // pendingJobCount();
-  }, [personalityAdded]);
 
   return (
-    <Box sx={{ ml: 0 }}>
-      <Paper sx={{ p: 3, borderRadius: "20px", mt: 3 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "19%",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "24px",
-              fontWeight: 700,
-              // ml: 6
-            }}
-          >
-            {i18n["allTalent.title"]}
-          </Typography>
-          <SmallButtonTalent
-            fontWeight={900}
-            textColor={"#000"}
-            color="grayButton200"
-            label={totalJob}
-            mr={1}
-            alignItems={"flex-end"}
-          />
-        </Box>
+    // <Box sx={{ ml: 0 }}>
+    //   <Paper sx={{ p: 3, borderRadius: "20px", mt: 3 }}>
+    //     <Box
+    //       sx={{
+    //         display: "flex",
+    //         alignItems: "center",
+    //         width: "19%",
+    //         justifyContent: "space-between",
+    //       }}
+    //     >
+    //       <Typography
+    //         sx={{
+    //           fontSize: "24px",
+    //           fontWeight: 700,
+    //           // ml: 6
+    //         }}
+    //       >
+    //         {i18n["allTalent.title"]}
+    //       </Typography>
+    //       <SmallButtonTalent
+    //         fontWeight={900}
+    //         textColor={"#000"}
+    //         color="grayButton200"
+    //         label={totalJob}
+    //         mr={1}
+    //         alignItems={"flex-end"}
+    //       />
+    //     </Box>
 
-        <Box sx={{ display: "flex" }} gap={3} mt={2}>
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "40px",
-              borderRadius: "25px",
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.grayBorder}`,
-              width: "50%",
-            }}
-          >
-            <InputBase
-              id="keyword"
-              // value={title}
-              // onChange={handleInputSearch}
-              placeholder={"Enter quick search term..."}
-              sx={{ ml: 2, mr: 2, width: "100%" }}
-            />
-          </Paper>
+    //     <Box sx={{ display: "flex" }} gap={3} mt={2}>
+    //       <Paper
+    //         sx={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           height: "40px",
+    //           borderRadius: "25px",
+    //           boxShadow: "none",
+    //           border: `1px solid ${theme.palette.grayBorder}`,
+    //           width: "50%",
+    //         }}
+    //       >
+    //         <InputBase
+    //           id="keyword"
+    //           // value={title}
+    //           // onChange={handleInputSearch}
+    //           placeholder={"Enter quick search term..."}
+    //           sx={{ ml: 2, mr: 2, width: "100%" }}
+    //         />
+    //       </Paper>
 
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "40px",
-              borderRadius: "25px",
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.grayBorder}`,
-              width: "50%",
-            }}
-          >
-            <InputBase
-              id="job_stage"
-              // value={title}
-              // onChange={handleInputSearch}
-              placeholder={"Stage"}
-              sx={{ ml: 2, mr: 2, width: "100%" }}
-            />
-            <Box
-              component="img"
-              className="eye"
-              alt="eye logo"
-              src={activeDownClose}
-              sx={{
-                height: 25,
-                width: 25,
-                mr: 1,
-              }}
-            />
-          </Paper>
-        </Box>
-        <Box sx={{ display: "flex" }} gap={3} mt={2}>
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "40px",
-              borderRadius: "25px",
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.grayBorder}`,
-              width: "50%",
-            }}
-          >
-            <InputBase
-              id="keyword"
-              // value={title}
-              // onChange={handleInputSearch}
-              placeholder={"Status"}
-              sx={{ ml: 2, mr: 2, width: "100%" }}
-            />
-            <Box
-              component="img"
-              className="eye"
-              alt="eye logo"
-              src={activeDownClose}
-              sx={{
-                height: 25,
-                width: 25,
-                mr: 1,
-              }}
-            />
-          </Paper>
+    //       <Paper
+    //         sx={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           height: "40px",
+    //           borderRadius: "25px",
+    //           boxShadow: "none",
+    //           border: `1px solid ${theme.palette.grayBorder}`,
+    //           width: "50%",
+    //         }}
+    //       >
+    //         <InputBase
+    //           id="job_stage"
+    //           // value={title}
+    //           // onChange={handleInputSearch}
+    //           placeholder={"Stage"}
+    //           sx={{ ml: 2, mr: 2, width: "100%" }}
+    //         />
+    //         <Box
+    //           component="img"
+    //           className="eye"
+    //           alt="eye logo"
+    //           src={activeDownClose}
+    //           sx={{
+    //             height: 25,
+    //             width: 25,
+    //             mr: 1,
+    //           }}
+    //         />
+    //       </Paper>
+    //     </Box>
+    //     <Box sx={{ display: "flex" }} gap={3} mt={2}>
+    //       <Paper
+    //         sx={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           height: "40px",
+    //           borderRadius: "25px",
+    //           boxShadow: "none",
+    //           border: `1px solid ${theme.palette.grayBorder}`,
+    //           width: "50%",
+    //         }}
+    //       >
+    //         <InputBase
+    //           id="keyword"
+    //           // value={title}
+    //           // onChange={handleInputSearch}
+    //           placeholder={"Status"}
+    //           sx={{ ml: 2, mr: 2, width: "100%" }}
+    //         />
+    //         <Box
+    //           component="img"
+    //           className="eye"
+    //           alt="eye logo"
+    //           src={activeDownClose}
+    //           sx={{
+    //             height: 25,
+    //             width: 25,
+    //             mr: 1,
+    //           }}
+    //         />
+    //       </Paper>
 
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "40px",
-              borderRadius: "25px",
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.grayBorder}`,
-              width: "50%",
-            }}
-          >
-            <InputBase
-              id="job_stage"
-              // value={title}
-              // onChange={handleInputSearch}
-              placeholder={"Associated jobs"}
-              sx={{ ml: 2, mr: 2, width: "100%" }}
-            />
-            <Box
-              component="img"
-              className="eye"
-              alt="eye logo"
-              src={activeDownClose}
-              sx={{
-                height: 25,
-                width: 25,
-                mr: 1,
-              }}
-            />
-          </Paper>
-        </Box>
-        <Box sx={{ display: "flex" }} gap={3} mt={2}>
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "40px",
-              borderRadius: "25px",
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.grayBorder}`,
-              width: "50%",
-            }}
-          >
-            <InputBase
-              id="keyword"
-              // value={title}
-              // onChange={handleInputSearch}
-              placeholder={"Talent Pools"}
-              sx={{ ml: 2, mr: 2, width: "100%" }}
-            />
-            <Box
-              component="img"
-              className="eye"
-              alt="eye logo"
-              src={activeDownClose}
-              sx={{
-                height: 25,
-                width: 25,
-                mr: 1,
-              }}
-            />
-          </Paper>
-          <Paper
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "40px",
-              borderRadius: "25px",
-              boxShadow: "none",
-              border: `1px solid ${theme.palette.grayBorder}`,
-              width: "50%",
-              opacity: 0,
-            }}
-          >
-            <InputBase
-              id="keyword"
-              // value={title}
-              // onChange={handleInputSearch}
-              placeholder={"Job status"}
-              sx={{ ml: 2, mr: 2, width: "100%" }}
-              disabled
-            />
-            <Box
-              component="img"
-              className="eye"
-              alt="eye logo"
-              src={activeDownClose}
-              sx={{
-                height: 25,
-                width: 25,
-                mr: 1,
-              }}
-            />
-          </Paper>
-        </Box>
-      </Paper>
-      <InfiniteScroll
-        style={{ overflow: "hidden" }}
-        dataLength={allJobs.length}
-        next={() => getJobList(lastKey)}
-        scrollThreshold={"100px"}
-        hasMore={true}
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-      >
-        <Box
-          sx={{
-            mt: 2,
-          }}
-        >
-          {allJobs?.map((job, index) => (
-            <AllTalentNewCard
-              key={index}
-              talentContent={job}
-              setPersonalityAdded={setPersonalityAdded}
-              traits={traits}
-            />
-          ))}
-        </Box>
-      </InfiniteScroll>
-    </Box>
+    //       <Paper
+    //         sx={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           height: "40px",
+    //           borderRadius: "25px",
+    //           boxShadow: "none",
+    //           border: `1px solid ${theme.palette.grayBorder}`,
+    //           width: "50%",
+    //         }}
+    //       >
+    //         <InputBase
+    //           id="job_stage"
+    //           // value={title}
+    //           // onChange={handleInputSearch}
+    //           placeholder={"Associated jobs"}
+    //           sx={{ ml: 2, mr: 2, width: "100%" }}
+    //         />
+    //         <Box
+    //           component="img"
+    //           className="eye"
+    //           alt="eye logo"
+    //           src={activeDownClose}
+    //           sx={{
+    //             height: 25,
+    //             width: 25,
+    //             mr: 1,
+    //           }}
+    //         />
+    //       </Paper>
+    //     </Box>
+    //     <Box sx={{ display: "flex" }} gap={3} mt={2}>
+    //       <Paper
+    //         sx={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           height: "40px",
+    //           borderRadius: "25px",
+    //           boxShadow: "none",
+    //           border: `1px solid ${theme.palette.grayBorder}`,
+    //           width: "50%",
+    //         }}
+    //       >
+    //         <InputBase
+    //           id="keyword"
+    //           // value={title}
+    //           // onChange={handleInputSearch}
+    //           placeholder={"Talent Pools"}
+    //           sx={{ ml: 2, mr: 2, width: "100%" }}
+    //         />
+    //         <Box
+    //           component="img"
+    //           className="eye"
+    //           alt="eye logo"
+    //           src={activeDownClose}
+    //           sx={{
+    //             height: 25,
+    //             width: 25,
+    //             mr: 1,
+    //           }}
+    //         />
+    //       </Paper>
+    //       <Paper
+    //         sx={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           height: "40px",
+    //           borderRadius: "25px",
+    //           boxShadow: "none",
+    //           border: `1px solid ${theme.palette.grayBorder}`,
+    //           width: "50%",
+    //           opacity: 0,
+    //         }}
+    //       >
+    //         <InputBase
+    //           id="keyword"
+    //           // value={title}
+    //           // onChange={handleInputSearch}
+    //           placeholder={"Job status"}
+    //           sx={{ ml: 2, mr: 2, width: "100%" }}
+    //           disabled
+    //         />
+    //         <Box
+    //           component="img"
+    //           className="eye"
+    //           alt="eye logo"
+    //           src={activeDownClose}
+    //           sx={{
+    //             height: 25,
+    //             width: 25,
+    //             mr: 1,
+    //           }}
+    //         />
+    //       </Paper>
+    //     </Box>
+    //   </Paper>
+    //   <InfiniteScroll
+    //     style={{ overflow: "hidden" }}
+    //     dataLength={allJobs.length}
+    //     next={() => getJobList(lastKey)}
+    //     scrollThreshold={"100px"}
+    //     hasMore={true}
+    //     endMessage={
+    //       <p style={{ textAlign: "center" }}>
+    //         <b>Yay! You have seen it all</b>
+    //       </p>
+    //     }
+    //   >
+    //     <Box
+    //       sx={{
+    //         mt: 2,
+    //       }}
+    //     >
+    //       {allJobs?.map((job, index) => (
+    //         <AllTalentNewCard
+    //           key={index}
+    //           talentContent={job}
+    //           setPersonalityAdded={setPersonalityAdded}
+    //           traits={traits}
+    //         />
+    //       ))}
+    //     </Box>
+    //   </InfiniteScroll>
+    // </Box>
+    <TalentsCommonComponent listName="AllTalents"/>
   );
 }
