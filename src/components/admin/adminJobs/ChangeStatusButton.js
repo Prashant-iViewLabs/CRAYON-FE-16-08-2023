@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SmallButton from "../../common/SmallButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -30,12 +30,16 @@ const ChangeStatusButton = ({
   employerIndustry,
   getJobList,
 }) => {
-  const [status, setStatus] = useState(jobStatus);
+  const [status, setStatus] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const anchorRef = useRef(null);
   const [openActive, setOpenActive] = useState(false);
   const open = Boolean(anchorEl);
-
+  
+  useEffect(() => {
+    setStatus(jobStatus)
+  }, [jobStatus])
+  
   function handleListKeyDown(event) {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -199,7 +203,6 @@ const ChangeStatusButton = ({
         );
       }
     } catch (error) {
-      console.log(error);
       dispatch(
         setAlert({
           show: true,
