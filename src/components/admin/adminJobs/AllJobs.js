@@ -31,6 +31,7 @@ const BASIC = {
   job_title: "",
   job_type: "",
   team_member_user_id: "",
+  company_id: "",
 };
 
 const JOBPAGE = [
@@ -146,38 +147,6 @@ export default function AllJobs({ page }) {
     navigate(`${pathname}/${activeJobId}`);
   };
 
-  //   const getJobList = async (lastkeyy) => {
-  //     const data = {
-  //         ...newBasicData,
-  //         lastKey: lastkeyy,
-  //         status_id: 1,
-  //       };
-  //     const { payload } = await dispatch(getAllJobs(data));
-  //     if (payload?.status === "success") {
-  //       if (lastkeyy === "") {
-  //         setAllJobs(payload.data);
-  //         setLastKey(payload.data[payload.data.length - 1]?.job_id);
-  //       } else {
-  //         setAllJobs((prevState) => [...prevState, ...payload.data]);
-  //       }
-  //     } else {
-  //       dispatch(
-  //         setAlert({
-  //           show: true,
-  //           type: ALERT_TYPE.ERROR,
-  //           msg: "Something went wrong! please relaod the window",
-  //         })
-  //       );
-  //     }
-  //   };
-
-  const JobCount = async () => {
-    const response = await dispatch(
-      getJobCount(temp !== undefined ? temp.status_id : "")
-    );
-    setTotalJob(response.payload.count);
-  };
-
   const getComments = async (jobid) => {
     try {
       const { payload } = await dispatch(getAllComments(jobid));
@@ -216,9 +185,11 @@ export default function AllJobs({ page }) {
       if (lastkeyy === "") {
         setLastKey(payload.pageNumber + 1);
         setAllJobs(payload.data);
+        setTotalJob(payload.talentCount);
       } else {
         setLastKey(payload.pageNumber + 1);
         setAllJobs((prevState) => [...prevState, ...payload.data]);
+        setTotalJob(payload.talentCount);
       }
     } else {
       dispatch(
@@ -239,11 +210,9 @@ export default function AllJobs({ page }) {
     } = event;
 
     const temp = stageArray.find((item) => item.id === value);
-    console.log(value, name, id);
-    console.log(temp.name);
     let newBasicData = {
       ...basicData,
-      job_stage: temp.name,
+      job_stage: temp?.name || "",
     };
     console.log(newBasicData);
     setBasicData(newBasicData);
@@ -259,11 +228,9 @@ export default function AllJobs({ page }) {
     } = event;
 
     const temp = jobTypeArray.find((item) => item.id === value);
-    console.log(value, name, id);
-    console.log(temp.name);
     let newBasicData = {
       ...basicData,
-      job_type: temp.name,
+      job_type: temp?.name || "",
     };
     console.log(newBasicData);
     setBasicData(newBasicData);
@@ -300,6 +267,24 @@ export default function AllJobs({ page }) {
     await getJobList("", newBasicData);
   };
 
+  const handleCompany = async (event) => {
+    const {
+      target: { value },
+      target: { name },
+      target: { id },
+    } = event;
+
+    console.log(value, name, id);
+    let newBasicData = {
+      ...basicData,
+      company_id: event.target.value,
+    };
+    console.log(newBasicData);
+    setBasicData(newBasicData);
+    setAllJobs([]);
+    await getJobList("", newBasicData);
+  };
+
   const handleJobStatus = async (event) => {
     let newBasicData = {
       ...basicData,
@@ -313,7 +298,6 @@ export default function AllJobs({ page }) {
 
   useEffect(() => {
     getJobList(lastKey, basicData);
-    JobCount();
   }, []);
 
   return (
@@ -329,6 +313,7 @@ export default function AllJobs({ page }) {
         handleInputSearch={handleInputSearch}
         handleTeamMember={handleTeamMember}
         jobStatus={jobStatus}
+        handleCompany={handleCompany}
         handleJobStatus={handleJobStatus}
       />
       <Grid
@@ -344,7 +329,7 @@ export default function AllJobs({ page }) {
           style={{ overflow: "hidden" }}
           dataLength={allJobs.length}
           next={() => getJobList(lastKey, basicData)}
-          scrollThreshold={"10px"}
+          scrollThreshold={"100px"}
           hasMore={true}
           endMessage={
             <p style={{ textAlign: "center" }}>

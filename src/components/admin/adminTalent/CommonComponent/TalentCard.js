@@ -72,10 +72,10 @@ import profile_challenger from "../../../../assets/Profile Icons_Challenger.svg"
 import profile_character from "../../../../assets/Profile Icons_Charater.svg";
 import profile_collaborator from "../../../../assets/Profile Icons_Collaborator.svg";
 import profile_contemplator from "../../../../assets/Profile Icons_Contemplator.svg";
-import TalentSVGButton from '../../../common/TalentSVGButton';
-import PoolJob from '../DialogBox/PoolJob';
-import JobAlert from '../DialogBox/JobAlert';
-import CommentBox from '../DialogBox/CommentBox';
+import TalentSVGButton from "../../../common/TalentSVGButton";
+import PoolJob from "../DialogBox/PoolJob";
+import JobAlert from "../DialogBox/JobAlert";
+import CommentBox from "../DialogBox/CommentBox";
 
 import {
   getPersonalities,
@@ -90,6 +90,7 @@ import Refferals from "../DialogBox/Refferals";
 import VideoDialog from "../DialogBox/VideoDialog";
 import Document from "../DialogBox/Document";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { useSelector } from "react-redux";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   marginTop: "4px",
@@ -235,13 +236,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   },
 }));
 
-export default function TalentCard({
-  talentContent,
-  setPersonalityAdded,
-  traits,
-}) {
-  console.clear()
-  console.log(talentContent)
+export default function TalentCard({ talentContent }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -262,7 +257,8 @@ export default function TalentCard({
   const [openVideo, setOpenVideo] = useState(null);
   const [openDocument, setOpenDocument] = useState(null);
   const [openActive, setOpenActive] = useState(false);
-  const [talentDetails, setTalentDetails] = useState(null)
+  const [talentDetails, setTalentDetails] = useState(null);
+  const [personalityAdded, setPersonalityAdded] = useState(false);
 
   const open = Boolean(anchorEl);
   const openPersonality = Boolean(anchorElPersonality);
@@ -273,10 +269,28 @@ export default function TalentCard({
 
   const i18n = locale.en;
 
+  const { traits } = useSelector((state) => state.postJobs);
+
+  const getAllData = async () => {
+    try {
+      // dispatch(setLoading(true));
+      await dispatch(getTraits());
+      // dispatch(setLoading(false));
+    } catch (error) {
+      // dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
 
   const handleClick = async (event) => {
     setAnchorEl(event.currentTarget);
-    await getTalent();
+    await getTalent("");
   };
   function handleListKeyDown(event) {
     if (event.key === "Tab") {
@@ -291,12 +305,6 @@ export default function TalentCard({
     seteditPersonality((prev) => !prev);
   };
 
-
-  const handleAddJobClick = async (event) => {
-    setJobClick(event.currentTarget);
-    await getTalentJobList("");
-  };
-
   const getTalent = async (lastkeyy) => {
     try {
       const { payload } = await dispatch(getTalentPool({ lastKey: lastkeyy }));
@@ -309,38 +317,13 @@ export default function TalentCard({
           setTableData((prevState) => [...prevState, ...payload.data]);
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
-  const getTalentJobList = async (lastkeyy) => {
-    console.log("LAST KEY", lastkeyy);
-    const { payload } = await dispatch(
-      getAdminTalentJobList(lastkeyy + "&status_id=2")
-    );
-    if (payload?.status == "success") {
-      if (lastkeyy === "") {
-        setTalentJobs(payload.data);
-        setLastKey(payload.data[payload.data.length - 1]?.job_id);
-      } else {
-        setTalentJobs((prevState) => [...prevState, ...payload.data]);
-      }
-    } else {
-      dispatch(
-        setAlert({
-          show: true,
-          type: ALERT_TYPE.ERROR,
-          msg: "Something went wrong! please relaod the window",
-        })
-      );
-    }
-  };
-
-  const getTalentDetails = async (job_id) => {
-    console.log(job_id)
-    const { payload } = await dispatch(getTalentFullDetails(job_id))
-    setTalentDetails(payload.data)
+  const getTalentDetails = async (user_id) => {
+    const { payload } = await dispatch(getTalentFullDetails(user_id));
     if (payload?.status === "success") {
-      console.log(payload.data)
+      setTalentDetails(payload.data);
     } else {
       dispatch(
         setAlert({
@@ -350,11 +333,11 @@ export default function TalentCard({
         })
       );
     }
-  }
+  };
   const handleExpandAccordian = async (jobId) => {
-    setFlip(prevState => !prevState)
-    !flip && await getTalentDetails(jobId)
-  }
+    setFlip((prevState) => !prevState);
+    !flip && (await getTalentDetails(jobId));
+  };
 
   const addToPool = async (canID, poolID) => {
     try {
@@ -381,7 +364,7 @@ export default function TalentCard({
           })
         );
       }
-    } catch (error) { }
+    } catch (error) {}
   };
   const addToJob = async (event, canId) => {
     try {
@@ -411,7 +394,7 @@ export default function TalentCard({
           })
         );
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const handleClose = () => {
@@ -450,6 +433,14 @@ export default function TalentCard({
   const removeWord = (value) => {
     return value?.replace("calendar", "");
   };
+
+  useEffect(() => {
+    personalityAdded && getTalentDetails(talentContent?.user_id);
+  }, [personalityAdded]);
+
+  useEffect(() => {
+    editPersonality && getAllData();
+  }, [editPersonality]);
 
   return (
     <StyledAccordion expanded={flip}>
@@ -580,8 +571,7 @@ export default function TalentCard({
                 height={18}
                 width={18}
               />
-              {talentContent?.jobTitle !==
-                null ? (
+              {talentContent?.jobTitle !== null ? (
                 <Typography
                   sx={{
                     fontSize: "14px",
@@ -590,9 +580,7 @@ export default function TalentCard({
                     ml: "4px",
                   }}
                 >
-                  {
-                    talentContent?.jobTitle
-                  }
+                  {talentContent?.jobTitle}
                 </Typography>
               ) : (
                 "-"
@@ -622,9 +610,7 @@ export default function TalentCard({
                       textOverflow: "ellipsis", // Adds dots at the end of overflowing text
                     }}
                   >
-                    {`${convertDOB(
-                      talentContent?.dob
-                    )} years`}
+                    {`${convertDOB(talentContent?.dob)} years`}
                   </Typography>
                 ) : (
                   "-"
@@ -656,8 +642,7 @@ export default function TalentCard({
                         textOverflow: "ellipsis", // Adds dots at the end of overflowing text
                       }}
                     >
-                      {talentContent?.town_name},{" "}
-                      {talentContent?.region_name}
+                      {talentContent?.town_name}, {talentContent?.region_name}
                     </Typography>
                   </Tooltip>
                 ) : (
@@ -684,15 +669,9 @@ export default function TalentCard({
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {
-                    talentContent?.currencySymbol
-                  }
-                  {formatCurrencyWithCommas(
-                    talentContent?.salaryMin
-                  )}to
-                  {formatCurrencyWithCommas(
-                    talentContent?.salaryMax
-                  )}
+                  {talentContent?.currencySymbol}
+                  {formatCurrencyWithCommas(talentContent?.salaryMin)}to
+                  {formatCurrencyWithCommas(talentContent?.salaryMax)}
                   pm
                 </Typography>
               </Box>
@@ -713,10 +692,7 @@ export default function TalentCard({
                       // mb: "2px",
                     }}
                   >
-                    {
-                      talentContent?.experienceYearEnd
-                    }{" "}
-                    years
+                    {talentContent?.experienceYearEnd} years
                   </Typography>
                 ) : (
                   "-"
@@ -739,9 +715,7 @@ export default function TalentCard({
                       // mb: "2px",
                     }}
                   >
-                    {removeWord(
-                      talentContent?.notice_period_description
-                    )}
+                    {removeWord(talentContent?.notice_period_description)}
                   </Typography>
                 ) : (
                   "-"
@@ -809,7 +783,7 @@ export default function TalentCard({
                   />
 
                   {talentContent?.candidate_profile?.linkedin_profile_link !==
-                    null ? (
+                  null ? (
                     <Typography
                       sx={{
                         fontSize: "12px",
@@ -968,7 +942,7 @@ export default function TalentCard({
                 source={deleteIcon}
                 height={24}
                 width={18}
-              // padding={"0 0 0 16px !important"}
+                // padding={"0 0 0 16px !important"}
               />
               <Box sx={{ display: "flex", paddingLeft: "10px" }}>
                 <Button
@@ -983,7 +957,9 @@ export default function TalentCard({
                     height: "30px !important",
                   }}
                 >
-                  {"interview"}
+                  {talentContent?.maxInterviewStageName !== null
+                    ? talentContent?.maxInterviewStageName
+                    : "-"}
                 </Button>
                 <Button
                   variant="contained"
@@ -1067,7 +1043,7 @@ export default function TalentCard({
                       role={undefined}
                       placement="bottom-start"
                       transition
-                    // disablePortal
+                      // disablePortal
                     >
                       {({ TransitionProps, placement }) => (
                         <Grow
@@ -1150,25 +1126,19 @@ export default function TalentCard({
                 {talentContent?.employment_type != null ? (
                   <SmallButton
                     color="blueButton700"
-                    label={truncate(
-                      talentContent?.employment_type,
-                      { length: 12 }
-                    )}
-                    value={
-                      talentContent?.employment_type
-                    }
+                    label={truncate(talentContent?.employment_type, {
+                      length: 12,
+                    })}
+                    value={talentContent?.employment_type}
                     mr="4px"
                     fontSize="12px"
                   ></SmallButton>
                 ) : null}
 
-                {talentContent?.work_setup !=
-                  null ? (
+                {talentContent?.work_setup != null ? (
                   <SmallButton
                     color="blueButton700"
-                    label={
-                      talentContent?.work_setup
-                    }
+                    label={talentContent?.work_setup}
                     mr="8px"
                     fontSize="12px"
                   ></SmallButton>
@@ -1331,7 +1301,7 @@ export default function TalentCard({
           flexDirection: "column",
         }}
       >
-        {flip && talentDetails &&
+        {flip && talentDetails && (
           // <DetailsSection talentDetails={talentDetails}/>
           <Grid item>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -1413,22 +1383,18 @@ export default function TalentCard({
                   >
                     {i18n["allTalent.tools"]}:
                   </Typography>
-                  <SmallButton
-                    minWidth="10px"
-                    height={18}
-                    color="yellowButton100"
-                    borderRadius="5px"
-                    label="Adobe"
-                    mr="4px"
-                  ></SmallButton>
-                  <SmallButton
-                    minWidth="10px"
-                    height={18}
-                    color="yellowButton100"
-                    borderRadius="5px"
-                    label="Microsoft Word"
-                    mr="4px"
-                  ></SmallButton>
+                  {talentDetails?.tool_users.map((item) => {
+                    return (
+                      <SmallButton
+                        minWidth="10px"
+                        height={18}
+                        color="yellowButton100"
+                        borderRadius="5px"
+                        label={item?.tool?.name}
+                        mr="4px"
+                      ></SmallButton>
+                    );
+                  })}
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                   <Typography
@@ -1648,49 +1614,49 @@ export default function TalentCard({
                   >
                     {talentDetails?.candidate_profile?.candidate_info?.primary
                       ?.name && (
-                        <Box
-                          component="img"
-                          height={80}
-                          alt="Primary personality"
-                          src={
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.primary?.name === "collaborator" &&
-                              profile_collaborator) ||
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.primary?.name === "challenger" &&
-                              profile_challenger) ||
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.primary?.name === "character" &&
-                              profile_character) ||
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.primary?.name === "contemplator" &&
-                              profile_contemplator)
-                          }
-                        />
-                      )}
+                      <Box
+                        component="img"
+                        height={80}
+                        alt="Primary personality"
+                        src={
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.primary?.name === "collaborator" &&
+                            profile_collaborator) ||
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.primary?.name === "challenger" &&
+                            profile_challenger) ||
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.primary?.name === "character" &&
+                            profile_character) ||
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.primary?.name === "contemplator" &&
+                            profile_contemplator)
+                        }
+                      />
+                    )}
 
                     {talentDetails?.candidate_profile?.candidate_info?.shadow
                       ?.name && (
-                        <Box
-                          component="img"
-                          height={80}
-                          alt="Shadow personality"
-                          src={
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.shadow?.name === "collaborator" &&
-                              profile_collaborator) ||
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.shadow?.name === "challenger" &&
-                              profile_challenger) ||
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.shadow?.name === "character" &&
-                              profile_character) ||
-                            (talentDetails?.candidate_profile?.candidate_info
-                              ?.shadow?.name === "contemplator" &&
-                              profile_contemplator)
-                          }
-                        />
-                      )}
+                      <Box
+                        component="img"
+                        height={80}
+                        alt="Shadow personality"
+                        src={
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "collaborator" &&
+                            profile_collaborator) ||
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "challenger" &&
+                            profile_challenger) ||
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "character" &&
+                            profile_character) ||
+                          (talentDetails?.candidate_profile?.candidate_info
+                            ?.shadow?.name === "contemplator" &&
+                            profile_contemplator)
+                        }
+                      />
+                    )}
 
                     <Box sx={{ margin: "0 -22px 0 -22px" }}>
                       <SingleRadialChart
@@ -1711,8 +1677,8 @@ export default function TalentCard({
                     </Box>
                   </Box>
                   <Box>
-                    {talentDetails?.candidate_profile?.candidate_traits?.length >
-                      0 &&
+                    {talentDetails?.candidate_profile?.candidate_traits
+                      ?.length > 0 &&
                       talentDetails?.candidate_profile?.candidate_traits.map(
                         (item) => {
                           return (
@@ -1913,18 +1879,18 @@ export default function TalentCard({
                   handleClick={handleClick}
                   tableData={tableData}
                   handleClose={handleClose}
-                  talentContent={{...talentContent,...talentDetails}}
+                  talentContent={{ ...talentContent, ...talentDetails }}
                   addToPool={addToPool}
                   anchorEl={anchorEl}
                   jobClick={jobClick}
                   talentJobs={talentJobs}
                   addToJob={addToJob}
-                  handleAddJobClick={handleAddJobClick}
+                  // handleAddJobClick={handleAddJobClick}
                 />
-                <JobAlert talentContent={
-                  {
+                <JobAlert
+                  talentContent={{
                     ...talentContent,
-                    ...talentDetails
+                    ...talentDetails,
                   }}
                 />
                 <CommentBox />
@@ -1960,7 +1926,7 @@ export default function TalentCard({
               />
             </Box>
           </Grid>
-        }
+        )}
       </AccordionDetails>
       <EditPersonality
         talentContent={talentContent}

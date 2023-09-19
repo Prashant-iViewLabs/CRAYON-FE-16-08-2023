@@ -2520,7 +2520,8 @@ export default function TalentDetailPage() {
 //   "& .MuiCollapse-root": {
 //     "& .MuiAccordionDetails-root": {
 //       display: "flex",
-//       paddingTop: 0,
+//       padding: "0 48px 0 48px",
+
 //       // padding: 0,
 //       "& .MuiButtonBase-root": {
 //         // padding: '0 8px',
@@ -3160,7 +3161,7 @@ export default function TalentDetailPage() {
 //                   />
 //                   {talentContent?.candidate_profile?.town !== null ? (
 //                     <Tooltip
-//                       title={`${talentContent?.candidate_profile?.town?.name},{" "}
+//                       title={`${talentContent?.candidate_profile?.town?.name},
 //                 ${talentContent?.candidate_profile?.town?.region?.name}`}
 //                       placement="top-end"
 //                     >

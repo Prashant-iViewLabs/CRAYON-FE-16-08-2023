@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { setAlert } from "../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../utils/Constants";
 import jwt_decode from "jwt-decode";
+import { getCompanies } from "../../../redux/employer/empProfileSlice";
+import SelectMenuWithScroll from "../../common/SelectMenuWithScroll";
 
 export default function Filters({
   total,
@@ -34,6 +36,7 @@ export default function Filters({
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [teammember, setTeammember] = useState([]);
+  const [companyList, setCompanyList] = useState([]);
   const open = Boolean(anchorEl);
   const initialOptionsCount = 12; // Initial number of options to display
   const optionsToLoadOnScroll = 12;
@@ -57,6 +60,30 @@ export default function Filters({
       const { payload } = await dispatch(getTeamMembers(""));
       if (payload?.status == "success") {
         setTeammember(payload?.data);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message,
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: error,
+        })
+      );
+    }
+  };
+  const getCompany = async (lastkeyy) => {
+    try {
+      const { payload } = await dispatch(getCompanies());
+      if (payload?.status == "success") {
+        setCompanyList(payload?.data);
       } else {
         dispatch(
           setAlert({
@@ -144,6 +171,7 @@ export default function Filters({
         </Paper>
         <Box sx={{ width: "50%" }}>
           <SelectMenu
+            clear={true}
             name="job_role_type"
             //   value={value}
             onHandleChange={handleJobRoleChange}
@@ -155,6 +183,7 @@ export default function Filters({
       <Box sx={{ display: "flex" }} gap={3} mt={2}>
         <Box sx={{ width: "50%" }}>
           <SelectMenu
+            clear={true}
             name="job_type"
             //   value={value}
             onHandleChange={handleJobType}
@@ -164,16 +193,18 @@ export default function Filters({
         </Box>
         <Box sx={{ width: "50%" }}>
           {decodedToken.data.role_id === 1 ? (
-            <SelectMenu
+            <SelectMenuWithScroll
+              clear={true}
               name="company"
               //   value={value}
               onHandleChange={handleCompany}
-              // options={companylist.length > 0 && companylist}
+              options={companyList.length > 0 && companyList}
               placeholder={"Company"}
-              // onOpen={() => getTeamMember("")}
+              onOpen={() => getCompany("")}
             />
           ) : (
             <SelectMenu
+              clear={true}
               name="team_member"
               //   value={value}
               onHandleChange={handleTeamMember}
@@ -188,6 +219,7 @@ export default function Filters({
       <Box sx={{ display: "flex" }} gap={3} mt={2}>
         <Box sx={{ width: "50%" }}>
           <SelectMenu
+            clear={true}
             name="job_status"
             defaultValue={value}
             onHandleChange={handleJobStatus}
@@ -199,6 +231,7 @@ export default function Filters({
         <Box sx={{ width: "50%" }}>
           {decodedToken.data.role_id === 1 && (
             <SelectMenu
+              clear={true}
               name="recruiter"
               onHandleChange={handleRecruiter}
               // options={recruiter.length > 0 && recruiter}

@@ -207,6 +207,12 @@ export default function AssociationSearch() {
     setBasicData(BASIC);
   };
 
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
+    setBasicData(BASIC);
+  };
+
   useEffect(() => {
     getAllData();
   }, []);
@@ -489,6 +495,7 @@ export default function AssociationSearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

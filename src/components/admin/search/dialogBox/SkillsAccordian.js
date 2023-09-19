@@ -201,16 +201,16 @@ export default function SkillsAccordian({
               <AccordionDetails key={index}>
                 {console.log("DATA", totalData)}
                 <Box
-                  id={"candidate_list"}
-                  sx={{ overflow: "hidden", height: "50vh", mt: 1 }}
+                  id="candidate_list"
+                  sx={{ overflow: "hidden", height: "500px", mt: 1 }}
                 >
                   <InfiniteScroll
                     style={{
-                      height: "100%",
+                      height: "500px",
                       overflowX: "hidden",
                       scrollbarWidth: "thin",
                     }}
-                    scrollableTarget={"candidate_list"}
+                    scrollableTarget="candidate_list"
                     dataLength={totalData}
                     next={() => getCandidateData(item, lastKeyy)}
                     scrollThreshold={"100px"}
@@ -253,7 +253,7 @@ export default function SkillsAccordian({
                             }
       
                             .infinite-scroll-component__outerdiv {
-                              height:100%
+                              height:"500px"
                             }
       
                             .infinite-scroll-component::-webkit-scrollbar-thumb {

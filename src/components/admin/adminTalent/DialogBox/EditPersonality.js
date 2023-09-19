@@ -197,7 +197,14 @@ export default function EditPersonality({
   };
 
   return (
-    <Dialog open={show} hideButton={false} maxWidth="xs" showFooter={false}>
+    <Dialog
+      open={show}
+      hideButton={false}
+      maxWidth="xs"
+      fullWidth={true}
+      showFooter={false}
+      scroll="body"
+    >
       <DialogTitle onClose={handleClose}>
         <IconButton
           aria-label="close"
@@ -228,7 +235,7 @@ export default function EditPersonality({
 
       <Box
         sx={{
-          height: "580px",
+          height: "fit-content",
         }}
       >
         <Box

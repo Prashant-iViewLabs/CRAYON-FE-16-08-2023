@@ -16,6 +16,24 @@ import RedLocation from "../../assets/Padding Included/Red_Location.svg";
 import YellowTool from "../../assets/Padding Included/Yellow_Own_Equipment.svg";
 import GreenCountry from "../../assets/Padding Included/Green_Country.svg";
 import GreenTitle from "../../assets/Padding Included/Green_Experience_Title_Job.svg";
+import AdvanceSectionAutoComplete from "./AdvanceSectionAutoComplete";
+import { useSelector } from "react-redux";
+import filter from "../../assets/Padding Included/White_Filter_Stats.svg";
+import SelectMenu from "./SelectMenu";
+import {
+  getCountry,
+  getCurrency,
+  getRequiredQualification,
+  getSkills,
+  getTools,
+  getTown,
+} from "../../redux/employer/postJobSlice";
+import { setAlert, setLoading } from "../../redux/configSlice";
+import { ALERT_TYPE, ERROR_MSG } from "../../utils/Constants";
+import { useDispatch } from "react-redux";
+import { getCompanies } from "../../redux/employer/empProfileSlice";
+import { useLocation } from "react-router-dom";
+import TalentSVGButton from "./TalentSVGButton";
 
 const rangeMarks = [
   {
@@ -72,10 +90,156 @@ const marks = [
 function textValue(value) {
   return value / 10;
 }
-const AdvanceSection = () => {
-  const [openAdvanceSearch, setAdvanceSearch] = useState(false);
+const formatNumber = (num) => {
+  if (num < 1000) {
+    return num.toString();
+  } else if (num < 1000000) {
+    return (num / 1000).toFixed(0) + "k";
+  } else {
+    return (num / 1000000).toFixed(0) + "M";
+  }
+};
 
+function rangeValueHandler(value) {
+  return formatNumber(value * 1000);
+}
+
+function rangeValueExperience(value) {
+  return `${value / 10} years`;
+}
+
+const BASIC = {
+  job_title: "",
+  region_id: [],
+  tag_id: [],
+  town_id: [],
+  tool_id: [],
+  salary: [],
+  experience: [],
+  company_id: [],
+  currency_id: [],
+  highest_qualification_id: [],
+};
+
+const AdvanceSection = ({
+  setBasicData,
+  basicData,
+  setAdvanceSearch,
+  openAdvanceSearch,
+}) => {
   const [rangeValue, setRangeValue] = useState([0, 20]);
+  const [expRange, setExpRange] = useState([0, 20]);
+  const [title, setTitle] = useState("");
+
+  const dispatch = useDispatch();
+  const params = useLocation();
+
+  const {
+    titles,
+    skills,
+    tools,
+    workExperience,
+    qualifications,
+    requiredQua,
+    currency,
+    country,
+    town,
+    roleTypes,
+    workSetup,
+  } = useSelector((state) => state.postJobs);
+
+  const { companies } = useSelector((state) => state.myProfile);
+
+  const getAllData = async (para) => {
+    try {
+      switch (para) {
+        case "country":
+          await dispatch(getCountry());
+          return;
+        case "skills":
+          await dispatch(getSkills());
+          return;
+        case "town":
+          await dispatch(getTown());
+          return;
+        case "tools":
+          await dispatch(getTools());
+          return;
+        case "companies":
+          await dispatch(getCompanies());
+          return;
+        case "currency":
+          await dispatch(getCurrency());
+          return;
+        case "requiredQua":
+          await dispatch(getRequiredQualification());
+          return;
+        default:
+          return;
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(setLoading(false));
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: ERROR_MSG,
+        })
+      );
+    }
+  };
+
+  const handleMultipleAutoComplete = (event, newValue, id) => {
+    let temp = [...newValue.map((val) => val?.inputValue || val?.id || val)];
+    let newCultureData = {
+      ...basicData,
+      [id]: temp,
+    };
+    console.log(newCultureData);
+    setBasicData(newCultureData);
+  };
+
+  const handleChange = (event) => {
+    let newBasicData = {};
+    setTitle(event.target.value);
+    if (params.pathname.includes("talent")) {
+      newBasicData = {
+        ...basicData,
+        talent_title: event.target.value,
+      };
+    } else {
+      newBasicData = {
+        ...basicData,
+        job_title: event.target.value,
+      };
+    }
+
+    setBasicData(newBasicData);
+  };
+
+  const handleRangeSliderChange = (event, newValue) => {
+    setRangeValue(newValue);
+    let newArr = newValue.map((val) => val * 1000);
+    const newBasicData = {
+      ...basicData,
+      [event.target.name]: newArr,
+    };
+    setBasicData(newBasicData);
+  };
+
+  const expHandleChange = (event, newValue) => {
+    console.log(event, newValue, event.target.name);
+    setExpRange(newValue);
+    let newArr = newValue?.map((val) => Math.floor(val / 10));
+    console.log(newArr);
+    const newBasicData = {
+      ...basicData,
+      [event.target.name]: newArr,
+    };
+    setBasicData(newBasicData);
+  };
+
   return (
     <Box
       sx={{
@@ -133,7 +297,7 @@ const AdvanceSection = () => {
                   alignItems: "center",
                   width: "100%",
                   borderRadius: 5,
-                  background: "white",
+                  padding: "5px",
                 }}
               >
                 <InputBase
@@ -143,7 +307,9 @@ const AdvanceSection = () => {
                     fontSize: "14px",
                     fontWeight: 700,
                   }}
+                  value={title}
                   placeholder="Select a job title"
+                  onChange={handleChange}
                 />
               </Paper>
             </Box>
@@ -166,26 +332,18 @@ const AdvanceSection = () => {
                   Regions
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="region_id"
+                onFocus={() => {
+                  if (country.length === 0) {
+                    getAllData("country");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Select the country you are in"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Select the region you are in"}
+                data={country}
+              />
             </Box>
           </Box>
           <Box
@@ -214,26 +372,18 @@ const AdvanceSection = () => {
                   Skills
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="tag_id"
+                onFocus={() => {
+                  if (skills.length === 0) {
+                    getAllData("skills");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Select the skills you are proficient in"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Select the skills you are proficient in "}
+                data={skills}
+              />
             </Box>
             <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -254,26 +404,18 @@ const AdvanceSection = () => {
                   Location
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="town_id"
+                onFocus={() => {
+                  if (town.length === 0) {
+                    getAllData("town");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Select a job title"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Select your town or city"}
+                data={town}
+              />
             </Box>
           </Box>
           <Box
@@ -302,26 +444,18 @@ const AdvanceSection = () => {
                   Tools
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="tool_id"
+                onFocus={() => {
+                  if (tools.length === 0) {
+                    getAllData("tools");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Select the tools you are proficient in"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Select the the tools you are proficient in "}
+                data={tools}
+              />
             </Box>
             <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -342,26 +476,18 @@ const AdvanceSection = () => {
                   Companies
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="company_id"
+                onFocus={() => {
+                  if (companies.length === 0) {
+                    getAllData("companies");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Select your preferred next company"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Select your preferred next company"}
+                data={companies}
+              />
             </Box>
           </Box>
           <Box
@@ -390,26 +516,18 @@ const AdvanceSection = () => {
                   Currency
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="currency_id"
+                onFocus={() => {
+                  if (currency.length === 0) {
+                    getAllData("currency");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Indicate your preferred currency"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Indicate your preferred currency"}
+                data={currency}
+              />
             </Box>
             <Box sx={{ width: "50%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -430,26 +548,18 @@ const AdvanceSection = () => {
                   Highest Qualification
                 </InputLabel>
               </Box>
-              <Paper
-                elevation={0}
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: 5,
+              <AdvanceSectionAutoComplete
+                multiple={true}
+                id="highest_qualification_id"
+                onFocus={() => {
+                  if (requiredQua.length === 0) {
+                    getAllData("requiredQua");
+                  }
                 }}
-              >
-                <InputBase
-                  sx={{
-                    ml: 1,
-                    width: 1,
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}
-                  placeholder="Select your highest qualification"
-                />
-              </Paper>
+                onChange={handleMultipleAutoComplete}
+                placeholder={"Select your highest qualification"}
+                data={requiredQua}
+              />
             </Box>
           </Box>
           <Box
@@ -472,47 +582,42 @@ const AdvanceSection = () => {
                 width: "89%",
                 ml: 1,
                 "& .MuiSlider-rail": {
-                  backgroundColor: "#ebecf3",
+                  backgroundColor: theme.palette.eyeview100.main,
                   height: "10px",
                 },
                 "& .MuiSlider-track": {
                   height: "10px",
-                  background: theme.palette.redButton.main,
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
                   background: "white",
                 },
-                "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
-                  backgroundColor: "#EBECF3",
-                },
                 "& .MuiSlider-valueLabel": {
-                  color: "#000",
+                  fontSize: 12,
+                  fontWeight: "normal",
+                  top: -6,
+                  backgroundColor: theme.palette.grayBackground,
+                  borderRadius: 1,
+                  color: theme.palette.text.primary,
+                  "&:before": {
+                    display: "none",
+                  },
+                  "& *": {
+                    background: "transparent",
+                    color: theme.palette.mode === "dark" ? "#fff" : "#000",
+                  },
                 },
               }}
               name="salary"
               getAriaLabel={() => "Temperature range"}
               value={rangeValue}
               valueLabelDisplay="on"
-              // step={basicData.employment_type == "freelance" && 1}
-              // onChange={
-              //   basicData.employment_type == "freelance"
-              //     ? handleRangeSlider2
-              //     : handleRangeSlider
-              // }
-              // color="redButton100"
-              // valueLabelDisplay="on"
-              // valueLabelFormat={
-              //   basicData.employment_type == "freelance"
-              //     ? rangeValueHandler2
-              //     : rangeValueHandler
-              // }
-              // getAriaValueText={
-              //   basicData.employment_type == "freelance"
-              //     ? rangeValueHandler2
-              //     : rangeValueHandler
-              // }
               marks={rangeMarks}
+              onChange={handleRangeSliderChange}
+              color="redButton100"
+              // step={basicData.job_role_type == "freelance" && 1}
+              valueLabelFormat={rangeValueHandler}
+              getAriaValueText={rangeValueHandler}
             />
           </Box>
           <Box sx={{ width: "50%" }}>
@@ -531,46 +636,41 @@ const AdvanceSection = () => {
                 width: "89%",
                 ml: 1,
                 "& .MuiSlider-rail": {
-                  backgroundColor: theme.palette.grayBackground,
+                  backgroundColor: theme.palette.eyeview100.main,
                   height: "10px",
                 },
                 "& .MuiSlider-track": {
                   height: "10px",
-                  background: theme.palette.blueButton700.main,
                 },
                 "& .MuiSlider-thumb": {
                   borderRadius: "15%",
                   background: "white",
                 },
-                "& .MuiSlider-valueLabel.MuiSlider-valueLabelOpen": {
-                  backgroundColor: "#EBECF3",
-                },
                 "& .MuiSlider-valueLabel": {
-                  color: "#000",
+                  fontSize: 12,
+                  fontWeight: "normal",
+                  top: -6,
+                  backgroundColor: theme.palette.grayBackground,
+                  borderRadius: 1,
+                  color: theme.palette.text.primary,
+                  "&:before": {
+                    display: "none",
+                  },
+                  "& *": {
+                    background: "transparent",
+                    color: theme.palette.mode === "dark" ? "#fff" : "#000",
+                  },
                 },
               }}
               name="experience"
               getAriaLabel={() => "Temperature range"}
-              value={rangeValue}
+              value={expRange}
               valueLabelDisplay="on"
-              // step={basicData.employment_type == "freelance" && 1}
-              // onChange={
-              //   basicData.employment_type == "freelance"
-              //     ? handleRangeSlider2
-              //     : handleRangeSlider
-              // }
-              // color="redButton100"
-              // valueLabelDisplay="on"
-              // valueLabelFormat={
-              //   basicData.employment_type == "freelance"
-              //     ? rangeValueHandler2
-              //     : rangeValueHandler
-              // }
-              // getAriaValueText={
-              //   basicData.employment_type == "freelance"
-              //     ? rangeValueHandler2
-              //     : rangeValueHandler
-              // }
+              onChange={expHandleChange}
+              color="blueButton800"
+              valueLabelFormat={rangeValueExperience}
+              getAriaValueText={rangeValueExperience}
+              step={5}
               marks={marks}
             />
           </Box>
@@ -585,14 +685,25 @@ const AdvanceSection = () => {
         }}
         size="small"
         variant="contained"
+        endIcon={
+          <Box
+            component="img"
+            className="eye"
+            alt="eye logo"
+            src={filter}
+            sx={{
+              height: 25,
+              width: 25,
+              mr: 1,
+            }}
+          />
+        }
         color={"lightGreenButton300"}
-        endIcon={openAdvanceSearch ? <ExpandLess /> : <ExpandMore />}
         onClick={() => {
           setAdvanceSearch((prevState) => !prevState);
+          setBasicData(BASIC);
         }}
-      >
-        {openAdvanceSearch ? "close" : "Advance"}
-      </Button>
+      ></Button>
     </Box>
   );
 };

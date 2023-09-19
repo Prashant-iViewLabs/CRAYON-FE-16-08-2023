@@ -294,7 +294,7 @@ export const getJobTitleData = createAsyncThunk(
 export const getTitlesCandidateData = createAsyncThunk(
   "getTitlesCandidateData",
   async ({ lastKey, keyword, job_title_id }, { dispatch }) => {
-    dispatch(setLoading(true));
+    // dispatch(setLoading(true));
     const { data } = await getApi(
       "/admin/search/getJobTitleCandidates?lastKey=" +
         lastKey +
@@ -304,7 +304,7 @@ export const getTitlesCandidateData = createAsyncThunk(
         job_title_id,
       true
     );
-    dispatch(setLoading(false));
+    // dispatch(setLoading(false));
     return data;
   }
 );

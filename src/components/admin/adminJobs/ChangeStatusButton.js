@@ -35,11 +35,11 @@ const ChangeStatusButton = ({
   const anchorRef = useRef(null);
   const [openActive, setOpenActive] = useState(false);
   const open = Boolean(anchorEl);
-  
+
   useEffect(() => {
-    setStatus(jobStatus)
-  }, [jobStatus])
-  
+    setStatus(jobStatus);
+  }, [jobStatus]);
+
   function handleListKeyDown(event) {
     if (event.key === "Tab") {
       event.preventDefault();

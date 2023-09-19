@@ -211,6 +211,12 @@ export default function NationalitySearch() {
     setBasicData(BASIC);
   };
 
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
+    setBasicData(BASIC);
+  };
+
   useEffect(() => {
     getAllData();
   }, []);
@@ -493,6 +499,7 @@ export default function NationalitySearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

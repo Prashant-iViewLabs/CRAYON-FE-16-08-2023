@@ -390,7 +390,7 @@ export default function JobCard({
           setTableData((prevState) => [...prevState, ...payload.data]);
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const handleClick = async (event) => {
@@ -427,7 +427,7 @@ export default function JobCard({
           })
         );
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
@@ -550,8 +550,9 @@ export default function JobCard({
               />
               <Tooltip title={jobContent?.title} placement="top-end">
                 <Link
-                  to={`${prevLocation}/job-detail/${`${jobContent?.town_name + " " + jobContent?.region_name
-                    }`}/${jobContent?.job_id}`}
+                  to={`${prevLocation}/job-detail/${`${
+                    jobContent?.town_name + " " + jobContent?.region_name
+                  }`}/${jobContent?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
@@ -581,7 +582,7 @@ export default function JobCard({
                   height: "30px",
                 }}
               >
-                {jobContent?.job_type.split(" ")[1]}
+                {jobContent?.job_type && jobContent?.job_type.split(" ")[1]}
               </Button>
             </Box>
             <Box
@@ -611,7 +612,7 @@ export default function JobCard({
                 >
                   {jobContent?.employer_profile_company_name?.length >= 30
                     ? jobContent?.employer_profile_company_name?.slice(0, 30) +
-                    "..."
+                      "..."
                     : jobContent?.employer_profile_company_name}
                 </Typography>
               </Tooltip>
@@ -850,8 +851,9 @@ export default function JobCard({
                 <SmallButton label={jobContent?.type} />
                 <SmallButton label={jobContent?.work_setup} />
                 <CopyToClipboard
-                  text={`${prevLocation}/job-detail/${`${jobContent?.town_name + " " + jobContent?.region_name
-                    }`}/${jobContent?.job_id}`}
+                  text={`${prevLocation}/job-detail/${`${
+                    jobContent?.town_name + " " + jobContent?.region_name
+                  }`}/${jobContent?.job_id}`}
                   onCopy={() => {
                     dispatch(
                       setAlert({
@@ -872,15 +874,15 @@ export default function JobCard({
                   />
                 </CopyToClipboard>
                 <Link
-                  to={`${prevLocation}/job-detail/${`${jobContent?.town_name + " " + jobContent?.region_name
-                    }`}/${jobContent?.job_id}`}
+                  to={`${prevLocation}/job-detail/${`${
+                    jobContent?.town_name + " " + jobContent?.region_name
+                  }`}/${jobContent?.job_id}`}
                   target={"_blank"}
                   style={{
                     textDecoration: "none",
                     color: theme.palette.black,
                   }}
                 >
-
                   <Box
                     component={"img"}
                     src={RedView}
@@ -1219,7 +1221,6 @@ export default function JobCard({
                       );
                     })}
                   </Box>
-                  {/* languages Remaining */}
                   <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                     <Typography
                       sx={{
@@ -1231,31 +1232,19 @@ export default function JobCard({
                     >
                       {i18n["pendingJobs.languages"]}
                     </Typography>
-                    <SmallButton
-                      minWidth="10px"
-                      height={18}
-                      color="grayButton100"
-                      borderRadius="5px"
-                      label="English"
-                      mr="4px"
-                    ></SmallButton>
-                    <SmallButton
-                      minWidth="10px"
-                      height={18}
-                      color="grayButton100"
-                      borderRadius="5px"
-                      label="Afrikaans"
-                      mr="4px"
-                    ></SmallButton>
-                    <SmallButton
-                      minWidth="10px"
-                      height={18}
-                      color="grayButton100"
-                      borderRadius="5px"
-                      label="Spanish"
-                      mr="4px"
-                    ></SmallButton>
-                    {/* languages Remaining */}
+
+                    {jobContent?.JobLanguages?.split(",").map((item) => {
+                      return (
+                        <SmallButton
+                          minWidth="10px"
+                          height={18}
+                          color="grayButton100"
+                          borderRadius="5px"
+                          label={item}
+                          mr="4px"
+                        ></SmallButton>
+                      );
+                    })}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                     <Typography
@@ -1268,30 +1257,14 @@ export default function JobCard({
                     >
                       {i18n["pendingJobs.institutions"]}
                     </Typography>
-                    <SmallButton
+                    {/* <SmallButton
                       minWidth="10px"
                       height={18}
                       color="grayButton100"
                       borderRadius="5px"
                       label="English"
                       mr="4px"
-                    ></SmallButton>
-                    <SmallButton
-                      minWidth="10px"
-                      height={18}
-                      color="grayButton100"
-                      borderRadius="5px"
-                      label="Afrikaans"
-                      mr="4px"
-                    ></SmallButton>
-                    <SmallButton
-                      minWidth="10px"
-                      height={18}
-                      color="grayButton100"
-                      borderRadius="5px"
-                      label="Spanish"
-                      mr="4px"
-                    ></SmallButton>
+                    ></SmallButton> */}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                     <Typography

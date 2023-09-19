@@ -11,7 +11,15 @@ const initialState = {
 export const adminJobsFilter = createAsyncThunk(
   "adminJobsFilter",
   async (
-    { lastKey, status_id, job_stage, job_title, job_type },
+    {
+      lastKey,
+      status_id,
+      job_stage,
+      job_title,
+      job_type,
+      team_member_user_id,
+      company_id,
+    },
     { dispatch }
   ) => {
     dispatch(setLoading(true));
@@ -25,7 +33,11 @@ export const adminJobsFilter = createAsyncThunk(
         "&job_stage=" +
         job_stage +
         "&job_type=" +
-        job_type,
+        job_type +
+        "&team_member_user_id=" +
+        team_member_user_id +
+        "&company_id=" +
+        company_id,
       true
     );
 
@@ -107,7 +119,10 @@ export const getAllJobs = createAsyncThunk(
 export const getAdminTalentJobList = createAsyncThunk(
   "getAdminTalentJobList",
   async (payload, { dispatch }) => {
-    const { data } = await getApi("/admin/job?lastKey=" + payload, true);
+    const { data } = await getApi(
+      "/admin/getTalentJobData?lastKey=" + payload,
+      true
+    );
     return data;
   }
 );
@@ -168,7 +183,15 @@ export const getAllComments = createAsyncThunk(
 export const getAllTalentJobs = createAsyncThunk(
   "getAllTalentJobs",
   async (
-    { lastKey, title, followerpool = "false", applicantpool = "false" },
+    {
+      lastKey,
+      title,
+      applicantpool = "false",
+      followerpool = "false",
+      pool_id,
+      job_id,
+      stage,
+    },
     { dispatch }
   ) => {
     dispatch(setLoading(true));
@@ -181,7 +204,12 @@ export const getAllTalentJobs = createAsyncThunk(
         applicantpool +
         "&followerpull=" +
         followerpool +
-        "&pool_id=",
+        "&pool_id=" +
+        pool_id +
+        "&job_id=" +
+        job_id +
+        "&stage=" +
+        stage,
       true
     );
     dispatch(setLoading(false));

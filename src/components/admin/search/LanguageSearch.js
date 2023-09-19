@@ -206,6 +206,12 @@ export default function LanguageSearch() {
     setBasicData(BASIC);
   };
 
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
+    setBasicData(BASIC);
+  };
+
   useEffect(() => {
     getAllData();
   }, []);
@@ -488,6 +494,7 @@ export default function LanguageSearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

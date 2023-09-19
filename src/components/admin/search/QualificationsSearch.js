@@ -24,9 +24,7 @@ import leftArrow from "../../../assets/Black_Left_Previous.svg";
 import rightArrow from "../../../assets/Black_Right_Next.svg";
 import * as React from "react";
 import FilterDrawer from "./dialogBox/FilterDrawer";
-import {
-  getQualificationsData,
-} from "../../../redux/admin/searchSlice";
+import { getQualificationsData } from "../../../redux/admin/searchSlice";
 import SmallButtonTalent from "../../common/SmallButtonTalent";
 import QualificationAccordian from "./dialogBox/QualificationAccordian";
 
@@ -206,6 +204,12 @@ export default function QualificationsSearch() {
   const resetSearch = () => {
     setOpenAccordian(false);
     setTitle("");
+    setBasicData(BASIC);
+  };
+
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
     setBasicData(BASIC);
   };
 
@@ -491,6 +495,7 @@ export default function QualificationsSearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

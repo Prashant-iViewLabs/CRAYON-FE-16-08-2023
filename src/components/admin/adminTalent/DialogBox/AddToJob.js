@@ -1,9 +1,78 @@
 import { Box, Popover, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Ozow from "../../../../assets/Company Logos/Screenshot 2023-08-11 at 12.21.50.png";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  addTalentToJob,
+  getAdminTalentJobList,
+} from "../../../../redux/admin/jobsSlice";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../../../redux/configSlice";
+import { ALERT_TYPE } from "../../../../utils/Constants";
 
-export default function AddToJob({ talentJob, addToJob, talentContent }) {
+export default function AddToJob({ talentContent, jobClick, setJobClick }) {
+  const dispatch = useDispatch();
+
+  const [lastKey, setLastKey] = useState(0);
+  const [talentJobs, setTalentJobs] = useState([]);
+
+  const getTalentJobList = async (lastkeyy) => {
+    console.log("LAST KEY", lastkeyy);
+    const { payload } = await dispatch(getAdminTalentJobList(lastkeyy));
+    if (payload?.status == "success") {
+      if (lastkeyy === "") {
+        setTalentJobs(payload.data);
+        setLastKey(payload.pageNumber + 1);
+      } else {
+        setTalentJobs((prevState) => [...prevState, ...payload.data]);
+        setLastKey(payload.pageNumber + 1);
+      }
+    } else {
+      dispatch(
+        setAlert({
+          show: true,
+          type: ALERT_TYPE.ERROR,
+          msg: "Something went wrong! please relaod the window",
+        })
+      );
+    }
+  };
+
+  const addToJob = async (event, canId) => {
+    try {
+      const job = talentJobs.find(
+        (item) => item.title === event.target.textContent
+      );
+      const data = {
+        candidate_id: canId,
+        job_id: job.job_id,
+      };
+      const { payload } = await dispatch(addTalentToJob(data));
+      if (payload.status === "success") {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.SUCCESS,
+            msg: "Talent added to job successfully",
+          })
+        );
+        setJobClick(null);
+      } else {
+        dispatch(
+          setAlert({
+            show: true,
+            type: ALERT_TYPE.ERROR,
+            msg: payload?.message?.message,
+          })
+        );
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    jobClick && getTalentJobList("");
+  }, [jobClick]);
+
   return (
     <Box
       sx={{
@@ -33,9 +102,10 @@ export default function AddToJob({ talentJob, addToJob, talentContent }) {
               overflowX: "hidden",
               scrollbarWidth: "thin",
             }}
-            dataLength={talentJob?.length}
-            // next={() => getJobList(lastKey)}
+            dataLength={talentJobs?.length}
+            next={() => getTalentJobList(lastKey)}
             hasMore={true}
+            // scrollThreshold={"90%"}
             scrollableTarget="talentList"
             endMessage={
               <p style={{ textAlign: "center" }}>
@@ -43,7 +113,7 @@ export default function AddToJob({ talentJob, addToJob, talentContent }) {
               </p>
             }
           >
-            {talentJob.map((item, index) => {
+            {talentJobs.map((item, index) => {
               return (
                 <Box sx={{ display: "flex", mt: 2 }}>
                   <Box

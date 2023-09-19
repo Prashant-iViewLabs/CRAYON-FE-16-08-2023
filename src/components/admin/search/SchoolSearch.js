@@ -24,7 +24,10 @@ import leftArrow from "../../../assets/Black_Left_Previous.svg";
 import rightArrow from "../../../assets/Black_Right_Next.svg";
 import * as React from "react";
 import FilterDrawer from "./dialogBox/FilterDrawer";
-import { getQualificationsData, getSchoolData } from "../../../redux/admin/searchSlice";
+import {
+  getQualificationsData,
+  getSchoolData,
+} from "../../../redux/admin/searchSlice";
 import SmallButtonTalent from "../../common/SmallButtonTalent";
 import QualificationAccordian from "./dialogBox/QualificationAccordian";
 import SchoolAccordian from "./dialogBox/Schoolaccordian";
@@ -205,6 +208,12 @@ export default function SchoolSearch() {
   const resetSearch = () => {
     setOpenAccordian(false);
     setTitle("");
+    setBasicData(BASIC);
+  };
+
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
     setBasicData(BASIC);
   };
 
@@ -488,6 +497,7 @@ export default function SchoolSearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

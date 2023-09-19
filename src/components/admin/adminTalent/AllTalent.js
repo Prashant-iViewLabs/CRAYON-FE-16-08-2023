@@ -299,8 +299,8 @@ export default function AllTalent() {
     //         <AllTalentNewCard
     //           key={index}
     //           talentContent={job}
-    //           setPersonalityAdded={setPersonalityAdded}
-    //           traits={traits}
+              // setPersonalityAdded={setPersonalityAdded}
+              // traits={traits}
     //         />
     //       ))}
     //     </Box>

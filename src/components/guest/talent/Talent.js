@@ -35,6 +35,19 @@ import { getAllTalentType } from "../../../redux/guest/talentTypes";
 import { Paper } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 
+const BASIC = {
+  talent_title: "",
+  region_id: [],
+  tag_id: [],
+  town_id: [],
+  tool_id: [],
+  salary: [],
+  experience: [],
+  company_id: [],
+  currency_id: [],
+  highest_qualification_id: [],
+};
+
 export default function Talent() {
   const i18n = locale.en;
   const theme = useTheme();
@@ -48,6 +61,7 @@ export default function Talent() {
   const [filters, setFilters] = useState([allIndustries[0]?.id]);
   const [filtersType, setFiltersType] = useState([allTypes[0]?.id]);
   const [filtersJobType, setFiltersJobType] = useState([allTalentTypes[0]?.id]);
+  const [basicData, setBasicData] = useState(BASIC);
 
   const [all_talent, setAll_talent] = useState([]);
   const [lastKey, setLastKey] = useState(0);
@@ -106,6 +120,7 @@ export default function Talent() {
         personalityType: personalityType.toString(),
         user_id: token ? decodedToken?.data?.user_id : "",
         jobtype: jobtype.toString(),
+        ...basicData,
       };
       const { payload } = await dispatch(getFilteredTalent(data));
       if (payload?.status == "success") {
@@ -235,11 +250,16 @@ export default function Talent() {
         gap={3}
         flexGrow="1 !important"
       >
-        <SearchBar placeholder={i18n["jobs.searchPlaceholder"]} />
+        <SearchBar
+          placeholder={"Begin your search for talent here..."}
+          setAllJobs={setAll_talent}
+          setLastKey={setLastKey}
+          setBasicData={setBasicData}
+          basicData={basicData}
+        />
         <InfiniteScroll
           key={`${filters} + ${filtersType} + ${filtersJobType}`}
           height="80vh"
-          loader={<h4>Loading more... </h4>}
           scrollThreshold={"100px"}
           dataLength={all_talent.length}
           next={() => getTalent(filters, filtersType, filtersJobType, lastKey)}

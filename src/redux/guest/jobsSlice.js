@@ -29,19 +29,26 @@ export const getFilteredJobs = createAsyncThunk(
     {
       selectedFilters = "",
       lastKey = "",
-      jobtype ="",
+      jobtype = "",
       jobstage = "",
       personalityType = "",
-      title ="",
+      job_title = "",
       user_id,
       favourites,
       recentjob,
       appliedjob,
+      region_id = "",
+      town_id = "",
+      salary = "",
+      experience = "",
+      tool_id = "",
+      tag_id = "",
+      company_id = "",
+      currency_id = "",
+      highest_qualification_id = "",
     },
     { dispatch }
   ) => {
-
-
     dispatch(setLoading(true));
     const { data } = await getApi(
       "/getjobslist/filter?industry_id=" +
@@ -54,16 +61,34 @@ export const getFilteredJobs = createAsyncThunk(
         jobstage +
         "&personalitytype_id=" +
         personalityType +
-        "&title=" +
-        title +
-        "&user_id=" +
-        user_id +
+        "&job_title=" +
+        job_title +
         "&favourite=" +
         favourites +
         "&appliedjobs=" +
         appliedjob +
+        "&user_id=" +
+        user_id +
         "&recent=" +
-        recentjob
+        recentjob +
+        "&region_id=" +
+        region_id +
+        "&town_id=" +
+        town_id +
+        "&salary=" +
+        salary +
+        "&experience=" +
+        experience +
+        "&tool_id=" +
+        tool_id +
+        "&tag_id=" +
+        tag_id +
+        "&company_id=" +
+        company_id +
+        "&highest_qualification_id=" +
+        highest_qualification_id +
+        "&currency_id=" +
+        currency_id
     );
     dispatch(setLoading(false));
     return data;

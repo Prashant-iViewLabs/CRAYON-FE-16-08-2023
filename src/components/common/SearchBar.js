@@ -23,10 +23,14 @@ import { getApi } from "../../utils/Apis";
 import { useDispatch } from "react-redux";
 import { ALERT_TYPE } from "../../utils/Constants";
 import { useEffect } from "react";
+import jwt_decode from "jwt-decode";
 
-import GreenSearch from "../../assets/CircularIcon/Red/Circular Icons__Green_Search.svg"
+import GreenSearch from "../../assets/CircularIcon/Red/Circular Icons__Green_Search.svg";
 import { InputLabel } from "@mui/material";
 import AdvanceSection from "./AdvanceSection";
+import { getFilteredJobs } from "../../redux/guest/jobsSlice";
+import { useLocation, useParams } from "react-router-dom";
+import { getFilteredTalent } from "../../redux/guest/talentSlice";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   height: 40,
@@ -53,54 +57,82 @@ const RedSwitch = styled(Switch)(({ theme }) => ({
 function valuetext(value) {
   return `${value}°C`;
 }
+
+const BASIC = {
+  job_title: "",
+  region_id: [],
+  tag_id: [],
+  town_id: [],
+  tool_id: [],
+  salary: [],
+  experience: [],
+  company_id: [],
+  currency_id: [],
+  highest_qualification_id: [],
+};
+
 export default function SearchBar({
   placeholder,
   setAllJobs,
-  setSearchedJobs,
+  setLastKey,
+  setBasicData,
+  basicData,
 }) {
   const i18n = locale.en;
   const theme = useTheme();
+  const params = useLocation();
   const dispatch = useDispatch();
   const [searchFilter, setSearchFilter] = useState(false);
   const [value1, setValue1] = useState([20, 37]);
   const [value2, setValue2] = useState([20, 37]);
   const [isOpen, setIsOpen] = useState(null);
   const [jobSearch, setJobSearch] = useState("");
-  const handleChange1 = (event, newValue) => {
-    setValue1(newValue);
-  };
-  const handleChange2 = (event, newValue) => {
-    setValue2(newValue);
-  };
-  const handleSearchFilter = () => {
-    setSearchFilter(prevState => !prevState);
-  };
-  const onMenuClick = (isOpen) => {
-    setIsOpen(isOpen);
-  };
+  const [openAdvanceSearch, setAdvanceSearch] = useState(false);
+
+  const token = localStorage?.getItem("token");
+  let decodedToken;
+  if (token) {
+    decodedToken = jwt_decode(token);
+  }
+  console.log(params.pathname.includes("talent"));
   const handleSearch = (event) => {
     setJobSearch(event.target.value);
   };
-  console.log("JOB SEARCH IN SEARCH BAR", jobSearch);
-  const getSearchedJobs = createAsyncThunk(
-    "getSearchedJobs",
-    async (payload, { dispatch }) => {
-      dispatch(setLoading(true));
-      const { data } = await getApi(
-        "/getjobslist/filter?industry_id=&lastKey=&jobtype_id=&jobstage_id=&personalitytype_id=&title=" +
-        encodeURIComponent(jobSearch)
-      );
-      setSearchedJobs(jobSearch);
-      dispatch(setLoading(false));
-      return data;
-    }
-  );
+
   const handleJobSearch = async () => {
-    const { payload } = await dispatch(getSearchedJobs());
-    console.log("JOBS SEARCH PAYLOAD", payload);
+    let data = {};
+    params.pathname.includes("talent")
+      ? (data = {
+          selectedFilters: "",
+          lastKey: "",
+          personalityType: "",
+          user_id: token ? decodedToken?.data?.user_id : "",
+          jobtype: "",
+          ...basicData,
+        })
+      : (data = {
+          selectedFilters: "",
+          lastKey: "",
+          jobtype: "",
+          jobstage: "",
+          personalityType: "",
+          user_id: token ? decodedToken?.data?.user_id : "",
+          favourites: "",
+          recentjob: "",
+          appliedjob: "",
+          ...basicData,
+        });
+    console.log(basicData);
+    const { payload } = await dispatch(
+      params.pathname.includes("talent")
+        ? getFilteredTalent(data)
+        : getFilteredJobs(data)
+    );
     if (payload?.status == "success") {
       setAllJobs([]);
+      setLastKey(payload.pageNumber + 1);
       setAllJobs((prevState) => [...prevState, ...payload.data]);
+      setAdvanceSearch(false);
     } else {
       dispatch(
         setAlert({
@@ -118,9 +150,11 @@ export default function SearchBar({
   //   }
   // }, [jobSearch]);
   return (
-    <Box sx={{
-      position: "relative"
-    }}>
+    <Box
+      sx={{
+        position: "relative",
+      }}
+    >
       <Paper
         elevation={0}
         sx={{
@@ -133,9 +167,8 @@ export default function SearchBar({
             xl: searchFilter ? "0" : "0 0 20px 20px",
           },
           zIndex: "1111",
-          overflow: "hidden"
+          overflow: "hidden",
         }}
-        
       >
         <IconButton
           color="black100"
@@ -144,7 +177,7 @@ export default function SearchBar({
           sx={{
             borderRadius: 0,
             background: theme.palette.lightGreenButton300.main,
-            color: "white"
+            color: "white",
           }}
         >
           <SearchIcon color="white" />
@@ -200,79 +233,13 @@ export default function SearchBar({
           zIndex: 10,
         }}
       >
-        <AdvanceSection />
+        <AdvanceSection
+          setBasicData={setBasicData}
+          basicData={basicData}
+          setAdvanceSearch={setAdvanceSearch}
+          openAdvanceSearch={openAdvanceSearch}
+        />
       </Box>
     </Box>
   );
 }
-
-{/* 
-      </Paper>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          background: theme.palette.mainBackground,
-          // border: 1,
-          borderRadius: "0 0 10px 10px",
-          width: "98%",
-          padding: 2,
-          paddingBottom: 0,
-          borderTop: 0,
-          boxShadow: 2
-        }}
-      >
-
-
-        {searchFilter && (
-          <>
-            
-          </>
-        )}
-        <Button
-          variant="contained"
-          color="lightGreenButton300"
-          sx={searchFilter ? {
-            borderRadius: "10px 10px 0 0"
-          } : {
-            borderRadius: "0 0 10px 10px"
-          }}
-          onClick={handleSearchFilter}
-        >
-
-           <Box
-            component={"img"}
-            // src={filterOptionsIcon}
-          /> 
-          {searchFilter ? "Close" : "open"}
-        </Button>
-      </Box>
-      <Paper
-        elevation={5}
-        sx={{ display: { xs: "flex", md: "none" }, m: { xs: 2, md: 0 } }}
-      >
-        <Paper
-          elevation={0}
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            borderRadius: 0,
-            width: 1,
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, width: 1, fontSize: "14px", fontWeight: 700 }}
-            placeholder={i18n["searchBar.placeholder"]}
-            inputProps={{ "aria-label": "search google maps" }}
-          />
-        </Paper>
-        <IconButton
-          color="redButton100"
-          aria-label="search job"
-          component="button"
-        >
-          <SearchIcon />
-        </IconButton> */}

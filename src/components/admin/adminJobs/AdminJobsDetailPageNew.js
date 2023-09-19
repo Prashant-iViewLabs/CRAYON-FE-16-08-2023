@@ -43,7 +43,6 @@ import notice from "../../../assets/Padding Excluded/Black_Notice_Period.svg";
 import deleteIcon from "../../../assets/Padding Excluded/Black_Trash_Delete_1 - Copy.svg";
 import activeDownClose from "../../../assets/Black_Down_Open - Copy.svg";
 
-
 import YellowLink from "../../../assets/CircularIcon/Red/Circular Icons__Yellow_Move.svg";
 import RedView from "../../../assets/CircularIcon/Red/Circular Icons__Red_View.svg";
 import BlueFolder from "../../../assets/CircularIcon/Red/Circular Icons__Blue_Title_Job_Experience.svg";
@@ -276,7 +275,6 @@ export default function AdminJobsDetailPage() {
     setExpand((prev) => !prev);
   };
 
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -308,7 +306,7 @@ export default function AdminJobsDetailPage() {
           setTableData((prevState) => [...prevState, ...payload.data]);
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const getComments = async (jobid) => {
@@ -450,7 +448,7 @@ export default function AdminJobsDetailPage() {
           })
         );
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -464,7 +462,10 @@ export default function AdminJobsDetailPage() {
         <LeftDrawer />
       </Box>
 
-      <StyledAccordion expanded={true} sx={{ width: "100%", margin: "2rem !important" }}>
+      <StyledAccordion
+        expanded={true}
+        sx={{ width: "100%", margin: "2rem !important" }}
+      >
         <AccordionSummary
           sx={{
             padding: 0,
@@ -499,7 +500,7 @@ export default function AdminJobsDetailPage() {
               width={20}
               fontWeight={700}
               borderRadius={"20px 0px 20px 0px"}
-            // onClick={() => setFlip((prev) => !prev)}
+              // onClick={() => setFlip((prev) => !prev)}
             />
             <Box
               sx={{
@@ -508,7 +509,7 @@ export default function AdminJobsDetailPage() {
                 alignItems: "center",
                 justifyContent: "center",
                 paddingX: 1,
-                MaxWidth: "10%"
+                MaxWidth: "10%",
               }}
             >
               {jobContent?.profile_url ? (
@@ -628,8 +629,10 @@ export default function AdminJobsDetailPage() {
                     }}
                   >
                     {jobContent?.employer_profile?.company_name?.length >= 30
-                      ? jobContent?.employer_profile?.company_name?.slice(0, 30) +
-                      "..."
+                      ? jobContent?.employer_profile?.company_name?.slice(
+                          0,
+                          30
+                        ) + "..."
                       : jobContent?.employer_profile?.company_name}
                   </Typography>
                 </Tooltip>
@@ -641,7 +644,9 @@ export default function AdminJobsDetailPage() {
                   justifyContent: "space-between",
                 }}
               >
-                <Box sx={{ display: "flex", alignItems: "center", width: "auto" }}>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", width: "auto" }}
+                >
                   <TalentSVGButton
                     padding={"0px !important"}
                     color={"white"}
@@ -653,11 +658,12 @@ export default function AdminJobsDetailPage() {
                     sx={{
                       fontWeight: 700,
                       fontSize: 12,
-                      whiteSpace: "nowrap"
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {jobContent?.town?.name || "-"}
-                    {jobContent?.town?.name && `, ${jobContent?.town?.region?.name} `}
+                    {jobContent?.town?.name &&
+                      `, ${jobContent?.town?.region?.name} `}
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -672,12 +678,13 @@ export default function AdminJobsDetailPage() {
                     sx={{
                       fontWeight: 700,
                       fontSize: 12,
-                      whiteSpace: "nowrap"
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {jobContent?.salary?.currency?.symbol}{" "}
                     {formatCurrencyWithCommas(jobContent?.salary?.min)} to{" "}
-                    {formatCurrencyWithCommas(jobContent?.salary?.max)} per month
+                    {formatCurrencyWithCommas(jobContent?.salary?.max)} per
+                    month
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -693,7 +700,7 @@ export default function AdminJobsDetailPage() {
                     sx={{
                       fontWeight: 700,
                       fontSize: 12,
-                      whiteSpace: "nowrap"
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {jobContent?.experience?.year} years
@@ -714,7 +721,7 @@ export default function AdminJobsDetailPage() {
                     sx={{
                       fontWeight: 700,
                       fontSize: 12,
-                      whiteSpace: "nowrap"
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {dateConverterMonth(jobContent?.created_at)}
@@ -726,11 +733,10 @@ export default function AdminJobsDetailPage() {
               sx={{
                 display: "flex",
                 justifyContent: "end",
-                flexGrow: 1
+                flexGrow: 1,
               }}
             >
-              <Box
-              >
+              <Box>
                 <Box
                   sx={{
                     height: "30%",
@@ -806,8 +812,9 @@ export default function AdminJobsDetailPage() {
                   <SmallButton label={jobContent?.type} />
                   <SmallButton label={jobContent?.work_setup} />
                   <CopyToClipboard
-                    text={`${prevLocation}/job-detail/${`${jobContent?.town_name + " " + jobContent?.region_name
-                      }`}/${jobContent?.job_id}`}
+                    text={`${prevLocation}/job-detail/${`${
+                      jobContent?.town_name + " " + jobContent?.region_name
+                    }`}/${jobContent?.job_id}`}
                     onCopy={() => {
                       dispatch(
                         setAlert({
@@ -861,15 +868,13 @@ export default function AdminJobsDetailPage() {
                   />
                 </Box>
               </Box>
-              <Box
-
-              >
+              <Box>
                 <ChangeStatusButton
                   loggedInUser={decodedToken?.data?.role_id}
                   jobId={jobContent?.job_id}
                   jobStatus={jobContent?.job_status?.name}
                   employerIndustry={jobContent?.employer_industries}
-                // getJobList={getJobList}
+                  // getJobList={getJobList}
                 />
                 {!include ? (
                   <Link
@@ -1022,7 +1027,7 @@ export default function AdminJobsDetailPage() {
                 fontSize: "12px",
                 fontWeight: 700,
                 // mb: "2px",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
               onClick={(event) => {
                 setAnchorElReferral(event.target);
@@ -1061,8 +1066,6 @@ export default function AdminJobsDetailPage() {
               <Refferals />
             </Popover>
           </Box>
-
-
         </AccordionSummary>
 
         <AccordionDetails
@@ -1120,19 +1123,19 @@ export default function AdminJobsDetailPage() {
                     >
                       {i18n["pendingJobs.industries"]}
                     </Typography>
-                    {jobContent?.employer_industries?.map(
-                      (industry, index) => {
-                        return (
-                          <SmallButton
-                            color="blueButton600"
-                            value={industry?.industry.name}
-                            label={truncate(industry?.industry.name, { length: 15 })}
-                            mr="8px"
-                            fontSize="10px"
-                          ></SmallButton>
-                        );
-                      }
-                    )}
+                    {jobContent?.employer_industries?.map((industry, index) => {
+                      return (
+                        <SmallButton
+                          color="blueButton600"
+                          value={industry?.industry.name}
+                          label={truncate(industry?.industry.name, {
+                            length: 15,
+                          })}
+                          mr="8px"
+                          fontSize="10px"
+                        ></SmallButton>
+                      );
+                    })}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                     <Typography
@@ -1253,7 +1256,10 @@ export default function AdminJobsDetailPage() {
                             color="grayButton100"
                             borderRadius="5px"
                             value={qualifications?.qualification?.name}
-                            label={truncate(qualifications?.qualification?.name, { length: 15 })}
+                            label={truncate(
+                              qualifications?.qualification?.name,
+                              { length: 15 }
+                            )}
                             mr="4px"
                           ></SmallButton>
                         );

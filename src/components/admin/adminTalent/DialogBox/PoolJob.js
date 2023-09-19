@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import SingleRadialChart from "../../../common/SingleRadialChart";
 import { useTheme } from "@emotion/react";
 import SmallButton from "../../../common/SmallButton";
@@ -22,6 +22,10 @@ import upClose from "../../../../assets/Padding Included/Black_Up_Close.svg";
 import downClose from "../../../../assets/Padding Included/Black_Down_Open.svg";
 import AddToPool from "./AddToPool";
 import AddToJob from "./AddToJob";
+import { getAdminTalentJobList } from "../../../../redux/admin/jobsSlice";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../../../redux/configSlice";
+import { ALERT_TYPE } from "../../../../utils/Constants";
 
 const label1 = "applied";
 const label2 = "shortlisted";
@@ -30,17 +34,28 @@ const label3 = "interviewed";
 export default function PoolJob({
   handleClick,
   tableData,
-  handleClose,
   talentContent,
   addToPool,
-  anchorEl,
-  jobClick,
-  talentJobs,
   addToJob,
-  handleAddJobClick,
+  anchorEl,
+  handleClose,
 }) {
   const theme = useTheme();
   const i18n = locale.en;
+  const dispatch = useDispatch();
+
+  const [jobClick, setJobClick] = useState(null);
+  // const [anchorEl, setAnchorEl] = useState(null);
+
+  const [lastKey, setLastKey] = useState(0);
+  const [talentJobs, setTalentJobs] = useState([]);
+
+  const handleAddJobClick = async (event) => {
+    setJobClick(event.currentTarget);
+  };
+  const handleCloseJob = () => {
+    setJobClick(null);
+  };
 
   return (
     <Grid
@@ -209,7 +224,7 @@ export default function PoolJob({
           id="broad-menu-job"
           anchorEl={jobClick}
           open={Boolean(jobClick)}
-          onClose={handleClose}
+          onClose={handleCloseJob}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "right",
@@ -226,7 +241,13 @@ export default function PoolJob({
             },
           }}
         >
-          <AddToJob talentJob={talentJobs} addToJob={addToJob} talentContent={talentContent}/>
+          <AddToJob
+            talentJob={talentJobs}
+            addToJob={addToJob}
+            talentContent={talentContent}
+            jobClick={jobClick}
+            setJobClick={setJobClick}
+          />
         </Popover>
       </Grid>
     </Grid>

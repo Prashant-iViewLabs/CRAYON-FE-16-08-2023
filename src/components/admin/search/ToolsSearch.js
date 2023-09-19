@@ -207,6 +207,12 @@ export default function ToolsSearch() {
     setBasicData(BASIC);
   };
 
+  const editSearch = () => {
+    setOpenAccordian(false);
+    setTitle(title);
+    setBasicData(BASIC);
+  };
+
   useEffect(() => {
     getAllData();
   }, []);
@@ -487,6 +493,7 @@ export default function ToolsSearch() {
             variant="contained"
             color="redButton100"
             width="fit-content"
+            onClick={editSearch}
           >
             edit search
           </Button>

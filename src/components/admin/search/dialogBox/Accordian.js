@@ -4,10 +4,11 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  CircularProgress,
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import redTalent from "../../../../assets/Padding Excluded/Black_Talent_Red.svg";
 import TalentSVGButton from "../../../common/TalentSVGButton";
@@ -44,14 +45,21 @@ export default function Accordian({
   titlesListKey,
 }) {
   const dispatch = useDispatch();
+  const scrollContainerRef = useRef(null);
 
   const [expanded, setExpanded] = useState(false);
   const [candidateList, setCandidateList] = useState([]);
   const [personalityAdded, setPersonalityAdded] = useState();
   const [lastKeyy, setLastKeyy] = useState(0);
   const [totalData, setTotalData] = useState(160);
+  const [currentOpen, setCurrentOpen] = useState();
+  const [tempObj, setTempObj] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
 
   const getCandidateData = async (data, lastkey) => {
+    setLoading(true);
     const candidateData = {
       lastKey: lastkey,
       keyword: data?.title,
@@ -59,9 +67,10 @@ export default function Accordian({
     };
     const { payload } = await dispatch(getTitlesCandidateData(candidateData));
     if (payload?.status == "success") {
-      setLastKeyy(payload?.pageNumber + 1);
-      setTotalData(payload?.totalData);
+      setLastKeyy(payload.pageNumber + 1);
+      setTotalData(payload.totalData);
       setCandidateList((prevState) => [...prevState, ...payload.data]);
+      setLoading(false);
     } else {
       dispatch(
         setAlert({
@@ -71,12 +80,33 @@ export default function Accordian({
         })
       );
     }
+    console.log(tempObj);
   };
 
   const handleClick = async (item, lastkey) => {
-    console.log(item, lastkey);
+    setTempObj({ item, lastkey });
+    setCurrentOpen(item.job_title_id);
     setCandidateList([]);
     await getCandidateData(item, lastkey);
+  };
+
+  const handleScroll = () => {
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer && candidateList.length < totalData) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const scrollPosition = scrollTop + clientHeight;
+
+      console.log(scrollPosition, scrollHeight);
+      console.log(scrollPosition >= scrollHeight - 1);
+      // Check if the user is near the end (within 50px) or at the end of the scrollable content
+      if (
+        scrollPosition >= scrollHeight - 1 &&
+        candidateList.length < totalData
+      ) {
+        // Call getCandidateData when near the end and update the state
+        getCandidateData(tempObj.item, lastKeyy);
+      }
+    }
   };
 
   return (
@@ -136,10 +166,10 @@ export default function Accordian({
           </p>
         }
       >
-        {console.log(titlesList)}
         {titlesList.map((item, index) => {
           return (
             <StyledAccordion
+              expanded={item.job_title_id === currentOpen}
               key={index}
               onChange={(e, expanded) => {
                 if (expanded) {
@@ -151,8 +181,7 @@ export default function Accordian({
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
-                // onClick={() => handleClick(item, 0)}
-                key={index}
+                key={item.job_title_id}
               >
                 <Box
                   sx={{
@@ -188,69 +217,37 @@ export default function Accordian({
                   </Box> */}
                 </Box>
               </AccordionSummary>
-              <AccordionDetails key={index}>
-                <Box
-                  id={"candidate_list"}
-                  sx={{ overflow: "hidden", height: "100%", mt: 1 }}
-                >
-                  <InfiniteScroll
+              <AccordionDetails
+                key={item.job_title_id}
+                style={{
+                  maxHeight: "300px", // Set a maximum height for each Accordion Detail
+                  overflowY: "auto", // Enable vertical scrolling if content exceeds maxHeight
+                }}
+                onScroll={handleScroll} // Attach the scroll event handler
+                ref={scrollContainerRef} // Assign the ref to the scrollable container
+              >
+                {candidateList.length <= 0 ? (
+                  <Box
                     style={{
-                      height: "100%",
-                      overflowX: "hidden",
-                      scrollbarWidth: "thin",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    scrollableTarget={"candidate_list"}
-                    dataLength={candidateList?.length}
-                    next={() => getCandidateData(item, lastKeyy)}
-                    // scrollThreshold={"10px"}
-                    hasMore={true}
-                    endMessage={
-                      <p style={{ textAlign: "center" }}>
-                        <b>Yay! You have seen it all</b>
-                      </p>
-                    }
                   >
-                    {console.log(candidateList)}
-
-                    {candidateList.length <= 0 ? (
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          fontWeight: 900,
-                          textAlign: "center",
-                        }}
-                      >
-                        No candidate
-                      </Typography>
-                    ) : (
-                      candidateList.map((candidate) => {
-                        return (
-                          <AllTalentNewCard
-                            key={index}
-                            traits={traits}
-                            talentContent={candidate}
-                            setPersonalityAdded={setPersonalityAdded}
-                          />
-                        );
-                      })
-                    )}
-
-                    <style>
-                      {`.infinite-scroll-component::-webkit-scrollbar {
-                        width: 7px !important;
-                        background-color: #F5F5F5; /* Set the background color of the scrollbar */
-                      }
-
-                      .infinite-scroll-component__outerdiv {
-                        height:100%
-                      }
-
-                      .infinite-scroll-component::-webkit-scrollbar-thumb {
-                        background-color: #888c; /* Set the color of the scrollbar thumb */
-                      }`}
-                    </style>
-                  </InfiniteScroll>
-                </Box>
+                    <CircularProgress color="inherit" size={20} />
+                  </Box>
+                ) : (
+                  candidateList.map((candidate) => {
+                    return (
+                      <AllTalentNewCard
+                        key={candidate.user_id}
+                        traits={traits}
+                        talentContent={candidate}
+                        setPersonalityAdded={setPersonalityAdded}
+                      />
+                    );
+                  })
+                )}
               </AccordionDetails>
             </StyledAccordion>
           );

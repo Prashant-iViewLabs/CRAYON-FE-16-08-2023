@@ -131,7 +131,6 @@ export default function JobAlert({ talentContent }) {
   const industryUsers = talentContent?.candidate_profile?.industry_users.map(
     (item) => item?.industry?.name
   );
-  console.log(industryUsers);
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
   };
@@ -308,7 +307,7 @@ export default function JobAlert({ talentContent }) {
             })} */}
             <Slider2
               color={"blueButton600"}
-              items={industryUsers}
+              items={industryUsers || []}
               hideTagsAfter={2}
             />
           </Box>

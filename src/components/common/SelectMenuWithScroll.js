@@ -26,7 +26,7 @@ function getStyles(option, value, theme) {
   };
 }
 
-export default function SelectMenu({
+export default function SelectMenuWithScroll({
   type,
   name,
   placeholder,
@@ -41,9 +41,7 @@ export default function SelectMenu({
   multiple,
   onOpen,
   handleScroll,
-  clear,
 }) {
-  const theme = useTheme();
   return (
     <Paper
       elevation={3}
@@ -62,14 +60,17 @@ export default function SelectMenu({
         input={input}
         id={id}
         // multiple={type == "multiple"}
+        MenuProps={{
+          ...MenuProps,
+          onScroll: handleScroll, // Add a scroll event listener
+        }}
         displayEmpty
         name={name}
         value={value}
         defaultValue={defaultValue}
         onChange={onHandleChange}
         onOpen={onOpen}
-        MenuProps={MenuProps}
-        onScroll={handleScroll}
+        // MenuProps={MenuProps}
         sx={{
           width: "100%",
           "& .MuiOutlinedInput-notchedOutline": {
@@ -92,42 +93,57 @@ export default function SelectMenu({
                   <Chip
                     variant="outlined"
                     key={value}
-                    label={options.find((item) => item.id == value)?.name}
+                    label={
+                      options.find(
+                        (item) =>
+                          item.job_id == value ||
+                          item.pool_id == value ||
+                          item.company_id == value
+                      )?.name
+                    }
                   />
                 ))}
               </Box>
             );
           } else {
             let data = options.find((item) =>
-              item.id ? item.id == selected : item.user_id == selected
+              item?.job_id
+                ? item?.job_id == selected
+                : item?.company_id
+                ? item?.company_id == selected
+                : item?.pool_id == selected
             );
             return typeof selected === "string"
               ? selected
               : data?.name
               ? data?.name
-              : data?.user?.first_name + " " + data?.user?.last_name;
+              : data?.title;
           }
         }}
       >
-        {clear ? (
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-        ) : (
-          <MenuItem disabled value="">
-            <em>{placeholder}</em>
-          </MenuItem>
-        )}
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
         {options?.length > 0 &&
           options?.map((option) => (
             <MenuItem
-              key={option.id ? option.id : option.user_id}
-              value={option.id ? option.id : option.user_id}
+              key={
+                option.job_id
+                  ? option.job_id
+                  : option.company_id
+                  ? option?.company_id
+                  : option.pool_id
+              }
+              value={
+                option.job_id
+                  ? option.job_id
+                  : option.company_id
+                  ? option?.company_id
+                  : option.pool_id
+              }
               // style={getStyles(option, value, theme)}
             >
-              {option.id
-                ? option?.name
-                : option?.user?.first_name + " " + option?.user?.last_name}
+              {option?.title || option?.name}
             </MenuItem>
           ))}
       </Select>

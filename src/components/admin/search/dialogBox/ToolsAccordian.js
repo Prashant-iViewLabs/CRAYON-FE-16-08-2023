@@ -197,19 +197,19 @@ export default function ToolsAccordian({
               </AccordionSummary>
               <AccordionDetails key={index}>
                 <Box
-                  id={"candidate_list"}
-                  sx={{ overflow: "hidden", height: "100%", mt: 1 }}
+                  id="candidate_list"
+                  sx={{ overflow: "hidden", height: "500px", mt: 1 }}
                 >
                   <InfiniteScroll
                     style={{
-                      height: "100%",
+                      height: "500px",
                       overflowX: "hidden",
                       scrollbarWidth: "thin",
                     }}
-                    scrollableTarget={"candidate_list"}
+                    scrollableTarget="candidate_list"
                     dataLength={candidateList?.length}
                     next={() => getCandidateData(item, lastKeyy)}
-                    // scrollThreshold={"10px"}
+                    scrollThreshold={"10px"}
                     hasMore={true}
                     endMessage={
                       <p style={{ textAlign: "center" }}>
@@ -249,7 +249,7 @@ export default function ToolsAccordian({
                               }
         
                               .infinite-scroll-component__outerdiv {
-                                height:100%
+                                height:"500px"
                               }
         
                               .infinite-scroll-component::-webkit-scrollbar-thumb {

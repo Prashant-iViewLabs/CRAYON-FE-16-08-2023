@@ -12,9 +12,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import redTalent from "../../../../assets/Padding Excluded/Black_Talent_Red.svg";
 import TalentSVGButton from "../../../common/TalentSVGButton";
 import InfoIcon from "../../../common/InfoIcon";
-import {
-    getAssociationsCandidateData,
-} from "../../../../redux/admin/searchSlice";
+import { getAssociationsCandidateData } from "../../../../redux/admin/searchSlice";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../../redux/configSlice";
 import { ALERT_TYPE } from "../../../../utils/Constants";
@@ -59,11 +57,20 @@ export default function AssociationAccordian({
       association_id: data?.association_id,
     };
     console.log(candidateList);
-    const { payload } = await dispatch(getAssociationsCandidateData(candidateData));
+    const { payload } = await dispatch(
+      getAssociationsCandidateData(candidateData)
+    );
     if (payload?.status == "success") {
-      setLastKeyy(payload?.pageNumber + 1);
-      setTotalData(payload?.totalData);
-      setCandidateList((prevState) => [...prevState, ...payload.data]);
+      if (payload.pageNumber === 0) {
+        console.log(payload.data);
+        setLastKeyy(payload?.pageNumber + 1);
+        setTotalData(payload?.totalData);
+        setCandidateList(payload.data);
+      } else {
+        setLastKeyy(payload?.pageNumber + 1);
+        setTotalData(payload?.totalData);
+        setCandidateList((prevState) => [...prevState, ...payload.data]);
+      }
     } else {
       dispatch(
         setAlert({
@@ -198,19 +205,19 @@ export default function AssociationAccordian({
               </AccordionSummary>
               <AccordionDetails key={index}>
                 <Box
-                  id={"candidate_list"}
-                  sx={{ overflow: "hidden", height: "100%", mt: 1 }}
+                  id="candidate_list"
+                  sx={{ overflow: "hidden", height: "500px", mt: 1 }}
                 >
                   <InfiniteScroll
                     style={{
-                      height: "100%",
+                      height: "500px",
                       overflowX: "hidden",
                       scrollbarWidth: "thin",
                     }}
-                    scrollableTarget={"candidate_list"}
+                    scrollableTarget="candidate_list"
                     dataLength={candidateList?.length}
                     next={() => getCandidateData(item, lastKeyy)}
-                    // scrollThreshold={"10px"}
+                    scrollThreshold={"10px"}
                     hasMore={true}
                     endMessage={
                       <p style={{ textAlign: "center" }}>
@@ -250,7 +257,7 @@ export default function AssociationAccordian({
                                   }
             
                                   .infinite-scroll-component__outerdiv {
-                                    height:100%
+                                    height:"500px"
                                   }
             
                                   .infinite-scroll-component::-webkit-scrollbar-thumb {

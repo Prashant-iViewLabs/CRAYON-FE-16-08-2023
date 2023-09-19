@@ -36,7 +36,22 @@ export const favouriteJob = createAsyncThunk(
 export const getFilteredTalent = createAsyncThunk(
   "getFilteredTalent",
   async (
-    { selectedFilters, lastKey, personalityType, user_id, jobtype },
+    {
+      selectedFilters,
+      lastKey,
+      personalityType,
+      user_id,
+      jobtype,
+      tag_id = "",
+      tool_id = "",
+      talent_title = "",
+      town_id = "",
+      region_id = "",
+      salary = "",
+      experience = "",
+      highest_qualification_id = "",
+      currency_id = "",
+    },
     { dispatch }
   ) => {
     if (selectedFilters === "1111" || selectedFilters === "all industries") {
@@ -60,7 +75,25 @@ export const getFilteredTalent = createAsyncThunk(
         "&personalitytype_id=" +
         personalityType +
         "&jobtype_id=" +
-        jobtype
+        jobtype +
+        "&tag_id=" +
+        tag_id +
+        "&tool_id=" +
+        tool_id +
+        "&talent_title=" +
+        talent_title +
+        "&town_id=" +
+        town_id +
+        "&region_id=" +
+        region_id +
+        "&salary=" +
+        salary +
+        "&experience=" +
+        experience +
+        "&highest_qualification_id=" +
+        highest_qualification_id +
+        "&currency_id=" +
+        currency_id
     );
     dispatch(setLoading(false));
     return data;

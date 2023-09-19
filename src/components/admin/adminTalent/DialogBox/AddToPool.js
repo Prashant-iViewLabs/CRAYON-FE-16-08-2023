@@ -52,7 +52,9 @@ export default function AddToPool({ talentData, addToPool }) {
                     component="img"
                     className="profileAvatar"
                     alt="crayon logo"
-                    src={Ozow}
+                    src={
+                      item?.profile_url !== "No URL" ? item?.profile_url : Ozow
+                    }
                     sx={{
                       mr: 1,
                       height: "35px !important",

@@ -24,6 +24,19 @@ import ApplyJobs from "./ApplyJobs";
 import { Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+const BASIC = {
+  job_title: "",
+  region_id: [],
+  tag_id: [],
+  town_id: [],
+  tool_id: [],
+  salary: [],
+  experience: [],
+  company_id: [],
+  currency_id: [],
+  highest_qualification_id: [],
+};
+
 export default function Jobs() {
   const i18n = locale.en;
   const dispatch = useDispatch();
@@ -45,7 +58,7 @@ export default function Jobs() {
   const [openApplyJobDialog, setopenApplyJobDialog] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [expandedItemId, setExpandedItemId] = useState(null);
-
+  const [basicData, setBasicData] = useState(BASIC);
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -88,21 +101,29 @@ export default function Jobs() {
     jobstage = [],
     personalityType = [],
     lastkeyy,
-    title = "",
+    job_title = "",
     filteralltype = {}
   ) => {
+    console.log(selectedFilters);
+
     let data = {
-      selectedFilters: selectedFilters[0] !== 1111? selectedFilters.toString(): "",
+      selectedFilters:
+        selectedFilters[0] !== 1111 ? selectedFilters.toString() : "",
       lastKey: lastkeyy?.toString(),
-      jobtype: jobtype[0] !== 1111? jobtype.toString(): "",
-      jobstage: jobstage[0] !== 1111?jobstage.toString(): "",
-      personalityType:personalityType[0] !== 1111? personalityType.toString(): "",
-      title: title,
+      jobtype: jobtype[0] !== 1111 ? jobtype.toString() : "",
+      jobstage: jobstage[0] !== 1111 ? jobstage.toString() : "",
+      personalityType:
+        personalityType[0] !== 1111 ? personalityType.toString() : "",
+      job_title: job_title,
       user_id: token ? decodedToken?.data?.user_id : "",
       favourites: filteralltype.favourite || "",
       recentjob: filteralltype.recent || "",
       appliedjob: filteralltype.appliedJobs || "",
+      ...basicData,
     };
+
+    console.log(data);
+
     const { payload } = await dispatch(getFilteredJobs(data));
 
     if (payload?.status === "success") {
@@ -117,10 +138,7 @@ export default function Jobs() {
         })
       );
     }
-
   };
-
-
 
   useEffect(() => {
     getJobList();
@@ -249,7 +267,6 @@ export default function Jobs() {
     );
   };
 
-
   return (
     <Grid
       container
@@ -313,13 +330,15 @@ export default function Jobs() {
         <SearchBar
           placeholder={i18n["jobs.searchPlaceholder"]}
           setAllJobs={setAllJobs}
-          setSearchedJobs={setSearchedJobs}
+          setLastKey={setLastKey}
+          setBasicData={setBasicData}
+          basicData={basicData}
         />
 
         <InfiniteScroll
           key={`${filters} + ${filtersJobType} + ${filtersJobStage} + ${filtersType}+${searchedJobs} +${favourite}`}
           height="80vh"
-          dataLength={allJobs.length * 4} //This is important field to render the next data
+          dataLength={allJobs.length} //This is important field to render the next data
           next={() =>
             getJobList(
               filters,
@@ -350,13 +369,7 @@ export default function Jobs() {
           >
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                  <Grid
-                    xl={3}
-                    lg={4}
-                    md={6}
-                    xs={12}
-                    key={job.job_id}
-                  >
+                  <Grid xl={3} lg={4} md={6} xs={12} key={job.job_id}>
                     <JobCard
                       index={job.job_id}
                       job={job}
@@ -367,17 +380,17 @@ export default function Jobs() {
                   </Grid>
                 ))
               : (allJobs.length = 0 ? (
-                <Box
-                  sx={{
-                    width: "100%",
-                    textAlign: "center",
-                    mt: 4,
-                    color: theme.palette.placeholder,
-                  }}
-                >
-                  {""}
-                </Box>
-              ) : null)}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      textAlign: "center",
+                      mt: 4,
+                      color: theme.palette.placeholder,
+                    }}
+                  >
+                    {""}
+                  </Box>
+                ) : null)}
           </Grid>
           <style>
             {`.infinite-scroll-component::-webkit-scrollbar {

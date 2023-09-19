@@ -121,9 +121,8 @@ function rangeValueHandler(value) {
 export default function JobAlert({ jobContent }) {
   const i18n = locale.en;
   const theme = useTheme();
-  const [rangeValue, setRangeValue] = useState([0,0
-  ]);
-  const [expRange, setExpRange] = useState([0,2]);
+  const [rangeValue, setRangeValue] = useState([0, 0]);
+  const [expRange, setExpRange] = useState([0, 2]);
 
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
@@ -136,14 +135,10 @@ export default function JobAlert({ jobContent }) {
   useEffect(() => {
     setRangeValue([
       jobContent?.salary?.min / 1000,
-      jobContent?.salary?.max / 1000
-    ])
-    setExpRange([
-      0,
-      jobContent?.experience?.year * 10
-    ])
-  }, [jobContent?.salary, jobContent?.experience])
-
+      jobContent?.salary?.max / 1000,
+    ]);
+    setExpRange([0, jobContent?.experience?.year * 10]);
+  }, [jobContent?.salary, jobContent?.experience]);
 
   return (
     <Grid
@@ -303,8 +298,10 @@ export default function JobAlert({ jobContent }) {
             </Typography>
             <Box sx={{ display: "flex", gap: 1 }}>
               <Slider2
-                items={jobContent?.employer_industries?.map(industry => industry.industry.name)
-                  || []
+                items={
+                  jobContent?.employer_industries?.map(
+                    (industry) => industry.industry.name
+                  ) || []
                 }
                 color="blueButton600"
                 hideTagsAfter={2}
