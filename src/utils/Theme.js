@@ -28,6 +28,10 @@ const theme = createTheme({
       main: "#E41E26",
       contrastText: "#FFFFFF",
     },
+    redButton200: {
+      main: "#FF6037",
+      contrastText: "#FFFFFF"
+    },
     pinkButton: {
       main: "#F5576C",
       contrastText: "#FFFFFF",
@@ -79,6 +83,14 @@ const theme = createTheme({
     blueButton800: {
       main: "#228CCE",
       contrastText: "#FFFFFF",
+    },
+    blueButton900: {
+      main: "#0F2143",
+      contrastText: "#FFFFFF"
+    },
+    blueButton1000: {
+      main: "#023E8A",
+      contrastText: "#FFFFFF"
     },
     yellowButton100: {
       main: "#F8B318",
@@ -194,10 +206,22 @@ const theme = createTheme({
       main: "#C19C47",
       contrastText: "#FFFFFF",
     },
+    traitsButton: {
+      main: "#D0A331",
+      contrastText: "#FFFFFF",
+    },
+    skillsButton: {
+      main: "#8B6212",
+      contrastText: "#FFFFFF",
+    },
+    toolsButton: {
+      main: "#A98600",
+      contrastText: "#FFFFFF",
+    },
     yellowColor: "#DC9B53",
     white: "#FFFFFF",
     black: "#000000",
-    mainBackground: "#FAFAFA",
+    mainBackground: "#EBECF3",
     menuBackground: "#F7F9FA",
     hoverBlue: "#E6EFFF",
     lightText: "#5E6366",
@@ -213,9 +237,71 @@ const theme = createTheme({
       green: "#B6C773",
       yellow: "#F09248",
       green200: "#18CA09",
+      Review: "#014D4E",
+      Shortlist: "#008384",
+      Interview:  "#5F9EA0",
     },
   },
-
+  jobCard: {
+    jobType: {
+      recruit: {
+        main: "#228CCE",
+        contrastText: "#FFFFFF"
+      },
+      direct: {
+        main: "#1DB954",
+        contrastText: "#FFFFFF"
+      }
+    },
+    jobStatus: {
+      Review: {
+        main: "#014D4E",
+        contrastText: "#FFFFFF",
+      },
+      Considering: {
+        main: "#19747E",
+        contrastText: "#FFFFFF",
+      },
+      Shortlist: {
+        main: "#008384",
+        contrastText: "#FFFFFF",
+      },
+      Interview: {
+        main: "#5F9EA0",
+        contrastText: "#FFFFFF",
+      },
+      Assesment: {
+        main: "#66B2B2",
+        contrastText: "#FFFFFF",
+      },
+      Offer: {
+        main: "#B2D8D8",
+        contrastText: "#FFFFFF",
+      },
+      Hired: {
+        main: "#48D1CC",
+        contrastText: "#FFFFFF",
+      },
+      Incomplete: {
+        main: "#C9CAD8",
+        contrastText: "#FFFFFF",
+      },
+      Matched: {
+        main: "#228CCE",
+        contrastText: "#FFFFFF",
+      },
+      Rejected: {
+        main: "#E41E26",
+        contrastText: "#FFFFFF",
+      },
+    },
+    type: {
+      main: "#0F2143"
+    },
+    industries: {
+      main: "#023E8A"
+    }
+  },
   talentCard: {},
 
   status: {

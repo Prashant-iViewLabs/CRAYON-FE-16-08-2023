@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
 import job_logo from "../../../../assets/job_logo.svg";
-import job_volume from "../../../../assets/job_volume.svg";
+import job_volume from "../../../../assets/Padding Excluded/Crayon Icon_Promote.svg";
 import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
 import BlueCurrency from "../../../../assets/Blue_Salary.svg";
 import redLocation from "../../../../assets/Red_Location.svg";
@@ -32,7 +32,10 @@ import { setAlert } from "../../../../redux/configSlice";
 import { favouriteJob } from "../../../../redux/guest/talentSlice";
 import jwt_decode from "jwt-decode";
 import { formatCurrencyWithCommas } from "../../../../utils/Currency";
-import DOMPurify from "dompurify";
+
+import matchMeIcon from '../../../../assets/Padding Excluded/Black_Match_me.svg'
+import viewIcon from '../../../../assets/Padding Excluded/White_View.svg'
+import applyIcon from '../../../../assets/Padding Excluded/Black_Follower.svg'
 
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
@@ -40,6 +43,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Slider2 from "../../../common/Slider2";
 import JobDescripiton from "../../../common/JobDescripiton";
 import { truncate } from "lodash";
+import LeftArrow from "../../../common/LeftArrow";
 
 const label1 = "applied";
 const label2 = "shortlisted";
@@ -54,7 +58,7 @@ const JobCardFront = ({
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const [isHovered, setIsHovered] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
   const [isStar, setIsStarSelected] = useState(job?.favourite);
   const jobIndustries = job?.JobIndustries?.split(",")
 
@@ -127,10 +131,35 @@ const JobCardFront = ({
     }
   };
 
+  const getBackground = (stageName) => {
+    switch (stageName) {
+      case "review":
+        return theme.jobCard.jobStatus.Review.main
+      case "considering":
+        return theme.jobCard.jobStatus.Considering.main
+      case "shortlist":
+        return theme.jobCard.jobStatus.Shortlist.main
+      case "interview":
+        return theme.jobCard.jobStatus.Interview.main
+      case "assessment":
+        return theme.jobCard.jobStatus.Assesment.main
+      case "offer":
+        return theme.jobCard.jobStatus.Offer.main
+      case "hired":
+        return theme.jobCard.jobStatus.Hired.main
+      case "incomplete":
+        return theme.jobCard.jobStatus.Incomplete.main
+      case "matched":
+        return theme.jobCard.jobStatus.Matched.main
+      case "rehjected":
+        return theme.jobCard.jobStatus.Rejected.main
+      default:
+        return "lightGray"
+    }
+  }
+
   return (
     <CustomCard
-      handleMouseEnter={() => setIsHovered(true)}
-      handleMouseLeave={() => setIsHovered(false)}
     >
       <Grid
         container
@@ -144,56 +173,118 @@ const JobCardFront = ({
         <Box
           component="img"
           sx={{
-            height: 40,
-            width: 40,
-            maxHeight: { xs: 40 },
-            maxWidth: { xs: 40 },
-            ml: 1,
-            mt: 1,
-            p: 1,
+            height: "60px",
+            width: "60px",
+            maxHeight: { xs: "60px" },
+            maxWidth: { xs: "60px" },
+            ml: "15px",
+            mt: "15px",
+            p: 0.2,
+            border: 1,
+            borderColor: "lightgrey",
             borderRadius: 4,
           }}
           alt="job_logo"
           src={job?.profile_url !== "No URL" ? job?.profile_url : job_logo}
         />
 
-        <Box
-          sx={{
-            padding: "10px 0",
-            flexGrow: 1,
-          }}
-        >
+        <Box sx={{
+          height: "90px"
+        }}>
           <Box
             sx={{
               display: "flex",
             }}
           >
-            {job?.job_type === "crayon recruit" ? (
-              <SmallButton
-                color="yellowButton100"
-                label={job?.job_type?.split(" ")[1]}
-                mr={1}
+            <Button
+              // color={"redButton"}
+              variant="contained"
+              sx={{
+                height: "auto",
+                minWidth: "60px",
+                minHeight: "45px",
+                borderRadius: "0 0 0 10px",
+                padding: 0,
+                fontSize: 12,
+                background: job?.job_type?.split(" ")[1] === "recruit" ? theme.jobCard.jobType.recruit.main : theme.jobCard.jobType.direct.main,
+                color: theme.jobCard.jobType.recruit.contrastText,
+                ":hover": {
+                  background: job?.job_type?.split(" ")[1] === "recruit" ? theme.jobCard.jobType.recruit.main : theme.jobCard.jobType.direct.main,
+
+                }
+              }}
+            >
+              {job?.job_type?.split(" ")[1]}
+            </Button>
+            <Button
+              sx={{
+                height: "auto",
+                minWidth: "60px",
+                minHeight: "45px",
+                borderRadius: 0,
+                padding: 0,
+                fontSize: 12,
+                background: getBackground(job?.stage_name),
+                color: "white",
+                ":hover": {
+                  background: getBackground(job?.stage_name)
+                }
+              }}
+            >
+              {job?.stage_name || "-"}
+            </Button>
+            <Box
+              sx={{
+                height: "45px",
+                width: "60px",
+                maxHeight: { xs: "60px" },
+                maxWidth: { xs: "60px" },
+                borderRadius: 0,
+                background: theme.palette.purpleButton300.main,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+
+
+              <Box
+                component="img"
+                sx={{
+                  height: 30,
+                  width: 30,
+                  maxHeight: { xs: 30 },
+                  maxWidth: { xs: 30 },
+                }}
+                alt="job_volume"
+                src={job_volume}
+                onClick={handleClick}
               />
-            ) : job?.job_type === "crayon lite" ? (
-              <SmallButton
-                color="orangeButton"
-                label={job?.job_type?.split(" ")[1]}
-                mr={1}
-              />
-            ) : null}
-            {job?.stage_name && (
-              <SmallButton
-                color="lightGreenButton300"
-                mr={1}
-                value={job?.sstage_name}
-                label={truncate(job?.stage_name, { length: 9 })}
-              />
-            )}
+            </Box>
+            <Button
+              color="grayButton200"
+              onClick={() =>
+                decodedToken?.data?.role_id === "undefined"
+                  ? handleClick
+                  : handleStar(job?.job_id)
+              }
+              sx={{
+                height: "auto",
+                minWidth: "60px",
+                minHeight: "45px",
+                background: theme.palette.grayBackground,
+                borderRadius: 0,
+                padding: 0,
+              }}
+            >
+              <StarRoundedIcon color={isStar ? "error" : "disabled"} />
+            </Button>
           </Box>
+
           <Typography
             sx={{
               fontWeight: 400,
-              fontSize: 10,
+              fontSize: 12,
               letterSpacing: "0.75px",
               opacity: 0.8,
               paddingTop: "8px",
@@ -202,63 +293,12 @@ const JobCardFront = ({
             posted {convertDatetimeAgo(job?.updated_at)}
           </Typography>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        >
-          <Box
-            sx={{
-              height: 39,
-              width: 43,
-              maxHeight: { xs: 43 },
-              maxWidth: { xs: 50 },
-              borderRadius: "0 0 0 10px",
-              background: theme.palette.purpleButton300.main,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              component="img"
-              sx={{
-                height: 20,
-                width: 20,
-                maxHeight: { xs: 20 },
-                maxWidth: { xs: 20 },
-              }}
-              alt="job_volume"
-              src={job_volume}
-              onClick={handleClick}
-            />
-          </Box>
-
-          <Button
-            color="grayButton200"
-            onClick={() =>
-              decodedToken?.data?.role_id === "undefined"
-                ? handleClick
-                : handleStar(job?.job_id)
-            }
-            sx={{
-              height: "auto",
-              minWidth: 50,
-              background: theme.palette.grayBackground,
-              borderRadius: 0,
-              padding: 0,
-            }}
-          >
-            <StarRoundedIcon color={isStar ? "error" : "disabled"} />
-          </Button>
-        </Box>
       </Grid>
       <Box
         sx={{
           display: "flex",
           width: "100%",
-          height: "292px",
+          flexGrow: 1
         }}
       >
         <Grid
@@ -285,7 +325,7 @@ const JobCardFront = ({
             >
               <Typography
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 900,
                   fontSize: 20,
                   overflow: "hidden",
                   display: "-webkit-box",
@@ -303,6 +343,7 @@ const JobCardFront = ({
               display: "flex",
               flexDirection: "column",
               marginBottom: "12px",
+              // gap:"10px"
             }}
           >
             <Box
@@ -316,10 +357,10 @@ const JobCardFront = ({
               <Box
                 component="img"
                 sx={{
-                  height: 18,
-                  width: 18,
-                  maxHeight: { xs: 18 },
-                  maxWidth: { xs: 18 },
+                  height: 25,
+                  width: 25,
+                  maxHeight: { xs: 28 },
+                  maxWidth: { xs: 28 },
                 }}
                 alt="currency"
                 src={BlueCurrency}
@@ -327,7 +368,7 @@ const JobCardFront = ({
               <Typography
                 sx={{
                   fontWeight: 700,
-                  fontSize: 12,
+                  fontSize: 14,
                   letterSpacing: "0.25px",
                 }}
               >
@@ -347,10 +388,10 @@ const JobCardFront = ({
               <Box
                 component="img"
                 sx={{
-                  height: 18,
-                  width: 18,
-                  maxHeight: { xs: 18 },
-                  maxWidth: { xs: 18 },
+                  height: 25,
+                  width: 25,
+                  maxHeight: { xs: 28 },
+                  maxWidth: { xs: 28 },
                 }}
                 alt="location"
                 src={redLocation}
@@ -358,7 +399,7 @@ const JobCardFront = ({
               <Typography
                 sx={{
                   fontWeight: 700,
-                  fontSize: 12,
+                  fontSize: 14,
                   letterSpacing: "0.25px",
                 }}
               >
@@ -378,10 +419,10 @@ const JobCardFront = ({
               <Box
                 component="img"
                 sx={{
-                  height: 16,
-                  width: 16,
-                  maxHeight: { xs: 15 },
-                  maxWidth: { xs: 15 },
+                  height: 25,
+                  width: 25,
+                  maxHeight: { xs: 28 },
+                  maxWidth: { xs: 28 },
                 }}
                 alt="job_exp"
                 src={job_exp}
@@ -389,7 +430,7 @@ const JobCardFront = ({
               <Typography
                 sx={{
                   fontWeight: 700,
-                  fontSize: 12,
+                  fontSize: 14,
                   letterSpacing: "0.25px",
                 }}
               >
@@ -402,16 +443,16 @@ const JobCardFront = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "start",
-                gap: 1,
+                gap: 1.8,
               }}
             >
               <Box
                 component="img"
                 sx={{
-                  height: 16,
-                  width: 16,
-                  maxHeight: { xs: 15 },
-                  maxWidth: { xs: 15 },
+                  height: 20,
+                  width: 20,
+                  maxHeight: { xs: 28 },
+                  maxWidth: { xs: 28 },
                   padding: 0,
                 }}
                 alt="calendar"
@@ -420,7 +461,7 @@ const JobCardFront = ({
               <Typography
                 sx={{
                   fontWeight: 700,
-                  fontSize: 12,
+                  fontSize: 14,
                   letterSpacing: "0.25px",
                 }}
               >
@@ -443,7 +484,7 @@ const JobCardFront = ({
             <Box>
               {job?.type && (
                 <SmallButton
-                  color={"blueButton700"}
+                  color={"blueButton900"}
                   height={25}
                   value={job?.type}
                   label={truncate(job?.type, { length: 12 })}
@@ -451,7 +492,7 @@ const JobCardFront = ({
                 />)}
               {job?.work_setup && (
                 <SmallButton
-                  color={"blueButton700"}
+                  color={"blueButton900"}
                   height={25}
                   value={job?.work_setup}
                   label={truncate(job?.work_setup, { length: 12 })}
@@ -460,7 +501,7 @@ const JobCardFront = ({
             </Box>
             <Slider2
               items={jobIndustries || []}
-              color={"blueButton600"}
+              color={"blueButton1000"}
               hideTagsAfter={2}
             />
           </Box>
@@ -469,7 +510,7 @@ const JobCardFront = ({
         <Box
           sx={{
             display: "flex",
-            alignItems: "end",
+            alignItems: "center",
           }}
         >
           <Button
@@ -477,110 +518,19 @@ const JobCardFront = ({
             color="redButton"
             sx={{
               width: "100%",
-              height: 150,
+              height: 60,
               padding: 0,
-              minWidth: "15px",
-              marginBottom: 2,
+              minWidth: "20px",
               fontSize: "20px",
-              borderRadius: "5px 0 0 5px",
+              borderRadius: "10px 0 0 10px",
             }}
             onClick={() => setisFlipped(true)}
           >
-            <NavigateNextIcon
-              sx={{
-                margin: 0,
-                padding: 0,
-              }}
-              fontSize="string"
-            />
+            <LeftArrow />
             {/* &#62; */}
           </Button>
         </Box>
       </Box>
-      {/* <Grid
-                container
-                spacing={2}
-                padding="0 8px 8px 0px"
-                minHeight={45}
-                sx={
-                    arrSlider2.length >= 4
-                        ? { justifyContent: "space-evenly", alignItems: "center" }
-                        : { ml: 2 }
-                }
-            >
-                {arrSlider2.length >= 4 ? (
-                    <IconButton
-                        sx={{
-                            border: `1px solid ${theme.palette.grayBorder}`,
-                            borderRadius: "8px",
-                            width: "37px",
-                            height: "37px",
-                            ml: 1,
-                        }}
-                        color="redButton100"
-                        aria-label="search job"
-                        component="button"
-                        onClick={handleLeftClick}
-                    >
-                        <KeyboardArrowLeftIcon />
-                    </IconButton>
-                ) : null}
-                <Box
-                    sx={
-                        job?.job_traits.length <= 1 &&
-                            job?.primary?.name !== "" &&
-                            job?.shadow?.name !== ""
-                            ? {
-                                width: "65%",
-                                display: "flex",
-                            }
-                            : {
-                                width: "65%",
-                                display: "flex",
-                                overflow: "hidden",
-                            }
-                    }
-                >
-                    {arrSlider2
-                        .filter((item) => item !== null)
-                        .map((item, index) => {
-                            if (item !== undefined) {
-                                return (
-                                    <SmallButton
-                                        color={
-                                            item?.trait?.name
-                                                ? "grayButton200"
-                                                : index === 1
-                                                    ? "brownButton"
-                                                    : "purpleButton"
-                                        }
-                                        height={25}
-                                        label={item?.trait ? item?.trait?.name : item}
-                                        mr="4px"
-                                    />
-                                );
-                            }
-                        })}
-                </Box>
-                {arrSlider2.length >= 4 ? (
-                    <IconButton
-                        sx={{
-                            border: `1px solid ${theme.palette.grayBorder}`,
-                            borderRadius: "8px",
-                            width: "37px",
-                            height: "37px",
-                            mr: 1,
-                        }}
-                        color="redButton100"
-                        aria-label="search job"
-                        component="button"
-                        onClick={handleRightClick}
-                    >
-                        <KeyboardArrowRightIcon />
-                    </IconButton>
-                ) : null}
-            </Grid> */}
-
       <Grid
         Grid
         container
@@ -590,33 +540,53 @@ const JobCardFront = ({
       >
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
           <SingleRadialChart
-            max={1000}
+            hollow="55%"
+            nameSize="10px"
+            valueSize="14px"
+            nameOffsetY="11"
+            valueOffsetY="-17"
+            max={500}
             labelsData={label1}
-            series={[job?.TotalUserCount]}
-            width={120}
-            color={theme.palette.chart.red}
+            series={[200]}
+            width={130}
+            color={theme.palette.chart.Review}
             index={index}
-            isHovered={isHovered}
+            name={"applied"}
+            // isHovered={isHovered}
           />
         </Box>
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
           <SingleRadialChart
+            hollow="55%"
+            nameSize="10px"
+            valueSize="14px"
+            nameOffsetY="11"
+            valueOffsetY="-17"
             labelsData={label2}
             series={[job?.totalusershorlisted]}
-            width={120}
-            color={theme.palette.chart.green}
+            width={130}
+            color={theme.palette.chart.Shortlist}
             index={index}
-            isHovered={isHovered}
+            name={"shortlist"}
+            // isHovered={isHovered}
           />
         </Box>
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
+          {/* {console.log(isHovered)} */}
           <SingleRadialChart
+            hollow="55%"
+            nameSize="10px"
+            valueSize="14px"
+            nameOffsetY="11"
+            valueOffsetY="-17"
             labelsData={label3}
             series={[job?.totaluserinterviewed]}
-            width={120}
-            color={theme.palette.chart.yellow}
+            width={130}
+            max={50}
+            color={theme.palette.chart.Interview}
             index={index}
-            isHovered={isHovered}
+            name={"interviewed"}
+            // isHovered={isHovered}
           />
         </Box>
       </Grid>
@@ -677,11 +647,21 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "10px",
+            fontSize: "12px",
           }}
           color="blueButton200"
+          startIcon={
+            <Box
+              component={"img"}
+              sx={{
+                height: 20,
+                width: 20,
+              }}
+              src={matchMeIcon}
+            />
+          }
         >
-          Match me
+          Match
         </Button>
         <Link
           to={`/jobs/job-detail/${`${job?.town_name + " " + job?.region_name
@@ -698,11 +678,23 @@ const JobCardFront = ({
             variant="contained"
             sx={{
               borderRadius: 0,
-              fontSize: "10px",
+              fontSize: "12px",
+              whiteSpace: "nowrap",
               height: "100%",
               width: "100%",
             }}
-            color="grayButton200"
+            color="yellowButton100"
+            startIcon={
+              <Box
+                component={"img"}
+                sx={{
+                  height: 40,
+                  width: 40,
+                  padding: 0,
+                }}
+                src={viewIcon}
+              />
+            }
           >
             View More
           </Button>
@@ -714,10 +706,20 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "10px",
+            fontSize: "12px",
           }}
           color="redButton"
           onClick={handleClick}
+          startIcon={
+            <Box
+              component={"img"}
+              sx={{
+                height: 20,
+                width: 20,
+              }}
+              src={applyIcon}
+            />
+          }
         >
           apply
         </Button>
