@@ -26,10 +26,13 @@ import {
   JOBS_LEFT_TYPES_BUTTON_GROUP,
 } from "../../../utils/Constants";
 import ButtonPanel from "../../common/ButtonPanel";
-import EmployerButtonPanel from "../../common/EmployerButtonPanel"
 import SmallButton from "../../common/SmallButton";
 import BasicInfo from "./DraggableCardComponents/BasicInfo";
 import CardsTopBar from "./DraggableCardComponents/CardsTopBar";
+import LeftArrow from "../../common/LeftArrow";
+import RightArrow from "../../common/RightArrow";
+import LeftMenu from "./DraggableCardComponents/LeftMenu";
+import EmployerButtonPanel from "../../common/EmployerButtonPanel";
 
 const StyledBox = (props) => {
   const { children, color } = props;
@@ -38,7 +41,7 @@ const StyledBox = (props) => {
     <Box
       sx={{
         height: 37,
-        backgroundColor: theme.palette[color].main,
+        backgroundColor: theme.manageTalent[color]?.main,
         borderRadius: "0 0 20px 20px",
         color: theme.palette.white,
         justifyContent: "space-between",
@@ -131,6 +134,9 @@ export default function ManageJob() {
   const [talentStatus, setTalentStatus] = useState([]);
   const [jobDetail, setJobDetail] = useState([]);
   const { jobId } = useParams();
+  const [leftExpanded, setLeftExpand] = useState(false);
+  const [rightExpanded, setRightExpanded] = useState(false);
+  const [leftMenu, setLeftMenu] = useState(false);
 
   const [talents, setTalents] = useState([]);
 
@@ -282,23 +288,25 @@ export default function ManageJob() {
   const renderColor = (column) => {
     switch (column?.status) {
       case "incomplete":
-        return "grayButton100";
+        return "manageIncomplete";
       case "matched":
-        return "QandA";
+        return "manageMatched";
       case "considering":
-        return "blueButton400";
+        return "manageConsidering";
       case "shortlist":
-        return "blueButton100";
+        return "manageShortlist";
       case "interview":
-        return "purpleButton200";
+        return "manageInterview";
       case "assessment":
-        return "brownButton";
+        return "manageAssesment";
       case "hired":
-        return "lightGreenButton100";
+        return "manageHired";
       case "rejected":
-        return "redButton";
+        return "manageRejected";
       case "review":
-        return "yellowButton100";
+        return "manageReview";
+      case "offer":
+        return "manageOffer";
       default:
         return "orangeButton";
     }
@@ -309,7 +317,6 @@ export default function ManageJob() {
   }, []);
 
   const handleSortedValue = (columnName, value) => {
-    console.log(columnName, value);
     setTalents((prevTalents) => {
       const updatedTalents = talentStatus?.map((item) => {
         if (item.id === columnName) {
@@ -324,7 +331,6 @@ export default function ManageJob() {
           return { ...item, items: existingItem ? existingItem.items : [] };
         }
       });
-      console.log(updatedTalents);
       return [...updatedTalents];
     });
   };
@@ -335,51 +341,118 @@ export default function ManageJob() {
       spacing={0}
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
+      flexWrap={"nowrap"}
     >
       <Grid
         item
         // md={2}
         // lg={1}
         // xl={1}
-        className="filterSec"
         sx={{
-          height: "88vh",
-          overflowY: "scroll",
-          width:150
+          display: "flex",
         }}
       >
-        <Paper
+        <Grid
+          item
+          // md={2}
+          // lg={1}
+          // xl={1}
           sx={{
-            background: "transparent",
-            marginRight: "1px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
           }}
         >
-          <ButtonPanel
-            panelData={TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP}
-            side="left"
-            // onChangeFilter={jobsFilterLeft}
-          />
-        </Paper>
-        <style>
-          {`.filterSec::-webkit-scrollbar {
-                  width: 5px !important;
-                  background-color: #EFEEEE; /* Set the background color of the scrollbar */
+          <LeftMenu leftExpanded={leftMenu} />
+        </Grid>
+        <Grid
+          item
+          // md={2}
+          // lg={1}
+          // xl={1}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            width: "150px",
+            marginRight: "30px",
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{
+              position: "static",
+              borderRadius: "0 10px 10px 0",
+              minWidth: "40px",
+              width: "40px",
+              height: "45px",
+              backgroundColor: theme.manageTalent.leftArrowButton.main,
+              ":hover": {
+                backgroundColor: theme.manageTalent.leftArrowButton.main,
+                boxShadow: "none",
+              },
+            }}
+            onClick={() => {
+              setLeftExpand((prevState) => !prevState);
+            }}
+          >
+            {!leftExpanded ? <LeftArrow /> : <RightArrow />}
+          </Button>
+          {!leftExpanded && (
+            <Box
+              sx={
+                {
+                  // height: "82vh",
+                  // overflowY: leftExpanded ? "scroll" : "unset",
                 }
-                .filterSec::-webkit-scrollbar-thumb {
-                  background-color: white;
-                  width: 5px;
-                  box-shadow: 0px 3px 3px #00000029;
-                  border-radius: 3px;
-                }`}
-        </style>
+              }
+              className="filterSec"
+            >
+              <Paper
+                sx={{
+                  background: "transparent",
+                  marginRight: "1px",
+                  boxShadow: "none",
+                }}
+              >
+                <ButtonPanel
+                  panelData={TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP}
+                  side="left"
+                  // onChangeFilter={jobsFilterLeft}
+                />
+              </Paper>
+            </Box>
+          )}
+          <Button
+            variant="contained"
+            sx={{
+              position: "static",
+              borderRadius: "0 10px 10px 0",
+              minWidth: "40px",
+              width: "40px",
+              height: "45px",
+              backgroundColor: theme.manageTalent.leftArrowButton.main,
+              ":hover": {
+                backgroundColor: theme.manageTalent.leftArrowButton.main,
+                boxShadow: "none",
+              },
+            }}
+            onClick={() => {
+              setLeftMenu((prevState) => !prevState);
+            }}
+          >
+            {leftMenu ? <LeftArrow /> : <RightArrow />}
+          </Button>
+        </Grid>
       </Grid>
+
       <Grid
         Grid
         xs={12}
         sm={6}
         md={8}
-        lg={9}
-        xl={9}
+        lg={10}
+        xl={10}
         sx={{
           // display: "flex",
           overflowX: "scroll",
@@ -394,6 +467,7 @@ export default function ManageJob() {
             sx={{
               display: "flex",
               maxHeight: "100%",
+              gap: "15px",
             }}
           >
             {Object.entries(talents).map(([columnId, column], index) => {
@@ -406,7 +480,6 @@ export default function ManageJob() {
                       {...provided.droppableProps}
                       sx={{
                         flex: "1 1 0px",
-                        margin: "8px",
                         minWidth: "325px",
                       }}
                     >
@@ -415,34 +488,38 @@ export default function ManageJob() {
                         column={column}
                         jobId={jobId}
                       >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          {column?.status}
+                        <Box sx={{ display: "flex" }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mr: "20px",
+                            }}
+                          >
+                            {column?.status}
+                          </Box>
+                          <Button
+                            variant="contained"
+                            color="base"
+                            label={column?.count}
+                            padding="0 4px"
+                            alignItems="end"
+                            sx={{
+                              fontSize: 14,
+                              fontWeight: 700,
+                              letterSpacing: "0.75px",
+                              height: 25,
+                              borderRadius: "6px",
+                              boxShadow: 0,
+                              color:
+                                theme.manageTalent[renderColor(column)]?.main,
+                              minWidth: "33px",
+                              padding: "0 8px",
+                            }}
+                          >
+                            {column?.count}
+                          </Button>
                         </Box>
-                        <Button
-                          variant="contained"
-                          color="base"
-                          label={column?.count}
-                          padding="0 4px"
-                          alignItems="end"
-                          sx={{
-                            fontSize: 14,
-                            fontWeight: 700,
-                            letterSpacing: "0.75px",
-                            height: 25,
-                            borderRadius: "6px",
-                            boxShadow: 0,
-                            color: theme.palette[renderColor(column)]?.main,
-                            minWidth: "33px",
-                            padding: "0 8px",
-                          }}
-                        >
-                          {column?.count}
-                        </Button>
                         <SortButton
                           jobId={jobId}
                           jobStatusId={column?.id}
@@ -452,7 +529,7 @@ export default function ManageJob() {
                       <Box id="talentList">
                         <InfiniteScroll
                           style={{
-                            height: "600px",
+                            // height: "100vh",
                             overflowX: "hidden",
                             scrollbarWidth: "thin",
                           }}
@@ -515,56 +592,78 @@ export default function ManageJob() {
                   }`}
         </style>
       </Grid>
+
       <Grid
         item
         // md={2}
         // lg={1}
         // xl={1}
-        className="rightfilterSec"
         sx={{
           display: "flex",
           flexDirection: "column",
+          gap: "10px",
           direction: "rtl",
-          width:150
+          width: "150px",
+          marginLeft: "30px",
         }}
       >
-        <style>
-          {`.rightfilterSec::-webkit-scrollbar {
-                       width: 5px !important;
-                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .rightfilterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
-        <Paper
+        <Button
+          variant="contained"
           sx={{
-            background: "transparent",
-            marginLeft: "1px",
-            display:"flex",
-            flexDirection:"column",
-            gap:"10px"
+            position: "sticky",
+            top: 0,
+            borderRadius: "10px 0 0 10px",
+            minWidth: "40px",
+            width: "40px",
+            height: "45px",
+            backgroundColor: theme.manageTalent.leftArrowButton.main,
+            ":hover": {
+              backgroundColor: theme.manageTalent.leftArrowButton.main,
+              boxShadow: "none",
+            },
+          }}
+          onClick={() => {
+            setRightExpanded((prevState) => !prevState);
           }}
         >
-          <EmployerButtonPanel
-            panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
-            side="right"
-            // onChangeFilter={jobsFilter}
-          />
-          <ButtonPanel
-            panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
-            side="right"
-            // onChangeFilter={jobsFilter}
-          />
-          <ButtonPanel
-            panelData={JOBS_LEFT_TYPES_BUTTON_GROUP}
-            side="right"
-            // onChangeFilter={jobsFilter}
-          />
-        </Paper>
+          {!rightExpanded ? <RightArrow /> : <LeftArrow />}
+        </Button>
+        {!rightExpanded && (
+          <Box
+            sx={
+              {
+                // height: "vh",
+                // overflowY: rightExpanded ? "scroll" : "unset",
+              }
+            }
+            className="rightfilterSec"
+          >
+            <Paper
+              sx={{
+                background: "transparent",
+                marginLeft: "1px",
+                boxShadow: "none",
+                width: "150px",
+              }}
+            >
+              <EmployerButtonPanel
+                panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
+                side="right"
+                // onChangeFilter={jobsFilter}
+              />
+              <ButtonPanel
+                panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
+                side="right"
+                // onChangeFilter={jobsFilter}
+              />
+              <ButtonPanel
+                panelData={JOBS_LEFT_TYPES_BUTTON_GROUP}
+                side="right"
+                // onChangeFilter={jobsFilter}
+              />
+            </Paper>
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

@@ -4,7 +4,7 @@ import { truncate } from "lodash";
 import { nanoid } from "@reduxjs/toolkit";
 import { Box } from "@mui/material";
 
-const Slider = ({ items, theme, color }) => {
+const Slider = ({ items, theme, color, minHeight = "25px"}) => {
   return (
     <Box
       sx={{
@@ -12,7 +12,7 @@ const Slider = ({ items, theme, color }) => {
         display: "flex",
         flexWrap: "wrap",
         gap: 1,
-        minHeight: "25px",
+        minHeight: minHeight,
       }}
     >
       {items

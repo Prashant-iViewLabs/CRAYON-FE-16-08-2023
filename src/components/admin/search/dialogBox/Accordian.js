@@ -226,7 +226,7 @@ export default function Accordian({
                 onScroll={handleScroll} // Attach the scroll event handler
                 ref={scrollContainerRef} // Assign the ref to the scrollable container
               >
-                {candidateList.length <= 0 ? (
+                {candidateList.length <= 0 && loading ? (
                   <Box
                     style={{
                       display: "flex",

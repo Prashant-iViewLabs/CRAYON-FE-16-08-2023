@@ -17,7 +17,6 @@ const sxPaper = {
   height: "530px",
   overflow: "hidden",
   width: "100%",
-  // minWidth:"360px",
   display:"flex",
   flexDirection: "column"
 };

@@ -24,11 +24,11 @@ import downClose from "../../../assets/Padding Included/Black_Down_Open.svg";
 import JobExp from "../../../assets/Padding Excluded/Black_Experience_Title_Job.svg";
 import calendar from "../../../assets/Padding Excluded/Black_Notice_Period.svg";
 
-import YellowLink from "../../../assets/CircularIcon/Red/Circular Icons__Yellow_Move.svg";
+import YellowLink from "../../../assets/CircularIcon/Yellow/Circular Icons__Yellow_Move.svg";
 import RedView from "../../../assets/CircularIcon/Red/Circular Icons__Red_View.svg";
-import BlueFolder from "../../../assets/CircularIcon/Red/Circular Icons__Blue_Title_Job_Experience.svg";
-import GreenPlay from "../../../assets/CircularIcon/Red/Circular Icons__Green_Play.svg";
-import YellowChatHistory from "../../../assets/CircularIcon/Red/Circular Icons__Yellow_Chat History_2.svg";
+import BlueFolder from "../../../assets/CircularIcon/Blue/Circular Icons__Blue_Title_Job_Experience.svg";
+import GreenPlay from "../../../assets/CircularIcon/Green/Circular Icons__Green_Play.svg";
+import YellowChatHistory from "../../../assets/CircularIcon/Yellow/Circular Icons__Yellow_Chat History_2.svg";
 import talentIcon from "../../../assets/CircularIcon/Red/Circular Icons__Red_Direxct.svg";
 
 import deleteIcon from "../../../assets/Padding Excluded/Black_Trash_Delete_1 - Copy.svg";

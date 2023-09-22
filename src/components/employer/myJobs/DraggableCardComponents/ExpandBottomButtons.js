@@ -4,12 +4,14 @@ import { Box, IconButton, Popover, Tooltip } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import eye from "../../../../assets/Black_View.svg";
 import loveThis from "../../../../assets/Black_I_Love_This.svg";
-import cv from "../../../../assets/Black_CV.svg";
-import chatHistory from "../../../../assets/Black_Chat History.svg";
-import chat from "../../../../assets/Black_Chat.svg";
-import user from "../../../../assets/Black_User_Profile.svg";
-import email from "../../../../assets/Black_Email.svg";
-import duplicate from "../../../../assets/Black_Duplicate.svg";
+import cv from "../../../../assets/CircularIcon/Red/Circular Icons__Red_CV.svg";
+import playIcon from "../../../../assets/CircularIcon/Green/Circular Icons__Green_Play.svg";
+import playIconRed from "../../../../assets/CircularIcon/Red/Circular Icons__Red_Play.svg";
+import chatHistory from "../../../../assets/CircularIcon/Yellow/Circular Icons__Yellow_Chat History_2.svg";
+import chat from "../../../../assets/CircularIcon/Red/Circular Icons__Red_Chat History_1.svg";
+import user from "../../../../assets/CircularIcon/Red/Circular Icons__Red_User_Profile.svg";
+import email from "../../../../assets/CircularIcon/Blue/Circular Icons__Blue_Mail.svg";
+import duplicate from "../../../../assets/Padding Included/Blue_Documents.svg";
 import contact from "../../../../assets/Black_Contact.svg";
 import linkedin from "../../../../assets/linkedin.svg";
 import personalDetail from "../../../../assets/Black_Personal Details.svg";
@@ -69,19 +71,19 @@ export default function ExpandBottomButtons({
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        margin: "16px 50px",
+        margin: "auto",
+        gap: "10px",
+        marginTop: "8px",
       }}
     >
-      <SmallButton
-        color={"eyeview"}
-        startIcon={<PlayArrowIcon />}
-        padding={0}
-        justifyContent={"flex-end"}
-        borderRadius={50}
-        height={31}
-        width={33}
-        fontWeight={700}
+      <SVGButton
+        color={"white"}
+        source={playIcon}
         onClick={handleVideoDialog}
+        height={40}
+        width={40}
+        startIconMargin={"0px !important"}
+        padding={"0px !important"}
       />
       <Popover
         id="dropdown-menu"
@@ -112,17 +114,13 @@ export default function ExpandBottomButtons({
             Video:
           </Typography>
           <Box sx={{ display: "flex", pt: 1 }}>
-            <SmallButton
-              color={"redButton"}
-              startIcon={<PlayArrowIcon />}
-              padding={0}
-              justifyContent={"flex-end"}
-              borderRadius={50}
-              // startIconMargin="4px"
-              // margin="auto"
-              height={31}
-              width={33}
-              fontWeight={700}
+            <SVGButton
+              color={"white"}
+              source={playIconRed}
+              height={30}
+              width={30}
+              startIconMargin={"0px !important"}
+              padding={"0px !important"}
             />
             <Typography
               sx={{
@@ -136,17 +134,13 @@ export default function ExpandBottomButtons({
             </Typography>
           </Box>
           <Box sx={{ display: "flex", pt: 1 }}>
-            <SmallButton
-              color={"eyeview"}
-              startIcon={<PlayArrowIcon />}
-              padding={0}
-              justifyContent={"flex-end"}
-              borderRadius={50}
-              // startIconMargin="4px"
-              // margin="auto"
-              height={31}
-              width={33}
-              fontWeight={700}
+            <SVGButton
+              color={"white"}
+              source={playIcon}
+              height={30}
+              width={30}
+              startIconMargin={"0px !important"}
+              padding={"0px !important"}
             />
             <Typography
               sx={{
@@ -161,7 +155,16 @@ export default function ExpandBottomButtons({
           </Box>
         </Box>
       </Popover>
-      <SVGButton color={"redButton"} source={cv} onClick={handleInfoDialog} />
+
+      <SVGButton
+        color={"white"}
+        source={cv}
+        onClick={handleInfoDialog}
+        height={40}
+        width={40}
+        startIconMargin={"0px !important"}
+        padding={"0px !important"}
+      />
 
       <Popover
         id="dropdown-menu"
@@ -201,7 +204,14 @@ export default function ExpandBottomButtons({
             }}
           >
             <Box sx={{ display: "flex", pt: 1 }}>
-              <SVGButton color={"redButton"} source={user} />
+              <SVGButton
+                color={"redButton"}
+                source={user}
+                height={30}
+                width={30}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -224,7 +234,14 @@ export default function ExpandBottomButtons({
             }}
           >
             <Box sx={{ display: "flex", pt: 1 }}>
-              <SVGButton color={"redButton"} source={cv} />
+              <SVGButton
+                color={"redButton"}
+                source={cv}
+                height={30}
+                width={30}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -239,7 +256,14 @@ export default function ExpandBottomButtons({
             </Box>
           </Link>
           <Box sx={{ display: "flex", pt: 1 }}>
-            <SVGButton color={"redButton"} source={user} />
+            <SVGButton
+              color={"redButton"}
+              source={user}
+              height={30}
+              width={30}
+              startIconMargin={"0px !important"}
+              padding={"0px !important"}
+            />
             <Typography
               sx={{
                 fontWeight: 700,
@@ -258,6 +282,10 @@ export default function ExpandBottomButtons({
         color={"quicklinks"}
         source={personalDetail}
         onClick={handlePersonalDetail}
+        height={40}
+        width={40}
+        startIconMargin={"0px !important"}
+        padding={"0px !important"}
       />
       <Popover
         id="dropdown-menu"
@@ -295,7 +323,14 @@ export default function ExpandBottomButtons({
             }}
           >
             <Box sx={{ display: "flex", pt: 1 }}>
-              <SVGButton color={"quicklinks"} source={email} />
+              <SVGButton
+                color={"quicklinks"}
+                source={email}
+                height={30}
+                width={30}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
 
               <Tooltip title={emailAddress} placement="top-end">
                 <Typography
@@ -326,7 +361,14 @@ export default function ExpandBottomButtons({
                 );
               }}
             >
-              <SVGButton color={"white"} source={duplicate} />
+              <SVGButton
+                color={"black"}
+                source={duplicate}
+                height={40}
+                width={40}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
             </CopyToClipboard>
           </Box>
           <Box
@@ -337,7 +379,14 @@ export default function ExpandBottomButtons({
             }}
           >
             <Box sx={{ display: "flex", pt: 1 }}>
-              <SVGButton color={"quicklinks"} source={contact} />
+              <SVGButton
+                color={"quicklinks"}
+                source={contact}
+                height={21}
+                width={30}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
               <Typography
                 sx={{
                   fontWeight: 700,
@@ -361,7 +410,14 @@ export default function ExpandBottomButtons({
                 );
               }}
             >
-              <SVGButton color={"white"} source={duplicate} />
+              <SVGButton
+                color={"black"}
+                source={duplicate}
+                height={40}
+                width={40}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
             </CopyToClipboard>
           </Box>
           <Box
@@ -412,13 +468,34 @@ export default function ExpandBottomButtons({
                 );
               }}
             >
-              <SVGButton color={"white"} source={duplicate} />
+              <SVGButton
+                color={"black"}
+                source={duplicate}
+                height={40}
+                width={40}
+                startIconMargin={"0px !important"}
+                padding={"0px !important"}
+              />
             </CopyToClipboard>
           </Box>
         </Box>
       </Popover>
-      <SVGButton color={"yellowButton100"} source={chatHistory} />
-      <SVGButton color={"redButton"} source={chat} />
+      <SVGButton
+        color={"white"}
+        source={chatHistory}
+        height={40}
+        width={40}
+        startIconMargin={"0px !important"}
+        padding={"0px !important"}
+      />
+      <SVGButton
+        color={"white"}
+        source={chat}
+        height={40}
+        width={40}
+        startIconMargin={"0px !important"}
+        padding={"0px !important"}
+      />
     </Box>
   );
 }

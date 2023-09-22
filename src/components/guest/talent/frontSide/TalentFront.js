@@ -43,7 +43,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
   // const [arrSlider, setArrSlider] = useState(
   //   job?.candidate_profile?.industry_users
   // );
-  const jobIndustries = job?.UserIndustries?.split(",")
+  const jobIndustries = job?.UserIndustries?.split(",");
 
   // const [personalityArrSlider, setPersonalityArrSlider] = useState([
   //   job?.candidate_profile?.candidate_info?.employment_type,
@@ -139,19 +139,19 @@ export default function TalentCard({ index, job, setisFlipped }) {
             }}
           >
             <Box>
-
               {job?.firstactivity && (
                 <SmallButton
                   color="yellowButton100"
                   label={job?.firstactivity}
                   // job?.firstactivity
                   mr={1}
-                />)}
+                />
+              )}
               {job?.secondactivity && (
                 <SmallButton
                   color="lightGreenButton300"
                   label={job?.secondactivity}
-                // job?.secondactivity
+                  // job?.secondactivity
                 />
               )}
             </Box>
@@ -250,7 +250,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
         sx={{
           display: "flex",
           width: "100%",
-          height: "287px",
+          // height: "287px",
+          flexGrow: 1,
         }}
       >
         <Grid
@@ -320,9 +321,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
               >
                 {job?.currencySymbol}
                 {/* job?.currencySymbol */}
-                {formatCurrencyWithCommas(
-                  job?.salaryMax
-                )}
+                {formatCurrencyWithCommas(job?.salaryMax)}
                 {/* job?.salaryMax */}
               </Typography>
             </Box>
@@ -345,8 +344,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.town_name},{" "}
-                {/* job?.town_name */}
+                {job?.town_name}, {/* job?.town_name */}
                 {job?.region_name}
                 {/* job?.region_name */}
               </Typography>
@@ -560,17 +558,11 @@ export default function TalentCard({ index, job, setisFlipped }) {
       >
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
           <SingleRadialChart
-            hollow="55%"
-            nameSize="10px"
-            valueSize="14px"
-            nameOffsetY="11"
-            valueOffsetY="-17"
             labelsData={label1}
             series={[job?.TotalUserCount]}
             width={120}
             color={theme.palette.chart.red}
             index={index}
-            name={"applied"}
             isHovered={isHovered}
           />
         </Box>
@@ -641,7 +633,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             fontSize: "10px",
           }}
           color="redButton"
-        // onClick={handleClick}
+          // onClick={handleClick}
         >
           {i18n["talentCard.shortlist"]}
         </Button>

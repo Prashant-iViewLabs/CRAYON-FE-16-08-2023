@@ -400,7 +400,7 @@ export default function Jobs() {
             spacing={2}
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
-              display: { md: "flex" },
+              display: { xs: "none", md: "flex" },
             }}
             width={"100%"}
           >

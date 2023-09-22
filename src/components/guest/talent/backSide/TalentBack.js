@@ -168,13 +168,13 @@ export default function TalentCard({ index, job, setisFlipped }) {
             }}
           >
             <Box>
-
               {job?.firstactivity && (
                 <SmallButton
                   color="yellowButton100"
                   label={job?.firstactivity}
                   mr={1}
-                />)}
+                />
+              )}
               {job?.secondactivity && (
                 <SmallButton
                   color="lightGreenButton300"
@@ -292,7 +292,8 @@ export default function TalentCard({ index, job, setisFlipped }) {
         sx={{
           display: "flex",
           width: "100%",
-          height: "287px",
+          // height: "287px",
+          flexGrow: 1,
         }}
       >
         <Grid
@@ -357,9 +358,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                 }}
               >
                 {job?.currencySymbol}
-                {formatCurrencyWithCommas(
-                  job?.salaryMax
-                )}
+                {formatCurrencyWithCommas(job?.salaryMax)}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -390,8 +389,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   letterSpacing: "0.25px",
                 }}
               >
-                {job?.town_name},{" "}
-                {job?.region_name}
+                {job?.town_name}, {job?.region_name}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -740,18 +738,10 @@ export default function TalentCard({ index, job, setisFlipped }) {
             // sx={{ margin: "0 -22px 0 -22px" }}
             alt="Personality"
             src={
-              (job?.primaryName ===
-                "collaborator" &&
-                profile_collaborator) ||
-              (job?.primaryName ===
-                "challenger" &&
-                profile_challenger) ||
-              (job?.primaryName ===
-                "character" &&
-                profile_character) ||
-              (job?.primaryName ===
-                "contemplator" &&
-                profile_contemplator)
+              (job?.primaryName === "collaborator" && profile_collaborator) ||
+              (job?.primaryName === "challenger" && profile_challenger) ||
+              (job?.primaryName === "character" && profile_character) ||
+              (job?.primaryName === "contemplator" && profile_contemplator)
             }
           />
         )}
@@ -764,18 +754,10 @@ export default function TalentCard({ index, job, setisFlipped }) {
             // alt="job_exp"
             alt="Personality"
             src={
-              (job?.shadowName ===
-                "collaborator" &&
-                profile_collaborator) ||
-              (job?.shadowName ===
-                "challenger" &&
-                profile_challenger) ||
-              (job?.shadowName ===
-                "character" &&
-                profile_character) ||
-              (job?.shadowName ===
-                "contemplator" &&
-                profile_contemplator)
+              (job?.shadowName === "collaborator" && profile_collaborator) ||
+              (job?.shadowName === "challenger" && profile_challenger) ||
+              (job?.shadowName === "character" && profile_character) ||
+              (job?.shadowName === "contemplator" && profile_contemplator)
             }
           />
         )}
@@ -824,7 +806,7 @@ export default function TalentCard({ index, job, setisFlipped }) {
             fontSize: "10px",
           }}
           color="redButton"
-        // onClick={handleClick}
+          // onClick={handleClick}
         >
           {i18n["talentCard.shortlist"]}
         </Button>

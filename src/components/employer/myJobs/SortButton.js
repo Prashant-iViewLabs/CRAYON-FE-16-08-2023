@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Button, MenuList, Box } from "@mui/material";
-import sortLogo from "../../../assets/sort_logo.svg";
+import { Button, MenuList, Box, Typography } from "@mui/material";
+import sortLogo from "../../../assets/Padding Included/White_Sort_Filter.svg";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
 
 import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { getTalentJobStatusApplications } from "../../../redux/employer/myJobsSlice";
+import { useTheme } from "@emotion/react";
 
 const sortingOptions = [
   "A to Z",
@@ -118,6 +119,7 @@ const StyledMenu = styled((props) => (
 const SortButton = ({ jobId, jobStatusId, handleSortedValue }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const theme = useTheme();
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
 
@@ -146,16 +148,22 @@ const SortButton = ({ jobId, jobStatusId, handleSortedValue }) => {
 
   return (
     <>
-      <Button
+      <Box
         variant="text"
         id="fade-button"
         aria-controls={open ? "fade-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
       >
-        <Box component="img" alt="sortLogo" src={sortLogo} />
-      </Button>
+        <Box component="img" alt="sortLogo" src={sortLogo} height={40} />
+        <Typography sx={{ color: "white" }}>sort</Typography>
+      </Box>
       <StyledMenu
         id="fade-menu"
         MenuListProps={{

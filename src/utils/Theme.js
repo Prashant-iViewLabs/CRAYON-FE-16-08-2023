@@ -28,10 +28,6 @@ const theme = createTheme({
       main: "#E41E26",
       contrastText: "#FFFFFF",
     },
-    redButton200: {
-      main: "#FF6037",
-      contrastText: "#FFFFFF"
-    },
     pinkButton: {
       main: "#F5576C",
       contrastText: "#FFFFFF",
@@ -83,14 +79,6 @@ const theme = createTheme({
     blueButton800: {
       main: "#228CCE",
       contrastText: "#FFFFFF",
-    },
-    blueButton900: {
-      main: "#0F2143",
-      contrastText: "#FFFFFF"
-    },
-    blueButton1000: {
-      main: "#023E8A",
-      contrastText: "#FFFFFF"
     },
     yellowButton100: {
       main: "#F8B318",
@@ -206,6 +194,10 @@ const theme = createTheme({
       main: "#C19C47",
       contrastText: "#FFFFFF",
     },
+    leftArrowButton: {
+      main: "#FF6037",
+      contrastText: "#FFFFFF",
+    },
     traitsButton: {
       main: "#D0A331",
       contrastText: "#FFFFFF",
@@ -216,6 +208,22 @@ const theme = createTheme({
     },
     toolsButton: {
       main: "#A98600",
+      contrastText: "#FFFFFF",
+    },
+    topBar: {
+      main: "#F2F4FB",
+      contrastText: "#FFFFFF",
+    },
+    redButton200: {
+      main: "#FF6037",
+      contrastText: "#FFFFFF",
+    },
+    blueButton900: {
+      main: "#0F2143",
+      contrastText: "#FFFFFF",
+    },
+    blueButton1000: {
+      main: "#023E8A",
       contrastText: "#FFFFFF",
     },
     yellowColor: "#DC9B53",
@@ -239,19 +247,20 @@ const theme = createTheme({
       green200: "#18CA09",
       Review: "#014D4E",
       Shortlist: "#008384",
-      Interview:  "#5F9EA0",
+      Interview: "#5F9EA0",
     },
   },
+
   jobCard: {
     jobType: {
       recruit: {
         main: "#228CCE",
-        contrastText: "#FFFFFF"
+        contrastText: "#FFFFFF",
       },
       direct: {
         main: "#1DB954",
-        contrastText: "#FFFFFF"
-      }
+        contrastText: "#FFFFFF",
+      },
     },
     jobStatus: {
       Review: {
@@ -296,13 +305,74 @@ const theme = createTheme({
       },
     },
     type: {
-      main: "#0F2143"
+      main: "#0F2143",
     },
     industries: {
-      main: "#023E8A"
-    }
+      main: "#023E8A",
+    },
   },
-  talentCard: {},
+
+  manageTalent: {
+    manageReview: {
+      main: "#014D4E",
+      contrastText: "#FFFFFF",
+    },
+
+    manageConsidering: {
+      main: "#19747E",
+      contrastText: "#FFFFFF",
+    },
+
+    manageShortlist: {
+      main: "#008384",
+      contrastText: "#FFFFFF",
+    },
+
+    manageInterview: {
+      main: "#5F9EA0",
+      contrastText: "#FFFFFF",
+    },
+
+    manageAssesment: {
+      main: "#66B2B2",
+      contrastText: "#FFFFFF",
+    },
+
+    manageOffer: {
+      main: "#B2D8D8",
+      contrastText: "#FFFFFF",
+    },
+
+    manageHired: {
+      main: "#48D1CC",
+      contrastText: "#FFFFFF",
+    },
+
+    manageIncomplete: {
+      main: "#C9CAD8",
+      contrastText: "#FFFFFF",
+    },
+
+    manageMatched: {
+      main: "#228CCE",
+      contrastText: "#FFFFFF",
+    },
+
+    manageRejected: {
+      main: "#E41E26",
+      contrastText: "#FFFFFF",
+    },
+
+    leftArrowButton: {
+      main: "#FF6037",
+      contrastText: "#FFFFFF",
+    },
+
+    profileBorder: {
+      main: "#C9CAD8",
+      contrastText: "#FFFFFF",
+    },
+  },
 
   status: {
     pending: {
@@ -330,12 +400,7 @@ const theme = createTheme({
       main: "#F05D61",
     },
   },
-  manageTalent: {
-    lovethis: {
-      main: "#F05DD8",
-      contrastText: "#FFFFFF",
-    },
-  },
+
   components: {
     MuiButton: {
       styleOverrides: {

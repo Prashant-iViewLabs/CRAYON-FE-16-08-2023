@@ -30,7 +30,7 @@ const en = {
   },
   topBar: {
     login: "login",
-    join: "join Crayon",
+    join: "join",
     logout: "logout",
     talent: "talent",
     lite: "lite",

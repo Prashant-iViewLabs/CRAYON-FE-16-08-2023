@@ -3,11 +3,15 @@ import SmallButton from "../../../common/SmallButton";
 import { nanoid } from "@reduxjs/toolkit";
 import { Box } from "@mui/material";
 
-export default function TagsSlider({ items, theme, color }) {
+export default function TagsSlider({ items, color, hideTagsAfter }) {
+  const remaining = (value) => {
+    const remainingTags = items.slice(value, items.length);
+    return remainingTags.join(", ");
+  };
   return (
     <Box
       sx={{
-        // width: '80%',
+        // width: '100%',
         display: "flex",
         flexWrap: "wrap",
         gap: 1,
@@ -17,7 +21,7 @@ export default function TagsSlider({ items, theme, color }) {
       {items
         .filter((item) => item != null)
         .map((item, index) => {
-          if (item !== undefined) {
+          if (item !== undefined && index < hideTagsAfter) {
             return (
               <SmallButton
                 key={nanoid()}
@@ -27,8 +31,17 @@ export default function TagsSlider({ items, theme, color }) {
                 label={item}
               />
             );
+          } else if (items.length === index + 1 && item !== undefined) {
+            return (
+              <SmallButton
+                key={nanoid()}
+                color={color}
+                height={25}
+                value={remaining(hideTagsAfter)}
+                label={`+ ${items.length - hideTagsAfter}`}
+              />
+            );
           }
-          return null; // Ensure you always return something in map
         })}
     </Box>
   );

@@ -6,6 +6,7 @@ export default function TextWrapper({
   line = 3,
   weight = 400,
   size = 14,
+  height,
   gutterBottom = true,
   ...rest
 }) {
@@ -21,6 +22,7 @@ export default function TextWrapper({
         sx={{
           fontWeight: weight,
           fontSize: size,
+          height:height,
           overflow: "hidden",
           display: "-webkit-box",
           WebkitBoxOrient: "vertical",

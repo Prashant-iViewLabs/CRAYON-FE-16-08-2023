@@ -14,7 +14,7 @@ export default function BasicInfo({
 }) {
   return (
     <>
-      <Box sx={{ marginLeft: "54px" }}>
+      <Box>
         <Box
           sx={{
             width: "100%",
@@ -22,7 +22,6 @@ export default function BasicInfo({
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            ml: 2,
           }}
         >
           <Box
@@ -50,7 +49,6 @@ export default function BasicInfo({
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            ml: 2,
           }}
         >
           <Box
@@ -78,7 +76,6 @@ export default function BasicInfo({
             display: "flex",
             flexDirection: "row",
             alignItems: "flex-start",
-            ml: 2,
           }}
         >
           <Box
@@ -107,7 +104,6 @@ export default function BasicInfo({
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            ml: 2,
           }}
         >
           <Box

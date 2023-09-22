@@ -69,7 +69,7 @@ export default function ButtonPanel({
         textAlign: side === "right" && "end",
         display: { xs: "none", sm: "flex" },
         flexDirection: "column",
-        gap:"10px"
+        gap: "10px",
         // overflow: { xs: "auto", sm: "hidden" },
       }}
     >
@@ -89,12 +89,14 @@ export default function ButtonPanel({
               fontWeight:
                 btn.title || selectedBtns.includes(btn.id) ? 900 : 400,
               "&:hover": {
+                // boxShadow: 15,
                 // opacity: 1,
                 // backgroundColor: theme.palette[btn.color]?.main,
                 backgroundColor: theme.palette.redButton200.main,
                 color: theme.palette.white,
                 fontWeight: 900,
               },
+              height: "45px",
               // opacity: selectedBtns.includes(btn.id) ? 1 : 0.5
             }}
             onClick={(e) => handleButtonClick(e, btn)}
@@ -103,7 +105,7 @@ export default function ButtonPanel({
             color={selectedBtns.includes(btn.id) ? "redButton200" : "base"}
             key={btn.id}
           >
-            {truncate(btn?.name, { length: 14 })}
+            {btn?.name}
           </Button>
         </Tooltip>
       ))}

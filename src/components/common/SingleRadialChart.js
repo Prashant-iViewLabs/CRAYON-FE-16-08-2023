@@ -5,13 +5,10 @@ import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { percentToValue, valueToPercent } from "../../utils/Common";
 import { Box } from "@mui/material";
-
 const StyledChart = styled(Chart)(({ theme }) => ({}));
-
 export default function SingleRadialChart({
   series,
-  width,
-  height,
+  width = 100,
   index,
   isHovered,
   name,
@@ -23,9 +20,10 @@ export default function SingleRadialChart({
   nameOffsetY = 16,
   valueOffsetY = -16,
   max = 100,
+  height = 100,
 }) {
   const theme = useTheme();
-  const [enableAnimation, setEnableAnimation] = useState(false)
+  const [enableAnimation, setEnableAnimation] = useState(false);
   const chartOptions = {
     options: {
       chart: {
@@ -61,7 +59,7 @@ export default function SingleRadialChart({
           startAngle: 10,
           endAngle: 360,
           hollow: {
-            size: hollow,
+            size: hollow, // Set the size of the hollow portion as needed
           },
           dataLabels: {
             name: {
@@ -73,7 +71,6 @@ export default function SingleRadialChart({
             },
             value: {
               show: true,
-
               fontSize: valueSize,
               offsetY: valueOffsetY,
               fontWeight: 700,
@@ -88,30 +85,27 @@ export default function SingleRadialChart({
       labels: [labelsData],
     },
   };
-
   const toggleAnimation = () => {
     setEnableAnimation((prevState) => !prevState);
   };
   const handleMouseMove = () => {
     if (enableAnimation) {
-      ApexCharts.exec('chart' + name + index, 'updateSeries', [0])
-      ApexCharts.exec('chart' + name + index, 'updateSeries', [valueToPercent(max, series[0])])
+      ApexCharts.exec("chart" + name + index, "updateSeries", [0]);
+      ApexCharts.exec("chart" + name + index, "updateSeries", [
+        valueToPercent(max, series[0]),
+      ]);
     }
-  }
-
+  };
   return (
     <Box
       onMouseEnter={toggleAnimation}
       onMouseLeave={toggleAnimation}
-      onMouseMove={handleMouseMove}  
+      onMouseMove={handleMouseMove}
     >
-
       <StyledChart
         options={chartOptions.options}
         // series={series}
-        series={
-          [valueToPercent(max, series[0])]
-        }
+        series={[valueToPercent(max, series[0])]}
         type="radialBar"
         width={width}
         height={height}

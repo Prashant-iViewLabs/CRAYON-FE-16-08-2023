@@ -265,7 +265,8 @@ export default function MyJobsCard({ index, job, getJobs, setisFlipped }) {
             sx={{
               display: "flex",
               width: "100%",
-              height: "292px",
+              // height: "292px",
+              flexGrow: 1,
             }}
           >
             <Grid

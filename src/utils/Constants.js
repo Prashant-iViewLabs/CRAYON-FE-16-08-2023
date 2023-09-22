@@ -260,28 +260,28 @@ export const JOBS_LEFT_TYPES_BUTTON_GROUP = [
   {
     id: 1,
     name: "all types",
-    color: "purpleButton",
+    color: "leftArrowButton",
     title: true,
   },
   {
     id: 2,
     name: "challengers",
-    color: "purpleButton",
+    color: "leftArrowButton",
   },
   {
     id: 3,
     name: "characters",
-    color: "purpleButton",
+    color: "leftArrowButton",
   },
   {
     id: 4,
     name: "contemplators",
-    color: "purpleButton",
+    color: "leftArrowButton",
   },
   {
     id: 5,
     name: "collaborators",
-    color: "purpleButton",
+    color: "leftArrowButton",
   },
 ];
 
@@ -499,33 +499,33 @@ export const TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP = [
   {
     id: 1,
     name: "all activity",
-    color: "lightGreenButton300",
+    color: "leftArrowButton",
     title: true,
   },
   {
     id: 2,
     name: "recent",
-    color: "lightGreenButton300",
+    color: "leftArrowButton",
   },
   {
     id: 3,
     name: "active",
-    color: "lightGreenButton300",
+    color: "leftArrowButton",
   },
   {
     id: 4,
     name: "in demand",
-    color: "lightGreenButton300",
+    color: "leftArrowButton",
   },
   {
     id: 5,
     name: "favourites",
-    color: "lightGreenButton300",
+    color: "leftArrowButton",
   },
   {
     id: 6,
     name: "my talent",
-    color: "lightGreenButton300",
+    color: "leftArrowButton",
   },
 ];
 
@@ -799,37 +799,37 @@ export const TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP = [
   {
     id: 1,
     name: "all applications",
-    color: "blueButton300",
+    color: "leftArrowButton",
     title: true,
   },
   {
     id: 2,
     name: "complete",
-    color: "blueButton300",
+    color: "leftArrowButton",
     // title: true,
   },
   {
     id: 3,
     name: "incomplete",
-    color: "blueButton300",
+    color: "leftArrowButton",
     // title: true,
   },
   {
     id: 4,
     name: "video",
-    color: "blueButton300",
+    color: "leftArrowButton",
     // title: true,
   },
   {
     id: 5,
     name: "crayon cam",
-    color: "blueButton300",
+    color: "leftArrowButton",
     // title: true,
   },
   {
     id: 6,
     name: "portfolio",
-    color: "blueButton300",
+    color: "leftArrowButton",
     // title: true,
   },
 ];
@@ -875,14 +875,14 @@ export const TALENT_RIGHT_JOB_INFO_BUTTON_GROUP = [
     id: 8,
     name: "gender",
     color: "blueButton700",
-    dropDown: true
+    dropDown: true,
     // title: true,
   },
   {
     id: 9,
     name: "race",
     color: "blueButton700",
-    dropDown: true
+    dropDown: true,
     // title: true,
   },
   // {
@@ -895,15 +895,15 @@ export const TALENT_RIGHT_JOB_INFO_BUTTON_GROUP = [
     id: 11,
     name: "qualification",
     color: "blueButton700",
-    dropDown: true
+    dropDown: true,
     // title: true,
   },
   {
     id: 12,
     name: "salary",
     color: "blueButton700",
-    
-    dropDown: true
+
+    dropDown: true,
     // title: true,
   },
   {
@@ -1061,8 +1061,8 @@ export const ADMIN_LFET_PANEL = [
       { id: 3, label: "Tools", path: "tools-search" },
       { id: 4, label: "Qualifications", path: "qualifications-search" },
       { id: 5, label: "Institutions", path: "institution-search" },
-      { id: 6, label: "Associations", path:"associations-search" },
-      { id: 7, label: "Schools", path:"schools-search" },
+      { id: 6, label: "Associations", path: "associations-search" },
+      { id: 7, label: "Schools", path: "schools-search" },
       { id: 8, label: "Towns", path: "towns-search" },
       { id: 9, label: "Nationalities", path: "nationalities-search" },
       { id: 10, label: "Languages", path: "languages-search" },

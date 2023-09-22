@@ -38,6 +38,7 @@ export default function SmallButton({
           boxShadow: 0,
           borderRadius: "5px",
           color: textColor,
+          backgroundColor: color,
           minWidth: "fit-content",
           padding: "0 8px",
           ".MuiButton-startIcon": {

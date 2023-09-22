@@ -24,8 +24,8 @@ import PlaceIcon from "@mui/icons-material/Place";
 import profile from "../../../assets/profile.png";
 import drag_dots from "../../../assets/drag_dots.svg";
 import eye from "../../../assets/Black_View.svg";
-import leftArrow from "../../../assets/Black_Left_Previous.svg";
-import rightArrow from "../../../assets/Black_Right_Next.svg";
+import leftArrow from "../../../assets/Crayon_User_Lite.svg";
+import rightArrow from "../../../assets/Crayon_User_Lite.svg";
 import loveThis from "../../../assets/Black_I_Love_This.svg";
 import likethis from "../../../assets/Black_Like.svg";
 import pending from "../../../assets/Black_Pending.svg";
@@ -76,6 +76,7 @@ import { formatCurrencyWithCommas } from "../../../utils/Currency";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Check, CheckCircle } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
+import CandidateFlipCircles from "./DraggableCardComponents/CandidateFlipCircles";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 5,
@@ -98,15 +99,17 @@ const StyledHR = styled(Box)(({ theme }) => ({
 }));
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  marginTop: 8,
+  marginTop: 15,
   background: `${theme.palette.white} !important`,
-  borderRadius: "20px !important",
+  borderRadius: "10px !important",
   width: "325px",
   height: "auto !important",
   position: "unset",
+  boxShadow: "none",
   "& .MuiAccordionSummary-root": {
     alignItems: "start",
     padding: 0,
+    marginTop: 15,
   },
   "& .MuiAccordionSummary-content": {
     margin: 0,
@@ -326,6 +329,9 @@ export default function DraggableCardNew({
       setShowQuestion(false);
       setShowQuickLink(false);
     } else {
+      console.log(showQuestion, showQuickLink);
+      console.log(showInfo, showDetailInfo);
+      console.log(expand);
       setExpand((prev) => !prev);
       setShowQuestion(false);
       setShowDetailInfo(true);
@@ -336,12 +342,15 @@ export default function DraggableCardNew({
   const handleFlip = () => {
     setFlip((prev) => !prev);
     if (showQuestion || showQuickLink) {
+      console.log(showQuestion, showQuickLink);
       setShowInfo(true);
       setShowSummaryInfo(true);
       setExpand(true);
       setShowQuestion(false);
       setShowQuickLink(false);
     } else {
+      console.log(showQuestion, showQuickLink);
+      console.log(showInfo, showDetailInfo);
       setShowInfo((prev) => !prev);
       setShowDetailInfo((prev) => !prev);
     }
@@ -415,31 +424,39 @@ export default function DraggableCardNew({
           expanded={expand}
         >
           <AccordionSummary aria-controls="panel1a-content">
-            <Grid sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+            <Grid
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
                 <Box
-                  component="img"
-                  className="dragDots"
-                  alt="drag dots"
-                  src={drag_dots}
-                  sx={
-                    {
-                      // mr: 1
-                    }
-                  }
-                />
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    className="dragDots"
+                    alt="drag dots"
+                    src={drag_dots}
+                    sx={{
+                      width: "20px !important",
+                      height: "20px !important",
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    borderRight: `solid 0.5px ${theme.palette.grayBorder}`,
+                    opacity: "0.3",
+                  }}
+                ></Box>
               </Box>
-              <Box
-                sx={{
-                  borderRight: `solid 0.5px ${theme.palette.grayBorder}`,
-                  opacity: "0.3",
-                }}
-              ></Box>
               {rejectCandidate && (
                 <Box
                   sx={{
@@ -571,20 +588,15 @@ export default function DraggableCardNew({
                       })}
                     </Box>
                   </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center !important",
-                    }}
-                  >
+                  <Box sx={{ margin: "auto", mb: 0 }}>
                     <SmallButton
                       color="redButton"
                       startIcon={
                         <Box
                           component="img"
                           sx={{
-                            height: 26,
-                            width: 26,
+                            height: 30,
+                            width: 30,
                           }}
                           alt="Down arrow"
                           src={upArrow}
@@ -594,7 +606,7 @@ export default function DraggableCardNew({
                       startIconMargin="4px"
                       marginTop="5px"
                       height={19}
-                      width={142}
+                      width={60}
                       fontWeight={700}
                       borderRadius="7px 7px 0px 0px"
                     />
@@ -672,8 +684,8 @@ export default function DraggableCardNew({
                         <Box
                           component="img"
                           sx={{
-                            height: 26,
-                            width: 26,
+                            height: 30,
+                            width: 30,
                           }}
                           alt="Down arrow"
                           src={upArrow}
@@ -683,7 +695,7 @@ export default function DraggableCardNew({
                       startIconMargin="4px"
                       marginTop="5px"
                       height={19}
-                      width={142}
+                      width={60}
                       fontWeight={700}
                       borderRadius="7px 7px 0px 0px"
                     />
@@ -691,56 +703,85 @@ export default function DraggableCardNew({
                 </Box>
               )}
               {showSummaryInfo && (
-                <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                      width: "fit-content",
-                      marginTop: "2px",
+                      // flexDirection: "column",
+                      justifyContent: "space-between",
+                      marginTop: "5px",
                     }}
                   >
                     <Box
-                      component="img"
-                      className="profileAvatar"
-                      alt="crayon logo"
-                      src={
-                        item?.profile_url !== "No URL"
-                          ? item?.profile_url
-                          : profile
-                      }
                       sx={{
-                        borderRadius: "50% !important",
-                        height: "50px !important",
-                        width: "50px !important",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        width: "65px",
+                        // gap: "1px",
                       }}
-                    />
-                    <Box sx={{ margin: "0 -8px 0 -8px" }}>
-                      <SingleRadialChart
-                        hollow="52%"
-                        nameSize="9px"
-                        valueSize="14px"
-                        nameOffsetY="11"
-                        valueOffsetY="-17"
-                        labelsData={label}
-                        series={chartData}
-                        width={86}
-                        color={theme.palette.chart.green200}
-                        index={1}
-                        isHovered={false}
+                    >
+                      <Box
+                        component="img"
+                        className="profileAvatar"
+                        alt="crayon logo"
+                        src={
+                          item?.profile_url !== "No URL"
+                            ? item?.profile_url
+                            : profile
+                        }
+                        sx={{
+                          borderRadius: "10px !important",
+                          border: `1px solid ${theme.manageTalent.profileBorder.main}`,
+                          height: "48px !important",
+                          width: "48px !important",
+                        }}
                       />
+                      <Box sx={{ margin: "0 -8px 0 -8px" }}>
+                        <SingleRadialChart
+                          hollow="55%"
+                          nameSize="9px"
+                          valueSize="14px"
+                          nameOffsetY="11"
+                          valueOffsetY="-17"
+                          labelsData={label}
+                          series={chartData}
+                          width={70}
+                          height={70}
+                          color={theme.manageTalent.manageMatched.main}
+                          index={item.user_id}
+                          isHovered={false}
+                          name={"match"}
+                        />
+                      </Box>
+                      {showInfo && expand && (
+                        <CandidateFlipCircles
+                          shadow={
+                            item?.candidate_profile?.candidate_info?.shadow
+                              ?.name
+                          }
+                          gritScore={
+                            item?.candidate_profile?.candidate_info?.grit_score
+                              ? item?.candidate_profile?.candidate_info
+                                  ?.grit_score
+                              : null
+                          }
+                          primary={
+                            item?.candidate_profile?.candidate_info?.primary
+                              ?.name
+                          }
+                          index={item?.user_id}
+                        />
+                      )}
                     </Box>
-                  </Box>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}
-                  >
                     <Box>
                       <Box
                         sx={{
@@ -896,34 +937,96 @@ export default function DraggableCardNew({
                           {formatCurrencyWithCommas(item?.Salary)} per month
                         </Typography>
                       </Box>
-                    </Box>
-                    {!expand && (
-                      <Box>
-                        <SmallButton
-                          color="redButton"
-                          startIcon={
-                            <Box
-                              component="img"
-                              sx={{
-                                height: 26,
-                                width: 26,
-                              }}
-                              alt="Down arrow"
-                              src={expand ? upArrow : downArrow}
-                            />
+
+                      {showDetailInfo && expand && (
+                        <BasicInfo
+                          town={item?.candidate_profile?.town?.name}
+                          region={item?.candidate_profile?.town?.region?.name}
+                          experience={
+                            item?.candidate_profile?.candidate_info?.experience
+                              ?.year
                           }
-                          onClick={toggleAcordion}
-                          startIconMargin="4px"
-                          marginTop="6px"
-                          height={19}
-                          width={142}
-                          fontWeight={700}
-                          borderRadius="7px 7px 0px 0px"
+                          educationInfo={
+                            item?.candidate_profile?.candidate_info
+                              ?.highest_qualification?.descript
+                          }
+                          notice={
+                            item?.candidate_profile?.candidate_info
+                              ?.notice_period?.description
+                          }
                         />
-                      </Box>
-                    )}
+                      )}
+                      {showInfo && expand && (
+                        <CandidateFlipInfo
+                          traits={item?.candidate_profile?.candidate_traits}
+                          skills={item?.candidate_profile?.tag_users}
+                          tools={item?.candidate_profile?.tool_users}
+                        />
+                      )}
+                    </Box>
                   </Box>
-                </>
+
+                  {expand && (
+                    <ExpandBottomButtons
+                      cvLink={item?.cv_url}
+                      userID={item?.user_id}
+                      phoneNo={item?.candidate_profile?.contact_no}
+                      emailAddress={item?.email}
+                      linkedinAddress={
+                        item?.candidate_profile?.linkedin_profile_link
+                      }
+                    />
+                  )}
+                  <Box sx={{ margin: "auto", mb: 0 }}>
+                    <SmallButton
+                      color="redButton"
+                      startIcon={
+                        <Box
+                          component="img"
+                          sx={{
+                            height: 30,
+                            width: 30,
+                          }}
+                          alt="Down arrow"
+                          src={expand ? upArrow : downArrow}
+                        />
+                      }
+                      onClick={toggleAcordion}
+                      startIconMargin="0px !important"
+                      marginTop="0px !important"
+                      padding="0px !important"
+                      height={19}
+                      width={60}
+                      fontWeight={700}
+                      borderRadius="7px 7px 0px 0px"
+                    />
+                  </Box>
+                  {/* {!showQuestion && (
+                    <Box sx={{ margin: "auto" }}>
+                      <SmallButton
+                        color="redButton"
+                        startIcon={
+                          <Box
+                            component="img"
+                            sx={{
+                              height: 30,
+                              width: 30,
+                            }}
+                            alt="Down arrow"
+                            src={expand ? upArrow : downArrow}
+                          />
+                        }
+                        onClick={toggleAcordion}
+                        startIconMargin="4px"
+                        marginTop="5px"
+                        height={19}
+                        width={60}
+                        fontWeight={700}
+                        borderRadius="7px 7px 0px 0px"
+                      />
+                    </Box>
+                  )} */}
+                </Box>
               )}
 
               <Box
@@ -931,7 +1034,7 @@ export default function DraggableCardNew({
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "flex-start",
-                  marginLeft: "auto",
+                  // marginLeft: "auto",
                 }}
               >
                 <SmallButton
@@ -972,10 +1075,10 @@ export default function DraggableCardNew({
                   padding={0}
                   startIconMargin="4px"
                   // margin="auto"
-                  height={32}
-                  width={33}
+                  height={30}
+                  width={30}
                   fontWeight={700}
-                  borderRadius="0px 20px 0px 0px"
+                  borderRadius="0px 10px 0px 0px"
                 />
                 <SmallButton
                   color="QandA"
@@ -992,9 +1095,9 @@ export default function DraggableCardNew({
                     />
                   }
                   padding={0}
-                  startIconMargin="4px"
-                  height={32}
-                  width={33}
+                  startIconMargin="0px"
+                  height={30}
+                  width={30}
                   fontWeight={700}
                   borderRadius="0"
                   onClick={(event) => handleQandADialog(event)}
@@ -1014,9 +1117,9 @@ export default function DraggableCardNew({
                     />
                   }
                   padding={0}
-                  startIconMargin="4px"
-                  height={32}
-                  width={33}
+                  startIconMargin="0px"
+                  height={30}
+                  width={30}
                   fontWeight={700}
                   borderRadius="0"
                   onClick={handleRejectDialog}
@@ -1036,9 +1139,9 @@ export default function DraggableCardNew({
                     />
                   }
                   padding={0}
-                  startIconMargin="4px"
-                  height={32}
-                  width={33}
+                  startIconMargin="0px"
+                  height={30}
+                  width={30}
                   fontWeight={700}
                   borderRadius="0"
                   onClick={handleQuickLink}
@@ -1059,14 +1162,14 @@ export default function DraggableCardNew({
                   }
                   onClick={() => setChangeViewColor(true)}
                   padding={0}
-                  startIconMargin="4px"
-                  height={32}
-                  width={33}
+                  startIconMargin="0px"
+                  height={30}
+                  width={30}
                   fontWeight={700}
                   borderRadius={
                     expand || showQuestion || showQuickLink
                       ? "0"
-                      : "0px 0px 20px 0px"
+                      : "0px 0px 10px 0px"
                   }
                 />
                 {(expand || showQuestion || showQuickLink) && (
@@ -1079,17 +1182,17 @@ export default function DraggableCardNew({
                         alt="eye logo"
                         src={flip ? leftArrow : rightArrow}
                         sx={{
-                          height: 26,
-                          width: 26,
+                          height: 22,
+                          width: 22,
                         }}
                       />
                     }
                     padding={0}
-                    startIconMargin="4px"
-                    height={32}
-                    width={33}
+                    startIconMargin="0px !important"
+                    height={30}
+                    width={30}
                     fontWeight={700}
-                    borderRadius="0px 0px 0px 20px"
+                    borderRadius="0px 0px 0px 10px"
                     onClick={handleFlip}
                   />
                 )}
@@ -1098,34 +1201,6 @@ export default function DraggableCardNew({
           </AccordionSummary>
 
           <AccordionDetails>
-            {!showQuestion && (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    component="img"
-                    className="dragDots"
-                    alt="drag dots"
-                    src={drag_dots}
-                    sx={
-                      {
-                        // mr: 1
-                      }
-                    }
-                  />
-                </Box>
-                <Box
-                  sx={{
-                    borderRight: `solid 0.5px ${theme.palette.grayBorder}`,
-                    opacity: "0.3",
-                  }}
-                ></Box>
-              </>
-            )}
             <Box
               sx={{
                 display: "flex",
@@ -1133,80 +1208,7 @@ export default function DraggableCardNew({
                 marginTop: "-80px",
                 width: "100%",
               }}
-            >
-              {showDetailInfo && (
-                <BasicInfo
-                  town={item?.candidate_profile?.town?.name}
-                  region={item?.candidate_profile?.town?.region?.name}
-                  experience={
-                    item?.candidate_profile?.candidate_info?.experience?.year
-                  }
-                  educationInfo={
-                    item?.candidate_profile?.candidate_info
-                      ?.highest_qualification?.descript
-                  }
-                  notice={
-                    item?.candidate_profile?.candidate_info?.notice_period
-                      ?.description
-                  }
-                />
-              )}
-
-              {showInfo && (
-                <CandidateFlipInfo
-                  primary={
-                    item?.candidate_profile?.candidate_info?.primary?.name
-                  }
-                  traits={item?.candidate_profile?.candidate_traits}
-                  skills={item?.candidate_profile?.tag_users}
-                  tools={item?.candidate_profile?.tool_users}
-                  shadow={item?.candidate_profile?.candidate_info?.shadow?.name}
-                  gritScore={
-                    item?.candidate_profile?.candidate_info?.grit_score
-                      ? item?.candidate_profile?.candidate_info?.grit_score
-                      : null
-                  }
-                />
-              )}
-
-              {expand && (
-                <ExpandBottomButtons
-                  cvLink={item?.cv_url}
-                  userID={item?.user_id}
-                  phoneNo={item?.candidate_profile?.contact_no}
-                  emailAddress={item?.email}
-                  linkedinAddress={
-                    item?.candidate_profile?.linkedin_profile_link
-                  }
-                />
-              )}
-
-              {!showQuestion && (
-                <Box sx={{ margin: "auto" }}>
-                  <SmallButton
-                    color="redButton"
-                    startIcon={
-                      <Box
-                        component="img"
-                        sx={{
-                          height: 26,
-                          width: 26,
-                        }}
-                        alt="Down arrow"
-                        src={expand ? upArrow : downArrow}
-                      />
-                    }
-                    onClick={toggleAcordion}
-                    startIconMargin="4px"
-                    marginTop="5px"
-                    height={19}
-                    width={142}
-                    fontWeight={700}
-                    borderRadius="7px 7px 0px 0px"
-                  />
-                </Box>
-              )}
-            </Box>
+            ></Box>
           </AccordionDetails>
         </StyledAccordion>
       )}

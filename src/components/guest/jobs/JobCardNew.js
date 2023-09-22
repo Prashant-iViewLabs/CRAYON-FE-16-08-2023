@@ -5,6 +5,7 @@ import JobCardBack from "./backSide/JobCardBack";
 import ReactCardFlip from "react-card-flip";
 
 export default function JobCard({
+  index,
   job,
   setQuestions,
   onHandleClose,

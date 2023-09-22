@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import job_logo from "../../../../assets/job_logo.svg";
-import job_volume from "../../../../assets/job_volume.svg";
+import flip from "../../../../assets/Crayon_User_Lite.svg";
+import job_volume from "../../../../assets/Padding Excluded/Crayon Icon_Promote.svg";
 import job_exp from "../../../../assets/Padding Included/Green_Duration.svg";
 import calendar from "../../../../assets/Padding Included/Yellow_Calendar.svg";
 import BlueCurrency from "../../../../assets/Blue_Salary.svg";
@@ -39,9 +40,9 @@ import profile_collaborator from "../../../../assets/Profile Icons_Collaborator.
 import profile_contemplator from "../../../../assets/Profile Icons_Contemplator.svg";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-import matchMeIcon from '../../../../assets/Padding Excluded/Black_Match_me.svg'
-import viewIcon from '../../../../assets/Padding Excluded/White_View.svg'
-import applyIcon from '../../../../assets/Padding Excluded/Black_Follower.svg'
+import matchMeIcon from "../../../../assets/Padding Excluded/Black_Match_me.svg";
+import viewIcon from "../../../../assets/Padding Excluded/White_View.svg";
+import applyIcon from "../../../../assets/Padding Excluded/Black_Follower.svg";
 
 import Slider2 from "../../../common/Slider2";
 import Slider from "../../../common/Slider";
@@ -64,7 +65,7 @@ const JobCardFront = ({
   const jobTags = job?.JobSkills?.split(",");
 
   const jobTools = job?.JobTools?.split(",");
-  const jobTraits = job?.JobTraits?.split(",")
+  const jobTraits = job?.JobTraits?.split(",");
 
   const token = localStorage?.getItem("token");
   let decodedToken;
@@ -139,29 +140,29 @@ const JobCardFront = ({
   const getBackground = (stageName) => {
     switch (stageName) {
       case "review":
-        return theme.jobCard.jobStatus.Review.main
+        return theme.jobCard.jobStatus.Review.main;
       case "considering":
-        return theme.jobCard.jobStatus.Considering.main
+        return theme.jobCard.jobStatus.Considering.main;
       case "shortlist":
-        return theme.jobCard.jobStatus.Shortlist.main
+        return theme.jobCard.jobStatus.Shortlist.main;
       case "interview":
-        return theme.jobCard.jobStatus.Interview.main
+        return theme.jobCard.jobStatus.Interview.main;
       case "assessment":
-        return theme.jobCard.jobStatus.Assesment.main
+        return theme.jobCard.jobStatus.Assesment.main;
       case "offer":
-        return theme.jobCard.jobStatus.Offer.main
+        return theme.jobCard.jobStatus.Offer.main;
       case "hired":
-        return theme.jobCard.jobStatus.Hired.main
+        return theme.jobCard.jobStatus.Hired.main;
       case "incomplete":
-        return theme.jobCard.jobStatus.Incomplete.main
+        return theme.jobCard.jobStatus.Incomplete.main;
       case "matched":
-        return theme.jobCard.jobStatus.Matched.main
+        return theme.jobCard.jobStatus.Matched.main;
       case "rehjected":
-        return theme.jobCard.jobStatus.Rejected.main
+        return theme.jobCard.jobStatus.Rejected.main;
       default:
-        return "lightGray"
+        return "lightGray";
     }
-  }
+  };
   return (
     <CustomCard
       handleMouseEnter={() => setIsHovered(true)}
@@ -175,7 +176,7 @@ const JobCardFront = ({
         // overflow={"hidden"}
         sx={{
           borderRadius: "25px 25px 0 0",
-          flexWrap: "nowrap"
+          flexWrap: "nowrap",
         }}
       >
         <Box
@@ -197,9 +198,11 @@ const JobCardFront = ({
           src={job?.profile_url !== "No URL" ? job?.profile_url : job_logo}
         />
 
-        <Box sx={{
-          height: "90px"
-        }}>
+        <Box
+          sx={{
+            height: "90px",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -216,12 +219,17 @@ const JobCardFront = ({
                 padding: 0,
                 fontSize: 12,
                 fontWeight: "normal",
-                background: job?.job_type?.split(" ")[1] === "recruit" ? theme.jobCard.jobType.recruit.main : theme.jobCard.jobType.direct.main,
+                background:
+                  job?.job_type?.split(" ")[1] === "recruit"
+                    ? theme.jobCard.jobType.recruit.main
+                    : theme.jobCard.jobType.direct.main,
                 color: theme.jobCard.jobType.recruit.contrastText,
                 ":hover": {
-                  background: job?.job_type?.split(" ")[1] === "recruit" ? theme.jobCard.jobType.recruit.main : theme.jobCard.jobType.direct.main,
-
-                }
+                  background:
+                    job?.job_type?.split(" ")[1] === "recruit"
+                      ? theme.jobCard.jobType.recruit.main
+                      : theme.jobCard.jobType.direct.main,
+                },
               }}
             >
               {job?.job_type?.split(" ")[1]}
@@ -238,8 +246,8 @@ const JobCardFront = ({
                 background: getBackground(job?.stage_name),
                 color: "white",
                 ":hover": {
-                  background: getBackground(job?.stage_name)
-                }
+                  background: getBackground(job?.stage_name),
+                },
               }}
             >
               {job?.stage_name || "-"}
@@ -257,8 +265,6 @@ const JobCardFront = ({
                 alignItems: "center",
               }}
             >
-
-
               <Box
                 component="img"
                 sx={{
@@ -288,7 +294,10 @@ const JobCardFront = ({
                 padding: 0,
               }}
             >
-              <StarRoundedIcon color={isStar ? "error" : "disabled"} fontSize="large" />
+              <StarRoundedIcon
+                color={isStar ? "error" : "disabled"}
+                fontSize="large"
+              />
             </Button>
           </Box>
 
@@ -311,7 +320,7 @@ const JobCardFront = ({
         sx={{
           display: "flex",
           width: "100%",
-          paddingBottom:"15px"
+          paddingBottom: "15px",
         }}
       >
         {/* Name and Info Section */}
@@ -325,17 +334,14 @@ const JobCardFront = ({
             flexGrow: 1,
             display: "flex",
             flexDirection: "column",
-            gap: "15px"
+            gap: "15px",
           }}
         >
-          <Tooltip
-            arrow
-            title={job?.title}
-            placement="top"
-          >
+          <Tooltip arrow title={job?.title} placement="top">
             <Link
-              to={`/jobs/job-detail/${`${job?.town_name + " " + job?.town?.region_name
-                }`}/${job?.job_id}`}
+              to={`/jobs/job-detail/${`${
+                job?.town_name + " " + job?.town?.region_name
+              }`}/${job?.job_id}`}
               target={"_blank"}
               style={{
                 textDecoration: "none",
@@ -347,7 +353,7 @@ const JobCardFront = ({
                   fontWeight: 900,
                   fontSize: 20,
                   overflow: "hidden",
-                  lineHeight: 1
+                  lineHeight: 1,
                 }}
               >
                 {job?.title || "-"}
@@ -358,7 +364,7 @@ const JobCardFront = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px"
+              gap: "10px",
             }}
           >
             <Box
@@ -367,7 +373,7 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1,
-                height: "14px"
+                height: "14px",
               }}
             >
               <Box
@@ -386,7 +392,7 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
-                  lineHeight: 1
+                  lineHeight: 1,
                 }}
               >
                 {job?.currency_symbol}
@@ -401,7 +407,7 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1,
-                height: "14px"
+                height: "14px",
               }}
             >
               <Box
@@ -420,12 +426,11 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
-                  lineHeight: 1
+                  lineHeight: 1,
                 }}
               >
-
                 {job?.town_name || "-"}
-                {job?.region_name && (`, ${job?.region_name} `)}
+                {job?.region_name && `, ${job?.region_name} `}
               </Typography>
             </Box>
             <Box
@@ -434,7 +439,7 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1,
-                height: "14px"
+                height: "14px",
               }}
             >
               <Box
@@ -453,11 +458,10 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
-                  lineHeight: 1
+                  lineHeight: 1,
                 }}
               >
-                {job?.experience_year_start} to {job?.experience_year_end}{" "}
-                years
+                {job?.experience_year_start} to {job?.experience_year_end} years
               </Typography>
             </Box>
             <Box
@@ -466,7 +470,7 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1.5,
-                height: "14px"
+                height: "14px",
               }}
             >
               <Box
@@ -476,7 +480,7 @@ const JobCardFront = ({
                   width: 18,
                   maxHeight: { xs: 28 },
                   maxWidth: { xs: 28 },
-                  ml: 0.5
+                  ml: 0.5,
                 }}
                 alt="calendar"
                 src={calendar}
@@ -486,7 +490,7 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
-                  lineHeight: 1
+                  lineHeight: 1,
                 }}
               >
                 {dateConverterMonth(job?.created_at)}
@@ -519,7 +523,8 @@ const JobCardFront = ({
               items={jobTraits || []}
               color={"traitsButton"}
               minHeight="60px"
-              theme={theme} />
+              theme={theme}
+            />
             {/* Trait Section */}
           </Box>
         </Grid>
@@ -544,7 +549,14 @@ const JobCardFront = ({
             }}
             onClick={() => setisFlipped(false)}
           >
-            <RightArrow />
+            <Box
+              component={"img"}
+              src={flip}
+              sx={{
+                height: "20px",
+                width: "20px",
+              }}
+            />
           </Button>
         </Box>
         {/* flip Button */}
@@ -557,24 +569,6 @@ const JobCardFront = ({
         justifyContent="space-around"
         alignItems="center"
       >
-        <Box sx={{ margin: "-13px -10px" }}>
-          <SingleRadialChart
-            hollow="69%"
-            nameSize="10px"
-            valueSize="14px"
-            nameOffsetY="11"
-            valueOffsetY="-17"
-            max={100}
-            labelsData={"grit score"}
-            series={[job?.grit_score]}
-            width={120}
-            height={120}
-            color={theme.palette.chart.red}
-            index={index}
-            name={"gritScore"}
-            isHovered={isHovered}
-          />
-        </Box>
         {job?.primary_name && (
           <Box
             component="img"
@@ -602,6 +596,24 @@ const JobCardFront = ({
             }
           />
         )}
+        <Box sx={{ margin: "-13px -10px" }}>
+          <SingleRadialChart
+            hollow="69%"
+            nameSize="10px"
+            valueSize="14px"
+            nameOffsetY="11"
+            valueOffsetY="-17"
+            max={100}
+            labelsData={"grit score"}
+            series={[job?.grit_score]}
+            width={120}
+            height={120}
+            color={theme.palette.traitsButton.main}
+            index={index}
+            name={"gritScore"}
+            isHovered={isHovered}
+          />
+        </Box>
       </Grid>
       {/* Radial Chart Section */}
       {/* Footer Section */}
@@ -614,8 +626,8 @@ const JobCardFront = ({
           width: "100%",
           borderRadius: "0 0 25px 25px",
           height: 60,
-          position:"fixed",
-          bottom:0
+          position: "fixed",
+          bottom: 0,
         }}
       >
         <Button
@@ -631,7 +643,7 @@ const JobCardFront = ({
               marginLeft: 0,
             },
             padding: "0px !important",
-            gap: 1
+            gap: 1,
           }}
           color="blueButton800"
           startIcon={
@@ -648,8 +660,9 @@ const JobCardFront = ({
           match
         </Button>
         <Link
-          to={`/jobs/job-detail/${`${job?.town_name + " " + job?.region_name
-            }`}/${job?.job_id}`}
+          to={`/jobs/job-detail/${`${
+            job?.town_name + " " + job?.region_name
+          }`}/${job?.job_id}`}
           target={"_blank"}
           style={{
             textDecoration: "none",
@@ -672,7 +685,7 @@ const JobCardFront = ({
                 marginRight: "0px !important",
                 marginLeft: 0,
               },
-              padding: "0px !important"
+              padding: "0px !important",
             }}
             color="yellowButton100"
             startIcon={
@@ -704,7 +717,7 @@ const JobCardFront = ({
               marginLeft: 0,
             },
             padding: "0px !important",
-            gap: 1
+            gap: 1,
           }}
           color="redButton"
           onClick={handleClick}
