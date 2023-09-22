@@ -32,8 +32,10 @@ import { get } from "lodash";
 import jwt_decode from "jwt-decode";
 import { getAllTypes } from "../../../redux/allTypes";
 import { getAllTalentType } from "../../../redux/guest/talentTypes";
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
+import RightArrow from "../../common/RightArrow";
+import LeftArrow from "../../common/LeftArrow";
 
 const BASIC = {
   talent_title: "",
@@ -65,6 +67,9 @@ export default function Talent() {
 
   const [all_talent, setAll_talent] = useState([]);
   const [lastKey, setLastKey] = useState(0);
+
+  const [rightExpand, setRightExpand] = useState(false)
+  const [leftExpanded, setLeftExpand] = useState(false)
 
   const isolateTouch = (e) => {
     e.stopPropagation();
@@ -195,35 +200,60 @@ export default function Talent() {
     >
       <Grid
         item
-        md={2}
-        lg={1}
-        xl={1}
-        className="filterSec"
+        // md={2}
+        // lg={1}
+        // xl={1}
         sx={{
-          height: "88vh",
-          overflowY: "scroll",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          maxWidth: "150px",
         }}
       >
-        <Paper
+        <Button
+          variant="contained"
           sx={{
-            background: "transparent",
-            marginRight: "1px",
+            position: "static",
+            borderRadius: "0 10px 10px 0",
+            minWidth: "40px",
+            width: "40px",
+            height: "45px"
           }}
+          color="redButton200"
+          onClick={() => { setLeftExpand(prevState => !prevState) }}
         >
-          <ButtonPanel
-            topMargin={true}
-            panelData={allIndustries}
-            side="left"
-            onChangeFilter={onChangeFilter}
-          />
-          <ButtonPanel
-            panelData={allTypes}
-            side="left"
-            onChangeFilter={onChangeFilterType}
-          />
-        </Paper>
-        <style>
-          {`.filterSec::-webkit-scrollbar {
+          {leftExpanded ? <LeftArrow /> : <RightArrow />}
+        </Button>
+        {leftExpanded && (
+          <Box
+            sx={{
+              height: "82vh",
+              overflowY: leftExpanded ? "scroll" : "unset",
+            }}
+            className="filterSec"
+          >
+            <Paper
+              sx={{
+                background: "transparent",
+                marginRight: "1px",
+              }}
+
+              className="filterSec"
+            >
+              <ButtonPanel
+                topMargin={true}
+                panelData={allIndustries}
+                side="left"
+                onChangeFilter={onChangeFilter}
+              />
+              <ButtonPanel
+                panelData={allTypes}
+                side="left"
+                onChangeFilter={onChangeFilterType}
+              />
+            </Paper>
+            <style>
+              {`.filterSec::-webkit-scrollbar {
                       width: 5px !important;
                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
                     }
@@ -233,7 +263,9 @@ export default function Talent() {
                       box-shadow: 0px 3px 3px #00000029;
                       border-radius: 3px;
                     }`}
-        </style>
+            </style>
+          </Box>
+        )}
       </Grid>
       <Grid
         item
@@ -341,20 +373,43 @@ export default function Talent() {
       </Grid>
       <Grid
         item
-        md={2}
-        lg={1}
-        xl={1}
-        className="rightfilterSec"
+        // md={2}
+        // lg={1}
+        // xl={1}
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "88vh",
-          overflowY: "scroll",
+          gap: "10px",
           direction: "rtl",
+          maxWidth: "147px",
         }}
       >
-        <style>
-          {`.rightfilterSec::-webkit-scrollbar {
+        <Button
+          variant="contained"
+          sx={{
+            position: "sticky",
+            top: 0,
+            borderRadius: "10px 0 0 10px",
+            minWidth: "40px",
+            width: "40px",
+            height: "45px"
+          }}
+          color="redButton200"
+          onClick={() => { setRightExpand(prevState => !prevState) }}
+        >
+
+          {rightExpand ? <RightArrow /> : <LeftArrow />}
+        </Button>
+        {rightExpand && (
+          <Box
+            sx={{
+              height: "82vh",
+              overflowY: rightExpand ? "scroll" : "unset",
+            }}
+            className="rightfilterSec"
+          >
+            <style>
+              {`.rightfilterSec::-webkit-scrollbar {
                        width: 5px !important;
                        background-color: #EFEEEE; /* Set the background color of the scrollbar */
                     }
@@ -364,24 +419,26 @@ export default function Talent() {
                       box-shadow: 0px 3px 3px #00000029;
                       border-radius: 3px;
                     }`}
-        </style>
-        <Paper
-          sx={{
-            background: "transparent",
-            marginLeft: "1px",
-          }}
-        >
-          <ButtonPanel
-            topMargin={true}
-            panelData={allTalentTypes}
-            side="right"
-            onChangeFilter={onChangeFilterJobType}
-          />
-          <ButtonPanel
-            panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
-            side="right"
-          />
-        </Paper>
+            </style>
+            <Paper
+              sx={{
+                background: "transparent",
+                marginLeft: "1px",
+              }}
+            >
+              <ButtonPanel
+                topMargin={true}
+                panelData={allTalentTypes}
+                side="right"
+                onChangeFilter={onChangeFilterJobType}
+              />
+              <ButtonPanel
+                panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
+                side="right"
+              />
+            </Paper>
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

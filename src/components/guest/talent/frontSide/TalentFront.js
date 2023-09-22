@@ -560,11 +560,17 @@ export default function TalentCard({ index, job, setisFlipped }) {
       >
         <Box sx={{ margin: "0 -22px 0 -22px" }}>
           <SingleRadialChart
+            hollow="55%"
+            nameSize="10px"
+            valueSize="14px"
+            nameOffsetY="11"
+            valueOffsetY="-17"
             labelsData={label1}
             series={[job?.TotalUserCount]}
             width={120}
             color={theme.palette.chart.red}
             index={index}
+            name={"applied"}
             isHovered={isHovered}
           />
         </Box>

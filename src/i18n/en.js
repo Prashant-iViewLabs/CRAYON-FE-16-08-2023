@@ -39,7 +39,7 @@ const en = {
   },
   searchBar: {
     filters: "filters",
-    letsGo: "search",
+    letsGo: "let's go!",
     jobTitle: "job title(s)",
     location: "location(s)",
     skills: "skills",
