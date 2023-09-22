@@ -875,30 +875,35 @@ export const TALENT_RIGHT_JOB_INFO_BUTTON_GROUP = [
     id: 8,
     name: "gender",
     color: "blueButton700",
+    dropDown: true
     // title: true,
   },
   {
     id: 9,
     name: "race",
     color: "blueButton700",
+    dropDown: true
     // title: true,
   },
-  {
-    id: 10,
-    name: "age",
-    color: "blueButton700",
-    // title: true,
-  },
+  // {
+  //   id: 10,
+  //   name: "age",
+  //   color: "blueButton700",
+  //   // title: true,
+  // },
   {
     id: 11,
     name: "qualification",
     color: "blueButton700",
+    dropDown: true
     // title: true,
   },
   {
     id: 12,
     name: "salary",
     color: "blueButton700",
+    
+    dropDown: true
     // title: true,
   },
   {

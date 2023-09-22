@@ -43,10 +43,11 @@ import { login, logout } from "../../redux/login/loginSlice";
 import { Popover, Typography } from "@mui/material";
 import jwt_decode from "jwt-decode";
 
-import userProfile from "../../assets/Padding Included/User_Profile.svg";
+import userProfile from "../../assets/Padding Excluded/Black_Man_Happy.svg";
 import profileDetail from "../../assets/Padding Included/Profile_Details.svg";
 import { TryOutlined } from "@mui/icons-material";
 import ComapnyLogo from "../../assets/Padding Included/Black_Company_Details.svg";
+
 
 const StyledTab = styled(Tabs)(({ theme }) => ({
   "& .MuiTab-root": {
@@ -57,9 +58,9 @@ const StyledTab = styled(Tabs)(({ theme }) => ({
     opacity: 1,
   },
   "& .MuiTabs-indicator": {
-    backgroundColor: theme.palette.redButton.main,
-    height: "4px",
-    borderRadius: "5px",
+    backgroundImage: "url('../../assets/SVG/Crayon Smile Icon_Green.svg')",
+    // height: "40px",
+    // borderRadius: "5px",
     // display: "flex",
     // justifyContent: "center",
     // backgroundColor: "transparent",
@@ -71,6 +72,13 @@ const StyledTab = styled(Tabs)(({ theme }) => ({
     // borderBottom: "5px solid orange",
   },
 }));
+const CustomTabIndicator = styled('div')`
+  /* Customize the size and positioning of the image */
+  width: 24px; /* Adjust the width as needed */
+  height: 24px; /* Adjust the height as needed */
+  background-image: url('../../assets/CircularIcon/Red/Circular Icons__Blue_Network.svg'); /* Replace with your image path */
+  background-size: cover;
+`;
 
 export default function TopBar() {
   const theme = useTheme();
@@ -278,7 +286,7 @@ export default function TopBar() {
         setcurrentTabs(PUBLIC_TAB_ITEMS);
         setActiveTab("jobs");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const handleTalent = () => {
     setIsAdmin(true);
@@ -402,64 +410,67 @@ export default function TopBar() {
         sx={{
           borderRadius: 0,
           height: "80px",
+          paddingX: "40px",
           justifyContent: "center",
         }}
       >
-        <Toolbar
+        <Box
           sx={{
-            justifyContent: { xs: "space-between" },
+            display: "flex",
+            justifyContent: "space-between",
+            height: "100%",
+            alignItems: "center"
           }}
         >
-          <div>
+          <Box
+            sx={{
+              display: "flex",
+              cursor: "pointer",
+            }}
+            onClick={handleHomeLogoClick}
+          >
             <Box
+              component="img"
               sx={{
-                display: "flex",
+                height: 45,
+                marginTop: 1,
                 cursor: "pointer",
               }}
-              onClick={handleHomeLogoClick}
+              alt="crayon logo"
+              src={crayon}
+            />
+            <Box
+              sx={{
+                marginLeft: 1,
+              }}
             >
-              <Box
-                component="img"
+              <Typography
                 sx={{
-                  height: 45,
-                  marginTop: 1,
-                  cursor: "pointer",
+                  margin: 0,
+                  fontWeight: "bold",
+                  fontFamily: "",
                 }}
-                alt="crayon logo"
-                src={crayon}
-              />
-              <Box
-                sx={{
-                  marginLeft: 1,
-                }}
+                variant="h4"
               >
-                <Typography
-                  sx={{
-                    margin: 0,
-                    fontWeight: "bold",
-                    fontFamily: "",
-                  }}
-                  variant="h4"
-                >
-                  Crayon
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "11px",
-                    letterSpacing: 1,
-                    margin: 0,
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    textAlign: "center",
-                  }}
-                  paragraph
-                >
-                  we connect smiles
-                </Typography>
-              </Box>
+                Crayon
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "11px",
+                  letterSpacing: 1,
+                  margin: 0,
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  textAlign: "center",
+                }}
+                paragraph
+              >
+                we connect smiles
+              </Typography>
             </Box>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          </Box>
+
+          <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
             <div style={{ paddingRight: "25px" }}>
               <IconButton
                 color="inherit"
@@ -470,6 +481,7 @@ export default function TopBar() {
               >
                 <MenuIcon />
               </IconButton>
+
               {!isAdmin && (
                 <>
                   <StyledTab
@@ -553,7 +565,7 @@ export default function TopBar() {
                 </>
               )}
             </div>
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, height:"100%" }}>
               {/* {isLoggedIn == true && !isAdmin && userType == 4 && (
                 <IconButton color="redButton">
                   <NotificationsIcon />
@@ -574,7 +586,19 @@ export default function TopBar() {
                     onClick={handleLogout}
                   >
                     {i18n["topBar.logout"]}
+
                   </Button>
+                  {/* <Button 
+                  variant="contained"
+                  color="grayButton100"
+                  sx={{  
+                    bottom: 0,
+                    position: "static",
+                    borderRadius:"10px 10px 0 0"
+                  }}
+                  >
+                    dropdown
+                  </Button> */}
                   {userType == 4 &&
                     (isAdmin ? (
                       <>
@@ -643,18 +667,22 @@ export default function TopBar() {
                 <Box
                   sx={{
                     display: "flex",
-                    borderRadius: 4,
+                    borderRadius: 0,
                     overflow: "hidden",
+                    width:"270px"
                   }}
                 >
                   <Button
                     variant="contained"
                     sx={{
                       width: "50%",
-                      padding: 3,
-                      borderRadius: 0,
+                      padding: "30px 0",
+                      borderRadius: "0 0 0 20px",
+                      top: 0,
+                      position: "static",
+                      flexDirection: "column"
                     }}
-                    color="redButton100"
+                    color="grayButton200"
                     onClick={() => setShowLogin(true)}
                   >
                     <Box
@@ -672,10 +700,11 @@ export default function TopBar() {
                     variant="contained"
                     sx={{
                       width: "50%",
-                      padding: 3,
-                      borderRadius: 0,
+                      padding: "30px 0",
+                      borderRadius: "0 0 20px 0",
+                      flexDirection: "column"
                     }}
-                    color="blueButton300"
+                    color="redButton100"
                     // startIcon={}
                     onClick={() => setShowSignup(true)}
                   >
@@ -695,7 +724,7 @@ export default function TopBar() {
               )}
             </Box>
           </div>
-        </Toolbar>
+        </Box>
       </AppBar>
       <Box component="nav">
         <Drawer

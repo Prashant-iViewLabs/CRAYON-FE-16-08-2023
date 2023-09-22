@@ -120,7 +120,7 @@ export default function SearchBar({
       <Paper
         elevation={0}
         sx={{
-          display: { xs: "none", md: "flex" },
+          display: { md: "flex" },
           m: { xs: 2, md: 0 },
           alignItems: "center",
           height: 60,

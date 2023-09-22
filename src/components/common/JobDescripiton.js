@@ -10,7 +10,7 @@ function createMarkup(html) {
   };
 }
 
-export default function JobDescripiton({ description }) {
+export default function JobDescripiton({ description, height }) {
   const theme = useTheme();
   const hasptag = description?.trim()?.startsWith("<");
   const getDescriptionText = (html) => {
@@ -30,12 +30,13 @@ export default function JobDescripiton({ description }) {
       <Typography
         sx={{
           fontWeight: 400,
-          fontSize: 14,
+          fontSize: 12,
           overflow: "hidden",
           display: "-webkit-box",
           WebkitBoxOrient: "vertical",
           WebkitLineClamp: 3,
           letterSpacing: "0.25px",
+          height: height
         }}
         color={theme.palette.black100}
         gutterBottom={true}
@@ -44,8 +45,8 @@ export default function JobDescripiton({ description }) {
     </Tooltip>
   ) : (
     <TextWrapper
-      mt="12px"
-      mb={1}
+      height={height}
+      size={12}
       color={theme.palette.black100}
       letterSpacing="0.25px"
     >

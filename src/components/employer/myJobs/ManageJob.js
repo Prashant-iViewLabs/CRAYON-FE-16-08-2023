@@ -26,6 +26,7 @@ import {
   JOBS_LEFT_TYPES_BUTTON_GROUP,
 } from "../../../utils/Constants";
 import ButtonPanel from "../../common/ButtonPanel";
+import EmployerButtonPanel from "../../common/EmployerButtonPanel"
 import SmallButton from "../../common/SmallButton";
 import BasicInfo from "./DraggableCardComponents/BasicInfo";
 import CardsTopBar from "./DraggableCardComponents/CardsTopBar";
@@ -337,13 +338,14 @@ export default function ManageJob() {
     >
       <Grid
         item
-        md={2}
-        lg={1}
-        xl={1}
+        // md={2}
+        // lg={1}
+        // xl={1}
         className="filterSec"
         sx={{
           height: "88vh",
           overflowY: "scroll",
+          width:150
         }}
       >
         <Paper
@@ -377,7 +379,7 @@ export default function ManageJob() {
         sm={6}
         md={8}
         lg={9}
-        xl={10}
+        xl={9}
         sx={{
           // display: "flex",
           overflowX: "scroll",
@@ -515,16 +517,15 @@ export default function ManageJob() {
       </Grid>
       <Grid
         item
-        md={2}
-        lg={1}
-        xl={1}
+        // md={2}
+        // lg={1}
+        // xl={1}
         className="rightfilterSec"
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "88vh",
-          overflowY: "scroll",
           direction: "rtl",
+          width:150
         }}
       >
         <style>
@@ -543,9 +544,12 @@ export default function ManageJob() {
           sx={{
             background: "transparent",
             marginLeft: "1px",
+            display:"flex",
+            flexDirection:"column",
+            gap:"10px"
           }}
         >
-          <ButtonPanel
+          <EmployerButtonPanel
             panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
             side="right"
             // onChangeFilter={jobsFilter}
