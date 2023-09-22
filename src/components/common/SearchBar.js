@@ -2,61 +2,23 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from "../../assets/Padding Excluded/White_Search.svg";
 import InputBase from "@mui/material/InputBase";
 import Paper from "@mui/material/Paper";
 import locale from "../../i18n/locale";
-import PlaceIcon from "@mui/icons-material/Place";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Grid from "@mui/material/Unstable_Grid2";
+import PlaceIcon from "../../assets/Red_Location.svg";
 import { styled, alpha } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-import Typography from "@mui/material/Typography";
-import Slider from "@mui/material/Slider";
-import LanguageIcon from "@mui/icons-material/Language";
-import ButtonMenu from "./ButtonMenu";
 import { useTheme } from "@mui/material/styles";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert, setLoading } from "../../redux/configSlice";
-import { getApi } from "../../utils/Apis";
 import { useDispatch } from "react-redux";
 import { ALERT_TYPE } from "../../utils/Constants";
-import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 
-import GreenSearch from "../../assets/CircularIcon/Red/Circular Icons__Green_Search.svg";
-import { InputLabel } from "@mui/material";
 import AdvanceSection from "./AdvanceSection";
 import { getFilteredJobs } from "../../redux/guest/jobsSlice";
 import { useLocation, useParams } from "react-router-dom";
 import { getFilteredTalent } from "../../redux/guest/talentSlice";
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  height: 40,
-  border: `solid ${theme.palette.redButton.main} 1px`,
-  borderRadius: 25,
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-}));
-const RedSwitch = styled(Switch)(({ theme }) => ({
-  "& .MuiSwitch-switchBase.Mui-checked": {
-    color: theme.palette.redButton.main,
-    "&:hover": {
-      backgroundColor: alpha(
-        theme.palette.redButton.main,
-        theme.palette.action.hoverOpacity
-      ),
-    },
-  },
-  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-    backgroundColor: theme.palette.redButton.main,
-  },
-}));
-function valuetext(value) {
-  return `${value}°C`;
-}
 
 const BASIC = {
   job_title: "",
@@ -103,25 +65,25 @@ export default function SearchBar({
     let data = {};
     params.pathname.includes("talent")
       ? (data = {
-          selectedFilters: "",
-          lastKey: "",
-          personalityType: "",
-          user_id: token ? decodedToken?.data?.user_id : "",
-          jobtype: "",
-          ...basicData,
-        })
+        selectedFilters: "",
+        lastKey: "",
+        personalityType: "",
+        user_id: token ? decodedToken?.data?.user_id : "",
+        jobtype: "",
+        ...basicData,
+      })
       : (data = {
-          selectedFilters: "",
-          lastKey: "",
-          jobtype: "",
-          jobstage: "",
-          personalityType: "",
-          user_id: token ? decodedToken?.data?.user_id : "",
-          favourites: "",
-          recentjob: "",
-          appliedjob: "",
-          ...basicData,
-        });
+        selectedFilters: "",
+        lastKey: "",
+        jobtype: "",
+        jobstage: "",
+        personalityType: "",
+        user_id: token ? decodedToken?.data?.user_id : "",
+        favourites: "",
+        recentjob: "",
+        appliedjob: "",
+        ...basicData,
+      });
     console.log(basicData);
     const { payload } = await dispatch(
       params.pathname.includes("talent")
@@ -161,12 +123,10 @@ export default function SearchBar({
           display: { xs: "none", md: "flex" },
           m: { xs: 2, md: 0 },
           alignItems: "center",
+          height: 60,
           border: "1px solid rgba(224, 224, 224, 0.5)",
           position: "sticky",
-          borderRadius: {
-            xl: searchFilter ? "0" : "0 0 20px 20px",
-          },
-          zIndex: "1111",
+          borderRadius: openAdvanceSearch ? 0: "0 0 20px 20px",
           overflow: "hidden",
         }}
       >
@@ -176,11 +136,18 @@ export default function SearchBar({
           component="button"
           sx={{
             borderRadius: 0,
-            background: theme.palette.lightGreenButton300.main,
+            height: 60,
+            width: 60,
+            background: theme.palette.redButton200.main,
             color: "white",
           }}
         >
-          <SearchIcon color="white" />
+          <Box
+            component={"img"}
+            height={30}
+            width={30}
+            src={SearchIcon}
+          />
         </IconButton>
         <Paper
           elevation={0}
@@ -205,7 +172,12 @@ export default function SearchBar({
           aria-label="search job"
           component="button"
         >
-          <PlaceIcon />
+          <Box
+            component={"img"}
+            height={30}
+            width={30}
+            src={PlaceIcon}
+          />
         </IconButton>
         {/* )} */}
         <Button
@@ -213,10 +185,10 @@ export default function SearchBar({
             width: 140,
             boxShadow: 0,
             borderRadius: 0,
-            height: "auto",
+            height: "100%",
           }}
           variant="contained"
-          color="lightGreenButton300"
+          color="redButton200"
           onClick={handleJobSearch}
         >
           {i18n["searchBar.letsGo"]}
@@ -225,9 +197,7 @@ export default function SearchBar({
       <Box
         sx={{
           position: "absolute",
-          // left: 0,
-          // right: 0,
-          top: 45,
+          top: 60,
           width: "100%",
           margin: "0 auto",
           zIndex: 10,
@@ -238,6 +208,7 @@ export default function SearchBar({
           basicData={basicData}
           setAdvanceSearch={setAdvanceSearch}
           openAdvanceSearch={openAdvanceSearch}
+          handleJobSearch={handleJobSearch}
         />
       </Box>
     </Box>

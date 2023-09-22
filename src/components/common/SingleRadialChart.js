@@ -1,17 +1,20 @@
 import Chart from "react-apexcharts";
 import { useTheme } from "@mui/material/styles";
 import ApexCharts from "apexcharts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { percentToValue, valueToPercent } from "../../utils/Common";
+import { Box } from "@mui/material";
 
 const StyledChart = styled(Chart)(({ theme }) => ({}));
 
 export default function SingleRadialChart({
   series,
   width,
+  height,
   index,
   isHovered,
+  name,
   labelsData,
   color,
   hollow = "65%",
@@ -22,11 +25,11 @@ export default function SingleRadialChart({
   max = 100,
 }) {
   const theme = useTheme();
-
+  const [enableAnimation, setEnableAnimation] = useState(false)
   const chartOptions = {
     options: {
       chart: {
-        id: "chart" + index,
+        id: "chart" + name + index,
         type: "radialBar",
         sparkline: {
           enabled: true,
@@ -34,20 +37,18 @@ export default function SingleRadialChart({
       },
       tooltip: {
         enabled: true,
-        enabledOnSeries: undefined,
-        shared: true,
-        followCursor: true,
-        intersect: false,
-        inverseOrder: false,
-        custom: undefined,
-        fillSeriesColor: true,
-        theme: "dark",
+        theme: "dark", // You can customize the theme
         style: {
           fontSize: "12px",
           fontFamily: undefined,
         },
         onDatasetHover: {
           highlightDataSeries: true,
+        },
+        y: {
+          formatter: function (val) {
+            return [percentToValue(max, val)];
+          },
         },
       },
       colors: [color],
@@ -66,7 +67,6 @@ export default function SingleRadialChart({
             name: {
               show: true,
               fontSize: nameSize,
-              show: true,
               offsetY: nameOffsetY,
               fontWeight: 500,
               color: "#404040",
@@ -89,25 +89,33 @@ export default function SingleRadialChart({
     },
   };
 
-  // useEffect(() => {
-  //     if (isHovered) {
-  //         ApexCharts.exec('chart' + index, 'updateSeries', [0, 0, 0])
-  //         ApexCharts.exec('chart' + index, 'updateSeries', [90, 99, 99])
-  //     }
-  // }, [isHovered])
+  const toggleAnimation = () => {
+    setEnableAnimation((prevState) => !prevState);
+  };
+  const handleMouseMove = () => {
+    if (enableAnimation) {
+      ApexCharts.exec('chart' + name + index, 'updateSeries', [0])
+      ApexCharts.exec('chart' + name + index, 'updateSeries', [valueToPercent(max, series[0])])
+    }
+  }
 
   return (
-    <StyledChart
-      options={chartOptions.options}
-      // series={series}
-      series={
-        //   labelsData == "notice"
-        //     ? [`${valueToPercent(max, series[0])} days`]
-        //     : [valueToPercent(max, series[0])]
-        [valueToPercent(max, series[0])]
-      }
-      type="radialBar"
-      width={width}
-    />
+    <Box
+      onMouseEnter={toggleAnimation}
+      onMouseLeave={toggleAnimation}
+      onMouseMove={handleMouseMove}  
+    >
+
+      <StyledChart
+        options={chartOptions.options}
+        // series={series}
+        series={
+          [valueToPercent(max, series[0])]
+        }
+        type="radialBar"
+        width={width}
+        height={height}
+      />
+    </Box>
   );
 }

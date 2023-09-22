@@ -16,10 +16,11 @@ import RedLocation from "../../assets/Padding Included/Red_Location.svg";
 import YellowTool from "../../assets/Padding Included/Yellow_Own_Equipment.svg";
 import GreenCountry from "../../assets/Padding Included/Green_Country.svg";
 import GreenTitle from "../../assets/Padding Included/Green_Experience_Title_Job.svg";
+import BlueCompany from "../../assets/Padding Excluded/Blue_Following_Company-.svg"
 import AdvanceSectionAutoComplete from "./AdvanceSectionAutoComplete";
 import { useSelector } from "react-redux";
 import filter from "../../assets/Padding Included/White_Filter_Stats.svg";
-import SelectMenu from "./SelectMenu";
+import closeIcon from '../../assets/Black_Up_Close - Copy.svg'
 import {
   getCountry,
   getCurrency,
@@ -41,24 +42,84 @@ const rangeMarks = [
     label: "0",
   },
   {
-    value: 20,
+    value: 5,
+    label: "10,000",
+  },
+  {
+    value: 10,
     label: "20,000",
   },
   {
-    value: 40,
+    value: 15,
+    label: "30,000",
+  },
+  {
+    value: 20,
     label: "40,000",
   },
   {
-    value: 60,
+    value: 25,
+    label: "50,000",
+  },
+  {
+    value: 30,
     label: "60,000",
   },
   {
-    value: 80,
+    value: 35,
+    label: "70,000",
+  },
+  {
+    value: 40,
     label: "80,000",
   },
   {
+    value: 45,
+    label: "90,000",
+  },
+  {
+    value: 50,
+    label: "100,000",
+  },
+  {
+    value: 55,
+    label: "110,000",
+  },
+  {
+    value: 60,
+    label: "120,000",
+  },
+  {
+    value: 65,
+    label: "130,000",
+  },
+  {
+    value: 70,
+    label: "140,000",
+  },
+  {
+    value: 75,
+    label: "150,000",
+  },
+  {
+    value: 80,
+    label: "160,000",
+  },
+  {
+    value: 85,
+    label: "170,000",
+  },
+  {
+    value: 90,
+    label: "180,000",
+  },
+  {
+    value: 95,
+    label: "190,000",
+  },
+  {
     value: 100,
-    label: "100000+",
+    label: "200000+",
   },
 ];
 const marks = [
@@ -67,24 +128,84 @@ const marks = [
     label: "0",
   },
   {
+    value: 5,
+    label: "1 ",
+  },
+  {
+    value: 10,
+    label: "2 ",
+  },
+  {
+    value: 15,
+    label: "3 ",
+  },
+  {
     value: 20,
-    label: "2 yrs",
+    label: "4 ",
+  },
+  {
+    value: 25,
+    label: "5",
+  },
+  {
+    value: 30,
+    label: "6",
+  },
+  {
+    value: 35,
+    label: "7",
   },
   {
     value: 40,
-    label: "4 yrs",
+    label: "8",
+  },
+  {
+    value: 45,
+    label: "9",
+  },
+  {
+    value: 50,
+    label: "10",
+  },
+  {
+    value: 55,
+    label: "11",
   },
   {
     value: 60,
-    label: "6yrs",
+    label: "12 ",
+  },
+  {
+    value: 65,
+    label: "13 ",
+  },
+  {
+    value: 70,
+    label: "14 ",
+  },
+  {
+    value: 75,
+    label: "15",
   },
   {
     value: 80,
-    label: "8yrs",
+    label: "16",
+  },
+  {
+    value: 85,
+    label: "17",
+  },
+  {
+    value: 90,
+    label: "18",
+  },
+  {
+    value: 95,
+    label: "19",
   },
   {
     value: 100,
-    label: "10yrs",
+    label: "20+",
   },
 ];
 function textValue(value) {
@@ -101,11 +222,11 @@ const formatNumber = (num) => {
 };
 
 function rangeValueHandler(value) {
-  return formatNumber(value * 1000);
+  return formatNumber(value * 2000);
 }
 
 function rangeValueExperience(value) {
-  return `${value / 10} years`;
+  return `${value / 5} years`;
 }
 
 const BASIC = {
@@ -126,6 +247,7 @@ const AdvanceSection = ({
   basicData,
   setAdvanceSearch,
   openAdvanceSearch,
+  handleJobSearch
 }) => {
   const [rangeValue, setRangeValue] = useState([0, 20]);
   const [expRange, setExpRange] = useState([0, 20]);
@@ -220,7 +342,9 @@ const AdvanceSection = ({
 
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
-    let newArr = newValue.map((val) => val * 1000);
+    console.log(newValue)
+    let newArr = newValue.map((val) => val * 2000);
+    console.log(newArr)
     const newBasicData = {
       ...basicData,
       [event.target.name]: newArr,
@@ -231,7 +355,8 @@ const AdvanceSection = ({
   const expHandleChange = (event, newValue) => {
     console.log(event, newValue, event.target.name);
     setExpRange(newValue);
-    let newArr = newValue?.map((val) => Math.floor(val / 10));
+    console.log(newValue)
+    let newArr = newValue?.map((val) => Math.floor(val / 5));
     console.log(newArr);
     const newBasicData = {
       ...basicData,
@@ -252,15 +377,16 @@ const AdvanceSection = ({
       {openAdvanceSearch && (
         <Box
           sx={{
-            width: "95%",
+            width: "96%",
             background: "#f4f5f7",
             padding: 4,
-            paddingY: 2,
+            pb: 0,
+            pt: 2,
             gap: 1,
             display: "flex",
             boxShadow: 1,
             flexDirection: "column",
-            borderRadius: "0 0 10px 10px",
+            borderRadius: "0 0 20px 20px",
           }}
         >
           <Box
@@ -461,10 +587,10 @@ const AdvanceSection = ({
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   component={"img"}
-                  src={GreenEducation}
+                  src={BlueCompany}
                   sx={{
-                    height: 30,
-                    width: 30,
+                    height: 20,
+                    width: 20,
                   }}
                 />
                 <InputLabel
@@ -562,11 +688,7 @@ const AdvanceSection = ({
               />
             </Box>
           </Box>
-          <Box
-            sx={{
-              width: "50%",
-            }}
-          >
+          <Box>
             <InputLabel
               sx={{
                 fontSize: "14px",
@@ -579,7 +701,7 @@ const AdvanceSection = ({
             <Slider
               disableSwap
               sx={{
-                width: "89%",
+                width: "95%",
                 ml: 1,
                 "& .MuiSlider-rail": {
                   backgroundColor: theme.palette.eyeview100.main,
@@ -620,7 +742,7 @@ const AdvanceSection = ({
               getAriaValueText={rangeValueHandler}
             />
           </Box>
-          <Box sx={{ width: "50%" }}>
+          <Box>
             <InputLabel
               sx={{
                 fontSize: "14px",
@@ -633,7 +755,7 @@ const AdvanceSection = ({
             <Slider
               disableSwap
               sx={{
-                width: "89%",
+                width: "95%",
                 ml: 1,
                 "& .MuiSlider-rail": {
                   backgroundColor: theme.palette.eyeview100.main,
@@ -674,36 +796,85 @@ const AdvanceSection = ({
               marks={marks}
             />
           </Box>
+          <Box
+            sx={{
+              margin: "auto",
+              paddingTop:2
+            }}
+          >
+            <Button
+              variant="contained"
+              color="grayButton200"
+              onClick={() => {
+                setAdvanceSearch((prevState) => !prevState);
+              }}
+              sx={{
+                borderRadius: "15px 0 0 0",
+                width:"150px",
+                height:"60px",
+                fontSize:15,
+                fontWeight:"bold",
+              }}
+              endIcon={
+                <Box
+                  component={"img"}
+                  src={closeIcon}
+                  height={35}
+                  width={35}
+                />
+              }
+            >
+              close
+            </Button>
+            <Button
+              variant="contained"
+              color="redButton200"
+              sx={{
+                borderRadius: "0 15px 0 0",
+                width:"150px",
+                height:"60px",
+                fontSize:15,
+                fontWeight:"bold",
+              }}
+              onClick={handleJobSearch}
+            >
+              let's go!
+            </Button>
+          </Box>
         </Box>
       )}
-      <Button
-        sx={{
-          padding: "4px 20px",
-          height: 20,
-          borderRadius: "0 0 15px 15px",
-          boxShadow: 3,
-        }}
-        size="small"
-        variant="contained"
-        endIcon={
-          <Box
-            component="img"
-            className="eye"
-            alt="eye logo"
-            src={filter}
-            sx={{
-              height: 25,
-              width: 25,
-              mr: 1,
-            }}
-          />
-        }
-        color={"lightGreenButton300"}
-        onClick={() => {
-          setAdvanceSearch((prevState) => !prevState);
-          setBasicData(BASIC);
-        }}
-      ></Button>
+      {
+        !openAdvanceSearch &&
+        <Button
+          sx={{
+            padding: "4px 20px",
+            height: 45,
+            width: 150,
+            borderRadius: "0 0 15px 15px",
+            boxShadow: 3,
+          }}
+          size="small"
+          variant="contained"
+          endIcon={
+            <Box
+              component="img"
+              className="eye"
+              alt="eye logo"
+              src={filter}
+              sx={{
+                height: 35,
+                width: 35,
+                mr: 1,
+              }}
+            />
+          }
+          color={"redButton200"}
+          onClick={() => {
+            setAdvanceSearch((prevState) => !prevState);
+            setBasicData(BASIC);
+          }}
+        ></Button>
+      }
     </Box>
   );
 };

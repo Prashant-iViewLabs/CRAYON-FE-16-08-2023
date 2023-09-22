@@ -14,9 +14,12 @@ const sxPaper = {
     // boxShadow: 15, //'rgb(0 0 0 / 24%) 0px 12px 24px',
     transition: "1s ease",
   },
-  height: "500px",
+  height: "530px",
   overflow: "hidden",
   width: "100%",
+  // minWidth:"360px",
+  display:"flex",
+  flexDirection: "column"
 };
 export default function CustomCard({
   children,

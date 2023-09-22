@@ -69,6 +69,7 @@ export default function ButtonPanel({
         textAlign: side === "right" && "end",
         display: { xs: "none", sm: "flex" },
         flexDirection: "column",
+        gap:"10px"
         // overflow: { xs: "auto", sm: "hidden" },
       }}
     >
@@ -76,22 +77,21 @@ export default function ButtonPanel({
         <Tooltip title={btn.name} key={btn.id} placement="top-end">
           <Button
             sx={{
-              mb: 1,
               padding: "6px 7px",
               lineHeight: "inherit",
               borderRadius: "5px",
-              borderBottomLeftRadius: side == "left" ? { sm: 0 } : "5px",
-              borderTopLeftRadius: side == "left" ? { sm: 0 } : "5px",
-              borderTopRightRadius: side == "right" ? { sm: 0 } : "5px",
-              borderBottomRightRadius: side == "right" ? { sm: 0 } : "5px",
+              borderBottomLeftRadius: side === "left" ? { sm: 0 } : "5px",
+              borderTopLeftRadius: side === "left" ? { sm: 0 } : "5px",
+              borderTopRightRadius: side === "right" ? { sm: 0 } : "5px",
+              borderBottomRightRadius: side === "right" ? { sm: 0 } : "5px",
               mr: { xs: 1, sm: 0 },
               minWidth: { xs: "90px", sm: 0 },
               fontWeight:
                 btn.title || selectedBtns.includes(btn.id) ? 900 : 400,
               "&:hover": {
-                boxShadow: 15,
                 // opacity: 1,
-                backgroundColor: theme.palette[btn.color]?.main,
+                // backgroundColor: theme.palette[btn.color]?.main,
+                backgroundColor: theme.palette.redButton200.main,
                 color: theme.palette.white,
                 fontWeight: 900,
               },
@@ -100,7 +100,7 @@ export default function ButtonPanel({
             onClick={(e) => handleButtonClick(e, btn)}
             disableElevation
             variant="contained"
-            color={selectedBtns.includes(btn.id) ? btn.color : "base"}
+            color={selectedBtns.includes(btn.id) ? "redButton200" : "base"}
             key={btn.id}
           >
             {truncate(btn?.name, { length: 14 })}

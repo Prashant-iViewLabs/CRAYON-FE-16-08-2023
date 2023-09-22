@@ -172,9 +172,10 @@ const JobCardFront = ({
         container
         justifyContent="space-between"
         alignItems="start"
-        overflow={"hidden"}
+        // overflow={"hidden"}
         sx={{
           borderRadius: "25px 25px 0 0",
+          flexWrap: "nowrap"
         }}
       >
         <Box
@@ -186,6 +187,7 @@ const JobCardFront = ({
             maxWidth: { xs: "60px" },
             ml: "15px",
             mt: "15px",
+            mb: "15px",
             p: 0.2,
             border: 1,
             borderColor: "lightgrey",
@@ -213,6 +215,7 @@ const JobCardFront = ({
                 borderRadius: "0 0 0 10px",
                 padding: 0,
                 fontSize: 12,
+                fontWeight: "normal",
                 background: job?.job_type?.split(" ")[1] === "recruit" ? theme.jobCard.jobType.recruit.main : theme.jobCard.jobType.direct.main,
                 color: theme.jobCard.jobType.recruit.contrastText,
                 ":hover": {
@@ -231,6 +234,7 @@ const JobCardFront = ({
                 borderRadius: 0,
                 padding: 0,
                 fontSize: 12,
+                fontWeight: "normal",
                 background: getBackground(job?.stage_name),
                 color: "white",
                 ":hover": {
@@ -284,7 +288,7 @@ const JobCardFront = ({
                 padding: 0,
               }}
             >
-              <StarRoundedIcon color={isStar ? "error" : "disabled"} />
+              <StarRoundedIcon color={isStar ? "error" : "disabled"} fontSize="large" />
             </Button>
           </Box>
 
@@ -297,7 +301,7 @@ const JobCardFront = ({
               paddingTop: "8px",
             }}
           >
-            posted {convertDatetimeAgo(job?.updated_at)}
+            posted {convertDatetimeAgo(job?.updated_at)} ago
           </Typography>
         </Box>
       </Grid>
@@ -307,7 +311,7 @@ const JobCardFront = ({
         sx={{
           display: "flex",
           width: "100%",
-          flexGrow: 1
+          paddingBottom:"15px"
         }}
       >
         {/* Name and Info Section */}
@@ -316,8 +320,12 @@ const JobCardFront = ({
           paddingTop={0}
           marginLeft={1}
           marginRight={1}
+          paddingBottom={0}
           sx={{
             flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px"
           }}
         >
           <Tooltip
@@ -339,11 +347,8 @@ const JobCardFront = ({
                   fontWeight: 900,
                   fontSize: 20,
                   overflow: "hidden",
-                  display: "-webkit-box",
-                  WebkitBoxOrient: "vertical",
-                  WebkitLineClamp: 1,
+                  lineHeight: 1
                 }}
-                gutterBottom
               >
                 {job?.title || "-"}
               </Typography>
@@ -353,8 +358,7 @@ const JobCardFront = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              marginBottom: "12px",
-              // gap:"10px"
+              gap: "10px"
             }}
           >
             <Box
@@ -363,6 +367,7 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1,
+                height: "14px"
               }}
             >
               <Box
@@ -381,10 +386,12 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
+                  lineHeight: 1
                 }}
               >
-                {job?.currency_symbol}{" "}
+                {job?.currency_symbol}
                 {formatCurrencyWithCommas(job?.salary_min)} to{" "}
+                {job?.currency_symbol}
                 {formatCurrencyWithCommas(job?.salary_max)} per month
               </Typography>
             </Box>
@@ -394,12 +401,13 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1,
+                height: "14px"
               }}
             >
               <Box
                 component="img"
                 sx={{
-                  height: 25,
+                  height: 20,
                   width: 25,
                   maxHeight: { xs: 28 },
                   maxWidth: { xs: 28 },
@@ -412,6 +420,7 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
+                  lineHeight: 1
                 }}
               >
 
@@ -425,6 +434,7 @@ const JobCardFront = ({
                 alignItems: "center",
                 justifyContent: "start",
                 gap: 1,
+                height: "14px"
               }}
             >
               <Box
@@ -443,6 +453,7 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
+                  lineHeight: 1
                 }}
               >
                 {job?.experience_year_start} to {job?.experience_year_end}{" "}
@@ -454,17 +465,18 @@ const JobCardFront = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "start",
-                gap: 1.8,
+                gap: 1.5,
+                height: "14px"
               }}
             >
               <Box
                 component="img"
                 sx={{
-                  height: 20,
-                  width: 20,
+                  height: 18,
+                  width: 18,
                   maxHeight: { xs: 28 },
                   maxWidth: { xs: 28 },
-                  padding: 0,
+                  ml: 0.5
                 }}
                 alt="calendar"
                 src={calendar}
@@ -474,6 +486,7 @@ const JobCardFront = ({
                   fontWeight: 700,
                   fontSize: 14,
                   letterSpacing: "0.25px",
+                  lineHeight: 1
                 }}
               >
                 {dateConverterMonth(job?.created_at)}
@@ -484,7 +497,7 @@ const JobCardFront = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 1,
+              gap: "10px",
             }}
           >
             {/* Tags section */}
@@ -505,6 +518,7 @@ const JobCardFront = ({
             <Slider
               items={jobTraits || []}
               color={"traitsButton"}
+              minHeight="60px"
               theme={theme} />
             {/* Trait Section */}
           </Box>
@@ -539,13 +553,13 @@ const JobCardFront = ({
       <Grid
         container
         spacing={2}
-        padding="0 16px 8px 16px"
+        padding="0 16px 0 16px"
         justifyContent="space-around"
         alignItems="center"
       >
-        <Box sx={{ margin: "0 -22px 0 -22px" }}>
+        <Box sx={{ margin: "-13px -10px" }}>
           <SingleRadialChart
-            hollow="55%"
+            hollow="69%"
             nameSize="10px"
             valueSize="14px"
             nameOffsetY="11"
@@ -554,6 +568,7 @@ const JobCardFront = ({
             labelsData={"grit score"}
             series={[job?.grit_score]}
             width={120}
+            height={120}
             color={theme.palette.chart.red}
             index={index}
             name={"gritScore"}
@@ -563,7 +578,7 @@ const JobCardFront = ({
         {job?.primary_name && (
           <Box
             component="img"
-            height={80}
+            height={100}
             alt="Primary personality"
             src={
               (job?.primary_name === "collaborator" && profile_collaborator) ||
@@ -577,7 +592,7 @@ const JobCardFront = ({
         {job?.shadow_name && (
           <Box
             component="img"
-            height={80}
+            height={100}
             alt="Shadow personality"
             src={
               (job?.shadow_name === "collaborator" && profile_collaborator) ||
@@ -598,7 +613,9 @@ const JobCardFront = ({
         sx={{
           width: "100%",
           borderRadius: "0 0 25px 25px",
-          height: 51,
+          height: 60,
+          position:"fixed",
+          bottom:0
         }}
       >
         <Button
@@ -607,9 +624,16 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "15px",
+            fontWeight: "bold",
+            ".MuiButton-startIcon": {
+              marginRight: "0px !important",
+              marginLeft: 0,
+            },
+            padding: "0px !important",
+            gap: 1
           }}
-          color="blueButton200"
+          color="blueButton800"
           startIcon={
             <Box
               component={"img"}
@@ -621,7 +645,7 @@ const JobCardFront = ({
             />
           }
         >
-          Match
+          match
         </Button>
         <Link
           to={`/jobs/job-detail/${`${job?.town_name + " " + job?.region_name
@@ -638,25 +662,32 @@ const JobCardFront = ({
             variant="contained"
             sx={{
               borderRadius: 0,
-              fontSize: "12px",
+              fontSize: "15px",
+              fontWeight: "bold",
               whiteSpace: "nowrap",
+              justifyContent: "flex-start",
               height: "100%",
               width: "100%",
+              ".MuiButton-startIcon": {
+                marginRight: "0px !important",
+                marginLeft: 0,
+              },
+              padding: "0px !important"
             }}
             color="yellowButton100"
             startIcon={
               <Box
                 component={"img"}
                 sx={{
-                  height: 40,
-                  width: 40,
+                  height: 35,
+                  width: 35,
                   padding: 0,
                 }}
                 src={viewIcon}
               />
             }
           >
-            View More
+            view more
           </Button>
         </Link>
 
@@ -666,7 +697,14 @@ const JobCardFront = ({
             borderRadius: 0,
             width: "33.33%",
             height: "100%",
-            fontSize: "12px",
+            fontSize: "15px",
+            fontWeight: "bold",
+            ".MuiButton-startIcon": {
+              marginRight: "0px !important",
+              marginLeft: 0,
+            },
+            padding: "0px !important",
+            gap: 1
           }}
           color="redButton"
           onClick={handleClick}
