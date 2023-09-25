@@ -123,7 +123,7 @@ export default function SearchBar({
           display: { xs: "none", md: "flex" },
           m: { xs: 2, md: 0 },
           alignItems: "center",
-          height: 60,
+          height: 45,
           border: "1px solid rgba(224, 224, 224, 0.5)",
           position: "sticky",
           borderRadius: openAdvanceSearch ? 0: "0 0 20px 20px",
@@ -182,7 +182,7 @@ export default function SearchBar({
         {/* )} */}
         <Button
           sx={{
-            width: 140,
+            width: 174,
             boxShadow: 0,
             borderRadius: 0,
             height: "100%",
@@ -197,7 +197,7 @@ export default function SearchBar({
       <Box
         sx={{
           position: "absolute",
-          top: 60,
+          top:45,
           width: "100%",
           margin: "0 auto",
           zIndex: 10,

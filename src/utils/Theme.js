@@ -199,15 +199,15 @@ const theme = createTheme({
       contrastText: "#FFFFFF",
     },
     traitsButton: {
-      main: "#D0A331",
+      main: "#80ceff",
       contrastText: "#FFFFFF",
     },
     skillsButton: {
-      main: "#8B6212",
+      main: "#0091ec",
       contrastText: "#FFFFFF",
     },
     toolsButton: {
-      main: "#A98600",
+      main: "#3fb5ff",
       contrastText: "#FFFFFF",
     },
     topBar: {
@@ -244,10 +244,11 @@ const theme = createTheme({
       red: "#EC5D60",
       green: "#B6C773",
       yellow: "#F09248",
+      blue: "#80ceff",
       green200: "#18CA09",
-      Review: "#014D4E",
-      Shortlist: "#008384",
-      Interview: "#5F9EA0",
+      Applied: "#fcd144",
+      Shortlisted: "#f5a200",
+      Interviewed: "#e49f18",
     },
   },
 

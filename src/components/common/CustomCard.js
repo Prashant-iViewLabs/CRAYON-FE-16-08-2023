@@ -6,7 +6,7 @@ import locale from "../../i18n/locale";
 const sxPaper = {
   mb: 2,
   border: "1px solid rgba(224, 224, 224, 0.75)",
-  boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.03)",
+  boxShadow: "0px 3px 8px rgba(0, 0, 0, 0.2)",
   borderRadius: "25px",
   // padding: '10px 0',
   "&:hover": {
@@ -14,9 +14,9 @@ const sxPaper = {
     // boxShadow: 15, //'rgb(0 0 0 / 24%) 0px 12px 24px',
     transition: "1s ease",
   },
-  height: "530px",
-  overflow: "hidden",
-  width: "100%",
+  minHeight: "529px",
+  // overflow: "hidden",
+  minWidth: "359px",
   display:"flex",
   flexDirection: "column"
 };

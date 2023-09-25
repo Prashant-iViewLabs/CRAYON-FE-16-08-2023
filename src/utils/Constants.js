@@ -382,6 +382,26 @@ export const JOBS_RIGHT_STAGES_BUTTON_GROUP = [
   },
 ];
 
+export const JOBS_RIGHT_COMPANIES_BUTTON = [
+  {
+    id: 1,
+    name: "all companies",
+    color: "redButton300",
+    title: true,
+  },
+  {
+    id: 2,
+    name: "size",
+    color: "redButton300",
+
+  },
+  {
+    id: 3,
+    name: "type",
+    color: "redButton300",
+  },
+]
+
 export const ADMIN_SEARCH_FILTER = [
   {
     id: 1,

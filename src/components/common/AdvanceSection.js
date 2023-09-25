@@ -850,7 +850,7 @@ const AdvanceSection = ({
             padding: "4px 20px",
             height: 45,
             width: 150,
-            borderRadius: "0 0 15px 15px",
+            borderRadius: "0 0 25px 25px",
             boxShadow: 3,
           }}
           size="small"

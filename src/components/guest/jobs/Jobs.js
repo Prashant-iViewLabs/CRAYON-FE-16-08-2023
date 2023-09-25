@@ -8,6 +8,7 @@ import SearchBar from "../../common/SearchBar";
 import ButtonPanel from "../../common/ButtonPanel";
 import {
   JOBS_RIGHT_STAGES_BUTTON_GROUP,
+  JOBS_RIGHT_COMPANIES_BUTTON,
   ALERT_TYPE,
 } from "../../../utils/Constants";
 import locale from "../../../i18n/locale";
@@ -288,7 +289,7 @@ export default function Jobs() {
           display: "flex",
           flexDirection: "column",
           gap: "10px",
-          width: "150px",
+          width: leftExpanded ? "150px" : "40px",
         }}
       >
         <Button
@@ -314,19 +315,11 @@ export default function Jobs() {
             }}
           >
 
-            <Paper
-              sx={{
-                background: "transparent",
-                marginRight: "1px",
-                boxShadow: 0
-              }}
-            >
-              <ButtonPanel
-                panelData={allIndustries}
-                side="left"
-                onChangeFilter={onChangeFilter}
-              />
-            </Paper>
+            <ButtonPanel
+              panelData={allIndustries}
+              side="left"
+              onChangeFilter={onChangeFilter}
+            />
 
             <Button
               variant="contained"
@@ -358,7 +351,7 @@ export default function Jobs() {
           display: "flex",
           flexDirection: "column",
         }}
-        gap={"54px"}
+        gap={"64px"}
         flexGrow="1 !important"
       >
         <SearchBar
@@ -397,17 +390,26 @@ export default function Jobs() {
         >
           <Grid
             container
-            spacing={2}
+            gap={"40px"}
+            margin={0}
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
               display: { xs: "none", md: "flex" },
             }}
+            justifyContent={"center"}
             width={"100%"}
           >
 
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                <Grid xl={3} lg={4} md={6} xs={12} key={job.job_id}>
+                <Grid
+                
+                  sx={{
+                    width: "360px",
+                    height:"530px",
+                    
+                    marginBottom:0
+                  }} key={job.job_id}>
                   <JobCard
                     job={job}
                     setQuestions={setQuestions}
@@ -441,7 +443,7 @@ export default function Jobs() {
           flexDirection: "column",
           gap: "10px",
           direction: "rtl",
-          width: "150px",
+          width: rightExpand?"150px":"40px",
         }}
       >
         <Button
@@ -468,38 +470,32 @@ export default function Jobs() {
               gap: "10px"
             }}
           >
-            <Paper
-              sx={{
-                background: "transparent",
-                boxShadow: 0,
-                gap:"10px",
-                display:"flex",
-                flexDirection:"column"
-              }}
-            >
 
-              <ButtonPanel
-                topMargin={true}
-                panelData={allJobTypes}
-                side="right"
-                onChangeFilter={onChangeFilterJobType}
-              />
-              <ButtonPanel
-                panelData={allStages}
-                side="right"
-                onChangeFilter={onChangeFilterJobStage}
-              />
-              <ButtonPanel
-                panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
-                onChangeFilter={onChangefavourite}
-                side="right"
-              />
-              <ButtonPanel
-                panelData={allTypes}
-                side="left"
-                onChangeFilter={onChangeFilterType}
-              />
-            </Paper>
+            <ButtonPanel
+              topMargin={true}
+              panelData={allJobTypes}
+              side="right"
+              onChangeFilter={onChangeFilterJobType}
+            />
+            <ButtonPanel
+              panelData={JOBS_RIGHT_COMPANIES_BUTTON}
+              side="right"
+            />
+            <ButtonPanel
+              panelData={allStages}
+              side="right"
+              onChangeFilter={onChangeFilterJobStage}
+            />
+            <ButtonPanel
+              panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
+              onChangeFilter={onChangefavourite}
+              side="right"
+            />
+            <ButtonPanel
+              panelData={allTypes}
+              side="right"
+              onChangeFilter={onChangeFilterType}
+            />
             <Button
               variant="contained"
               sx={{

@@ -48,6 +48,8 @@ import Slider2 from "../../../common/Slider2";
 import Slider from "../../../common/Slider";
 import RightArrow from "../../../common/RightArrow";
 
+import MUIRadialChart from "../../../common/MUIRadialChart";
+
 const JobCardFront = ({
   index,
   job,
@@ -187,9 +189,8 @@ const JobCardFront = ({
             maxHeight: { xs: "60px" },
             maxWidth: { xs: "60px" },
             ml: "15px",
-            mt: "15px",
+            mt: "14px",
             mb: "15px",
-            p: 0.2,
             border: 1,
             borderColor: "lightgrey",
             borderRadius: 4,
@@ -219,12 +220,16 @@ const JobCardFront = ({
                 padding: 0,
                 fontSize: 12,
                 fontWeight: "normal",
+                
+                boxShadow:0, 
                 background:
                   job?.job_type?.split(" ")[1] === "recruit"
                     ? theme.jobCard.jobType.recruit.main
                     : theme.jobCard.jobType.direct.main,
                 color: theme.jobCard.jobType.recruit.contrastText,
                 ":hover": {
+                  
+                  boxShadow:0, 
                   background:
                     job?.job_type?.split(" ")[1] === "recruit"
                       ? theme.jobCard.jobType.recruit.main
@@ -246,6 +251,7 @@ const JobCardFront = ({
                 background: getBackground(job?.stage_name),
                 color: "white",
                 ":hover": {
+                  boxShadow:0,  
                   background: getBackground(job?.stage_name),
                 },
               }}
@@ -291,6 +297,7 @@ const JobCardFront = ({
                 minHeight: "45px",
                 background: theme.palette.grayBackground,
                 borderRadius: 0,
+                borderTopRightRadius:"25px",
                 padding: 0,
               }}
             >
@@ -327,7 +334,7 @@ const JobCardFront = ({
         <Grid
           Grid
           paddingTop={0}
-          marginLeft={1}
+          marginLeft={"15px"}
           marginRight={1}
           paddingBottom={0}
           sx={{
@@ -564,8 +571,8 @@ const JobCardFront = ({
       {/* Radial Chart Section */}
       <Grid
         container
-        spacing={2}
-        padding="0 16px 0 16px"
+        spacing={"18px"}
+        padding="0 15px 0 15px"
         justifyContent="space-around"
         alignItems="center"
       >
@@ -596,7 +603,9 @@ const JobCardFront = ({
             }
           />
         )}
-        <Box sx={{ margin: "-13px -10px" }}>
+        <MUIRadialChart value={job?.grit_score} chartName={"grit score"} max={100} size={100} countFontSize={16} labelFontSize={14} color={"blue"}/>
+        
+        {/* <Box sx={{ margin: "-13px -10px" }}>
           <SingleRadialChart
             hollow="69%"
             nameSize="10px"
@@ -613,7 +622,7 @@ const JobCardFront = ({
             name={"gritScore"}
             isHovered={isHovered}
           />
-        </Box>
+        </Box> */}
       </Grid>
       {/* Radial Chart Section */}
       {/* Footer Section */}

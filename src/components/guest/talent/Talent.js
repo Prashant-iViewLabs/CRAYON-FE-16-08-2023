@@ -32,8 +32,10 @@ import { get } from "lodash";
 import jwt_decode from "jwt-decode";
 import { getAllTypes } from "../../../redux/allTypes";
 import { getAllTalentType } from "../../../redux/guest/talentTypes";
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
+import LeftArrow from "../../common/LeftArrow";
+import RightArrow from "../../common/RightArrow";
 
 const BASIC = {
   talent_title: "",
@@ -62,6 +64,9 @@ export default function Talent() {
   const [filtersType, setFiltersType] = useState([allTypes[0]?.id]);
   const [filtersJobType, setFiltersJobType] = useState([allTalentTypes[0]?.id]);
   const [basicData, setBasicData] = useState(BASIC);
+
+  const [rightExpand, setRightExpand] = useState(true)
+  const [leftExpanded, setLeftExpand] = useState(true)
 
   const [all_talent, setAll_talent] = useState([]);
   const [lastKey, setLastKey] = useState(0);
@@ -192,50 +197,71 @@ export default function Talent() {
       spacing={0}
       flexDirection={{ xs: "column", sm: "row" }}
       justifyContent="space-between"
+      flexWrap={"nowrap"}
     >
       <Grid
         item
-        md={2}
-        lg={1}
-        xl={1}
-        className="filterSec"
+        // md={2}
+        // lg={1}
+        // xl={1}
         sx={{
-          height: "88vh",
-          overflowY: "scroll",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          width: "150px",
         }}
       >
-        <Paper
+        <Button
+          variant="contained"
           sx={{
-            background: "transparent",
-            marginRight: "1px",
+            position: "static",
+            borderRadius: "0 10px 10px 0",
+            minWidth: "40px",
+            width: "40px",
+            height: "45px"
           }}
+          color="redButton200"
+          onClick={() => { setLeftExpand(prevState => !prevState) }}
         >
-          <ButtonPanel
-            topMargin={true}
-            panelData={allIndustries}
-            side="left"
-            onChangeFilter={onChangeFilter}
-          />
-          <ButtonPanel
-            panelData={allTypes}
-            side="left"
-            onChangeFilter={onChangeFilterType}
-          />
-        </Paper>
-        <style>
-          {`.filterSec::-webkit-scrollbar {
-                      width: 5px !important;
-                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .filterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
+          {leftExpanded ? <LeftArrow /> : <RightArrow />}
+        </Button>
+        {leftExpanded && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px"
+            }}
+          >
+            <ButtonPanel
+              topMargin={true}
+              panelData={allIndustries}
+              side="left"
+              onChangeFilter={onChangeFilter}
+            />
+            <ButtonPanel
+              panelData={allTypes}
+              side="left"
+              onChangeFilter={onChangeFilterType}
+            />
+            <Button
+              variant="contained"
+              sx={{
+                position: "static",
+                borderRadius: "0 10px 10px 0",
+                minWidth: "40px",
+                width: "40px",
+                height: "45px"
+              }}
+              color="redButton200"
+              onClick={() => { setLeftExpand(prevState => !prevState) }}
+            >
+              {leftExpanded ? <LeftArrow /> : <RightArrow />}
+            </Button>
+          </Box>
+        )}
       </Grid>
-      <Grid
+      {/* <Grid
         item
         xs={12}
         sm={6}
@@ -243,11 +269,11 @@ export default function Talent() {
         lg={9}
         xl={10}
         sx={{
-          px: 2,
+          paddingX: "30px",
           display: "flex",
           flexDirection: "column",
         }}
-        gap={3}
+        gap={"54px"}
         flexGrow="1 !important"
       >
         <SearchBar
@@ -259,11 +285,14 @@ export default function Talent() {
         />
         <InfiniteScroll
           key={`${filters} + ${filtersType} + ${filtersJobType}`}
-          height="80vh"
           scrollThreshold={"100px"}
           dataLength={all_talent.length}
           next={() => getTalent(filters, filtersType, filtersJobType, lastKey)}
           hasMore={true}
+          style={{
+            height: "none !important",
+            overflow: "unset !important"
+          }}
           endMessage={
             <p style={{ textAlign: "center" }}>
               <b>Yay! You have seen it all</b>
@@ -272,17 +301,22 @@ export default function Talent() {
         >
           <Grid
             container
-            spacing={2}
+            gap={"40px"}
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
               display: { xs: "none", md: "flex" },
             }}
-            width={"99.5%"}
+            width={"100%"}
           >
             {all_talent.length > 0 ? (
               all_talent?.map((talent) => {
                 return (
-                  <Grid xl={3} lg={4} md={6} xs={12} key={talent}>
+                  <Grid sx={{
+                    width: "360px",
+                    height: "560px",
+
+                    marginBottom: 0
+                  }} key={talent}>
                     <TalentCard index={nanoid()} job={talent} />
                   </Grid>
                 );
@@ -300,88 +334,138 @@ export default function Talent() {
               </Box>
             )}
           </Grid>
-          <style>
-            {`.infinite-scroll-component::-webkit-scrollbar {
-                      width: 5px !important;
-                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .infinite-scroll-component__outerdiv {
-                      height:100%
-                    }
-                    .infinite-scroll-component::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;/* Set the color of the scrollbar thumb */
-                    }`}
-          </style>
         </InfiniteScroll>
-        <Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
-          {/* <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <TalentCard index="11" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <TalentCard index="12" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <TalentCard index="13" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <TalentCard index="14" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <TalentCard index="15" />
-            </Grid>
-            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
-              <TalentCard index="16" />
-            </Grid>
-          </SwipeableViews> */}
-        </Grid>
-      </Grid>
+      </Grid> */}
       <Grid
         item
-        md={2}
-        lg={1}
-        xl={1}
-        className="rightfilterSec"
+        xs={12}
+        sm={6}
+        md={8}
+        lg={9}
+        xl={10}
+        sx={{
+          paddingX: "30px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "54px",
+          flexGrow: "1 !important",
+        }}
+      >
+        <SearchBar
+          placeholder={"Begin your search for talent here..."}
+          setAllJobs={setAll_talent}
+          setLastKey={setLastKey}
+          setBasicData={setBasicData}
+          basicData={basicData}
+        />
+        <InfiniteScroll
+          key={`${filters} + ${filtersType} + ${filtersJobType}`}
+          scrollThreshold={"100px"}
+          dataLength={all_talent.length}
+          next={() => getTalent(filters, filtersType, filtersJobType, lastKey)}
+          hasMore={true}
+          style={{
+            height: "unset !important",
+            overflow: "unset !important",
+          }}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          <Grid
+  container
+  gap={{ xs: "20px", md: "40px" }}
+  flexDirection={{ xs: "column", md: "row" }}
+  sx={{
+    display: "flex",
+    flexWrap: "wrap",
+    width: "100%",
+    justifyContent: "space-between",
+  }}
+>
+  {all_talent.length > 0 ? (
+    all_talent?.map((talent) => {
+      return (
+        // <Grid
+        //   sx={{
+        //     flex: "1 0 calc(20%)", 
+        //     marginBottom: "20px", 
+        //   }}
+        //   key={talent}
+        // >
+        
+          <TalentCard index={nanoid()} job={talent} />
+        // </Grid>
+      );
+    })
+  ) : (
+    <Box
+      sx={{
+        width: "100%",
+        textAlign: "center",
+        mt: 4,
+        color: theme.palette.placeholder,
+      }}
+    >
+      {""}
+    </Box>
+  )}
+</Grid>
+
+        </InfiniteScroll>
+      </Grid>
+
+      <Grid
+        item
+        // md={2}
+        // lg={1}
+        // xl={1}
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "88vh",
-          overflowY: "scroll",
+          gap: "10px",
           direction: "rtl",
+          width: "150px",
         }}
       >
-        <style>
-          {`.rightfilterSec::-webkit-scrollbar {
-                       width: 5px !important;
-                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                    }
-                    .rightfilterSec::-webkit-scrollbar-thumb {
-                      background-color: white;
-                      width: 5px;
-                      box-shadow: 0px 3px 3px #00000029;
-                      border-radius: 3px;
-                    }`}
-        </style>
-        <Paper
+        <Button
+          variant="contained"
           sx={{
-            background: "transparent",
-            marginLeft: "1px",
+            position: "sticky",
+            top: 0,
+            borderRadius: "10px 0 0 10px",
+            minWidth: "40px",
+            width: "40px",
+            height: "45px"
           }}
+          color="redButton200"
+          onClick={() => { setRightExpand(prevState => !prevState) }}
         >
-          <ButtonPanel
-            topMargin={true}
-            panelData={allTalentTypes}
-            side="right"
-            onChangeFilter={onChangeFilterJobType}
-          />
-          <ButtonPanel
-            panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
-            side="right"
-          />
-        </Paper>
+
+          {rightExpand ? <RightArrow /> : <LeftArrow />}
+        </Button>
+        {rightExpand && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px"
+            }}
+          >
+            <ButtonPanel
+              topMargin={true}
+              panelData={allTalentTypes}
+              side="right"
+              onChangeFilter={onChangeFilterJobType}
+            />
+            <ButtonPanel
+              panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}
+              side="right"
+            />
+          </Box>
+        )}
       </Grid>
     </Grid>
   );
