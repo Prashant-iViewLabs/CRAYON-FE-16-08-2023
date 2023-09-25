@@ -105,7 +105,8 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   width: "325px",
   height: "auto !important",
   position: "unset",
-  boxShadow: "none",
+  boxShadow:
+    "0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12)",
   "& .MuiAccordionSummary-root": {
     alignItems: "start",
     padding: 0,
@@ -437,6 +438,8 @@ export default function DraggableCardNew({
                   sx={{
                     display: "flex",
                     alignItems: "center",
+                    backgroundColor: "#f2f4fb",
+                    borderRadius: "10px 0 0 10px",
                   }}
                 >
                   <Box

@@ -45,6 +45,9 @@ export default function SmallButton({
             marginRight: startIconMargin,
             marginLeft: 0,
           },
+          // ":hover": {
+          //   boxShadow: "none",
+          // },
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",

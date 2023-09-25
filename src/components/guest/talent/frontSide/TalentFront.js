@@ -151,6 +151,45 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   label={job?.secondactivity}
                 />
               )}
+              <Button
+                // color={"redButton"}
+                variant="contained"
+                sx={{
+                  height: "auto",
+                  minWidth: "60px",
+                  minHeight: "45px",
+                  borderRadius: "0 0 0 10px",
+                  padding: 0,
+                  fontSize: 12,
+                  fontWeight: "normal",
+                  background: theme.manageTalent.manageMatched.main,
+
+                  color: theme.jobCard.jobType.recruit.contrastText,
+                  ":hover": {
+                    background: theme.manageTalent.manageMatched.main,
+                  },
+                }}
+              >
+                recent
+              </Button>
+              <Button
+                sx={{
+                  height: "auto",
+                  minWidth: "60px",
+                  minHeight: "45px",
+                  borderRadius: 0,
+                  padding: 0,
+                  fontSize: 12,
+                  fontWeight: "normal",
+                  background: theme.palette.yellowButton100.main,
+                  color: "white",
+                  ":hover": {
+                    background: theme.palette.yellowButton100.main,
+                  },
+                }}
+              >
+                in demand
+              </Button>
             </Box>
             <Box
               sx={{

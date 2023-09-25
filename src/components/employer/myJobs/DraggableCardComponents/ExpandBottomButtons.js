@@ -71,9 +71,8 @@ export default function ExpandBottomButtons({
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        margin: "auto",
+        margin: "10px",
         gap: "10px",
-        marginTop: "8px",
       }}
     >
       <SVGButton

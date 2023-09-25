@@ -26,6 +26,8 @@ import {
   AUTHORIZED_TAB_ITEMS_CANDIDATE,
   ALERT_TYPE,
   ERROR_MSG,
+  TAB_ITEMS_EMPLOYER,
+  TAB_ITEMS_CANDIDATE,
 } from "../../utils/Constants";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import locale from "../../i18n/locale";
@@ -44,12 +46,23 @@ import { Popover, Typography } from "@mui/material";
 import jwt_decode from "jwt-decode";
 
 import userProfile from "../../assets/Padding Excluded/Black_Man_Happy.svg";
+import candidateProfile from "../../assets/Padding Excluded/Black_Man_Happy - Copy.svg";
+import candidateLite from "../../assets/Crayon_User_Lite.svg";
+import candidateTalent from "../../assets/CircularIcon/Red/Circular Icons__Red_Network.svg";
 import profileDetail from "../../assets/Padding Included/Profile_Details.svg";
 import { TryOutlined } from "@mui/icons-material";
-import ComapnyLogo from "../../assets/Padding Included/Black_Company_Details.svg";
-
+import ComapnyLogo from "../../assets/Padding Excluded/Crayon_Direct_No_Padding.svg";
+import redIcon from "../../assets/TabIcons/Crayon Smile Icon_Red.svg";
+import notification from "../../assets/Characters/Crayon_Talent_Menu_Alert_2.svg";
+import topBarIcon from "../../assets/Characters/Crayon_Talent_Menu_Dashboard.svg";
+import upArrow from "../../assets/Black_Up_Close - Copy.svg";
+import downArrow from "../../assets/Black_Down_Open - Copy.svg";
+import zIndex from "@mui/material/styles/zIndex";
+import SmallButtonTalent from "./SmallButtonTalent";
 
 const StyledTab = styled(Tabs)(({ theme }) => ({
+  display: "flex !important",
+  alignItems: "center !important",
   "& .MuiTab-root": {
     textTransform: "none",
     color: theme.palette.black,
@@ -58,27 +71,15 @@ const StyledTab = styled(Tabs)(({ theme }) => ({
     opacity: 1,
   },
   "& .MuiTabs-indicator": {
-    backgroundImage: "url('../../assets/SVG/Crayon Smile Icon_Green.svg')",
-    // height: "40px",
-    // borderRadius: "5px",
-    // display: "flex",
-    // justifyContent: "center",
-    // backgroundColor: "transparent",
-    // height: "60px",
-    // width: "60px  !important",
-    // borderRadius: "50%",
-    // borderRight: "5px solid transparent",
-    // borderLeft: "5px solid transparent",
-    // borderBottom: "5px solid orange",
+    backgroundColor: "transparent",
+  },
+  "& .MuiTab-iconWrapper": {
+    marginBottom: "0px !important",
+  },
+  "& .Mui-selected": {
+    // marginTop: "12px !important",
   },
 }));
-const CustomTabIndicator = styled('div')`
-  /* Customize the size and positioning of the image */
-  width: 24px; /* Adjust the width as needed */
-  height: 24px; /* Adjust the height as needed */
-  background-image: url('../../assets/CircularIcon/Red/Circular Icons__Blue_Network.svg'); /* Replace with your image path */
-  background-size: cover;
-`;
 
 export default function TopBar() {
   const theme = useTheme();
@@ -107,9 +108,18 @@ export default function TopBar() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const [publicTabs, setPublicTabs] = useState(PUBLIC_TAB_ITEMS);
   const quickLinksButtonRef = useRef(null);
+  const candidateButtonRef = useRef(null);
 
+  const [anchorElTopBar, setAnchorElTopBar] = useState(null);
+  const openTopBar = Boolean(anchorElTopBar);
+  const topBarRef = useRef(null);
+
+  const [anchorElCandidate, setAnchorElCandidate] = useState(null);
+  const [buttonClick, setButtonClick] = useState(false);
+  const openCandidate = Boolean(anchorElCandidate);
   const sign = useSelector((state) => state.sign);
   // const handleLogin = () => {
   //   setOpenLoginDialog(true);
@@ -173,6 +183,30 @@ export default function TopBar() {
 
   const handleTabClick = (event, newTab) => {
     setAnchorEl(quickLinksButtonRef.current);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = () => {
+    setAnchorElTopBar(topBarRef.current);
+  };
+
+  const handlePopoverCloseTopBar = (label) => {
+    setAnchorElTopBar(null);
+    if (label === "logout") {
+      handleLogout();
+      // return;
+    }
+  };
+
+  const handleCandidateTabClick = (event, newTab) => {
+    setAnchorElCandidate(candidateButtonRef.current);
+  };
+
+  const handleCandidatePopoverClose = () => {
+    setAnchorElCandidate(null);
   };
   console.log(decodedToken?.data);
 
@@ -258,7 +292,6 @@ export default function TopBar() {
           })
         );
       } else {
-
         dispatch(
           setAlert({
             show: true,
@@ -286,7 +319,7 @@ export default function TopBar() {
         setcurrentTabs(PUBLIC_TAB_ITEMS);
         setActiveTab("jobs");
       }
-    } catch (error) { }
+    } catch (error) {}
   };
   const handleTalent = () => {
     setIsAdmin(true);
@@ -310,9 +343,7 @@ export default function TopBar() {
       setActiveTab("candidate/my-jobs");
     }
   };
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
+
   const handleCloseLogin = () => {
     setShowLogin(false);
   };
@@ -323,7 +354,6 @@ export default function TopBar() {
     setShowLogin((prevState) => !prevState);
     setShowSignup((prevState) => !prevState);
   };
-  const open = Boolean(anchorEl);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -409,8 +439,9 @@ export default function TopBar() {
         color="base"
         sx={{
           borderRadius: 0,
-          height: "80px",
+          height: "100px",
           paddingX: "40px",
+          // paddingBottom: "15px",
           justifyContent: "center",
         }}
       >
@@ -419,59 +450,197 @@ export default function TopBar() {
             display: "flex",
             justifyContent: "space-between",
             height: "100%",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Box
             sx={{
               display: "flex",
-              cursor: "pointer",
+              alignItems: "center",
+              gap: "30px",
             }}
-            onClick={handleHomeLogoClick}
           >
             <Box
-              component="img"
               sx={{
-                height: 45,
-                marginTop: 1,
+                display: "flex",
                 cursor: "pointer",
               }}
-              alt="crayon logo"
-              src={crayon}
-            />
-            <Box
-              sx={{
-                marginLeft: 1,
-              }}
+              onClick={handleHomeLogoClick}
             >
-              <Typography
+              <Box
+                component="img"
                 sx={{
-                  margin: 0,
-                  fontWeight: "bold",
-                  fontFamily: "",
+                  height: 60,
+                  marginTop: "10px",
+                  cursor: "pointer",
                 }}
-                variant="h4"
-              >
-                Crayon
-              </Typography>
-              <Typography
+                alt="crayon logo"
+                src={crayon}
+              />
+              <Box
                 sx={{
-                  fontSize: "11px",
-                  letterSpacing: 1,
-                  margin: 0,
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  textAlign: "center",
+                  marginLeft: 1,
                 }}
-                paragraph
               >
-                we connect smiles
-              </Typography>
+                <Typography
+                  sx={{
+                    margin: 0,
+                    fontWeight: "bold",
+                    fontFamily: "",
+                  }}
+                  variant="h3"
+                >
+                  Crayon
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    letterSpacing: 1,
+                    margin: 0,
+                    fontWeight: 600,
+                    lineHeight: 1,
+                    textAlign: "center",
+                  }}
+                  paragraph
+                >
+                  we connect smiles
+                </Typography>
+              </Box>
             </Box>
+            {userType === 3 && (
+              <Box
+                sx={{
+                  height: "100px",
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  ref={candidateButtonRef}
+                  onClick={() => handleCandidateTabClick()}
+                  startIcon={
+                    <Box
+                      component={"img"}
+                      src={candidateProfile}
+                      sx={{
+                        height: "20px",
+                        width: "20px",
+                      }}
+                    />
+                  }
+                  sx={{
+                    borderRadius: "20px 20px 0 0",
+                    backgroundColor: theme.manageTalent.manageAssesment.main,
+                    ":hover": {
+                      backgroundColor: theme.manageTalent.manageAssesment.main,
+                      boxShadow: "none",
+                    },
+                    padding: "22px 25px 30px 25px !important",
+                  }}
+                >
+                  Candidate
+                </Button>
+                <Popover
+                  id="dropdown-menu"
+                  open={openCandidate}
+                  anchorEl={anchorElCandidate}
+                  onClose={handleCandidatePopoverClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                >
+                  <Box sx={{ width: "300px", padding: "10px" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 900,
+                      }}
+                    >
+                      take me home, country road
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        // fontWeight: 900,
+                      }}
+                    >
+                      This is your crayon home base.
+                    </Typography>
+                  </Box>
+                </Popover>
+              </Box>
+            )}
+
+            {userType === 4 && (
+              <Box
+                sx={{
+                  height: "100px",
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  startIcon={
+                    <Box
+                      component={"img"}
+                      src={candidateLite}
+                      sx={{
+                        height: "25px",
+                        width: "25px",
+                      }}
+                    />
+                  }
+                  sx={{
+                    height: "60px",
+                    borderRadius: "20px 20px 0 0",
+                    backgroundColor: theme.palette.yellowButton100.main,
+                    ":hover": {
+                      backgroundColor: theme.palette.yellowButton100.main,
+                      boxShadow: "none",
+                    },
+                    padding: "22px 10px 25px 10px!important",
+                  }}
+                >
+                  Crayon Lite
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => setButtonClick((prev) => !prev)}
+                  sx={{
+                    height: "60px", 
+                    marginLeft: "-20px",
+                    zIndex: "-999",
+                    borderRadius: "0px 20px 0 0",
+                    backgroundColor: theme.palette.redButton100.main,
+                    ":hover": {
+                      backgroundColor: theme.palette.redButton100.main,
+                      boxShadow: "none",
+                    },
+                    padding: "21px 15px 25px 25px!important",
+                  }}
+                >
+                  Talent
+                </Button>
+              </Box>
+            )}
           </Box>
 
-          <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
-            <div style={{ paddingRight: "25px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              gap: "60px",
+            }}
+          >
+            <div>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -484,6 +653,7 @@ export default function TopBar() {
 
               {!isAdmin && (
                 <>
+                  {console.log(activeTab)}
                   <StyledTab
                     value={activeTab}
                     onChange={handleTabChange}
@@ -492,6 +662,15 @@ export default function TopBar() {
                     aria-label="secondary tabs example"
                     sx={{
                       display: { xs: "none", sm: "block" },
+                      "& .Mui-selected": {
+                        marginTop:
+                          activeTab == "employer/quick_links"
+                            ? "0px !important"
+                            : "12px !important",
+                      },
+                      "& .MuiTabs-flexContainer": {
+                        gap: "60px !important",
+                      },
                     }}
                   >
                     {currentTabs?.map(({ label, path }) => (
@@ -507,9 +686,15 @@ export default function TopBar() {
                         component={Link}
                         sx={{
                           display: "flex",
-                          flexDirection: "row-reverse",
+                          flexDirection:
+                            label == "quick links"
+                              ? "row-reverse"
+                              : "column-reverse",
                           justifyContent: "center",
-                          minHeight: "48px !important",
+                          minHeight: "30px !important",
+                          padding: "0px !important",
+                          minWidth: "fit-content !important",
+                          // paddingBottom: "0px !important",
                         }}
                         icon={
                           label == "quick links" ? (
@@ -521,7 +706,18 @@ export default function TopBar() {
                               )}
                             </>
                           ) : (
-                            ""
+                            activeTab === path && (
+                              <img
+                                src={redIcon} // Use your SVG image here
+                                alt={label}
+                                style={{
+                                  width: "40px", // Adjust the width and height as needed
+                                  // "& .MuiTab-iconWrapper": {
+                                  //   marginBottom: "0px !important",
+                                  // },
+                                }}
+                              />
+                            )
                           )
                         }
                       />
@@ -534,11 +730,11 @@ export default function TopBar() {
                     onClose={handlePopoverClose}
                     anchorOrigin={{
                       vertical: "bottom",
-                      horizontal: "left",
+                      horizontal: "center",
                     }}
                     transformOrigin={{
                       vertical: "top",
-                      horizontal: "left",
+                      horizontal: "center",
                     }}
                   >
                     <Tabs orientation="vertical" onChange={handlequicklinks}>
@@ -565,7 +761,13 @@ export default function TopBar() {
                 </>
               )}
             </div>
-            <Box sx={{ display: { xs: "none", md: "flex" }, height:"100%" }}>
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
               {/* {isLoggedIn == true && !isAdmin && userType == 4 && (
                 <IconButton color="redButton">
                   <NotificationsIcon />
@@ -573,7 +775,7 @@ export default function TopBar() {
               )} */}
               {isLoggedIn == true ? (
                 <>
-                  <Button
+                  {/* <Button
                     variant="contained"
                     sx={{
                       ml: 2,
@@ -586,20 +788,36 @@ export default function TopBar() {
                     onClick={handleLogout}
                   >
                     {i18n["topBar.logout"]}
-
-                  </Button>
-                  {/* <Button 
-                  variant="contained"
-                  color="grayButton100"
-                  sx={{  
-                    bottom: 0,
-                    position: "static",
-                    borderRadius:"10px 10px 0 0"
-                  }}
-                  >
-                    dropdown
                   </Button> */}
-                  {userType == 4 &&
+
+                  <Box sx={{ display: "flex" }}>
+                    <Box
+                      component={"img"}
+                      src={notification}
+                      sx={{
+                        height: "35px",
+                        width: "35px",
+                      }}
+                    />
+                  </Box>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: theme.palette.redButton100.main,
+                      borderRadius: "5px",
+                      boxShadow: "none",
+                      height: "20px !important",
+                      minWidth: "fit-content !important",
+                      lineHeight: 0,
+                      padding: "6px",
+                      fontSize: "10px",
+                      top: "-10px",
+                      left: "-13px",
+                    }}
+                  >
+                    5
+                  </Button>
+                  {/* {userType == 4 &&
                     (isAdmin ? (
                       <>
                         <Button
@@ -661,7 +879,115 @@ export default function TopBar() {
                     >
                       {i18n["topBar.myCrayon"]}
                     </Button>
-                  )}
+                  )} */}
+
+                  <Box
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        backgroundColor: "#f2f4fb",
+                        padding: "10px 0px 20px 10px",
+                        borderRadius: "20px 20px 0 0",
+                        width: "100px",
+                        justifyContent: "center",
+                      }}
+                      ref={topBarRef}
+                      onClick={handleClick}
+                    >
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 50,
+                          width: 50,
+                          cursor: "pointer",
+                        }}
+                        alt="crayon logo"
+                        src={topBarIcon}
+                      />
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 20,
+                          width: 20,
+                          cursor: "pointer",
+                        }}
+                        alt="crayon logo"
+                        src={openTopBar ? upArrow : downArrow}
+                      />
+                    </Box>
+                  </Box>
+                  <Popover
+                    id="dropdown-menu"
+                    open={openTopBar}
+                    anchorEl={anchorElTopBar}
+                    onClose={handlePopoverCloseTopBar}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                    sx={{
+                      "& .MuiPaper-root": {
+                        borderRadius: "0px !important",
+                        backgroundColor: "#f2f4fb",
+                        boxShadow: "none",
+                        cursor: "pointer",
+                      },
+                    }}
+                  >
+                    <Tabs orientation="vertical">
+                      {userType === 4 &&
+                        TAB_ITEMS_EMPLOYER?.map(({ label, path }) => (
+                          <Tab
+                            sx={{
+                              width: "109px",
+                              textTransform: "none",
+                              color: "#000000",
+                              fontSize: "16px",
+                              fontWeight: 700,
+                              opacity: 1,
+                              borderRadius: "none",
+                            }}
+                            key={path}
+                            value={path}
+                            to={label !== "logout" ? path : null}
+                            label={label}
+                            component={Link}
+                            onClick={() => handlePopoverCloseTopBar(label)}
+                          />
+                        ))}
+                      {userType === 3 &&
+                        TAB_ITEMS_CANDIDATE?.map(({ label, path }) => (
+                          <Tab
+                            sx={{
+                              width: "109px",
+                              textTransform: "none",
+                              color: "#000000",
+                              fontSize: "16px",
+                              fontWeight: 700,
+                              opacity: 1,
+                              borderRadius: "none",
+                            }}
+                            key={path}
+                            value={path}
+                            to={label !== "logout" ? path : null}
+                            label={label}
+                            component={Link}
+                            onClick={() => handlePopoverCloseTopBar(label)}
+                          />
+                        ))}
+                    </Tabs>
+                  </Popover>
                 </>
               ) : (
                 <Box
@@ -669,18 +995,21 @@ export default function TopBar() {
                     display: "flex",
                     borderRadius: 0,
                     overflow: "hidden",
-                    width:"270px"
+                    width: "220px",
+                    height: "100%",
                   }}
                 >
                   <Button
                     variant="contained"
                     sx={{
+                      boxShadow: "none !important",
                       width: "50%",
+                      height: "75px",
                       padding: "30px 0",
                       borderRadius: "0 0 0 20px",
                       top: 0,
                       position: "static",
-                      flexDirection: "column"
+                      flexDirection: "column",
                     }}
                     color="grayButton200"
                     onClick={() => setShowLogin(true)}
@@ -699,10 +1028,12 @@ export default function TopBar() {
                   <Button
                     variant="contained"
                     sx={{
+                      boxShadow: "none !important",
                       width: "50%",
                       padding: "30px 0",
                       borderRadius: "0 0 20px 0",
-                      flexDirection: "column"
+                      height: "75px",
+                      flexDirection: "column",
                     }}
                     color="redButton100"
                     // startIcon={}

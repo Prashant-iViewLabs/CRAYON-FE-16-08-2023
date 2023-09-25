@@ -49,7 +49,7 @@ export default function Main() {
         <Snackbar />
         <Backdrop />
         <TopBar />
-        <Box component="main" sx={{ pt: 2, width: 1 }}>
+        <Box component="main" sx={{ pt: "36px", width: 1 }}>
           <Toolbar />
           <Box
             sx={{

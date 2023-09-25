@@ -8,8 +8,8 @@ import SearchBar from "../../common/SearchBar";
 import ButtonPanel from "../../common/ButtonPanel";
 import {
   JOBS_RIGHT_STAGES_BUTTON_GROUP,
-  JOBS_RIGHT_COMPANIES_BUTTON,
   ALERT_TYPE,
+  JOBS_RIGHT_COMPANIES_BUTTON,
 } from "../../../utils/Constants";
 import locale from "../../../i18n/locale";
 import { getFilteredJobs } from "../../../redux/guest/jobsSlice";
@@ -24,7 +24,7 @@ import CustomDialog from "../../common/CustomDialog";
 import ApplyJobs from "./ApplyJobs";
 import { Button, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import leftArrow from '../../../assets/Black_Right_Next.svg'
+import leftArrow from "../../../assets/Black_Right_Next.svg";
 import LeftArrow from "../../common/LeftArrow";
 import RightArrow from "../../common/RightArrow";
 
@@ -63,15 +63,14 @@ export default function Jobs() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [expandedItemId, setExpandedItemId] = useState(null);
   const [basicData, setBasicData] = useState(BASIC);
-  const [rightExpand, setRightExpand] = useState(true)
-  const [leftExpanded, setLeftExpand] = useState(true)
+  const [rightExpand, setRightExpand] = useState(true);
+  const [leftExpanded, setLeftExpand] = useState(true);
 
   const token = localStorage?.getItem("token");
   let decodedToken;
   if (token) {
     decodedToken = jwt_decode(token);
   }
-
 
   const onHandleClose = () => {
     setopenApplyJobDialog(false);
@@ -111,7 +110,6 @@ export default function Jobs() {
     job_title = "",
     filteralltype = {}
   ) => {
-
     let data = {
       selectedFilters:
         selectedFilters[0] !== 1111 ? selectedFilters.toString() : "",
@@ -143,7 +141,6 @@ export default function Jobs() {
       );
     }
   };
-
 
   useEffect(() => {
     getJobList();
@@ -290,6 +287,7 @@ export default function Jobs() {
           flexDirection: "column",
           gap: "10px",
           width: leftExpanded ? "150px" : "40px",
+          // marginRight: "30px",
         }}
       >
         <Button
@@ -299,10 +297,12 @@ export default function Jobs() {
             borderRadius: "0 10px 10px 0",
             minWidth: "40px",
             width: "40px",
-            height: "45px"
+            height: "45px",
           }}
           color="redButton200"
-          onClick={() => { setLeftExpand(prevState => !prevState) }}
+          onClick={() => {
+            setLeftExpand((prevState) => !prevState);
+          }}
         >
           {leftExpanded ? <LeftArrow /> : <RightArrow />}
         </Button>
@@ -311,15 +311,25 @@ export default function Jobs() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px"
+              gap: "10px",
+              height: "95vh",
+              overflowY: leftExpanded ? "scroll" : "unset",
             }}
+            className="filterSec"
           >
-
-            <ButtonPanel
-              panelData={allIndustries}
-              side="left"
-              onChangeFilter={onChangeFilter}
-            />
+            <Paper
+              sx={{
+                background: "transparent",
+                marginRight: "1px",
+                boxShadow: 0,
+              }}
+            >
+              <ButtonPanel
+                panelData={allIndustries}
+                side="left"
+                onChangeFilter={onChangeFilter}
+              />
+            </Paper>
 
             <Button
               variant="contained"
@@ -328,16 +338,29 @@ export default function Jobs() {
                 borderRadius: "0 10px 10px 0",
                 minWidth: "40px",
                 width: "40px",
-                height: "45px"
+                height: "45px",
               }}
               color="redButton200"
-              onClick={() => { setLeftExpand(prevState => !prevState) }}
+              onClick={() => {
+                setLeftExpand((prevState) => !prevState);
+              }}
             >
               {leftExpanded ? <LeftArrow /> : <RightArrow />}
             </Button>
+            <style>
+              {`.filterSec::-webkit-scrollbar {
+                      width: 0px !important;
+                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .filterSec::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 0px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 0px;
+                    }`}
+            </style>
           </Box>
         )}
-
       </Grid>
       <Grid
         item
@@ -351,7 +374,7 @@ export default function Jobs() {
           display: "flex",
           flexDirection: "column",
         }}
-        gap={"64px"}
+        gap={"54px"}
         flexGrow="1 !important"
       >
         <SearchBar
@@ -363,6 +386,7 @@ export default function Jobs() {
         />
 
         <InfiniteScroll
+          height="95vh"
           key={`${filters} + ${filtersJobType} + ${filtersJobStage} + ${filtersType}+${searchedJobs} +${favourite}`}
           dataLength={allJobs.length} //This is important field to render the next data
           next={() =>
@@ -376,12 +400,12 @@ export default function Jobs() {
               favourite
             )
           }
-          scrollThreshold={"100px"}
+          scrollThreshold={"1px"}
           hasMore={true}
-          style={{
-            height: "none !important",
-            overflow: "unset !important"
-          }}
+          // style={{
+          //   height: "none !important",
+          //   overflow: "unset !important",
+          // }}
           endMessage={
             <p style={{ textAlign: "center" }}>
               <b>Yay! You have seen it all</b>
@@ -391,46 +415,62 @@ export default function Jobs() {
           <Grid
             container
             gap={"40px"}
-            margin={0}
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
               display: { xs: "none", md: "flex" },
+              margin: "0px !important",
+              justifyContent: "center",
+              // paddingTop: "0px !important",
             }}
-            justifyContent={"center"}
             width={"100%"}
           >
-
             {allJobs.length > 0
               ? allJobs?.map((job) => (
-                <Grid
-                
-                  sx={{
-                    width: "360px",
-                    height:"530px",
-                    
-                    marginBottom:0
-                  }} key={job.job_id}>
-                  <JobCard
-                    job={job}
-                    setQuestions={setQuestions}
-                    onHandleClose={onHandleClose}
-                    setopenApplyJobDialog={setopenApplyJobDialog}
-                  />
-                </Grid>
-              ))
+                  // <Grid xl={3} lg={4} md={6} xs={12} key={job.job_id}>
+                  <Grid
+                    sx={{
+                      width: "360px",
+                      height: "530px",
+                      marginBottom: 0,
+                    }}
+                    key={job.job_id}
+                  >
+                    <JobCard
+                      job={job}
+                      setQuestions={setQuestions}
+                      onHandleClose={onHandleClose}
+                      setopenApplyJobDialog={setopenApplyJobDialog}
+                    />
+                  </Grid>
+                ))
               : (allJobs.length = 0 ? (
-                <Box
-                  sx={{
-                    width: "100%",
-                    textAlign: "center",
-                    mt: 4,
-                    color: theme.palette.placeholder,
-                  }}
-                >
-                  {""}
-                </Box>
-              ) : null)}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      textAlign: "center",
+                      mt: 4,
+                      color: theme.palette.placeholder,
+                    }}
+                  >
+                    {""}
+                  </Box>
+                ) : null)}
           </Grid>
+          <style>
+            {`.infinite-scroll-component::-webkit-scrollbar {
+                      width: 0px !important;
+                      background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .infinite-scroll-component__outerdiv {
+                      height:100%
+                    }
+                    .infinite-scroll-component::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 0px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;/* Set the color of the scrollbar thumb */
+                    }`}
+          </style>
         </InfiniteScroll>
       </Grid>
       <Grid
@@ -443,7 +483,8 @@ export default function Jobs() {
           flexDirection: "column",
           gap: "10px",
           direction: "rtl",
-          width: rightExpand?"150px":"40px",
+          width: rightExpand ? "150px" : "40px",
+          // marginLeft: "30px",
         }}
       >
         <Button
@@ -454,12 +495,13 @@ export default function Jobs() {
             borderRadius: "10px 0 0 10px",
             minWidth: "40px",
             width: "40px",
-            height: "45px"
+            height: "45px",
           }}
           color="redButton200"
-          onClick={() => { setRightExpand(prevState => !prevState) }}
+          onClick={() => {
+            setRightExpand((prevState) => !prevState);
+          }}
         >
-
           {rightExpand ? <RightArrow /> : <LeftArrow />}
         </Button>
         {rightExpand && (
@@ -467,35 +509,59 @@ export default function Jobs() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px"
+              gap: "10px",
+              height: "95vh",
+              overflowY: rightExpand ? "scroll" : "unset",
             }}
+            className="rightfilterSec"
           >
-
-            <ButtonPanel
-              topMargin={true}
-              panelData={allJobTypes}
-              side="right"
-              onChangeFilter={onChangeFilterJobType}
-            />
-            <ButtonPanel
-              panelData={JOBS_RIGHT_COMPANIES_BUTTON}
-              side="right"
-            />
-            <ButtonPanel
-              panelData={allStages}
-              side="right"
-              onChangeFilter={onChangeFilterJobStage}
-            />
-            <ButtonPanel
-              panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
-              onChangeFilter={onChangefavourite}
-              side="right"
-            />
-            <ButtonPanel
-              panelData={allTypes}
-              side="right"
-              onChangeFilter={onChangeFilterType}
-            />
+            <style>
+              {`.rightfilterSec::-webkit-scrollbar {
+                       width: 0px !important;
+                       background-color: #EFEEEE; /* Set the background color of the scrollbar */
+                    }
+                    .rightfilterSec::-webkit-scrollbar-thumb {
+                      background-color: white;
+                      width: 0px;
+                      box-shadow: 0px 3px 3px #00000029;
+                      border-radius: 3px;
+                    }`}
+            </style>
+            <Paper
+              sx={{
+                background: "transparent",
+                boxShadow: 0,
+                gap: "10px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <ButtonPanel
+                topMargin={true}
+                panelData={allJobTypes}
+                side="right"
+                onChangeFilter={onChangeFilterJobType}
+              />
+              <ButtonPanel
+                panelData={JOBS_RIGHT_COMPANIES_BUTTON}
+                side="right"
+              />
+              <ButtonPanel
+                panelData={allStages}
+                side="right"
+                onChangeFilter={onChangeFilterJobStage}
+              />
+              <ButtonPanel
+                panelData={JOBS_RIGHT_STAGES_BUTTON_GROUP}
+                onChangeFilter={onChangefavourite}
+                side="right"
+              />
+              <ButtonPanel
+                panelData={allTypes}
+                side="right"
+                onChangeFilter={onChangeFilterType}
+              />
+            </Paper>
             <Button
               variant="contained"
               sx={{
@@ -504,12 +570,13 @@ export default function Jobs() {
                 borderRadius: "10px 0 0 10px",
                 minWidth: "40px",
                 width: "40px",
-                height: "45px"
+                height: "45px",
               }}
               color="redButton200"
-              onClick={() => { setRightExpand(prevState => !prevState) }}
+              onClick={() => {
+                setRightExpand((prevState) => !prevState);
+              }}
             >
-
               {rightExpand ? <RightArrow /> : <LeftArrow />}
             </Button>
           </Box>
@@ -530,6 +597,6 @@ export default function Jobs() {
           setopenApplyJobDialog={setopenApplyJobDialog}
         />
       </CustomDialog>
-    </Grid >
+    </Grid>
   );
 }

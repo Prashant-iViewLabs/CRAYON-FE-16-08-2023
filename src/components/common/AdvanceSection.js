@@ -16,11 +16,11 @@ import RedLocation from "../../assets/Padding Included/Red_Location.svg";
 import YellowTool from "../../assets/Padding Included/Yellow_Own_Equipment.svg";
 import GreenCountry from "../../assets/Padding Included/Green_Country.svg";
 import GreenTitle from "../../assets/Padding Included/Green_Experience_Title_Job.svg";
-import BlueCompany from "../../assets/Padding Excluded/Blue_Following_Company-.svg"
+import BlueCompany from "../../assets/Padding Excluded/Blue_Following_Company-.svg";
 import AdvanceSectionAutoComplete from "./AdvanceSectionAutoComplete";
 import { useSelector } from "react-redux";
 import filter from "../../assets/Padding Included/White_Filter_Stats.svg";
-import closeIcon from '../../assets/Black_Up_Close - Copy.svg'
+import closeIcon from "../../assets/Black_Up_Close - Copy.svg";
 import {
   getCountry,
   getCurrency,
@@ -247,7 +247,7 @@ const AdvanceSection = ({
   basicData,
   setAdvanceSearch,
   openAdvanceSearch,
-  handleJobSearch
+  handleJobSearch,
 }) => {
   const [rangeValue, setRangeValue] = useState([0, 20]);
   const [expRange, setExpRange] = useState([0, 20]);
@@ -342,9 +342,9 @@ const AdvanceSection = ({
 
   const handleRangeSliderChange = (event, newValue) => {
     setRangeValue(newValue);
-    console.log(newValue)
+    console.log(newValue);
     let newArr = newValue.map((val) => val * 2000);
-    console.log(newArr)
+    console.log(newArr);
     const newBasicData = {
       ...basicData,
       [event.target.name]: newArr,
@@ -355,7 +355,7 @@ const AdvanceSection = ({
   const expHandleChange = (event, newValue) => {
     console.log(event, newValue, event.target.name);
     setExpRange(newValue);
-    console.log(newValue)
+    console.log(newValue);
     let newArr = newValue?.map((val) => Math.floor(val / 5));
     console.log(newArr);
     const newBasicData = {
@@ -799,7 +799,7 @@ const AdvanceSection = ({
           <Box
             sx={{
               margin: "auto",
-              paddingTop:2
+              paddingTop: 2,
             }}
           >
             <Button
@@ -810,18 +810,13 @@ const AdvanceSection = ({
               }}
               sx={{
                 borderRadius: "15px 0 0 0",
-                width:"150px",
-                height:"60px",
-                fontSize:15,
-                fontWeight:"bold",
+                width: "150px",
+                height: "60px",
+                fontSize: 15,
+                fontWeight: "bold",
               }}
               endIcon={
-                <Box
-                  component={"img"}
-                  src={closeIcon}
-                  height={35}
-                  width={35}
-                />
+                <Box component={"img"} src={closeIcon} height={35} width={35} />
               }
             >
               close
@@ -831,10 +826,10 @@ const AdvanceSection = ({
               color="redButton200"
               sx={{
                 borderRadius: "0 15px 0 0",
-                width:"150px",
-                height:"60px",
-                fontSize:15,
-                fontWeight:"bold",
+                width: "150px",
+                height: "60px",
+                fontSize: 15,
+                fontWeight: "bold",
               }}
               onClick={handleJobSearch}
             >
@@ -843,14 +838,13 @@ const AdvanceSection = ({
           </Box>
         </Box>
       )}
-      {
-        !openAdvanceSearch &&
+      {!openAdvanceSearch && (
         <Button
           sx={{
             padding: "4px 20px",
             height: 45,
             width: 150,
-            borderRadius: "0 0 25px 25px",
+            borderRadius: "0 0 15px 15px",
             boxShadow: 3,
           }}
           size="small"
@@ -868,13 +862,13 @@ const AdvanceSection = ({
               }}
             />
           }
-          color={"redButton200"}
+          color={"tealColor"}
           onClick={() => {
             setAdvanceSearch((prevState) => !prevState);
             setBasicData(BASIC);
           }}
         ></Button>
-      }
+      )}
     </Box>
   );
 };

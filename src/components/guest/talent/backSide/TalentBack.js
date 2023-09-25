@@ -177,6 +177,24 @@ export default function TalentCard({ index, job, setisFlipped }) {
                   label={job?.secondactivity}
                 />
               )}
+              <Button
+                sx={{
+                  height: "auto",
+                  minWidth: "60px",
+                  minHeight: "45px",
+                  borderRadius: 0,
+                  padding: 0,
+                  fontSize: 12,
+                  fontWeight: "normal",
+                  background: theme.palette.lightGreenButton300.main,
+                  color: "white",
+                  ":hover": {
+                    background: theme.palette.lightGreenButton300.main,
+                  },
+                }}
+              >
+                active
+              </Button>
             </Box>
             <Box
               sx={{

@@ -25,7 +25,7 @@ export default function CandidateFlipInfo({
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        marginLeft: "4px",
+        // marginLeft: "4px",
         marginBottom: "8px",
         gap: 1,
         width: "192px",

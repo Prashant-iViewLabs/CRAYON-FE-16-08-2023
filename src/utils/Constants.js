@@ -81,6 +81,37 @@ export const ADMIN_TAB_ITEMS = [
   },
 ];
 
+export const TAB_ITEMS_EMPLOYER = [
+  {
+    label: "my crayon",
+    path: "employer/my-jobs",
+  },
+  {
+    label: "post a job",
+    path: "employer/post-a-job",
+  },
+  {
+    label: "my jobs",
+    path: "employer/my-jobs",
+  },
+  {
+    label: "my team",
+    path: "employer/my-team",
+  },
+  {
+    label: "get coins",
+    path: "employer/coins",
+  },
+  {
+    label: "support",
+    path: "employer/support",
+  },
+  {
+    label: "logout",
+    path: "*",
+  },
+];
+
 export const AUTHORIZED_TAB_ITEMS_EMPLOYER = [
   {
     label: "quick links",
@@ -105,6 +136,37 @@ export const AUTHORIZED_TAB_ITEMS_EMPLOYER = [
   {
     label: "my profile",
     path: "employer/my-profile",
+  },
+];
+
+export const TAB_ITEMS_CANDIDATE = [
+  {
+    label: "my crayon",
+    path: "candidate/my-jobs",
+  },
+  {
+    label: "my jobs",
+    path: "candidate/my-jobs",
+  },
+  {
+    label: "my CV",
+    path: "candidate/my-cv",
+  },
+  {
+    label: "my videos",
+    path: "candidate/my-cam",
+  },
+  {
+    label: "get coins",
+    path: "candidate/coins",
+  },
+  {
+    label: "support",
+    path: "candidate/support",
+  },
+  {
+    label: "logout",
+    path: "*",
   },
 ];
 
@@ -381,26 +443,6 @@ export const JOBS_RIGHT_STAGES_BUTTON_GROUP = [
     color: "black100",
   },
 ];
-
-export const JOBS_RIGHT_COMPANIES_BUTTON = [
-  {
-    id: 1,
-    name: "all companies",
-    color: "redButton300",
-    title: true,
-  },
-  {
-    id: 2,
-    name: "size",
-    color: "redButton300",
-
-  },
-  {
-    id: 3,
-    name: "type",
-    color: "redButton300",
-  },
-]
 
 export const ADMIN_SEARCH_FILTER = [
   {
@@ -857,7 +899,7 @@ export const TALENT_LEFT_JOB_APPLICATION_BUTTON_GROUP = [
 export const TALENT_RIGHT_JOB_INFO_BUTTON_GROUP = [
   {
     id: 1,
-    name: "all talents",
+    name: "all talent",
     color: "blueButton700",
     title: true,
   },
@@ -931,6 +973,25 @@ export const TALENT_RIGHT_JOB_INFO_BUTTON_GROUP = [
     name: "experience",
     color: "blueButton700",
     // title: true,
+  },
+];
+
+export const JOBS_RIGHT_COMPANIES_BUTTON = [
+  {
+    id: 1,
+    name: "all companies",
+    color: "redButton300",
+    title: true,
+  },
+  {
+    id: 2,
+    name: "size",
+    color: "redButton300",
+  },
+  {
+    id: 3,
+    name: "type",
+    color: "redButton300",
   },
 ];
 

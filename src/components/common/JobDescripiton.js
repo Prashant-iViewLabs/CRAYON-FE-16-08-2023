@@ -36,7 +36,8 @@ export default function JobDescripiton({ description, height }) {
           WebkitBoxOrient: "vertical",
           WebkitLineClamp: 3,
           letterSpacing: "0.25px",
-          height: height
+          height: height,
+          lineHeight: "1.6",
         }}
         color={theme.palette.black100}
         gutterBottom={true}

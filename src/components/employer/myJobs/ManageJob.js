@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -127,6 +127,17 @@ export const columnsFromBackend = {
   },
 };
 
+const BASIC = {
+  sortType: null,
+  jobtype_id: "",
+  genderType: "",
+  salary: [],
+  personalitytype_id: "",
+  qualification_id: "",
+  skin_id: "",
+  experience: [],
+};
+
 export default function ManageJob() {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -137,8 +148,13 @@ export default function ManageJob() {
   const [leftExpanded, setLeftExpand] = useState(false);
   const [rightExpanded, setRightExpanded] = useState(false);
   const [leftMenu, setLeftMenu] = useState(false);
+  const [basicData, setBasicData] = useState(BASIC);
+
+  const [gender, setGender] = useState("");
+  const [qualification, setQualification] = useState("");
 
   const [talents, setTalents] = useState([]);
+  const basicDataRef = useRef(basicData);
 
   const getTalentStatusApplications = async (
     jobId,
@@ -146,13 +162,15 @@ export default function ManageJob() {
     manageStatus
   ) => {
     try {
+      console.log(basicDataRef.current);
+      const data = {
+        job_id: jobId,
+        job_status_id: jobStatusId,
+        ...basicDataRef.current,
+      };
+      // console.log(jobId, jobStatusId, manageStatus);
       const [manage] = await Promise.all([
-        dispatch(
-          getTalentJobStatusApplications({
-            job_id: jobId,
-            job_status_id: jobStatusId,
-          })
-        ),
+        dispatch(getTalentJobStatusApplications(data)),
       ]);
       // lastkey += 1;
       setTalents((prevTalents) => {
@@ -190,6 +208,7 @@ export default function ManageJob() {
       ]);
       setJobDetail(manage.payload.jobdetail);
       setTalentStatus(manage.payload.data);
+      // console.log(jobId, item.id, manage.payload.data);
       manage.payload.data.map((item) => {
         item.count > 0
           ? getTalentStatusApplications(jobId, item.id, manage.payload.data)
@@ -260,6 +279,7 @@ export default function ManageJob() {
       const draggableColumn = talents
         ?.find((item) => item?.id == source?.droppableId)
         ?.items?.find((item) => item?.user_id == draggableId);
+
       setTalents(
         talents?.map((talent) => {
           if (talent?.id == sourceColumn?.id) {
@@ -312,9 +332,32 @@ export default function ManageJob() {
     }
   };
 
+  const handleDropDownFilters = async () => {
+    console.log(gender);
+    console.log(qualification);
+
+    setBasicData((prevBasicData) => ({
+      ...prevBasicData,
+      genderType: gender,
+      qualification_id: qualification !== "" && qualification.toString(),
+    }));
+    await getTalentMyJobStatusCount(jobId);
+  };
+
   useEffect(() => {
     getTalentMyJobStatusCount(jobId);
   }, []);
+  useEffect(() => {
+    console.log(qualification);
+    if (gender || qualification) {
+      handleDropDownFilters();
+    }
+  }, [gender, qualification]);
+
+  useEffect(() => {
+    // Update the ref whenever the state changes
+    basicDataRef.current = basicData;
+  }, [basicData]);
 
   const handleSortedValue = (columnName, value) => {
     setTalents((prevTalents) => {
@@ -333,6 +376,22 @@ export default function ManageJob() {
       });
       return [...updatedTalents];
     });
+  };
+
+  const talentRightFIlters = async (selectedFilter) => {
+    let jobs = [];
+    selectedFilter.map((type) => {
+      let selectedJobType = TALENT_RIGHT_JOB_INFO_BUTTON_GROUP.find(
+        (jobtype) => jobtype.id === type
+      );
+      jobs.push(selectedJobType.name);
+    });
+    console.log(jobs);
+    setBasicData((prevBasicData) => ({
+      ...prevBasicData,
+      jobtype_id: jobs[0] === "all talent" ? "" : jobs.toString(),
+    }));
+    await getTalentMyJobStatusCount(jobId);
   };
 
   return (
@@ -374,7 +433,7 @@ export default function ManageJob() {
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            width: "150px",
+            width: !leftExpanded ? "150px" : "",
             marginRight: "30px",
           }}
         >
@@ -431,9 +490,9 @@ export default function ManageJob() {
               minWidth: "40px",
               width: "40px",
               height: "45px",
-              backgroundColor: theme.manageTalent.leftArrowButton.main,
+              backgroundColor: theme.palette.redButton100.main,
               ":hover": {
-                backgroundColor: theme.manageTalent.leftArrowButton.main,
+                backgroundColor: theme.palette.redButton100.main,
                 boxShadow: "none",
               },
             }}
@@ -527,49 +586,17 @@ export default function ManageJob() {
                         />
                       </StyledBox>
                       <Box id="talentList">
-                        <InfiniteScroll
-                          style={{
-                            // height: "100vh",
-                            overflowX: "hidden",
-                            scrollbarWidth: "thin",
-                          }}
-                          key={column?.id}
-                          dataLength={talents[index]?.items?.length}
-                          next={() => console.log("HIHIHIHI")}
-                          hasMore={true}
-                          scrollableTarget="talentList"
-                          scrollThreshold={"10px"}
-                          endMessage={
-                            <p style={{ textAlign: "center" }}>
-                              <b>Yay! You have seen it all</b>
-                            </p>
-                          }
-                        >
-                          {talents[index]?.items?.map((item, index) => (
-                            <DraggableCard
-                              key={item?.user_id}
-                              item={item}
-                              index={index}
-                              droppableId={column?.id}
-                              onDragEnd={onDragEnd}
-                              jobId={jobId}
-                              talentStatus={talentStatus}
-                            />
-                          ))}
-                          <style>
-                            {`.infinite-scroll-component::-webkit-scrollbar {
-                            width: 7px !important;
-                            background-color: #EFEEEE; /* Set the background color of the scrollbar */
-                          }
-
-                          .infinite-scroll-component::-webkit-scrollbar-thumb {
-                            background-color: white;
-                            width: 5px;
-                            // box-shadow: 0px 3px 3px #00000029;
-                            border-radius: 3px;
-                          }`}
-                          </style>
-                        </InfiniteScroll>
+                        {talents[index]?.items?.map((item, index) => (
+                          <DraggableCard
+                            key={item?.user_id}
+                            item={item}
+                            index={index}
+                            droppableId={column?.id}
+                            onDragEnd={onDragEnd}
+                            jobId={jobId}
+                            talentStatus={talentStatus}
+                          />
+                        ))}
                       </Box>
                       {provided.placeholder}
                     </Box>
@@ -603,7 +630,7 @@ export default function ManageJob() {
           flexDirection: "column",
           gap: "10px",
           direction: "rtl",
-          width: "150px",
+          width: !rightExpanded ? "150px" : "",
           marginLeft: "30px",
         }}
       >
@@ -630,26 +657,30 @@ export default function ManageJob() {
         </Button>
         {!rightExpanded && (
           <Box
-            sx={
-              {
-                // height: "vh",
-                // overflowY: rightExpanded ? "scroll" : "unset",
-              }
-            }
-            className="rightfilterSec"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              width: "150px",
+            }}
+            // className="rightfilterSec"
           >
             <Paper
               sx={{
                 background: "transparent",
                 marginLeft: "1px",
                 boxShadow: "none",
-                width: "150px",
+                gap: "10px",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <EmployerButtonPanel
                 panelData={TALENT_RIGHT_JOB_INFO_BUTTON_GROUP}
                 side="right"
-                // onChangeFilter={jobsFilter}
+                onChangeFilter={talentRightFIlters}
+                setGender={setGender}
+                setQualification={setQualification}
               />
               <ButtonPanel
                 panelData={TALENT_RIGHT_JOB_ACTIVITY_BUTTON_GROUP}

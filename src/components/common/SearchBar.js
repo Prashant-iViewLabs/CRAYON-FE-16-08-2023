@@ -65,25 +65,25 @@ export default function SearchBar({
     let data = {};
     params.pathname.includes("talent")
       ? (data = {
-        selectedFilters: "",
-        lastKey: "",
-        personalityType: "",
-        user_id: token ? decodedToken?.data?.user_id : "",
-        jobtype: "",
-        ...basicData,
-      })
+          selectedFilters: "",
+          lastKey: "",
+          personalityType: "",
+          user_id: token ? decodedToken?.data?.user_id : "",
+          jobtype: "",
+          ...basicData,
+        })
       : (data = {
-        selectedFilters: "",
-        lastKey: "",
-        jobtype: "",
-        jobstage: "",
-        personalityType: "",
-        user_id: token ? decodedToken?.data?.user_id : "",
-        favourites: "",
-        recentjob: "",
-        appliedjob: "",
-        ...basicData,
-      });
+          selectedFilters: "",
+          lastKey: "",
+          jobtype: "",
+          jobstage: "",
+          personalityType: "",
+          user_id: token ? decodedToken?.data?.user_id : "",
+          favourites: "",
+          recentjob: "",
+          appliedjob: "",
+          ...basicData,
+        });
     console.log(basicData);
     const { payload } = await dispatch(
       params.pathname.includes("talent")
@@ -124,10 +124,11 @@ export default function SearchBar({
           m: { xs: 2, md: 0 },
           alignItems: "center",
           height: 45,
-          border: "1px solid rgba(224, 224, 224, 0.5)",
+          // border: "1px solid rgba(224, 224, 224, 0.5)",
           position: "sticky",
-          borderRadius: openAdvanceSearch ? 0: "0 0 20px 20px",
+          borderRadius: openAdvanceSearch ? 0 : "0 0 20px 20px",
           overflow: "hidden",
+          boxShadow: 3,
         }}
       >
         <IconButton
@@ -138,16 +139,14 @@ export default function SearchBar({
             borderRadius: 0,
             height: 60,
             width: 60,
-            background: theme.palette.redButton200.main,
+            background: theme.palette.tealColor.main,
             color: "white",
+            ":hover": {
+              background: theme.palette.tealColor.main,
+            },
           }}
         >
-          <Box
-            component={"img"}
-            height={30}
-            width={30}
-            src={SearchIcon}
-          />
+          <Box component={"img"} height={30} width={30} src={SearchIcon} />
         </IconButton>
         <Paper
           elevation={0}
@@ -172,23 +171,18 @@ export default function SearchBar({
           aria-label="search job"
           component="button"
         >
-          <Box
-            component={"img"}
-            height={30}
-            width={30}
-            src={PlaceIcon}
-          />
+          <Box component={"img"} height={45} width={45} src={PlaceIcon} />
         </IconButton>
         {/* )} */}
         <Button
           sx={{
-            width: 174,
+            width: 140,
             boxShadow: 0,
             borderRadius: 0,
             height: "100%",
           }}
           variant="contained"
-          color="redButton200"
+          color="tealColor"
           onClick={handleJobSearch}
         >
           {i18n["searchBar.letsGo"]}
@@ -197,7 +191,7 @@ export default function SearchBar({
       <Box
         sx={{
           position: "absolute",
-          top:45,
+          top: 46,
           width: "100%",
           margin: "0 auto",
           zIndex: 10,

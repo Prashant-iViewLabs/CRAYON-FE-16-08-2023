@@ -12,6 +12,7 @@ export default function TagsSlider({ items, color, hideTagsAfter }) {
     <Box
       sx={{
         // width: '100%',
+        marginLeft: "4px",
         display: "flex",
         flexWrap: "wrap",
         gap: 1,

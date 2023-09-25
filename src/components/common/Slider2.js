@@ -29,7 +29,7 @@ const Slider2 = ({ items, color, hideTagsAfter }) => {
                 height={25}
                 value={item}
                 label={truncate(item, { length: 12 })}
-                mr="5px"
+                mr="4px"
               />
             );
           } else if (items.length === index + 1 && item !== undefined) {
@@ -40,7 +40,7 @@ const Slider2 = ({ items, color, hideTagsAfter }) => {
                 height={25}
                 value={remaining(hideTagsAfter)}
                 label={`+ ${items.length - hideTagsAfter}`}
-                mr="5px"
+                mr="4px"
               />
             );
           }

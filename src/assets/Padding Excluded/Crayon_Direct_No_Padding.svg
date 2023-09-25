@@ -7,19 +7,19 @@
       }
 
       .cls-2 {
-        fill: #f8b318;
+        fill: white;
       }
 
       .cls-3 {
-        fill: #ee4745;
+        fill: white;
       }
 
       .cls-4 {
-        fill: #1db954;
+        fill: white;
       }
 
       .cls-5 {
-        fill: #228cce;
+        fill: white;
       }
     </style>
   </defs>

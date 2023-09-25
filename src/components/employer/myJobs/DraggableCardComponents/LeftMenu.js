@@ -238,17 +238,17 @@ export default function LeftMenu({ leftExpanded }) {
     <Box
       sx={{
         width: leftExpanded ? "260px" : "80px",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#f2f4fb",
         borderRadius: "0 0 25px 0",
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start",
+        alignItems: leftExpanded ? "flex-start" : "center",
         cursor: "pointer",
-        padding: "0 10px",
+        // padding: "0 10px",
       }}
       className="filterSec"
     >
-      <Box sx={{ display: "flex", marginTop: "65px" }}>
+      <Box sx={{ display: "flex", marginTop: "15px" }}>
         <Box
           component={"img"}
           src={Dashboard}
@@ -349,7 +349,14 @@ export default function LeftMenu({ leftExpanded }) {
         )}
       </Box>
 
-      <Box sx={{ display: "flex", marginTop: "45px", width: "100%" }}>
+      <Box
+        sx={{
+          display: "flex",
+          marginTop: "45px",
+          justifyContent: "center",
+          width: leftExpanded ? "100%" : "80px",
+        }}
+      >
         <Box
           component={"img"}
           src={Talent}
@@ -465,7 +472,14 @@ export default function LeftMenu({ leftExpanded }) {
         )}
       </Box>
 
-      <Box sx={{ display: "flex", marginTop: "45px", width: "100%" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "45px",
+          width: leftExpanded ? "100%" : "80px",
+        }}
+      >
         <Box
           component={"img"}
           src={Search}

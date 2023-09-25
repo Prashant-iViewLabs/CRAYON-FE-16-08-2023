@@ -65,8 +65,8 @@ export default function Talent() {
   const [filtersJobType, setFiltersJobType] = useState([allTalentTypes[0]?.id]);
   const [basicData, setBasicData] = useState(BASIC);
 
-  const [rightExpand, setRightExpand] = useState(true)
-  const [leftExpanded, setLeftExpand] = useState(true)
+  const [rightExpand, setRightExpand] = useState(true);
+  const [leftExpanded, setLeftExpand] = useState(true);
 
   const [all_talent, setAll_talent] = useState([]);
   const [lastKey, setLastKey] = useState(0);
@@ -218,10 +218,12 @@ export default function Talent() {
             borderRadius: "0 10px 10px 0",
             minWidth: "40px",
             width: "40px",
-            height: "45px"
+            height: "45px",
           }}
           color="redButton200"
-          onClick={() => { setLeftExpand(prevState => !prevState) }}
+          onClick={() => {
+            setLeftExpand((prevState) => !prevState);
+          }}
         >
           {leftExpanded ? <LeftArrow /> : <RightArrow />}
         </Button>
@@ -230,7 +232,7 @@ export default function Talent() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px"
+              gap: "10px",
             }}
           >
             <ButtonPanel
@@ -251,17 +253,19 @@ export default function Talent() {
                 borderRadius: "0 10px 10px 0",
                 minWidth: "40px",
                 width: "40px",
-                height: "45px"
+                height: "45px",
               }}
               color="redButton200"
-              onClick={() => { setLeftExpand(prevState => !prevState) }}
+              onClick={() => {
+                setLeftExpand((prevState) => !prevState);
+              }}
             >
               {leftExpanded ? <LeftArrow /> : <RightArrow />}
             </Button>
           </Box>
         )}
       </Grid>
-      {/* <Grid
+      <Grid
         item
         xs={12}
         sm={6}
@@ -291,7 +295,7 @@ export default function Talent() {
           hasMore={true}
           style={{
             height: "none !important",
-            overflow: "unset !important"
+            overflow: "unset !important",
           }}
           endMessage={
             <p style={{ textAlign: "center" }}>
@@ -305,18 +309,22 @@ export default function Talent() {
             flexDirection={{ sx: "column", md: "row" }}
             sx={{
               display: { xs: "none", md: "flex" },
+              justifyContent: "center",
             }}
             width={"100%"}
           >
             {all_talent.length > 0 ? (
               all_talent?.map((talent) => {
                 return (
-                  <Grid sx={{
-                    width: "360px",
-                    height: "560px",
+                  <Grid
+                    sx={{
+                      width: "360px",
+                      height: "560px",
 
-                    marginBottom: 0
-                  }} key={talent}>
+                      marginBottom: 0,
+                    }}
+                    key={talent}
+                  >
                     <TalentCard index={nanoid()} job={talent} />
                   </Grid>
                 );
@@ -335,88 +343,29 @@ export default function Talent() {
             )}
           </Grid>
         </InfiniteScroll>
-      </Grid> */}
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={8}
-        lg={9}
-        xl={10}
-        sx={{
-          paddingX: "30px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "54px",
-          flexGrow: "1 !important",
-        }}
-      >
-        <SearchBar
-          placeholder={"Begin your search for talent here..."}
-          setAllJobs={setAll_talent}
-          setLastKey={setLastKey}
-          setBasicData={setBasicData}
-          basicData={basicData}
-        />
-        <InfiniteScroll
-          key={`${filters} + ${filtersType} + ${filtersJobType}`}
-          scrollThreshold={"100px"}
-          dataLength={all_talent.length}
-          next={() => getTalent(filters, filtersType, filtersJobType, lastKey)}
-          hasMore={true}
-          style={{
-            height: "unset !important",
-            overflow: "unset !important",
-          }}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-        >
-          <Grid
-  container
-  gap={{ xs: "20px", md: "40px" }}
-  flexDirection={{ xs: "column", md: "row" }}
-  sx={{
-    display: "flex",
-    flexWrap: "wrap",
-    width: "100%",
-    justifyContent: "space-between",
-  }}
->
-  {all_talent.length > 0 ? (
-    all_talent?.map((talent) => {
-      return (
-        // <Grid
-        //   sx={{
-        //     flex: "1 0 calc(20%)", 
-        //     marginBottom: "20px", 
-        //   }}
-        //   key={talent}
-        // >
-        
-          <TalentCard index={nanoid()} job={talent} />
-        // </Grid>
-      );
-    })
-  ) : (
-    <Box
-      sx={{
-        width: "100%",
-        textAlign: "center",
-        mt: 4,
-        color: theme.palette.placeholder,
-      }}
-    >
-      {""}
-    </Box>
-  )}
-</Grid>
-
-        </InfiniteScroll>
+        <Grid container spacing={2} sx={{ my: 2, display: { md: "none" } }}>
+          {/* <SwipeableViews enableMouseEvents onTouchStart={isolateTouch}>
+            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
+              <TalentCard index="11" />
+            </Grid>
+            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
+              <TalentCard index="12" />
+            </Grid>
+            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
+              <TalentCard index="13" />
+            </Grid>
+            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
+              <TalentCard index="14" />
+            </Grid>
+            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
+              <TalentCard index="15" />
+            </Grid>
+            <Grid xl={3} lg={4} md={6} xs={12} sx={{ px: 3 }}>
+              <TalentCard index="16" />
+            </Grid>
+          </SwipeableViews> */}
+        </Grid>
       </Grid>
-
       <Grid
         item
         // md={2}
@@ -438,12 +387,13 @@ export default function Talent() {
             borderRadius: "10px 0 0 10px",
             minWidth: "40px",
             width: "40px",
-            height: "45px"
+            height: "45px",
           }}
           color="redButton200"
-          onClick={() => { setRightExpand(prevState => !prevState) }}
+          onClick={() => {
+            setRightExpand((prevState) => !prevState);
+          }}
         >
-
           {rightExpand ? <RightArrow /> : <LeftArrow />}
         </Button>
         {rightExpand && (
@@ -451,7 +401,7 @@ export default function Talent() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px"
+              gap: "10px",
             }}
           >
             <ButtonPanel

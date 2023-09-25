@@ -160,9 +160,9 @@ export default function Home() {
                 width: "6%",
                 color: "white",
                 borderRadius: 0,
-                background: theme.palette.greenButton.main,
+                background: theme.palette.tealColor.main,
                 "&:hover": {
-                  background: theme.palette.greenButton.main, // Set the same background color for hover
+                  background: theme.palette.tealColor.main, // Set the same background color for hover
                 },
               }}
             >
