@@ -245,9 +245,11 @@ const theme = createTheme({
     grayIcon: "#545974",
     picNameColor: "#069697",
     chart: {
+      gray:"#F2F4FB",
       red: "#EC5D60",
       green: "#B6C773",
       yellow: "#F09248",
+      black:"#000000",
       blue: "#80CEFF",
       green200: "#18CA09",
       Applied: "#FCD144",

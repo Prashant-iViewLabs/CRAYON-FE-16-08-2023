@@ -519,7 +519,7 @@ const JobCardFront = ({
               hideTagsAfter={2}
             />
           </Box>
-          <JobDescripiton description={job?.description} height={"50px"} />
+          <JobDescripiton description={job?.description} height={"60px"} />
         </Grid>
         <Box
           sx={{

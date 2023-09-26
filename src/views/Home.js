@@ -97,18 +97,20 @@ export default function Home() {
       flexDirection={{ xs: "column", sm: "row" }}
       sx={{
         background: "#E3F1F9",
-        background: "linear-gradient(to bottom, #E3F1F9 75%, #FFFFFF 100%)",
-        height: "88vh",
+        background: "linear-gradient(to bottom, #ebecf3 75%, #FFFFFF 100%)",
+        height:"88vh"
       }}
     >
-      <Grid item xs={12} sx={{ mt: 2 }}>
+
+   
+      <Grid item xs={12} sx={{ mt: "2%" , display:"flex",flexDirection:"column", gap:5 }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             position: "relative",
-            gap: 3,
+            gap: "2rem",
           }}
         >
           <Box
@@ -244,7 +246,7 @@ export default function Home() {
                       lineHeight: { sm: "15px", xs: "15px" },
                     }}
                     variant="contained"
-                    color="yellowButton100"
+                    color="redButton"
                   >
                     <Box
                       component="img"
@@ -277,7 +279,7 @@ export default function Home() {
                       lineHeight: { sm: "15px", xs: "15px" },
                     }}
                     variant="contained"
-                    color="blueButton800"
+                    color="yellowButton100"
                   >
                     <Box
                       component="img"
@@ -294,19 +296,6 @@ export default function Home() {
               </Box>
             </Box>
           </Paper>
-          {/* <Box
-            sx={{
-              position: "absolute",
-              // left: 0,
-              // right: 0,
-              top: 54,
-              width: "70%",
-              margin: "0 auto",
-              zIndex: 10,
-            }}
-          >
-            <AdvanceSection />
-          </Box> */}
         </Box>
         <StyledGrid
           container
@@ -316,46 +305,6 @@ export default function Home() {
           alignItems={"center"}
           paddingBottom={1}
         >
-          {/* <Box
-            sx={{
-              pt: 2,
-              width: "70%",
-              marginBottom: 5,
-            }}
-          >
-            <Typography
-              sx={{
-                //   fontSize: { xs: "32px", sm: "35px", lg:"50px"},
-                fontSize: { xs: "22px", sm: "25px", lg: "35px" },
-                fontWeight: 700,
-                mr: 1,
-              }}
-            >
-              {i18n["login.talent"]}
-              <span>{i18n["login.title1"]}</span>
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: { xs: "22px", sm: "25px", lg: "35px" },
-                //   fontSize: { xs: "32px", sm: "35px", lg:"50px" },
-                fontWeight: 700,
-                mr: 1,
-              }}
-            >
-              for all shapes and sizes
-              {/* <span>{i18n["login.done"]}</span>
-                <span className="fast">{i18n["login.fast"]}</span>
-                <span>{i18n["login.title2"]}</span> */}
-          {/*</Typography>
-            <Button
-              sx={{ width: 150, mt: 3 }}
-              variant="contained"
-              color="redButton"
-            >
-              {/* {i18n["login.viewPlans"]} */}
-          {/*learn more
-            </Button>
-          </Box> */}
           <Box
             sx={{
               margin: "auto",
@@ -363,6 +312,7 @@ export default function Home() {
               display: "flex",
               flexWrap: "nowrap",
               marginTop: 6,
+              height:"30vh"
             }}
           >
             <StyledBox

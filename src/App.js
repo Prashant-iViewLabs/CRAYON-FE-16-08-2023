@@ -35,7 +35,7 @@ import PendingJobs from './components/admin/adminJobs/pendingJobs/PendingJobs';
 import PausedJobs from './components/admin/adminJobs/pausedJobs/PausedJobs';
 import ClosedJobs from './components/admin/adminJobs/closedJobs/ClosedJobs';
 import CandidateCVPage from './components/candidate/cvPage/CandidateCVPage';
-import JobsDetailPage from './components/guest/jobs/JobsDetailPage';
+import JobsDetailPage from './components/guest/jobs/JobsDetailPageNew';
 import ManageJob from './components/employer/myJobs/ManageJob';
 
 import MyTeams from './components/employer/myTeams/MyTeams';
